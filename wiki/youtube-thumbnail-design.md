@@ -131,13 +131,17 @@ The "sticker" name comes from the visual effect: subject feels die-cut onto back
 
 ## Design Tools
 
-| Tool | Cost | Best For |
-|---|---|---|
-| Canva Pro | $13/mo | Speed, templates, background removal, brand kit |
-| Figma | Free | Component-based templates, collaboration, batch production |
-| Photoshop | $21/mo | Quality, compositing, retouching. Steep learning curve. |
+The user currently uses Pixelmator Pro.
 
-No AI tool currently produces YouTube-optimized thumbnails reliably. Use AI for ideation and background generation; human design for the final composition.
+Use AI for ideation and background generation; human design for the final composition.
+
+### Designer Agent
+
+The **designer agent** ([repo](https://github.com/databyjp/elastic-dev-graphic-designer) · local: `/Users/jphwang/code/agent-sandboxes/designer`) produces SVG infographics and graphic elements rendered to PNG via resvg. It follows the Elastic design system (colors, typography, layout patterns) and has reference examples for both cheat-sheet-style cards and pipeline diagrams.
+
+**Use it for:** persona cards, comparison tables, config diagrams, architecture visuals — any graphic element that appears in the video AND can be repurposed for thumbnails. Write a task brief in `designer/tasks/<task-name>/brief.md`.
+
+**Don't use it for:** final thumbnail compositing (that's Figma/Canva), photo editing, or anything requiring raster manipulation. The agent produces clean vector elements; humans composite them with photos and apply blur/effects.
 
 ---
 

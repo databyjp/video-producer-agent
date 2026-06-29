@@ -21,16 +21,20 @@ okf_version: "0.1"
 
 ## 2026-06-29 — Ideation for right-index-options project
 
-**Action:** Evaluated scratch notes (Ideation.md, Outline-Video1-Overview.md, Persona-vector-search-config-tables.md) against wiki knowledge. Produced ideation assessment with title options, thumbnail concepts, scope recommendations, and created project brief.
+**Action:** Evaluated scratch notes (Ideation.md, Outline-Video1-Overview.md, Persona-vector-search-config-tables.md) against wiki knowledge. Produced ideation assessment, iterated on title and thumbnail concepts with JP, and finalized packaging decisions.
 
 **Pages created:**
-- `projects/right-index-options/brief.md` — Project brief with concept, series plan, personas, title/thumbnail options, pending decisions
+- `projects/right-index-options/brief.md` — Project brief with concept, series plan, personas, finalized title/thumbnail
+
+**Packaging decisions (finalized):**
+- **Title (primary):** "3 Engineers, 3 Vector Search Setups — Who's Right?"
+- **Title (A/B backup):** "3 Different Vector Search Configs — Which One Wins?"
+- **Thumbnail:** Redacted table + face — JP with evaluative expression, blurred 3-column config table behind (green/blue/orange columns), no text, no checkmarks, dark background
 
 **Key recommendations:**
-- Title: "Same Data, 3 Engineers, 3 Setups — All Correct" or "Why 3 Engineers Should Configure Vector Search Differently"
-- Drop Dial 0 (semantic_text vs dense_vector) from overview video — too product-specific
-- Trim sub-dials and ops concerns to deep-dive videos; keep overview lean
-- Series structure: 1 overview + 4 dial deep-dives
+- Series structure: 1 overview (8–10 min) + 4 dial deep-dives
+- Drop "Budget-obsessed" label from Ben — let context show the constraint
+- Resolve legal-research exclusion concern with "or any domain where wrong answers have real consequences"
 - Cross-link with April 2026 short-form vector index series (adjacent, not overlapping)
 
 ## 2026-06-29 — Created developer video production guidelines
@@ -89,3 +93,21 @@ okf_version: "0.1"
 - `wiki/developer-video-production-guidelines.md` — Added cross-references to new SEO/packaging pages
 
 **Index updated** with all new pages.
+
+## 2026-06-29 — Outlined Video 1: right-index-options overview
+
+**Action:** Wrote the working outline for the overview video of the "Right Index Options" series.
+
+**Research performed (live web search):**
+- Verified current Elasticsearch dense_vector index types and defaults (ES 9.x): `flat`, `hnsw`, `int8_hnsw`, `int4_hnsw`, `bbq_hnsw`, `bbq_flat`, `bbq_disk` (Enterprise, ES 9.2+)
+- Confirmed ES 9.1 default behavior: vectors <384 dims → `int8_hnsw`; ≥384 dims → `bbq_hnsw`
+- Confirmed BBQ mechanics: 32× memory reduction, pre-computed corrective factors, default 3× oversampling + rescore
+- Confirmed `bbq_disk` (DiskBBQ): disk-based IVF-style clustering, Enterprise subscription required, available ES 9.2+
+- Verified Elastic Rerank: `.rerank-v1`, DeBERTa v3, 184M params, 40% avg BEIR improvement, 512-token limit, `text_similarity_reranker` retriever
+- Verified MTEB April–June 2026 embedding model landscape: Qwen3-Embedding-8B (MMTEB leader, 70.58, Apache 2.0), Gemini Embedding 001 (68.32 MTEB, multilingual leader), Voyage 3.1 Large (top API retrieval), Cohere Embed v4 (multimodal), BGE-M3 (multilingual open-source)
+- Confirmed Matryoshka now standard across all major models
+
+**Deliverable created:**
+- `projects/right-index-options/outline.md` — Full 10-section outline with scripted beats for each section, persona config table, production notes, source references
+
+**Brief updated:** status → `outline-complete`

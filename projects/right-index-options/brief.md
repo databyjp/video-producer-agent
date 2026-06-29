@@ -1,55 +1,61 @@
 ---
 type: Project Brief
 title: "Right Index Options — Vector Search Configuration"
-description: Persona-driven video (or series) on choosing the right vector search config for quality, speed, or cost
+description: Persona-driven guide to vector search config tradeoffs (quality vs speed vs cost)
 tags: [vector-search, elasticsearch, configuration, series]
 timestamp: 2026-06-29T00:00:00Z
-status: ideation
+status: outline-complete
 ---
 
 # Right Index Options — Project Brief
 
 ## Concept
 
-"Three engineers, same data, same database — three completely different vector search configurations, all correct." Walks the viewer through four configuration dials (model selection, index type, quantization, reranking) through the lens of three personas optimizing for quality, speed, or cost.
+Three engineers, same task (set up vector search), three different correct configurations. The video walks through four configuration "dials" (model selection, index type, quantization, reranking) and shows how each persona's constraints lead to different optimal choices.
 
-## Series Plan
-
-- **Video 1 (Overview):** All four dials at headline level. 8–10 minutes. The "entry point" that establishes the framework.
-- **Videos 2–5 (Deep Dives):** One per dial. Each goes deeper into the mechanics, tradeoffs, and Elasticsearch-specific configs.
-- The April 2026 short-form series (HNSW, DiskBBQ) is adjacent content — cross-link but don't repeat.
+**Core thesis:** There is no single best vector search config — the right one depends on what you're optimizing for.
 
 ## Personas
 
-| Persona | Use Case | Optimizing For | Constraint |
-|---|---|---|---|
-| Cora | Legal/medical research tool | Retrieval quality | Wrong answers have real consequences |
-| Samantha | E-commerce product search | Speed/latency | Every millisecond costs conversions |
-| Ben | Document archive at massive scale | Cost | Budget is the binding constraint |
+- **Cora** — legal/medical research tool, ~500k–1M docs, quality-first (wrong answers have real consequences)
+- **Samantha** — e-commerce product search, millions of SKUs, speed-first (latency costs conversions)
+- **Ben** — doc archive, tens of millions of docs, cost-first (budget is the binding constraint)
 
-## Working Title Options
+## Packaging
 
-1. **Same Data, 3 Engineers, 3 Setups — All Correct** (strongest curiosity gap)
-2. **Why 3 Engineers Should Configure Vector Search Differently** (more searchable)
+### Title
 
-## Thumbnail Direction
+- **Primary:** 3 Engineers, 3 Vector Search Setups — Who's Right?
+- **Backup/A/B:** 3 Different Vector Search Configs — Which One Wins?
 
-- Three colored screens/terminals with different configs, all with checkmarks ("All correct")
-- Or: Three figures with props (magnifying glass / stopwatch / piggy bank) — "Same data"
+### Thumbnail
 
-## Key Decisions (pending)
+**Concept: Cascading Persona Cards + Face**
+- JP in foreground, evaluative/skeptical expression, direct eye contact
+- Behind: the three persona cards (Cora/Samantha/Ben) cascading/fanned, partially blurred — uses the actual video asset cards, not a separate thumbnail-only graphic
+- Cards are color-coded (green/blue/orange), overlapping so all three are visible but none fully readable — creates the information gap
+- No text overlay, no checkmarks — title carries the context
+- Dark background, high contrast
+- Key elements in left 2/3 (safe zone)
 
-- [ ] Lock title
-- [ ] Confirm series scope (1 overview + 4 deep dives?)
-- [ ] Decide whether Dial 0 (semantic_text vs dense_vector) appears in overview or only in deep dives
-- [ ] Target length for overview video
+**Production note:** Build the persona cards as video assets first (see Production Notes in outline). Blur and composite for thumbnail in Figma/Canva afterward.
 
-## Reference Material
+## Series Plan
 
-- `scratch/Ideation.md` — beat-by-beat outline
-- `scratch/Outline-Video1-Overview.md` — structured outline for Video 1
-- `scratch/Persona-vector-search-config-tables.md` — detailed config tables for all personas/dials
+| Video | Focus | Est. Length |
+|---|---|---|
+| **1. Overview** (this video) | 4 dials, 3 personas, complete table | 8–10 min |
+| **2. Embedding Models** | Dial 1 — model selection, dims, Matryoshka, distance metrics | 10–12 min |
+| **3. Index Types** | Dial 2 — flat vs HNSW vs DiskBBQ, build params, query-time tuning | 10–12 min |
+| **4. Quantization** | Dial 3 — float32→binary spectrum, oversampling, rescore | 8–10 min |
+| **5. Reranking** | Dial 4 — cross-encoder reranking, window size, cost/quality | 6–8 min |
 
-## Product Integration
+## Elastic Integration
 
-Elasticsearch is the demo platform throughout. Integration is organic — showing real mapping configs, HNSW parameters, quantization settings, rerank pipelines. Concept-first test passes: the framework applies to any vector database.
+Elasticsearch is the execution environment for all demos. Organic — it's the tool being configured, not a bolted-on mention.
+
+## Callbacks to Past Content
+
+- Jina v5 text (2026-02) — embedding model context
+- Vector Indexes Explained (2026-04) — HNSW/DiskBBQ deep dives
+- Both can be referenced without re-explaining
