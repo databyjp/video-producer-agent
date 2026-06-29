@@ -86,12 +86,13 @@ source: <URL or path>    # for source summaries only
 When the human asks for production work (e.g. "research topic X", "generate thumbnail ideas", "draft titles for Y"):
 
 1. **Consult the wiki** — read `index.md`, find relevant pages (past research, style preferences, what worked before).
-2. **Do the work** — perform the task, informed by accumulated knowledge.
-3. **Feed back** — after the task, update the wiki with anything reusable:
+2. **Research actively** — don't limit work to what the human explicitly mentions. When a task involves technical choices, search to discover the current landscape (available options, recent changes, new tools). When the task involves specific claims, verify them against current sources. Training data goes stale; the web doesn't.
+3. **Do the work** — perform the task, informed by accumulated knowledge and fresh research.
+4. **Feed back** — after the task, update the wiki with anything reusable:
    - New research → `sources/` summary + `wiki/` concept pages.
    - Title/thumbnail patterns that worked → update relevant wiki pages.
    - Style preferences the human expressed → note in wiki.
-4. **Log** — append to `log.md`.
+5. **Log** — append to `log.md`.
 
 The wiki should never slow down a task. If there's nothing relevant yet, just do the work and capture the learnings after.
 

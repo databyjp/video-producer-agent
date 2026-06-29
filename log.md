@@ -124,3 +124,9 @@ okf_version: "0.1"
 - Task briefs live in the originating project, not the sub-agent's workspace — context stays co-located
 - `project_root` uses absolute paths so sub-agents with different working directories can resolve references
 - One file per deliverable; briefs point to project files (outline, brief) rather than duplicating content
+
+## 2026-06-29 — Added active research guidance to Task workflow
+
+**Action:** Added "Research actively" as step 2 in the Task workflow in AGENTS.md.
+
+**Rationale:** The agent was not explicitly instructed to search/discover beyond what the human mentions. Two behaviors needed: (1) *discover* — proactively explore the current landscape of options, tools, and changes; (2) *verify* — confirm specific technical claims against current sources. Both are now covered in a single workflow step.
