@@ -242,3 +242,45 @@ okf_version: "0.1"
 
 **Task brief:**
 - Created `tasks/design-control-panel-graphic.md` — 3-panel layout (replacing the old 4-quadrant brief which was consumed by the designer agent)
+
+## 2026-06-29 — Outline revision from dual agent review
+
+**Context:** Two independent review agents assessed the outline for accuracy and gaps. Conducted targeted research against current ES docs, MTEB leaderboards, and GitHub PRs to verify claims before editing.
+
+**Changes made (17 edits):**
+
+### Inaccuracies fixed:
+1. **Gemini MTEB score** — 68.32 is overall MTEB avg, not retrieval. Retrieval is 67.71. Qwen3-8B leads retrieval at 69.44. Fixed claim.
+2. **Qwen3-0.6B score** — Added English MTEB v2 score (70.70) alongside MMTEB multilingual (64.34). Much stronger for English audience.
+3. **`rescore_vector.disk`** — Wrong parameter name. Corrected to `on_disk_rescore`, an **index-time** setting in `index_options` (not query-time). Verified via ES PR #135778 and docs.
+4. **RAM estimates** — Adjusted all three personas to include HNSW graph overhead. Cora: ~5GB, Samantha: ~250–300MB, Ben: <100MB. Ratios preserved.
+5. **Oversampling table** — Clarified that auto-adjusted defaults are BBQ-specific; int8/int4 use configurable `rescore_vector.oversample`.
+6. **Elastic Rerank tech preview** — Added caveat that `.rerank-v1` is still in technical preview. Added in both Section 6 (Cora's config) and Section 8 (reranking caveat).
+
+### Gaps filled:
+7. **bfloat16 default** — Elevated from footnote to prominent callout in Aspect 2. semantic_text defaults to bfloat16 as of ES 9.4, halving raw vector storage.
+8. **Cosine auto-normalization** — Added mention that ES normalizes vectors to unit length and uses dot_product internally when cosine similarity is selected.
+9. **HNSW vs DiskBBQ degradation** — Added that HNSW latency spikes exponentially when graph falls out of RAM, while DiskBBQ degrades linearly. Key operational context for Ben.
+10. **Indexing speed tradeoff** — Added note in Cora's section that m:32/ef:200 means 2–3× slower indexing.
+11. **`visit_percentage` query-time** — Added explanation that `default_visit_percentage` is mapping-level, but `visit_percentage` can be passed per-query.
+12. **`num_candidates`** — Added brief explanation of its role and interplay with oversampling.
+13. **`precondition` parameter** — Added one-line mention (ES 9.4+, bbq_disk, random orthogonal projection).
+14. **Segment optimization** — Added force-merge / `max_merged_segment` tip for Samantha's speed setup.
+15. **Filtered kNN** — Added brief explanation of how filtered kNN works for HNSW.
+
+### Polish:
+16. Fixed garbled "same toys" analogy in Section 3.
+17. Fixed duplicate "Let's unpack the big ones" / "Let's start with the surprising one" transitions.
+
+### Claims verified correct (no change needed):
+- `chunk_rescorer` exists — confirmed GA in ES 9.2 via PR #135198 and current docs.
+- `cluster_size` IS a user-facing parameter — confirmed in dense_vector docs. Report 2 was wrong.
+- Dense vectors excluded from `_source` by default — confirmed for new indices since ES 9.2.
+- `default_visit_percentage` IS the correct mapping-level parameter name.
+
+### Items intentionally deferred:
+- DiskBBQ eager filter iteration for restrictive filters — couldn't find this documented; would need to verify with Elastic engineering.
+- Decision tree flowchart graphic — good suggestion, deferred to visual asset planning.
+- Anti-pattern callout — good idea but risks scope creep; may add in scripting.
+- Jina acquisition context — noted but the hook is already tight.
+- EIS pricing caveat — the docs say "appropriate subscription level"; added no explicit claim of free unlimited.
