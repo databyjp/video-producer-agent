@@ -14,35 +14,49 @@ A graphic showing three "control panels" — one per configuration aspect (Embed
 
 ## Requirements
 
-### Content — three panels
+### Layout — 3×3 grid
 
-Each panel represents one aspect of vector search configuration. Each panel contains parameter names grouped under three optimization targets.
+The graphic is a **3×3 grid**, not three separate panels.
 
-**Panel 1 — Embedding Model**
-- 🎯 Quality parameters: Large model (8B+ params), Full dimensions (1024–4096), Managed API hosting
-- ⚡ Speed parameters: Small model (0.6B), Truncated dimensions via Matryoshka (256–512), Managed API hosting
-- 💰 Cost parameters: Small model, Truncated dimensions (128–256), Self-hosted
+- **Columns** (top headers): Embedding Model, Vector Indexing & Storage, Reranking
+- **Rows** (left-side labels): 🎯 Quality, ⚡ Speed, 💰 Cost
 
-**Panel 2 — Vector Indexing & Storage**
-- 🎯 Quality parameters: `hnsw` (unquantized float32), Dense graph (high `m`), High `ef_construction`
-- ⚡ Speed parameters: `bbq_hnsw` (1-bit quantized), Default graph params, 3× oversampling
-- 💰 Cost parameters: `bbq_disk` (vectors on disk), Low-bit quantization, Disk rescore
+Each cell contains the parameter selections for that (aspect × optimization target) combination.
 
-**Panel 3 — Reranking**
-- 🎯 Quality parameters: Deep reranking (top-100), Pointwise cross-encoder, chunk_rescorer enabled
-- ⚡ Speed parameters: No reranking (skip entirely)
-- 💰 Cost parameters: Shallow reranking (top-30), Listwise model (1 inference call), min_score filtering
+### Cell contents
+
+**Row 1 — 🎯 Quality**
+| Embedding Model | Indexing & Storage | Reranking |
+|---|---|---|
+| Large model (8B+ params) | `hnsw` index (unquantized float32) | Deep reranking (top-100) |
+| Full dimensions (1024–4096) | Dense graph (high `m`) | Pointwise cross-encoder |
+| Managed API hosting | High `ef_construction` | `chunk_rescorer` enabled |
+
+**Row 2 — ⚡ Speed**
+| Embedding Model | Indexing & Storage | Reranking |
+|---|---|---|
+| Small model (0.6B) | `bbq_hnsw` (1-bit quantized) | No reranking (skip entirely) |
+| Truncated dims via Matryoshka (256–512) | Default graph params | — |
+| Managed API hosting | 3× oversampling | — |
+
+**Row 3 — 💰 Cost**
+| Embedding Model | Indexing & Storage | Reranking |
+|---|---|---|
+| Small model | `bbq_disk` (vectors on disk) | Shallow reranking (top-30) |
+| Truncated dimensions (128–256) | Low-bit quantization | Listwise model (1 inference call) |
+| Self-hosted (vLLM) | Disk rescore | `min_score` filtering |
 
 ### Structural requirements
 
-- Must work as a **full set of three panels** — all visible at once in Section 2 overview.
-- Must work with **one panel highlighted** while the other two are dimmed — shown this way in Sections 4, 5, and 6 respectively. Produce highlight/dim variants or make panels separable.
-- NOT sliders — the outline explicitly says "discrete parameter selections." Show named parameters grouped under quality/speed/cost, not continuous dials.
-- The purpose is to show the *shape* of the decision space — the viewer should see what parameters exist and how they cluster by optimization goal.
+- Must work as the **full 3×3 grid** — all nine cells visible at once in Section 2 overview.
+- Must work with **one column highlighted** while the other two columns are dimmed — shown this way in Sections 4, 5, and 6 respectively. Produce column-highlight variants or make columns separable.
+- Reading across a row should feel like seeing one persona's full config. Reading down a column should feel like seeing the three options for one aspect.
+- NOT sliders — discrete parameter selections. Each cell shows named parameters, not continuous dials.
+- The row labels on the left (Quality/Speed/Cost) should use the persona colors: Quality = green (#36B37E), Speed = blue (#0B64DD), Cost = orange (#FF957D).
 
 ### Output
 
-Only panel image is to be output. The user can take care of dimming others, and progressively revealing them.
+Only the grid image is to be output. The user can take care of dimming columns and progressively revealing them.
 
 ## Context
 
