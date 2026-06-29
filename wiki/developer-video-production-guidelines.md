@@ -73,6 +73,8 @@ Title and thumbnail determine whether anyone sees your content. This isn't vanit
 - **"Versus" content performs reliably well.** Confirmed independently by Martin Keen (IBM) and Greg Baugues. Comparisons are "catnip for YouTube." ([source](../sources/ibm-technology-martin-keen-interview.md))
 - **Thumbnails need to work at thumbnail size.** One focal point, high contrast, 4 words or fewer. Developer audiences respond to clarity and credibility, not clickbait.
 
+For detailed, data-driven guidance on packaging: [YouTube Title Optimization](youtube-title-optimization.md) · [YouTube Thumbnail Design](youtube-thumbnail-design.md) · [YouTube SEO Fundamentals](youtube-seo-fundamentals.md)
+
 ---
 
 ## 5. Hook Hard, Deliver Immediately

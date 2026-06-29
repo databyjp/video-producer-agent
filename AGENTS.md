@@ -28,6 +28,14 @@ video-producer/
 │   └── assets/        # Downloaded images, PDFs, data files
 ├── sources/           # One summary page per ingested source
 ├── wiki/              # LLM-generated knowledge pages
+├── projects/          # Active video projects (one directory per video/series)
+│   └── <project>/
+│       ├── brief.md       # Status, concept, key decisions (project index)
+│       ├── outline.md     # Working outline (deliverable)
+│       ├── script.md      # Working script (deliverable)
+│       ├── assets/        # Graphics, thumbnails
+│       ├── code/          # Demo code, configs
+│       └── scratch/       # Raw notes, Obsidian exports (human input, not modified by LLM)
 ├── code/              # Runnable code/scripts linked from wiki pages
 └── temp/              # Scratch space (not part of the wiki)
 ```
