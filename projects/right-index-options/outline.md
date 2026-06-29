@@ -366,10 +366,18 @@ If you want to start configuring, the Elasticsearch docs for everything we cover
 ### Visual Assets Needed
 - Persona cards (Cora / Samantha / Ben) — style similar to trading cards or player cards
 - 3-aspect control panel graphic — three panels, each showing parameter groups with quality/speed/cost targets (NOT sliders — discrete parameter selections)
+- Oprah meme / "you get a gold star" text overlay (Section 1 cold open)
 - MTEB/MMTEB leaderboard snapshot (clean table, current as of recording date — verify before recording; include Jina v5 models)
+- Matryoshka truncation visual — 1024-dim vector being truncated to 512, 256, 128, styled as Russian nesting dolls
+- Embedding model comparison table (Model / Params / Dims / Hosting / Cost per M tokens — five rows: Jina v5 full, Jina v5 Matryoshka, Qwen3-0.6B, Gemini, Qwen3-8B)
 - Index type + quantization combined table (index types as rows, showing algorithm, quantization, memory model, and recovery)
-- Reranker comparison table (Elastic .rerank-v1, Jina v3 listwise, Jina v2, Cohere, custom)
-- Full config table (the big reveal — color-coded columns, expanded with specific parameter values)
+- HNSW graph visualization — simplified multi-layer graph showing query entering at top layer, navigating down toward nearest neighbors
+- Hierarchical k-means cluster visualization for `bbq_disk` — query finds nearest centroid, then scores vectors within that cluster
+- Two-stage oversampling + rescoring process visual — "Stage 1: Fast search on compressed vectors (30 candidates)" → "Stage 2: Rescore against float32 on disk (return top 10)"
+- Quantization format table (format / bits per dim / RAM reduction / default oversampling — rows: float32, int8, int4, bbq 1-bit, bbq_disk bits=2, bbq_disk bits=4)
+- ES 9.x defaults popup graphic ("Enterprise → bbq_disk | No Enterprise: <384 dims → int8_hnsw | ≥384 dims → bbq_hnsw")
+- Reranker comparison table (Elastic .rerank-v1, Jina v3 listwise, Jina v2)
+- Full config table (the big reveal — color-coded columns: Cora green, Samantha blue, Ben orange — expanded with specific parameter values and RAM/cost/latency rows)
 - Demo code snippets: dense_vector mapping with dims/similarity/index_options, semantic_text with Jina v5 on EIS, bbq_disk with bits/cluster_size, kNN query with rescore_vector, text_similarity_reranker with chunk_rescorer
 
 ### Demo Beats
