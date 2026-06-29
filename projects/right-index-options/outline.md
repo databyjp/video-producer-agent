@@ -16,13 +16,13 @@ status: draft
 
 **Cold open: the setup.**
 
-Three engineers. Same task: set up vector search for their project.
+Three engineers have the same task - to set up vector search for their project.
 
-Cora's done. She's using a high-dimensional embedding model, float32 precision, deep reranking on every query. Her recall is excellent.
+Cora's done. She's using a high-dimensional embedding model, float32 precision, deep reranking on every query. She checks the search quality thorugh recall, and goes home happy.
 
-Samantha's done too. Same embedding model as Cora — but she truncated the vectors to 25% with Matryoshka, applied quantization with BBQ, and skipped reranking entirely. Her results come back fast.
+Samantha's done too. Same embedding model as Cora — but she truncated the vectors to 25% with Matryoshka, applied quantization with BBQ, and skipped reranking entirely. Her results come back lightning fast.
 
-Ben just pushed to production. He's using a self-hosted open-source model, with vectors living almost entirely on disk, aggressive quantization everywhere — and then a tiny reranker at the end to clean things up. His cloud bill is tiny.
+Ben just pushed to production. He's using a self-hosted open-source model, with vectors living almost entirely on disk, aggressive quantization everywhere — and then a tiny reranker at the end to clean things up. His cloud dashboard shows a tiny bill, which makes him very happy.
 
 [pause]
 
@@ -30,7 +30,7 @@ These are three very different configurations. But which one is the best, or eve
 
 If you ask me, I'd say everybody's done a great job [Insert Oprah meme - "you get a gold star" text] - and it's not just because I'm avoiding conflict. What I didn't show you yet is that I'd given each of Ben, Samantha and Cora different tasks.
 
-So the real question is [Suits meme - have Harvey asking 'what's the job'] what's the job at hand? In other words, what constraints and parameters is each person optimising for? Let's find out.
+So the real question is - what's the job at hand? In other words, what constraints and parameters is each person optimising for? Let's find out.
 
 ---
 
@@ -42,9 +42,9 @@ To configure vector search, you're really turning four aspects:
 
 [popup: "The 4 Aspects" — show four quadrants, each as a "control panel." Each panel has the aspect name at top (e.g. "Embedding Model"), then three sub-sections for optimization target: 🎯 Quality / ⚡ Speed / 💰 Cost. Under each target, show the specific named parameters you'd tune toward that goal.]
 
-**Aspect 1 — Embedding model.** Not just "which model" — there are multiple independent parameters:
+**Aspect 1 — Embedding model.**
 - **Model architecture & size** (239M → 8B+ parameters) — bigger models capture more meaning but cost more to run
-- **Output dimensions** (32 → 4096) — Matryoshka lets you truncate without retraining; fewer dims = less storage, faster search
+- **Output dimensions** (32 → 4096) — Matryoshka lets you truncate without retraining; fewer dims = less storage, faster search,
 - **Hosting model** — Elastic Inference Service (managed), commercial API (Voyage, Gemini, OpenAI), or self-hosted (vLLM, llama.cpp)
 - **Context window** (8K → 32K tokens) — how much text the model sees per embedding
 - **Task-specific adapters** — some models (Jina v5) have LoRA adapters optimized for retrieval vs. classification vs. clustering
