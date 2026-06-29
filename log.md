@@ -174,3 +174,44 @@ okf_version: "0.1"
 ## 2026-06-29 — Revised task briefs: stripped styling, kept content & layout only
 
 **Action:** Updated both task briefs in `projects/right-index-options/tasks/` to remove prescriptive styling (color palettes, font choices, card aesthetic, slider handle style, highlight opacity values). Retained layout structure, content/labels, export variants, usage context, and functional requirements (e.g. "must be recognizable when blurred"). Styling decisions are now fully delegated to the designer agent.
+
+## 2026-06-29 — Deep research pass: fleshed out all 4 aspects with specific tunable parameters
+
+**Action:** Researched each of the four vector search configuration aspects thoroughly, then updated the outline and design task brief with specific, concrete parameters organized by optimization target (quality/speed/cost).
+
+**Research performed (live web search + doc fetch):**
+- Elasticsearch dense_vector docs (full fetch): Confirmed all index_options types, element_type options, similarity metrics, bbq_disk parameters (cluster_size, bits, visit_percentage, random_projection), rescore_vector settings, vectordb_document index mode, updatable field type paths
+- BBQ docs (full fetch): Confirmed bbq_disk bits parameter (1/2/4/7) with auto-adjusted oversampling, asymmetric quantization (1-bit index + 4-bit query), oversampling mechanics, disk overhead numbers
+- Elastic Rerank docs (full fetch): Confirmed .rerank-v1 specs (DeBERTa, 184M, English-only, 512 tokens), performance claims, architecture details
+- Jina models in ES (full fetch): Confirmed Jina v5-text-small (677M, 1024 dims, 32K context), v5-text-nano (239M, 768 dims, 8K context), v5-omni models, Jina Reranker v3 (listwise, 64 docs/call), Jina Reranker v2 (cross-encoder, 1024 tokens), all on EIS
+- Jina v5-text blog (full fetch): Confirmed LoRA task adapters (retrieval, text matching, clustering, classification), Matryoshka support, BBQ optimization training
+- Elastic Jina acquisition (confirmed Oct 2025)
+- semantic_text now defaults to Jina v5 on EIS (April 2026)
+- text_similarity_reranker retriever docs: Confirmed rank_window_size, min_score, chunk_rescorer params, Cohere/Vertex AI/HuggingFace integration options
+- MTEB April 2026 leaderboard analysis: Confirmed model rankings, pricing, Matryoshka support across all major models
+- ES 9.4: bbq_disk becomes default for float vectors when Enterprise license available; bits parameter added; native SIMD scoring
+
+**Key outline changes:**
+- Section 2: Expanded each aspect from a one-liner to a full parameter inventory with specific tunable knobs
+- Section 2: Updated graphic direction from "sliders" to "control panel" with quality/speed/cost sub-sections
+- Section 4 (Embedding Model): Replaced Voyage references with Jina v5 (Elastic's native model); added parameter table with model size, dimensions, hosting, context window, task adapters, modality; updated persona choices to use Jina v5-text-small on EIS
+- Section 5 (Index Type): Added full parameter table per index type; added HNSW tuning knobs (m, ef_construction); added bbq_disk tuning knobs (cluster_size, bits, visit_percentage, random_projection); updated defaults to reflect ES 9.4 (bbq_disk default with Enterprise); added element_type/similarity discussion; made persona choices more specific (Cora: m:32, ef:200; Ben: bits:2, cluster_size:256)
+- Section 6 (Quantization): Added bits parameter for bbq_disk; added rescore_vector.disk flag; added disk overhead numbers per quantization level; added bfloat16 as a quantization option; updated persona choices with specific parameter values
+- Section 7 (Reranking): Added full reranker comparison table (Elastic, Jina v3 listwise, Jina v2, Cohere, custom HuggingFace); added pointwise vs listwise architecture distinction; added min_score and chunk_rescorer parameters; updated Ben to use Jina v3 listwise, Cora to use chunk_rescorer
+- Section 8: Updated config table with specific parameter values per persona
+- Section 9: Updated vector exclusion from _source (now default in ES 9.x); added Jina reranker alternatives for multilingual; updated migration path with explicit upgrade sequence
+- Section 10: Updated series roadmap with specific topics per video
+- Production Notes: Updated all visual asset descriptions, demo beats, version notes, callbacks, and sources
+
+**Task brief updated:**
+- `tasks/design-four-dials-graphic.md` — Completely rewritten as "4 Aspects Control Panel Graphic": four quadrants as control panels (not sliders), each with quality/speed/cost sub-sections showing named parameters. Added persona variant requirement. Includes explicit design direction rejecting the slider metaphor.
+
+**Sources consulted:**
+- https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/dense-vector
+- https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/bbq
+- https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/ml-nlp-rerank
+- https://www.elastic.co/docs/explore-analyze/machine-learning/nlp/ml-nlp-jina
+- https://www.elastic.co/search-labs/blog/jina-embeddings-v5-text
+- https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/text-similarity-reranker-retriever
+- https://awesomeagents.ai/leaderboards/embedding-model-leaderboard-mteb-april-2026/
+- https://www.codesota.com/benchmarks/mteb
