@@ -38,9 +38,9 @@ So the real question is [Suits meme - have Harvey asking 'what's the job'] what'
 
 **The core idea before we meet the personas.**
 
-To configure vector search, you're really turning four dials:
+To configure vector search, you're really turning four aspects:
 
-[popup: "The 4 Dials - show four quadrants, showing each "dial" - graphic should be one analog vertical slider in each quadrant, each with a quality ↔ cost/speed axis; but along the axis show two or three "points", each point with chosen parameters]
+[popup: "The 4 Aspects - show four quadrants, showing each "control panel" - each control panel should have the "parameter" being tuned (e.g. "embedding model", or "index type & config"). Then, three sub-headings in the quadrant for optimsiation target - e.g. quality / speed / cost. Then, each section should have names parameters to tune, like embedding model size, output dimensions, supported modalities, quantization]
 
 **Dial 1 — Embedding model.** Which model generates your vectors? What are the dimensions? Does it support Matryoshka truncation?
 

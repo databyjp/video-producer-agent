@@ -141,7 +141,7 @@ The **designer agent** ([repo](https://github.com/databyjp/elastic-dev-graphic-d
 
 **Use it for:** persona cards, comparison tables, config diagrams, architecture visuals — any graphic element that appears in the video AND can be repurposed for thumbnails. Write a task brief in `designer/tasks/<task-name>/brief.md`.
 
-**Don't use it for:** final thumbnail compositing (that's Figma/Canva), photo editing, or anything requiring raster manipulation. The agent produces clean vector elements; humans composite them with photos and apply blur/effects.
+**Don't use it for:** final thumbnail compositing, photo editing, or anything requiring raster manipulation. The agent produces clean vector elements; humans composite them with photos and apply blur/effects.
 
 ---
 

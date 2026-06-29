@@ -42,7 +42,7 @@ Three engineers, same task (set up vector search), three different correct confi
 - Dark background, high contrast
 - Key elements in left 2/3 (safe zone)
 
-**Production note:** Build the persona cards as video assets first (see Production Notes in outline). Blur and composite for thumbnail in Figma/Canva afterward.
+**Production note:** Build the persona cards as video assets first (see Production Notes in outline). Blur and composite for thumbnail in Pixelmator afterward.
 
 ## Series Plan
 

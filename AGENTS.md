@@ -55,7 +55,7 @@ The table below describes the full lifecycle of a video. The user will ask for h
 | Stage | Human | AI-Assisted |
 |---|---|---|
 | **Ideation** | Propose & select topic | Research, title/thumbnail ideation |
-| **Thumbnail** | Design & execute in Canva/Figma | Generate concepts & copy |
+| **Thumbnail** | Design & execute in SVG; The user has Pixelmator Pro | Generate concepts & copy |
 | **Outline** | Write video outline | Detailed research, critique & suggest edits |
 | **Script** | Write outline → full script | Co-generate draft, co-review |
 | **Graphics** | Review & approve | Co-generate key graphics |

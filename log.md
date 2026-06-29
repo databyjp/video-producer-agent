@@ -162,3 +162,15 @@ okf_version: "0.1"
 **Action:** Added `/Users/jphwang/code/llm-wiki/elastic-devrel-wiki` as a read-only external wiki reference in AGENTS.md. Updated Task workflow step 1 to consult both wikis.
 
 **Rationale:** The Elastic wiki has directly relevant technical content (vector search, HNSW, DiskBBQ, RRF, etc.) that the agent should leverage when working on Elastic-related video projects. Read-only — this agent doesn't write to it. Two behaviors needed: (1) *discover* — proactively explore the current landscape of options, tools, and changes; (2) *verify* — confirm specific technical claims against current sources. Both are now covered in a single workflow step.
+
+## 2026-06-29 — Created design task briefs for Sections 2–3 graphics
+
+**Action:** Created two task briefs in `projects/right-index-options/tasks/`:
+- `design-four-dials-graphic.md` — Four-quadrant layout with vertical sliders showing the quality ↔ cost/speed axis for each dial (Embedding Model, Index Type, Quantization, Reranking). Each slider has 2–3 labeled tick positions with real config values. Needs full-reveal and per-dial highlight variants for Sections 4–7.
+- `design-persona-cards.md` — Three trading-card-style persona cards for Cora (green/quality), Samantha (blue/speed), Ben (orange/cost). Each card has name, priority badge, domain, key stats, avatar/icon, and optional tagline. Needs individual cards, composite set, and highlight variants. Also used in thumbnail (blurred/fanned behind JP).
+
+**Context:** Outline reviewed through Section 3. Both assets are recurring throughout the video and must be visually consistent with each other. Briefs include full content specs, export variants, and design direction. Cards double as thumbnail assets per the brief's thumbnail concept.
+
+## 2026-06-29 — Revised task briefs: stripped styling, kept content & layout only
+
+**Action:** Updated both task briefs in `projects/right-index-options/tasks/` to remove prescriptive styling (color palettes, font choices, card aesthetic, slider handle style, highlight opacity values). Retained layout structure, content/labels, export variants, usage context, and functional requirements (e.g. "must be recognizable when blurred"). Styling decisions are now fully delegated to the designer agent.
