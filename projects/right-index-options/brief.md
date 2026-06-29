@@ -15,11 +15,15 @@ Three engineers, same task (set up vector search), three different correct confi
 
 **Core thesis:** There is no single best vector search config — the right one depends on what you're optimizing for.
 
+**Framing note:** The video acknowledges `semantic_text` as the simpler entry point (sensible defaults, managed inference) before diving into the dials. The dials explain what's happening under the hood — and when you'd override the defaults. This prevents the video from making things seem unnecessarily complex for viewers who don't need fine-grained control.
+
+**Hybrid search note:** The dials cover vector search configuration in isolation. Most production systems combine vector search with BM25 via hybrid search (RRF). The video notes this in the tradeoffs section — hybrid search acts as a safety net that reduces sensitivity to any single vector config choice.
+
 ## Personas
 
 - **Cora** — legal/medical research tool, ~500k–1M docs, quality-first (wrong answers have real consequences)
 - **Samantha** — e-commerce product search, millions of SKUs, speed-first (latency costs conversions)
-- **Ben** — doc archive, tens of millions of docs, cost-first (budget is the binding constraint)
+- **Ben** — doc archive, tens of millions of docs, cost-first (budget is the binding constraint). Uses aggressive quantization + disk-based index, with shallow reranking as a cheap quality recovery mechanism.
 
 ## Packaging
 

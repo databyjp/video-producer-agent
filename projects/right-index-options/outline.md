@@ -16,25 +16,21 @@ status: draft
 
 **Cold open: the setup.**
 
-Three engineers. Same task: set up vector search on their Elasticsearch index.
+Three engineers. Same task: set up vector search for their project.
 
 Cora's done. She's using a high-dimensional embedding model, float32 precision, deep reranking on every query. Her recall is excellent.
 
-Samantha's done too. Low-dimensional embeddings, aggressive binary quantization, no reranking. Her results come back fast.
+Samantha's done too. Same embedding model as Cora — but she truncated the vectors to 25% with Matryoshka, applied quantization with BBQ, and skipped reranking entirely. Her results come back fast.
 
-Ben just pushed to production. No managed embedding API, open-source model, vectors living almost entirely on disk. His cloud bill barely moved.
+Ben just pushed to production. He's using a self-hosted open-source model, with vectors living almost entirely on disk, aggressive quantization everywhere — and then a tiny reranker at the end to clean things up. His cloud bill is tiny.
 
 [pause]
 
-All three of them did it right.
+These are three very different configurations. But which one is the best, or even the worst?
 
-[beat — skeptical JP face]
+If you ask me, I'd say everybody's done a great job [Insert Oprah meme - "you get a gold star" text] - and it's not just because I'm avoiding conflict. What I didn't show you yet is that I'd given each of Ben, Samantha and Cora different tasks.
 
-Which means... one of two things is true. Either there's no single best way to configure vector search — or two of these people are about to have a bad day.
-
-[beat]
-
-Today, we're figuring out which it is.
+So the real question is [Suits meme - have Harvey asking 'what's the job'] what's the job at hand? In other words, what constraints and parameters is each person optimising for? Let's find out.
 
 ---
 
@@ -44,23 +40,23 @@ Today, we're figuring out which it is.
 
 To configure vector search, you're really turning four dials:
 
-[popup: "The 4 Dials"]
+[popup: "The 4 Dials - show four quadrants, showing each "dial" - graphic should be one analog vertical slider in each quadrant, each with a quality ↔ cost/speed axis; but along the axis show two or three "points", each point with chosen parameters]
 
 **Dial 1 — Embedding model.** Which model generates your vectors? What are the dimensions? Does it support Matryoshka truncation?
 
-**Dial 2 — Index type.** How are vectors stored and searched? Flat brute-force, HNSW graph, or disk-based clustering?
+**Dial 2 — Index type & configuration.** How are vectors stored and searched? Flat brute-force, HNSW graph, or disk-based clustering?
 
 **Dial 3 — Quantization.** How much do you compress the vectors? float32, int8, int4, or binary (BBQ)?
 
 **Dial 4 — Reranking.** Do you run a cross-encoder model to re-score the top results after retrieval?
 
-[show diagram: four sliders/dials, each with a quality ↔ cost/speed axis]
-
 Every one of these dials has a tradeoff. Crank them all toward quality and you get the best results money can buy — literally. Crank them toward cost and speed and you might still get great results, as long as you know what you're giving up.
 
 The hard part is knowing where to set each dial for *your* situation.
 
-That's what the personas are for.
+**Quick aside - could be done as a pause & additional talking head overlay from a different angle:** if you've used `semantic_text` in Elasticsearch, it picks sensible defaults for most of these dials — model, chunking, index type. This video is about understanding what those defaults are doing, and when you'd want to override them. Think of `semantic_text` as the automatic transmission. We're looking under the hood.
+
+So let's take a look at our friends Cora, Samantha and Ben
 
 ---
 
@@ -68,21 +64,23 @@ That's what the personas are for.
 
 **Three constraints, three profiles.**
 
+[for each persona, show the whole persona card, but highlight their card section while darkening the others / progressive revealing them]
+
 [show persona card: CORA]
 
-**Cora** is building a legal and medical research tool. Half a million to a million documents. If her search returns the wrong case, the wrong study, the wrong precedent — someone makes a bad decision. Her constraint is quality. Wrong answers have real consequences.
+**Cora** is building a legal and medical research tool. She might have a lot, but not an overwhelming amount of documents, say - a million documents. They tend to be long documents too, so after chunking she's looking at a tens of millions of vectors. What's really important to Cora is the search quality. If her agent doesn't find the right case or study, or worse, returns an inappropriate case or study — it can be really costly. Maybe someon makes a bad decision, which might lead to a legal case, or medical research taking a wrong turn, costing a lot of money and time. She prioritises quality over everything else.
 
 [show persona card: SAMANTHA]
 
-**Samantha** runs product search for an e-commerce platform. Millions of SKUs. Every millisecond of query latency costs conversions. She can't wait for a reranker. Her constraint is speed.
+**Samantha** runs product search for an e-commerce platform. Millions of SKUs, and if they grow, potentially billions. Unlike Cora, each SKU is roughly one vector, so her vector count tracks her product count. Samantha's product serves impatient online shoppers. Every millisecond of query latency risks users leaving to go somewhere else, and costs conversion. She wants the search results to be good, but it doesn't matter as much for it to be perfect. Her priority is speed.
 
 [show persona card: BEN]
 
-**Ben** is archiving tens of millions of documents. The search needs to work. But the cluster costs more than anything else on his team's budget. His constraint is cost.
+**Ben** is building an archive. He might have tens, or hundreds of millions of documents. After chunking, he could be looking at billions of vectors, over time. The search needs to work, but this is an archive. Most of the documents aren't used very often, if at all, and his end users demand competitive pricing above all. They would like someplace reliable to store this data, and be able to query it on the rare occasions that they need to. As a dusty archive, the end users prioritise cost. So, Ben looks to minimise cost over all else.
 
-[beat]
+[show the entire persona card set]
 
-Same problem. Completely different binding constraints. Let's turn the dials.
+These are very divergent needs from one another. Sure, they all need vector search - but they're about the same toys, as say, a iPhone, a supercomputer, or a Tickle-Me Elmo toy are computers. So how do these divergent needs translate to actual differences?
 
 ---
 
@@ -98,13 +96,17 @@ In 2026, the top commercial API options include Voyage 3.1 Large (~2048 dims), G
 
 [popup: "Matryoshka Representation Learning — truncate dims without retraining"]
 
+One caveat on those leaderboard scores — MTEB measures performance across generic benchmarks. Your domain might have a different shape. Always test on your actual data.
+
 **Cora** wants high-quality. She picks a model with strong retrieval benchmarks — something like Voyage 3.1 at 1024 dims. She doesn't want to truncate. Every dimension is earning its keep.
 
-**Samantha** wants speed — and smaller vectors mean faster search. She uses Matryoshka truncation to drop to 512 dims without changing models. Half the vector storage, roughly the same model quality.
+**Samantha** wants speed — and smaller vectors mean faster search. She uses the same model as Cora, but with Matryoshka truncation to drop to 512 dims. Half the vector storage, roughly the same model quality. Same quality ceiling, smaller footprint.
 
 **Ben** needs to keep embedding costs near zero. He self-hosts Qwen3-Embedding-0.6B — 600M parameters, Apache 2.0, strong retrieval quality, runs on a single GPU he's already paying for. No per-token API cost at tens of millions of documents.
 
 [show table column: Model | Dims | Cost/M tokens or self-host]
+
+[demo: show dense_vector field mapping in ES — setting dims, similarity. Then briefly show the semantic_text equivalent — "or you let Elasticsearch handle this for you."]
 
 *The deeper dive on models — Matryoshka, similarity metrics, model architecture — is Video 2.*
 
@@ -121,15 +123,19 @@ In Elasticsearch, you set this with `index_options.type` on your `dense_vector` 
 - **`flat`** — brute-force exact search. Scans everything. Accurate, but doesn't scale.
 - **`hnsw`** — the workhorse. Navigable Small World graph. Approximate, fast, but all vectors must fit in RAM. RAM cost: ~4GB per million 1024-dim float32 vectors.
 - **`bbq_hnsw`** — HNSW with binary quantization. Same graph structure, 32× less memory. Default for float vectors with ≥384 dims as of ES 9.1.
-- **`bbq_disk`** *(Enterprise)* — disk-based. Groups vectors into clusters via hierarchical k-means. Only cluster centroids live in memory. Built for datasets that don't fit in RAM. Available since ES 9.2.
+- **`bbq_disk`** — disk-based. Groups vectors into clusters via hierarchical k-means. Only cluster centroids live in memory. Built for datasets that don't fit in RAM. Available since ES 9.2. *(Note: requires an Enterprise Elastic license.)*
 
 [popup: "ES 9.1 defaults: <384 dims → int8_hnsw | ≥384 dims → bbq_hnsw"]
 
-**Cora** has ~1M documents at 1024 dims — that's around 4GB of RAM for float32 HNSW, which is manageable on a well-specced node. She sticks with `hnsw` (unquantized) to preserve maximum recall.
+**Cora** has a few million vectors at 1024 dims — that's around 4GB of RAM per million vectors for float32 HNSW, which is manageable on a well-specced node. She sticks with `hnsw` (unquantized) to preserve maximum recall.
 
-**Samantha** has millions of SKUs and needs speed. She uses `bbq_hnsw`. The 32× memory reduction means she can fit more vectors in RAM per node, and HNSW graph traversal is fast. With oversampling + rescoring, accuracy stays high.
+**Samantha** has millions of SKUs and needs speed. She uses `bbq_hnsw`. The 32× memory reduction means she can fit more vectors in RAM per node, and HNSW graph traversal is fast. With oversampling + rescoring, accuracy stays high. One thing worth noting: her e-commerce queries almost always have filters — size, color, availability. Elasticsearch's filtered kNN optimizations mean those facets don't kill vector search performance.
 
-**Ben** has tens of millions of documents. HNSW would require hundreds of gigabytes of RAM. He uses `bbq_disk`. Vectors live on disk, centroids in memory. The cluster bill is a fraction of the HNSW alternative.
+**Ben** has tens of millions of documents, potentially hundreds of millions of vectors after chunking. HNSW would require hundreds of gigabytes of RAM. He uses `bbq_disk`. Vectors live on disk, centroids in memory. The cluster bill is a fraction of the HNSW alternative.
+
+Notice that Cora and Samantha both chose HNSW — the same underlying graph algorithm — but for opposite reasons. Cora wants the recall. Samantha wants the speed. The difference is in how they quantize the vectors on that graph, which is the next dial.
+
+[demo: show index_options.type in a dense_vector mapping — hnsw vs bbq_hnsw config side by side]
 
 *The deep dive on HNSW graph parameters (m, ef_construction), bbq_disk cluster sizing, and performance tuning is Video 3.*
 
@@ -139,7 +145,7 @@ In Elasticsearch, you set this with `index_options.type` on your `dense_vector` 
 
 **The precision spectrum — and what you're actually trading.**
 
-Quantization compresses vectors from float32 to smaller formats. In Elasticsearch, there are four levels:
+We just saw that the index type often implies a quantization level — `bbq_hnsw` uses binary quantization, `hnsw` defaults to full precision. But quantization is worth understanding as its own dial, because it controls how much precision you trade for memory savings, and because the recovery mechanisms (oversampling, rescoring) are where the real tuning happens.
 
 [show visual: spectrum bar — float32 → int8 → int4 → BBQ (binary)]
 
@@ -156,17 +162,19 @@ The key insight with BBQ: Elasticsearch doesn't just discard precision. It store
 
 There's one important storage note: even with quantization, Elasticsearch keeps the raw float32 vectors on disk for rescoring. So quantization saves RAM, not disk.
 
-**Cora** uses no quantization — or at most int8 if memory is tight — and keeps rescoring on. Quality first.
+**Cora** stays at full float32 precision. No quantization, no oversampling. She's paying the RAM cost to avoid any recall degradation.
 
-**Samantha** uses `bbq_hnsw` with default 3× oversampling. The memory savings matter, and the oversampling rescoring step is fast enough to fit inside her latency budget.
+**Samantha** is on BBQ (via `bbq_hnsw`), so the question for her is oversampling budget. Default 3× oversampling fits inside her latency SLO — it recovers most of the recall loss from binary quantization without blowing her P99. Pushing to 5× would recover a bit more recall but at a latency cost she can't afford.
 
-**Ben** uses BBQ as part of `bbq_disk`. The entire system is disk-optimised — raw vectors on disk, quantized for the search pass, corrective factors stored alongside. The RAM footprint is a tiny fraction of what HNSW would need.
+**Ben** is also on BBQ (via `bbq_disk`), but he leans into *higher* oversampling than Samantha. His latency budget is looser — users will tolerate a second or two. So he cranks oversampling up to claw back more recall from the aggressive compression. And he has another recovery mechanism waiting at the next dial.
+
+[demo: show oversampling config in a kNN query — rescore_vector.oversample parameter]
 
 *Quantization in depth — oversampling math, int4 edge cases, the BBQ optimized scalar quantization algorithm — is Video 4.*
 
 -----
 
-## SECTION 7 — DIAL 4: RERANKING (1 min)
+## SECTION 7 — DIAL 4: RERANKING (1–1.5 min)
 
 **A second model to fix what the first one got wrong.**
 
@@ -174,37 +182,51 @@ Vector search retrieves by approximate similarity. But approximate has limits �
 
 In Elasticsearch, this is `text_similarity_reranker` — a retriever that takes the top-N results from a standard search, runs them through a reranking model, and returns the re-ordered results.
 
-[show code snippet: text_similarity_reranker with rank_window_size: 100]
-
 Elastic ships a built-in reranker (`.rerank-v1` — DeBERTa-based, 184M params, 40% average improvement over BM25 alone on BEIR). You can also use Cohere Rerank or upload any Hugging Face cross-encoder.
 
-The catch: if you rerank to depth N, you run N inferences per query. Shallow reranking — top-30 — is often the right balance for CPU inference.
+The catch: if you rerank to depth N, you run N inferences per query. So the question isn't just "rerank or not" — it's how deep.
 
-**Cora** uses deep reranking (top-100). She can afford the latency. The improvement in recall at the top positions is the whole point of her product.
+[show code snippet: text_similarity_reranker with rank_window_size]
 
-**Samantha** skips reranking — or uses a very shallow window (top-10). Her latency budget doesn't allow it.
+Let's start with the surprising one.
 
-**Ben** skips reranking. At tens of millions of documents and high query volume, the compute cost is prohibitive.
+**Ben** uses shallow reranking — top-20 to top-30. This is the payoff of his whole strategy. He saved aggressively at every prior dial — self-hosted model, disk-based index, binary quantization. Each of those trades away some recall. But a lightweight reranker at the end, rescoring just a short list, recovers a meaningful chunk of that quality for very little compute. Cheap first stage, smart second stage.
+
+**Cora** uses deep reranking (top-100). She can afford the latency. The improvement in precision at the top positions is the whole point of her product.
+
+**Samantha** skips reranking entirely. Her latency budget is the binding constraint — even shallow reranking adds inference time she can't spare. She relies on the oversampling + rescore from the quantization layer to do the quality recovery work.
+
+[demo: show text_similarity_reranker in a retriever pipeline — rank_window_size: 30 for Ben vs 100 for Cora]
 
 *Cross-encoder architecture, rank window sizing, cost modelling — Video 5.*
 
 ---
 
-## SECTION 8 — THE TABLE (1 min)
+## SECTION 8 — THE TABLE + COMPOUND EFFECTS (1.5 min)
 
-**All three configs, side by side.**
+**All three configs, side by side — and why the interactions matter.**
 
 [show the full config table — color-coded columns: Cora (green), Samantha (blue), Ben (orange)]
 
 |  | Cora (Quality) | Samantha (Speed) | Ben (Cost) |
 |---|---|---|---|
 | **Embedding model** | Voyage 3.1 Large, 1024 dims | Voyage 3.1 Large, 512 dims (Matryoshka) | Qwen3-0.6B, 1024 dims (self-hosted) |
-| **Index type** | `hnsw` (float32) | `bbq_hnsw` | `bbq_disk` |
-| **Quantization** | None | BBQ + 3× oversample | BBQ (disk-based) |
-| **Reranking** | Yes — top-100 | No | No |
-| **Approx RAM / 1M docs** | ~4 GB | ~130 MB | ~20–30 MB |
+| **Index type** | `hnsw` | `bbq_hnsw` | `bbq_disk` |
+| **Quantization** | float32 (none) | BBQ + 3× oversample | BBQ + higher oversample |
+| **Reranking** | Yes — top-100 | No | Yes — top-20–30 |
+| **Approx RAM / 1M vectors** | ~4 GB | ~65 MB | ~20–30 MB |
 | **Embedding cost** | $0.05 per M tokens | $0.05 per M tokens | ~$0 (self-hosted) |
-| **Query latency** | Slower (reranker adds ~50–200ms) | Fastest | Fast (disk I/O dependent) |
+| **Query latency** | Slower (reranker adds ~50–200ms) | Fastest | Moderate (disk I/O + shallow rerank) |
+
+[beat]
+
+Now look at the compound effects — this is where it gets interesting.
+
+**Ben stacked savings at every layer.** Self-hosted model saves embedding cost. Disk-based index saves RAM. Binary quantization saves more RAM. And then the shallow reranker at the end recovers quality for pennies. He's not just "cheap and worse" — he's running a cost-optimized pipeline with a quality recovery strategy built in.
+
+**Cora and Samantha both picked HNSW** — the same graph algorithm — for opposite reasons. Cora keeps it unquantized for maximum recall. Samantha quantizes it aggressively for memory efficiency. Same search structure, completely different precision trade.
+
+**Model choice cascades through everything.** Cora's 1024-dim float32 vectors cost ~4GB per million vectors in RAM. Samantha's 512-dim BBQ vectors cost ~65MB. That's roughly a 60× difference in RAM footprint — driven by just two dials.
 
 [beat]
 
@@ -212,21 +234,19 @@ All three are correct. None of them would work well for the other two.
 
 ---
 
-## SECTION 9 — HONEST TRADEOFFS (45s)
+## SECTION 9 — WHAT ELSE YOU SHOULD KNOW (45s)
 
-**What this framework doesn't tell you.**
-
-A few things worth saying plainly:
+**Things this framework doesn't cover — and a few easy wins.**
 
 These are archetypes, not recipes. Real projects mix constraints — maybe you care about quality *and* cost, just with different weights.
 
-MTEB scores are a starting point. They measure performance across generic benchmarks. Your domain might have a different shape. Always test on your actual data.
+We covered vector search config in isolation — but most production systems combine vector search with BM25 via hybrid search using RRF. That changes the sensitivity of some of these dials. BM25 catches keyword matches the embedding misses, which means your vector path doesn't have to be perfect. Hybrid search is a whole topic of its own.
 
-Reranking English-only. Elastic Rerank is English-only at 512 tokens max. If you're building multilingual or need long-context reranking, you need a different solution.
+One easy win that applies to all three setups: exclude your vectors from `_source`. Elasticsearch stores raw vectors on disk for rescoring regardless — you don't need them duplicated in `_source` too. At Ben's scale especially, this saves real disk and network overhead.
 
-`bbq_disk` requires an Enterprise Elastic subscription. If you're on a basic license, it's not available.
+Reranking caveat: Elastic's built-in reranker is English-only, 512 tokens max. If you're building multilingual or need long-context reranking, you'll need a different model.
 
-And finally — you can migrate. Elasticsearch lets you update `index_options.type` via the Mapping API, moving up the quantization ladder without reindexing the whole index. New segments use the new type; old ones keep the old until you force-merge or reindex.
+And finally — you're not locked in. Elasticsearch lets you update `index_options.type` via the Mapping API, moving up or down the quantization ladder without reindexing. New segments use the new type; old ones keep the old until you force-merge. So start somewhere reasonable and tune from there.
 
 ---
 
@@ -261,6 +281,15 @@ If you want to start configuring, all the Elasticsearch examples from this video
 - Quantization spectrum bar (float32 → int8 → int4 → BBQ)
 - Full config table (the big reveal — color-coded columns)
 - Series roadmap graphic
+- Demo code snippets: dense_vector mapping, semantic_text equivalent, index_options config, oversampling query, text_similarity_reranker pipeline
+
+### Demo Beats
+Each dial section includes a brief demo moment (15–20s). These can be static code overlays or quick Kibana console shots — not full live-coding sessions. Purpose: ground the abstract dials in real Elasticsearch config.
+
+- **Dial 1:** dense_vector field mapping (dims, similarity) + semantic_text shortcut
+- **Dial 2:** index_options.type — hnsw vs bbq_hnsw side by side
+- **Dial 3:** kNN query with rescore_vector.oversample parameter
+- **Dial 4:** text_similarity_reranker retriever with rank_window_size
 
 ### Elasticsearch Version Notes
 - All index type behavior reflects Elasticsearch 9.x

@@ -41,6 +41,13 @@ video-producer/
 └── temp/              # Scratch space (not part of the wiki)
 ```
 
+## External wikis
+
+- **Elastic DevRel Wiki** — `/Users/jphwang/code/llm-wiki/elastic-devrel-wiki`
+  Elastic-specific technical knowledge (vector search, HNSW, DiskBBQ, ES|QL, etc.).
+  Read its `index.md` to find relevant pages when working on Elastic-related content.
+  This wiki is maintained separately — read from it but do not modify it.
+
 ## Video Production Stages
 
 The table below describes the full lifecycle of a video. The user will ask for help with **individual tasks** from specific stages — not the whole pipeline at once. Only do what is asked.
@@ -85,7 +92,7 @@ source: <URL or path>    # for source summaries only
 
 When the human asks for production work (e.g. "research topic X", "generate thumbnail ideas", "draft titles for Y"):
 
-1. **Consult the wiki** — read `index.md`, find relevant pages (past research, style preferences, what worked before).
+1. **Consult the wikis** — read `index.md` for this wiki and the Elastic DevRel Wiki (see External wikis above) to find relevant pages (past research, style preferences, technical context, what worked before).
 2. **Research actively** — don't limit work to what the human explicitly mentions. When a task involves technical choices, search to discover the current landscape (available options, recent changes, new tools). When the task involves specific claims, verify them against current sources. Training data goes stale; the web doesn't.
 3. **Do the work** — perform the task, informed by accumulated knowledge and fresh research.
 4. **Feed back** — after the task, update the wiki with anything reusable:
