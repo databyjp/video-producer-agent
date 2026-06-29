@@ -284,3 +284,11 @@ okf_version: "0.1"
 - Anti-pattern callout — good idea but risks scope creep; may add in scripting.
 - Jina acquisition context — noted but the hook is already tight.
 - EIS pricing caveat — the docs say "appropriate subscription level"; added no explicit claim of free unlimited.
+
+## 2026-06-29 — Updated AGENTS.md: task brief and outline conventions
+
+**Action:** Two additions to AGENTS.md conventions:
+1. **Task briefs: semantics only.** Added explicit guidance that task briefs specify *what* to show, not *how* to style it. No colors, font sizes, background guidance, or layout prescriptions — the designer agent has its own design system.
+2. **Visual assets in outlines.** Added convention that the "Visual Assets Needed" section should only list assets that need standalone design work (infographics, diagrams). Memes, screenshots, demo code, and table overlays are noted inline in the script and don't belong in the asset list.
+
+**Rationale:** The outline's production notes section was accumulating a flat list mixing designer deliverables with editor-time assets (memes, code snippets, screenshots). This made it unclear what actually needed a design task brief. Separating the two keeps the outline clean and the task briefs focused.

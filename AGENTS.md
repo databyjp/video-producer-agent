@@ -148,9 +148,11 @@ timestamp: <ISO 8601>
 
 The body should contain:
 - **Objective** — what the deliverable is and how it will be used.
-- **Specs** — dimensions, format, style constraints, etc.
+- **Content** — what information appears on the graphic (labels, data, text). Be specific about semantics.
 - **Context** — point the sub-agent to files in the project (outline, brief) rather than duplicating content. The `project_root` field gives the sub-agent an absolute path to read from.
 - **References** — style examples, past assets, wiki pages.
+
+**Semantics only — no styling.** Task briefs specify *what* to show, not *how* to style it. Don't include colors, font sizes, background guidance, card aesthetics, or layout prescriptions. The designer agent has its own design system and will make better styling decisions with its own guidelines than with ours overriding them. Structural requirements are fine (e.g. "needs to be separable into individual panels for highlight/dim variants").
 
 ### Principles
 
@@ -166,4 +168,5 @@ The body should contain:
 - **Cross-link generously** between wiki pages.
 - **Source summaries are factual;** interpretation goes in wiki pages.
 - **No time estimates in outlines.** Don't add per-section durations or suggested lengths — they're inaccurate before scripting and go stale as outlines evolve. Total video length estimates belong in the project brief only. Give a wide range as to not artificially constrain the material, or conversely to add unnecessary padding.
+- **Visual assets in outlines.** Outlines should include inline visual directions (see [Visual Direction Conventions](wiki/visual-direction-conventions.md)) as part of the script flow. A separate "Visual Assets Needed" section in the outline should only list assets that need to be **created by the designer sub-agent** as standalone deliverables (infographics, persona cards, framework diagrams). Don't list memes, screenshots, demo code snippets, or table overlays — those are noted inline in the script and produced during editing, not as separate design tasks.
 
