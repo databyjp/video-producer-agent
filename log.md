@@ -292,3 +292,33 @@ okf_version: "0.1"
 2. **Visual assets in outlines.** Added convention that the "Visual Assets Needed" section should only list assets that need standalone design work (infographics, diagrams). Memes, screenshots, demo code, and table overlays are noted inline in the script and don't belong in the asset list.
 
 **Rationale:** The outline's production notes section was accumulating a flat list mixing designer deliverables with editor-time assets (memes, code snippets, screenshots). This made it unclear what actually needed a design task brief. Separating the two keeps the outline clean and the task briefs focused.
+
+## 2026-06-29 — Created designer task briefs for right-index-options
+
+**Project:** right-index-options
+**Action:** Created 4 task briefs in `projects/right-index-options/tasks/` for the designer agent, one per visual asset from the outline's "Visual Assets Needed" section:
+
+1. `design-persona-cards.md` — Cora/Samantha/Ben trading cards with highlight/dim variants
+2. `design-control-panel.md` — 3-aspect control panel (Embedding, Indexing, Reranking) with per-panel highlight variants
+3. `design-matryoshka-visual.md` — Matryoshka dimension truncation visual (1024→512→256→128)
+4. `design-oversampling-rescoring-visual.md` — Two-stage oversampling + rescoring process diagram
+
+All briefs follow semantics-only convention (no styling prescriptions). Each references the relevant outline sections for context.
+
+## 2026-06-29 — Drafted script for right-index-options
+
+**Project:** right-index-options
+**Action:** Created `projects/right-index-options/script.md` — full draft script based on `outline.md`, following voice/style conventions from `wiki/script-voice-and-style.md` and structure patterns from `wiki/script-structure-patterns.md`.
+
+**Notes:**
+- All inline visual directions use `[bracket]` notation per `wiki/visual-direction-conventions.md`
+- Phonetic guidance included for numbers and technical terms (e.g., "thirty-two times (32×)")
+- Kept the outline's persona descriptions largely intact since they read naturally as spoken word
+- Demo beats kept as brief inline notes (not fully scripted — these are screencast segments)
+- CTA asks viewers which persona they identify with
+
+## 2026-06-29 — Added script co-drafting conventions to AGENTS.md
+
+**Action:** Added "Scripts are spoken, not read" convention with four sub-rules: don't enumerate specs (teach intuition, put numbers in overlays), respect scope boundaries (if outline says "deep dive is Video X" don't include it), personas are the narrative spine (not spec lists), one idea per paragraph.
+
+**Rationale:** Script draft for right-index-options showed classic LLM completionism — listing MTEB scores (68.32, 67.71, 70.58, 69.44) in spoken text, expanding Matryoshka/hosting into full subsections despite the outline saying "deep dive is Video 2", and adding tuning knobs (m, ef_construction, cluster_size, bits, corrective factors) that belong in later videos. Rules address the mechanical failures; editorial judgment about what earns its place remains human-led.

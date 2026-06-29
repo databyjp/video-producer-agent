@@ -167,6 +167,11 @@ The body should contain:
 - **One concept per page.** Split if too broad.
 - **Cross-link generously** between wiki pages.
 - **Source summaries are factual;** interpretation goes in wiki pages.
+- **Scripts are spoken, not read.** When co-drafting scripts, optimize for a viewer *watching*, not reading. Specific rules:
+  - **Don't enumerate specs.** A list of model scores (68.32, 67.71, 70.58) is unabsorbable in a video. Teach the intuition — "open-weight models now match or beat commercial APIs on retrieval benchmarks" — and put the numbers in a table overlay.
+  - **Respect scope boundaries.** If the outline says "deep dive is in Video X," do not include that deep-dive content in this script. Mention it exists, link forward, move on.
+  - **Personas are the spine, not specs.** Each section should arrive at "here's what Cora/Samantha/Ben choose and why" as quickly as possible. Technical context exists to set up that choice, not to be exhaustive.
+  - **One idea per paragraph.** If a paragraph covers tuning knobs AND recovery mechanisms AND storage format, split or cut.
 - **No time estimates in outlines.** Don't add per-section durations or suggested lengths — they're inaccurate before scripting and go stale as outlines evolve. Total video length estimates belong in the project brief only. Give a wide range as to not artificially constrain the material, or conversely to add unnecessary padding.
 - **Visual assets in outlines.** Outlines should include inline visual directions (see [Visual Direction Conventions](wiki/visual-direction-conventions.md)) as part of the script flow. A separate "Visual Assets Needed" section in the outline should only list assets that need to be **created by the designer sub-agent** as standalone deliverables (infographics, persona cards, framework diagrams). Don't list memes, screenshots, demo code snippets, or table overlays — those are noted inline in the script and produced during editing, not as separate design tasks.
 
