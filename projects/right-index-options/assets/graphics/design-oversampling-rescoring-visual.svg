@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="2400" height="1350" viewBox="0 0 2400 1350" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <path id="background" fill="#f0f3f8" stroke="none" d="M 0 0 L 2400 0 L 2400 1350 L 0 1350 Z"/>
+
+    <!-- Title -->
+    <text xml:space="preserve" x="69" y="154" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="96" font-weight="700" fill="#1c1e23" letter-spacing="-2.3">Oversampling + Rescoring</text>
+    <text xml:space="preserve" x="69" y="232" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="48" fill="#5a6068">How quantized vector search recovers quality</text>
+
+    <!-- ======================== -->
+    <!-- QUERY INPUT (left side) -->
+    <!-- ======================== -->
+    <!-- Query pill -->
+    <rect x="69" y="460" width="200" height="80" rx="40" fill="#0b64dd" stroke="none"/>
+    <text xml:space="preserve" x="169" y="510" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="34" font-weight="700" fill="#ffffff" text-anchor="middle">Query</text>
+
+    <!-- Arrow from query to Stage 1 -->
+    <line x1="269" y1="500" x2="340" y2="500" stroke="#98A2B3" stroke-width="4"/>
+    <polygon points="340,488 364,500 340,512" fill="#98A2B3"/>
+
+    <!-- ======================== -->
+    <!-- STAGE 1 CARD            -->
+    <!-- ======================== -->
+    <defs>
+        <filter id="shadow1" x="-5%" y="-5%" width="115%" height="120%" filterUnits="objectBoundingBox" color-interpolation-filters="sRGB">
+            <feGaussianBlur stdDeviation="12.8" in="SourceAlpha" result="blur"/>
+            <feOffset dx="4.3" dy="8.5" in="blur" result="offsetblur"/>
+            <feFlood flood-color="#000000" flood-opacity="0.18"/>
+            <feComposite in2="offsetblur" operator="in"/>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <filter id="shadow2" x="-5%" y="-5%" width="115%" height="120%" filterUnits="objectBoundingBox" color-interpolation-filters="sRGB">
+            <feGaussianBlur stdDeviation="12.8" in="SourceAlpha" result="blur"/>
+            <feOffset dx="4.3" dy="8.5" in="blur" result="offsetblur"/>
+            <feFlood flood-color="#000000" flood-opacity="0.18"/>
+            <feComposite in2="offsetblur" operator="in"/>
+            <feMerge>
+                <feMergeNode/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+
+    <!-- Stage 1 card body -->
+    <rect x="380" y="330" width="750" height="580" rx="20" fill="#ffffff" stroke="#FEC514" stroke-width="4.3" filter="url(#shadow1)"/>
+
+    <!-- Stage 1 tab -->
+    <rect x="405" y="298" width="260" height="64" rx="10" fill="#ffffff" stroke="#8b95a5" stroke-width="3.2"/>
+    <rect x="405" y="298" width="260" height="11" rx="5" fill="#FEC514"/>
+    <rect x="405" y="309" width="260" height="6" fill="#FEC514"/>
+    <text xml:space="preserve" x="423" y="350" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="24.5" font-weight="700" fill="#1c1e23" letter-spacing="4.7">STAGE 1</text>
+
+    <!-- Stage 1 title -->
+    <text xml:space="preserve" x="420" y="420" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="38" font-weight="700" fill="#1c1e23">Fast Search</text>
+    <text xml:space="preserve" x="420" y="468" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="34" fill="#5a6068">Search the quantized index</text>
+    <text xml:space="preserve" x="420" y="510" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="34" fill="#5a6068">using compressed vectors.</text>
+
+    <!-- Data source label -->
+    <rect x="420" y="545" width="380" height="54" rx="10" fill="#f8f9fc" stroke="#d3dae6" stroke-width="2"/>
+    <text xml:space="preserve" x="435" y="581" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="26" font-weight="700" fill="#0b64dd">Compressed vectors</text>
+
+    <!-- "in RAM" badge -->
+    <rect x="820" y="545" width="140" height="54" rx="10" fill="#FEC514" stroke="none"/>
+    <text xml:space="preserve" x="890" y="581" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="24" font-weight="700" fill="#1c1e23" text-anchor="middle">in RAM</text>
+
+    <!-- Candidates visualization - 30 small blocks (6x5 grid) -->
+    <text xml:space="preserve" x="420" y="645" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="#5a6068">Output: 30 candidates</text>
+
+    <!-- Row 1 -->
+    <rect x="420" y="665" width="50" height="36" rx="6" fill="#FEC514" opacity="0.9"/>
+    <rect x="478" y="665" width="50" height="36" rx="6" fill="#FEC514" opacity="0.85"/>
+    <rect x="536" y="665" width="50" height="36" rx="6" fill="#FEC514" opacity="0.8"/>
+    <rect x="594" y="665" width="50" height="36" rx="6" fill="#FEC514" opacity="0.75"/>
+    <rect x="652" y="665" width="50" height="36" rx="6" fill="#FEC514" opacity="0.7"/>
+    <rect x="710" y="665" width="50" height="36" rx="6" fill="#FEC514" opacity="0.65"/>
+    <!-- Row 2 -->
+    <rect x="420" y="709" width="50" height="36" rx="6" fill="#FEC514" opacity="0.6"/>
+    <rect x="478" y="709" width="50" height="36" rx="6" fill="#FEC514" opacity="0.55"/>
+    <rect x="536" y="709" width="50" height="36" rx="6" fill="#FEC514" opacity="0.5"/>
+    <rect x="594" y="709" width="50" height="36" rx="6" fill="#FEC514" opacity="0.47"/>
+    <rect x="652" y="709" width="50" height="36" rx="6" fill="#FEC514" opacity="0.44"/>
+    <rect x="710" y="709" width="50" height="36" rx="6" fill="#FEC514" opacity="0.41"/>
+    <!-- Row 3 -->
+    <rect x="420" y="753" width="50" height="36" rx="6" fill="#FEC514" opacity="0.38"/>
+    <rect x="478" y="753" width="50" height="36" rx="6" fill="#FEC514" opacity="0.35"/>
+    <rect x="536" y="753" width="50" height="36" rx="6" fill="#FEC514" opacity="0.32"/>
+    <rect x="594" y="753" width="50" height="36" rx="6" fill="#FEC514" opacity="0.29"/>
+    <rect x="652" y="753" width="50" height="36" rx="6" fill="#FEC514" opacity="0.26"/>
+    <rect x="710" y="753" width="50" height="36" rx="6" fill="#FEC514" opacity="0.23"/>
+    <!-- Row 4 -->
+    <rect x="420" y="797" width="50" height="36" rx="6" fill="#FEC514" opacity="0.21"/>
+    <rect x="478" y="797" width="50" height="36" rx="6" fill="#FEC514" opacity="0.19"/>
+    <rect x="536" y="797" width="50" height="36" rx="6" fill="#FEC514" opacity="0.17"/>
+    <rect x="594" y="797" width="50" height="36" rx="6" fill="#FEC514" opacity="0.15"/>
+    <rect x="652" y="797" width="50" height="36" rx="6" fill="#FEC514" opacity="0.14"/>
+    <rect x="710" y="797" width="50" height="36" rx="6" fill="#FEC514" opacity="0.13"/>
+    <!-- Row 5 -->
+    <rect x="420" y="841" width="50" height="36" rx="6" fill="#FEC514" opacity="0.12"/>
+    <rect x="478" y="841" width="50" height="36" rx="6" fill="#FEC514" opacity="0.11"/>
+    <rect x="536" y="841" width="50" height="36" rx="6" fill="#FEC514" opacity="0.1"/>
+    <rect x="594" y="841" width="50" height="36" rx="6" fill="#FEC514" opacity="0.09"/>
+    <rect x="652" y="841" width="50" height="36" rx="6" fill="#FEC514" opacity="0.08"/>
+    <rect x="710" y="841" width="50" height="36" rx="6" fill="#FEC514" opacity="0.07"/>
+
+    <!-- ======================== -->
+    <!-- FLOW ARROW (between)    -->
+    <!-- ======================== -->
+    <!-- Big connecting arrow -->
+    <line x1="1150" y1="620" x2="1280" y2="620" stroke="#98A2B3" stroke-width="5"/>
+    <polygon points="1280,604 1310,620 1280,636" fill="#98A2B3"/>
+
+    <!-- Narrowing label on arrow -->
+    <text xml:space="preserve" x="1230" y="580" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="28" font-weight="700" fill="#5a6068" text-anchor="middle">30 → 10</text>
+
+    <!-- ======================== -->
+    <!-- STAGE 2 CARD            -->
+    <!-- ======================== -->
+    <!-- Stage 2 card body -->
+    <rect x="1330" y="330" width="750" height="470" rx="20" fill="#ffffff" stroke="#48EFCF" stroke-width="4.3" filter="url(#shadow2)"/>
+
+    <!-- Stage 2 tab -->
+    <rect x="1355" y="298" width="260" height="64" rx="10" fill="#ffffff" stroke="#8b95a5" stroke-width="3.2"/>
+    <rect x="1355" y="298" width="260" height="11" rx="5" fill="#48EFCF"/>
+    <rect x="1355" y="309" width="260" height="6" fill="#48EFCF"/>
+    <text xml:space="preserve" x="1373" y="350" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="24.5" font-weight="700" fill="#1c1e23" letter-spacing="4.7">STAGE 2</text>
+
+    <!-- Stage 2 title -->
+    <text xml:space="preserve" x="1370" y="420" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="38" font-weight="700" fill="#1c1e23">Rescore</text>
+    <text xml:space="preserve" x="1370" y="468" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="34" fill="#5a6068">Re-rank each candidate</text>
+    <text xml:space="preserve" x="1370" y="510" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="34" fill="#5a6068">against original vectors.</text>
+
+    <!-- Data source label -->
+    <rect x="1370" y="545" width="380" height="54" rx="10" fill="#f8f9fc" stroke="#d3dae6" stroke-width="2"/>
+    <text xml:space="preserve" x="1385" y="581" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="26" font-weight="700" fill="#0b64dd">float32 vectors</text>
+
+    <!-- "on disk" badge -->
+    <rect x="1770" y="545" width="160" height="54" rx="10" fill="#48EFCF" stroke="none"/>
+    <text xml:space="preserve" x="1850" y="581" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="24" font-weight="700" fill="#1c1e23" text-anchor="middle">on disk</text>
+
+    <!-- Results visualization - top 10 (2x5 grid, larger blocks, bolder colors) -->
+    <text xml:space="preserve" x="1370" y="645" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="#5a6068">Output: Top 10 results</text>
+
+    <!-- Row 1 (top 5) -->
+    <rect x="1370" y="665" width="90" height="50" rx="8" fill="#48EFCF" opacity="0.95"/>
+    <text xml:space="preserve" x="1415" y="698" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#1c1e23" text-anchor="middle">1</text>
+    <rect x="1470" y="665" width="90" height="50" rx="8" fill="#48EFCF" opacity="0.85"/>
+    <text xml:space="preserve" x="1515" y="698" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#1c1e23" text-anchor="middle">2</text>
+    <rect x="1570" y="665" width="90" height="50" rx="8" fill="#48EFCF" opacity="0.75"/>
+    <text xml:space="preserve" x="1615" y="698" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#1c1e23" text-anchor="middle">3</text>
+    <rect x="1670" y="665" width="90" height="50" rx="8" fill="#48EFCF" opacity="0.65"/>
+    <text xml:space="preserve" x="1715" y="698" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#1c1e23" text-anchor="middle">4</text>
+    <rect x="1770" y="665" width="90" height="50" rx="8" fill="#48EFCF" opacity="0.55"/>
+    <text xml:space="preserve" x="1815" y="698" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#1c1e23" text-anchor="middle">5</text>
+
+    <!-- Row 2 (6-10) -->
+    <rect x="1370" y="725" width="90" height="50" rx="8" fill="#48EFCF" opacity="0.48"/>
+    <text xml:space="preserve" x="1415" y="758" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#1c1e23" text-anchor="middle">6</text>
+    <rect x="1470" y="725" width="90" height="50" rx="8" fill="#48EFCF" opacity="0.40"/>
+    <text xml:space="preserve" x="1515" y="758" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#1c1e23" text-anchor="middle">7</text>
+    <rect x="1570" y="725" width="90" height="50" rx="8" fill="#48EFCF" opacity="0.33"/>
+    <text xml:space="preserve" x="1615" y="758" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#1c1e23" text-anchor="middle">8</text>
+    <rect x="1670" y="725" width="90" height="50" rx="8" fill="#48EFCF" opacity="0.27"/>
+    <text xml:space="preserve" x="1715" y="758" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#1c1e23" text-anchor="middle">9</text>
+    <rect x="1770" y="725" width="90" height="50" rx="8" fill="#48EFCF" opacity="0.22"/>
+    <text xml:space="preserve" x="1815" y="758" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="18" font-weight="700" fill="#1c1e23" text-anchor="middle">10</text>
+
+    <!-- ======================== -->
+    <!-- BOTTOM KEY CALLOUT      -->
+    <!-- ======================== -->
+    <text xml:space="preserve" x="69" y="1050" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="38" font-weight="700" fill="#1c1e23">3× oversampling</text>
+    <text xml:space="preserve" x="69" y="1100" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="34" fill="#5a6068">Retrieve 3× more candidates than needed, then rescore to pick the best.</text>
+    <text xml:space="preserve" x="69" y="1148" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="34" fill="#5a6068">Compressed search is fast but approximate — rescoring against full-precision</text>
+    <text xml:space="preserve" x="69" y="1196" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="34" fill="#5a6068">vectors recovers the accuracy lost during quantization.</text>
+
+    <!-- ======================== -->
+    <!-- FOOTER + ELASTIC LOGO   -->
+    <!-- ======================== -->
+    <text xml:space="preserve" x="69" y="1310" font-family="'Space Mono', 'JetBrains Mono', monospace" font-size="24" font-weight="700" fill="#98A2B3" letter-spacing="3.2">OVERSAMPLING + RESCORING</text>
+
+    <!-- Elastic logo badge -->
+    <g id="elastic-logo">
+        <rect x="2170" y="1254" width="214" height="80" rx="15" fill="#f0f3f8" stroke="#fec514" stroke-width="6"/>
+        <g transform="translate(2198.5, 1268.5)">
+            <path fill="#fec514" d="M 22.89 9.98 L 35.63 15.8 L 48.49 4.54 C 48.68 3.61 48.77 2.66 48.77 1.71 C 48.77 -1.35 47.79 -4.34 45.97 -6.81 C 44.15 -9.28 41.58 -11.1 38.65 -12.01 C 35.72 -12.92 32.58 -12.86 29.68 -11.85 C 26.78 -10.85 24.28 -8.94 22.55 -6.41 L 20.4 4.67 L 22.89 9.98 Z" transform="translate(-23, 12)"/>
+            <path fill="#02bcb7" d="M 9.7 23.47 C 9.52 24.42 9.42 25.38 9.42 26.34 C 9.42 29.42 10.41 32.42 12.24 34.9 C 14.07 37.38 16.65 39.15 19.59 40.11 C 22.53 41.02 26.06 40.96 28.6 39.94 C 31.51 38.92 34.01 36.97 35.74 34.45 L 37.86 23.39 L 35.03 17.97 L 22.24 12.14 L 9.7 23.47 Z" transform="translate(-23, 12)"/>
+            <path fill="#f04e98" d="M 9.63 1.42 L 18.36 3.49 L 20.27 -6.44 C 19.08 -7.34 17.63 -7.83 16.14 -7.84 C 14.65 -7.85 13.2 -7.38 12 -6.49 C 10.8 -5.61 9.92 -4.36 9.5 -2.93 C 9.07 -1.5 9.11 0.03 9.63 1.42 Z" transform="translate(-23, 12)"/>
+            <path fill="#45a8ff" d="M 8.87 3.5 C 6.95 4.15 5.28 5.38 4.1 7.02 C 2.91 8.65 2.27 10.62 2.25 12.64 C 2.25 14.6 2.84 16.5 3.95 18.11 C 5.06 19.72 6.63 20.95 8.46 21.65 L 20.71 10.57 L 18.46 5.77 L 8.87 3.5 Z" transform="translate(-23, 12)"/>
+            <path fill="#9adc30" d="M 37.98 34.45 C 39.17 35.34 40.61 35.83 42.1 35.84 C 43.59 35.85 45.03 35.37 46.23 34.49 C 47.42 33.61 48.3 32.36 48.73 30.94 C 49.16 29.51 49.12 27.99 48.61 26.59 L 39.88 24.56 L 37.98 34.45 Z" transform="translate(-23, 12)"/>
+            <path fill="#0b64dd" d="M 39.76 22.26 L 49.36 24.51 C 51.28 23.86 52.95 22.64 54.13 21 C 55.32 19.36 55.96 17.39 55.98 15.37 C 55.98 13.42 55.38 11.52 54.27 9.91 C 53.16 8.31 51.59 7.08 49.77 6.39 L 37.21 17.39 L 39.76 22.26 Z" transform="translate(-23, 12)"/>
+        </g>
+        <text xml:space="preserve" x="2260" y="1304" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="22" font-weight="700" fill="#1c1e23" letter-spacing="1">elastic</text>
+    </g>
+</svg>
