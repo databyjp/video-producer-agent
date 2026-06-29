@@ -165,4 +165,5 @@ The body should contain:
 - **One concept per page.** Split if too broad.
 - **Cross-link generously** between wiki pages.
 - **Source summaries are factual;** interpretation goes in wiki pages.
+- **No time estimates in outlines.** Don't add per-section durations or suggested lengths — they're inaccurate before scripting and go stale as outlines evolve. Total video length estimates belong in the project brief only. Give a wide range as to not artificially constrain the material, or conversely to add unnecessary padding.
 

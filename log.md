@@ -215,3 +215,30 @@ okf_version: "0.1"
 - https://www.elastic.co/docs/reference/elasticsearch/rest-apis/retrievers/text-similarity-reranker-retriever
 - https://awesomeagents.ai/leaderboards/embedding-model-leaderboard-mteb-april-2026/
 - https://www.codesota.com/benchmarks/mteb
+
+## 2026-06-29 — Merged quantization into index type; removed series plan; made video self-contained
+
+**Action:** Structural revision of the outline and brief based on two decisions:
+1. Quantization merged into "Vector Indexing & Storage" (Aspect 2) because in Elasticsearch, index type and quantization are one `index_options.type` decision — not two separate choices.
+2. All series plan references removed. The video is now self-contained, not "Video 1 of 5."
+
+**Outline changes:**
+- Reduced from 4 aspects to 3: Embedding Model, Vector Indexing & Storage, Reranking
+- Section 2 updated: "THE FRAMEWORK: 3 ASPECTS" — three concise one-liners
+- Sections 5+6 (Index Type + Quantization) merged into Section 5 ("ASPECT 2: VECTOR INDEXING & STORAGE") — covers index types, quantization spectrum, and oversampling recovery as one coherent decision
+- Old Section 7 (Reranking) → Section 6
+- Old Section 8 (Table) → Section 7 — config table reduced from 4 rows to 3 (embedding, index & storage, reranking)
+- Old Section 9 (Tradeoffs) → Section 8
+- Old Section 10 (Wrap-up + Series Intro) → Section 9 (Wrap-up) — removed series roadmap, removed all "Video N" forward references throughout
+- Removed all "*deep dive is Video N*" lines from aspect sections
+- Title line changed from "Video 1 of 5" to just target length
+- Production notes: removed series roadmap graphic from asset list; updated demo beats to 3 aspects
+
+**Brief changes:**
+- Removed `series` tag
+- Updated concept to reference 3 aspects instead of 4 dials
+- Added structural note explaining why index type + quantization are merged
+- Removed entire Series Plan table
+
+**Task brief:**
+- Created `tasks/design-control-panel-graphic.md` — 3-panel layout (replacing the old 4-quadrant brief which was consumed by the designer agent)

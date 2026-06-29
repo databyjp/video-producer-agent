@@ -2,7 +2,7 @@
 type: Project Brief
 title: "Right Index Options — Vector Search Configuration"
 description: Persona-driven guide to vector search config tradeoffs (quality vs speed vs cost)
-tags: [vector-search, elasticsearch, configuration, series]
+tags: [vector-search, elasticsearch, configuration]
 timestamp: 2026-06-29T00:00:00Z
 status: outline-complete
 ---
@@ -11,13 +11,15 @@ status: outline-complete
 
 ## Concept
 
-Three engineers, same task (set up vector search), three different correct configurations. The video walks through four configuration "dials" (model selection, index type, quantization, reranking) and shows how each persona's constraints lead to different optimal choices.
+Three engineers, same task (set up vector search), three different correct configurations. The video walks through three configuration aspects (embedding model, vector indexing & storage, reranking) and shows how each persona's constraints lead to different optimal choices.
 
 **Core thesis:** There is no single best vector search config — the right one depends on what you're optimizing for.
 
-**Framing note:** The video acknowledges `semantic_text` as the simpler entry point (sensible defaults, managed inference) before diving into the dials. The dials explain what's happening under the hood — and when you'd override the defaults. This prevents the video from making things seem unnecessarily complex for viewers who don't need fine-grained control.
+**Framing note:** The video acknowledges `semantic_text` as the simpler entry point (sensible defaults, managed inference) before diving into the aspects. The aspects explain what's happening under the hood — and when you'd override the defaults. This prevents the video from making things seem unnecessarily complex for viewers who don't need fine-grained control.
 
-**Hybrid search note:** The dials cover vector search configuration in isolation. Most production systems combine vector search with BM25 via hybrid search (RRF). The video notes this in the tradeoffs section — hybrid search acts as a safety net that reduces sensitivity to any single vector config choice.
+**Structural note:** Index type and quantization are presented as one aspect ("Vector indexing & storage") because in Elasticsearch they're one configuration decision — the `index_options.type` determines both the search algorithm and the quantization level. Splitting them would create a mental model that doesn't match the API.
+
+**Hybrid search note:** The aspects cover vector search configuration in isolation. Most production systems combine vector search with BM25 via hybrid search (RRF). The video notes this in the tradeoffs section — hybrid search acts as a safety net that reduces sensitivity to any single vector config choice.
 
 ## Personas
 
@@ -43,16 +45,6 @@ Three engineers, same task (set up vector search), three different correct confi
 - Key elements in left 2/3 (safe zone)
 
 **Production note:** Build the persona cards as video assets first (see Production Notes in outline). Blur and composite for thumbnail in Pixelmator afterward.
-
-## Series Plan
-
-| Video | Focus | Est. Length |
-|---|---|---|
-| **1. Overview** (this video) | 4 dials, 3 personas, complete table | 8–10 min |
-| **2. Embedding Models** | Dial 1 — model selection, dims, Matryoshka, distance metrics | 10–12 min |
-| **3. Index Types** | Dial 2 — flat vs HNSW vs DiskBBQ, build params, query-time tuning | 10–12 min |
-| **4. Quantization** | Dial 3 — float32→binary spectrum, oversampling, rescore | 8–10 min |
-| **5. Reranking** | Dial 4 — cross-encoder reranking, window size, cost/quality | 6–8 min |
 
 ## Elastic Integration
 
