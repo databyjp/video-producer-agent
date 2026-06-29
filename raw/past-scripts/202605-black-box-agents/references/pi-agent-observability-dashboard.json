@@ -1,0 +1,1766 @@
+{
+  "options": {
+    "hide_panel_titles": false,
+    "hide_panel_borders": false,
+    "use_margins": true,
+    "auto_apply_filters": true,
+    "sync_colors": false,
+    "sync_cursor": true,
+    "sync_tooltips": false
+  },
+  "time_range": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "title": "Pi Agent Observability v2",
+  "panels": [
+    {
+      "grid": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 3
+      },
+      "config": {
+        "title": "",
+        "data_source": {
+          "type": "data_view_spec",
+          "index_pattern": "traces-generic.otel-*",
+          "time_field": "@timestamp"
+        },
+        "type": "metric",
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "type": "primary",
+            "operation": "unique_count",
+            "field": "trace_id",
+            "empty_as_null": false,
+            "label": "Sessions",
+            "color": {
+              "type": "auto"
+            }
+          }
+        ],
+        "styling": {
+          "primary": {
+            "position": "bottom",
+            "labels": {
+              "alignment": "left"
+            },
+            "value": {
+              "sizing": "auto",
+              "alignment": "right"
+            }
+          }
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent",
+          "language": "kql"
+        }
+      },
+      "id": "total-sessions",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 3
+      },
+      "config": {
+        "title": "",
+        "data_source": {
+          "type": "data_view_spec",
+          "index_pattern": "traces-generic.otel-*",
+          "time_field": "@timestamp"
+        },
+        "type": "metric",
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "type": "primary",
+            "operation": "count",
+            "empty_as_null": false,
+            "label": "Turns",
+            "color": {
+              "type": "auto"
+            }
+          }
+        ],
+        "styling": {
+          "primary": {
+            "position": "bottom",
+            "labels": {
+              "alignment": "left"
+            },
+            "value": {
+              "sizing": "auto",
+              "alignment": "right"
+            }
+          }
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and name: \"pi.turn\"",
+          "language": "kql"
+        }
+      },
+      "id": "total-turns",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 24,
+        "y": 0,
+        "w": 12,
+        "h": 3
+      },
+      "config": {
+        "title": "",
+        "data_source": {
+          "type": "data_view_spec",
+          "index_pattern": "traces-generic.otel-*",
+          "time_field": "@timestamp"
+        },
+        "type": "metric",
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "type": "primary",
+            "operation": "count",
+            "empty_as_null": false,
+            "label": "Tool Calls",
+            "color": {
+              "type": "auto"
+            }
+          }
+        ],
+        "styling": {
+          "primary": {
+            "position": "bottom",
+            "labels": {
+              "alignment": "left"
+            },
+            "value": {
+              "sizing": "auto",
+              "alignment": "right"
+            }
+          }
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.tool.name: *",
+          "language": "kql"
+        }
+      },
+      "id": "tool-calls",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 36,
+        "y": 0,
+        "w": 12,
+        "h": 3
+      },
+      "config": {
+        "title": "",
+        "data_source": {
+          "type": "data_view_spec",
+          "index_pattern": "traces-generic.otel-*",
+          "time_field": "@timestamp"
+        },
+        "type": "metric",
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "type": "primary",
+            "operation": "count",
+            "empty_as_null": false,
+            "label": "Tool Failures",
+            "color": {
+              "type": "auto"
+            }
+          }
+        ],
+        "styling": {
+          "primary": {
+            "position": "bottom",
+            "labels": {
+              "alignment": "left"
+            },
+            "value": {
+              "sizing": "auto",
+              "alignment": "right"
+            }
+          }
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.tool.name: * and attributes.event.outcome: failure",
+          "language": "kql"
+        }
+      },
+      "id": "tool-failures",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 0,
+        "y": 15,
+        "w": 24,
+        "h": 6
+      },
+      "config": {
+        "title": "Sessions over Time",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar",
+            "data_source": {
+              "type": "data_view_spec",
+              "index_pattern": "traces-generic.otel-*",
+              "time_field": "@timestamp"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "operation": "date_histogram",
+              "field": "@timestamp",
+              "suggested_interval": "auto",
+              "use_original_time_range": false,
+              "include_empty_rows": true,
+              "drop_partial_intervals": false
+            },
+            "y": [
+              {
+                "operation": "unique_count",
+                "field": "trace_id",
+                "empty_as_null": false,
+                "label": "Sessions",
+                "color": {
+                  "type": "auto"
+                }
+              }
+            ]
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent",
+          "language": "kql"
+        }
+      },
+      "id": "sessions-per-day",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 24,
+        "y": 15,
+        "w": 24,
+        "h": 6
+      },
+      "config": {
+        "title": "Stop Reasons over Time",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_stacked",
+            "data_source": {
+              "type": "data_view_spec",
+              "index_pattern": "logs-generic.otel-*",
+              "time_field": "@timestamp"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "operation": "date_histogram",
+              "field": "@timestamp",
+              "suggested_interval": "auto",
+              "use_original_time_range": false,
+              "include_empty_rows": true,
+              "drop_partial_intervals": false
+            },
+            "y": [
+              {
+                "operation": "count",
+                "empty_as_null": false,
+                "label": "Turns"
+              }
+            ],
+            "breakdown_by": {
+              "operation": "terms",
+              "fields": [
+                "attributes.pi.message.stop_reason"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              },
+              "color": {
+                "mode": "categorical",
+                "palette": "default",
+                "mapping": []
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.event.type: turn_end",
+          "language": "kql"
+        }
+      },
+      "id": "stop-reasons-by-day",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 0,
+        "y": 21,
+        "w": 24,
+        "h": 6
+      },
+      "config": {
+        "title": "Reads vs Edits over Time",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_stacked",
+            "data_source": {
+              "type": "data_view_spec",
+              "index_pattern": "traces-generic.otel-*",
+              "time_field": "@timestamp"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "operation": "date_histogram",
+              "field": "@timestamp",
+              "suggested_interval": "auto",
+              "use_original_time_range": false,
+              "include_empty_rows": true,
+              "drop_partial_intervals": false
+            },
+            "y": [
+              {
+                "operation": "count",
+                "empty_as_null": false,
+                "label": "Calls"
+              }
+            ],
+            "breakdown_by": {
+              "operation": "terms",
+              "fields": [
+                "attributes.pi.tool.name"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              },
+              "color": {
+                "mode": "categorical",
+                "palette": "default",
+                "mapping": []
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.tool.name: (read or edit)",
+          "language": "kql"
+        }
+      },
+      "id": "reads-vs-edits-by-day",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 24,
+        "y": 21,
+        "w": 24,
+        "h": 6
+      },
+      "config": {
+        "title": "Tool Outcomes over Time",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_stacked",
+            "data_source": {
+              "type": "data_view_spec",
+              "index_pattern": "traces-generic.otel-*",
+              "time_field": "@timestamp"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "operation": "date_histogram",
+              "field": "@timestamp",
+              "suggested_interval": "auto",
+              "use_original_time_range": false,
+              "include_empty_rows": true,
+              "drop_partial_intervals": false
+            },
+            "y": [
+              {
+                "operation": "count",
+                "empty_as_null": false,
+                "label": "Calls"
+              }
+            ],
+            "breakdown_by": {
+              "operation": "terms",
+              "fields": [
+                "attributes.event.outcome"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              },
+              "color": {
+                "mode": "categorical",
+                "palette": "default",
+                "mapping": []
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.tool.name: *",
+          "language": "kql"
+        }
+      },
+      "id": "tool-outcomes-by-day",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 0,
+        "y": 27,
+        "w": 16,
+        "h": 6
+      },
+      "config": {
+        "title": "Tool Output Bytes over Time",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_stacked",
+            "data_source": {
+              "type": "data_view_spec",
+              "index_pattern": "logs-generic.otel-*",
+              "time_field": "@timestamp"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "operation": "date_histogram",
+              "field": "@timestamp",
+              "suggested_interval": "auto",
+              "use_original_time_range": false,
+              "include_empty_rows": true,
+              "drop_partial_intervals": false
+            },
+            "y": [
+              {
+                "operation": "sum",
+                "field": "attributes.pi.tool.output.bytes",
+                "empty_as_null": false,
+                "label": "Output Bytes",
+                "format": {
+                  "type": "bytes",
+                  "decimals": 0
+                }
+              }
+            ],
+            "breakdown_by": {
+              "operation": "terms",
+              "fields": [
+                "attributes.pi.tool.name"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              },
+              "color": {
+                "mode": "categorical",
+                "palette": "default",
+                "mapping": []
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.event.type: tool_result",
+          "language": "kql"
+        }
+      },
+      "id": "tool-output-bytes-by-day",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 16,
+        "y": 27,
+        "w": 16,
+        "h": 6
+      },
+      "config": {
+        "title": "Tool Calls by Type over Time",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_stacked",
+            "data_source": {
+              "type": "data_view_spec",
+              "index_pattern": "traces-generic.otel-*",
+              "time_field": "@timestamp"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "operation": "date_histogram",
+              "field": "@timestamp",
+              "suggested_interval": "auto",
+              "use_original_time_range": false,
+              "include_empty_rows": true,
+              "drop_partial_intervals": false
+            },
+            "y": [
+              {
+                "operation": "count",
+                "empty_as_null": false,
+                "label": "Calls"
+              }
+            ],
+            "breakdown_by": {
+              "operation": "terms",
+              "fields": [
+                "attributes.pi.tool.name"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              },
+              "color": {
+                "mode": "categorical",
+                "palette": "default",
+                "mapping": []
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.tool.name: *",
+          "language": "kql"
+        }
+      },
+      "id": "tool-calls-by-type-over-time",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 32,
+        "y": 27,
+        "w": 16,
+        "h": 6
+      },
+      "config": {
+        "title": "Tool Outcomes",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_horizontal",
+            "data_source": {
+              "type": "data_view_spec",
+              "index_pattern": "traces-generic.otel-*",
+              "time_field": "@timestamp"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "operation": "terms",
+              "fields": [
+                "attributes.event.outcome"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              }
+            },
+            "y": [
+              {
+                "operation": "count",
+                "empty_as_null": false,
+                "label": "Calls",
+                "color": {
+                  "type": "auto"
+                }
+              }
+            ]
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        },
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.tool.name: *",
+          "language": "kql"
+        }
+      },
+      "id": "tool-outcomes-bar",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 0,
+        "y": 33,
+        "w": 16,
+        "h": 6
+      },
+      "config": {
+        "title": "Input Bytes per Task",
+        "type": "data_table",
+        "data_source": {
+          "type": "data_view_spec",
+          "index_pattern": "logs-generic.otel-*",
+          "time_field": "@timestamp"
+        },
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "operation": "sum",
+            "field": "attributes.pi.input.bytes",
+            "empty_as_null": false,
+            "label": "Input Bytes"
+          }
+        ],
+        "rows": [
+          {
+            "operation": "terms",
+            "fields": [
+              "trace_id"
+            ],
+            "limit": 20,
+            "rank_by": {
+              "type": "metric",
+              "metric_index": 0,
+              "direction": "desc"
+            }
+          }
+        ],
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.event.type: input",
+          "language": "kql"
+        }
+      },
+      "id": "input-bytes-per-task",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 16,
+        "y": 33,
+        "w": 16,
+        "h": 6
+      },
+      "config": {
+        "title": "Output Bytes per Task",
+        "type": "data_table",
+        "data_source": {
+          "type": "data_view_spec",
+          "index_pattern": "logs-generic.otel-*",
+          "time_field": "@timestamp"
+        },
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "operation": "sum",
+            "field": "attributes.pi.tool.output.bytes",
+            "empty_as_null": false,
+            "label": "Output Bytes"
+          }
+        ],
+        "rows": [
+          {
+            "operation": "terms",
+            "fields": [
+              "trace_id"
+            ],
+            "limit": 20,
+            "rank_by": {
+              "type": "metric",
+              "metric_index": 0,
+              "direction": "desc"
+            }
+          }
+        ],
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.event.type: tool_result",
+          "language": "kql"
+        }
+      },
+      "id": "output-bytes-per-task",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 32,
+        "y": 33,
+        "w": 16,
+        "h": 6
+      },
+      "config": {
+        "title": "Turns per Task",
+        "type": "data_table",
+        "data_source": {
+          "type": "data_view_spec",
+          "index_pattern": "logs-generic.otel-*",
+          "time_field": "@timestamp"
+        },
+        "sampling": 1,
+        "ignore_global_filters": false,
+        "metrics": [
+          {
+            "operation": "count",
+            "empty_as_null": false,
+            "label": "Turns"
+          }
+        ],
+        "rows": [
+          {
+            "operation": "terms",
+            "fields": [
+              "trace_id"
+            ],
+            "limit": 20,
+            "rank_by": {
+              "type": "metric",
+              "metric_index": 0,
+              "direction": "desc"
+            }
+          }
+        ],
+        "query": {
+          "expression": "resource.attributes.service.name: pi-agent and attributes.pi.event.type: turn_end",
+          "language": "kql"
+        }
+      },
+      "id": "turns-per-task",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 0,
+        "y": 39,
+        "w": 48,
+        "h": 10
+      },
+      "config": {
+        "ref_id": "dd076f7a-70e5-4e24-b232-e6c1e699f565"
+      },
+      "id": "top-sessions-by-usage",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 0,
+        "y": 49,
+        "w": 48,
+        "h": 10
+      },
+      "config": {
+        "ref_id": "a7ce5446-8410-47fb-ad7e-50cb999d179b"
+      },
+      "id": "top-sessions-by-activity",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 0,
+        "y": 3,
+        "w": 24,
+        "h": 6
+      },
+      "config": {
+        "title": "Token Usage by Model",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_horizontal_stacked",
+            "data_source": {
+              "type": "data_view_spec",
+              "index_pattern": "pi-session-rollup",
+              "time_field": "session_start"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "operation": "terms",
+              "fields": [
+                "model"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              }
+            },
+            "y": [
+              {
+                "operation": "sum",
+                "field": "max_tokens",
+                "empty_as_null": false,
+                "label": "Tokens",
+                "format": {
+                  "type": "number",
+                  "decimals": 0,
+                  "compact": true
+                }
+              }
+            ],
+            "breakdown_by": {
+              "operation": "terms",
+              "fields": [
+                "type"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              },
+              "color": {
+                "mode": "categorical",
+                "palette": "default",
+                "mapping": []
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        }
+      },
+      "id": "token-usage-by-model-accurate",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 24,
+        "y": 3,
+        "w": 24,
+        "h": 6
+      },
+      "config": {
+        "title": "Cost by Model",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_horizontal_stacked",
+            "data_source": {
+              "type": "data_view_spec",
+              "index_pattern": "pi-session-rollup",
+              "time_field": "session_start"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "operation": "terms",
+              "fields": [
+                "model"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              }
+            },
+            "y": [
+              {
+                "operation": "sum",
+                "field": "max_cost",
+                "empty_as_null": false,
+                "label": "Cost",
+                "format": {
+                  "type": "number",
+                  "decimals": 2,
+                  "compact": false
+                }
+              }
+            ],
+            "breakdown_by": {
+              "operation": "terms",
+              "fields": [
+                "type"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              },
+              "color": {
+                "mode": "categorical",
+                "palette": "default",
+                "mapping": []
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        }
+      },
+      "id": "cost-by-model-accurate",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 0,
+        "y": 9,
+        "w": 24,
+        "h": 6
+      },
+      "config": {
+        "title": "Tool Calls by Model",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_horizontal_stacked",
+            "data_source": {
+              "type": "data_view_spec",
+              "index_pattern": "pi-session-tools",
+              "time_field": "session_start"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "operation": "terms",
+              "fields": [
+                "model"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              }
+            },
+            "y": [
+              {
+                "operation": "sum",
+                "field": "max_tool_calls",
+                "empty_as_null": false,
+                "label": "Tool Calls",
+                "format": {
+                  "type": "number",
+                  "decimals": 0,
+                  "compact": true
+                }
+              }
+            ],
+            "breakdown_by": {
+              "operation": "terms",
+              "fields": [
+                "tool_name"
+              ],
+              "limit": 10,
+              "rank_by": {
+                "type": "metric",
+                "metric_index": 0,
+                "direction": "desc"
+              },
+              "color": {
+                "mode": "categorical",
+                "palette": "default",
+                "mapping": []
+              }
+            }
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        }
+      },
+      "id": "tool-calls-by-model-accurate",
+      "type": "vis"
+    },
+    {
+      "grid": {
+        "x": 24,
+        "y": 9,
+        "w": 24,
+        "h": 6
+      },
+      "config": {
+        "title": "Cost / Token Usage",
+        "type": "xy",
+        "layers": [
+          {
+            "type": "bar_horizontal",
+            "data_source": {
+              "type": "esql",
+              "query": "FROM pi-session-rollup | STATS total_cost = SUM(max_cost), total_tokens = SUM(max_tokens) BY model | EVAL `Cost per 1K Tokens` = ROUND(total_cost * 1000.0 / total_tokens, 4) | SORT `Cost per 1K Tokens` DESC"
+            },
+            "sampling": 1,
+            "ignore_global_filters": false,
+            "x": {
+              "column": "model"
+            },
+            "y": [
+              {
+                "column": "Cost per 1K Tokens",
+                "format": {
+                  "type": "number",
+                  "decimals": 4,
+                  "compact": false
+                },
+                "color": {
+                  "type": "auto"
+                }
+              }
+            ]
+          }
+        ],
+        "axis": {
+          "x": {
+            "title": {
+              "visible": false
+            },
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "fit",
+              "rounding": false
+            },
+            "labels": {
+              "orientation": "horizontal"
+            },
+            "scale": "ordinal"
+          },
+          "y": {
+            "title": {
+              "visible": false
+            },
+            "scale": "linear",
+            "ticks": {
+              "visible": true
+            },
+            "grid": {
+              "visible": true
+            },
+            "domain": {
+              "type": "full",
+              "rounding": true
+            },
+            "labels": {
+              "orientation": "horizontal"
+            }
+          }
+        },
+        "styling": {
+          "overlays": {
+            "partial_buckets": {
+              "visible": false
+            },
+            "current_time_marker": {
+              "visible": false
+            }
+          },
+          "bars": {
+            "minimum_height": 1,
+            "data_labels": {
+              "visible": false
+            }
+          }
+        },
+        "legend": {
+          "placement": "outside",
+          "position": "right",
+          "layout": {
+            "type": "grid",
+            "truncate": {
+              "max_lines": 1
+            }
+          },
+          "visibility": "hidden"
+        }
+      },
+      "id": "cost-per-token-by-model",
+      "type": "vis"
+    }
+  ],
+  "pinned_panels": []
+}
