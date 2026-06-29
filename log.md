@@ -111,3 +111,16 @@ okf_version: "0.1"
 - `projects/right-index-options/outline.md` — Full 10-section outline with scripted beats for each section, persona config table, production notes, source references
 
 **Brief updated:** status → `outline-complete`
+
+## 2026-06-29 — Added sub-agent task brief convention
+
+**Action:** Established a convention for handing off work to sub-agents (designer, researcher, etc.) via self-contained task briefs.
+
+**Changes:**
+- `AGENTS.md` — Added `tasks/` to project directory layout; added "Sub-agent task briefs" section documenting format, naming (`<agent>-<subject>.md`), frontmatter schema (including `project_root` absolute path), and principles (one file per deliverable, briefs live in originating project, sub-agent reads from here)
+- Created `projects/right-index-options/tasks/` directory
+
+**Design decisions:**
+- Task briefs live in the originating project, not the sub-agent's workspace — context stays co-located
+- `project_root` uses absolute paths so sub-agents with different working directories can resolve references
+- One file per deliverable; briefs point to project files (outline, brief) rather than duplicating content

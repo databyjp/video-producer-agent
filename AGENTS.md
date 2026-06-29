@@ -33,6 +33,7 @@ video-producer/
 │       ├── brief.md       # Status, concept, key decisions (project index)
 │       ├── outline.md     # Working outline (deliverable)
 │       ├── script.md      # Working script (deliverable)
+│       ├── tasks/         # Handoff briefs for sub-agents (designer, researcher, etc.)
 │       ├── assets/        # Graphics, thumbnails
 │       ├── code/          # Demo code, configs
 │       └── scratch/       # Raw notes, Obsidian exports (human input, not modified by LLM)
@@ -114,6 +115,41 @@ When the human provides sources (URLs or files in `raw/`):
 ### Lint
 
 Flag contradictions, orphan pages, missing concepts, stale content.
+
+## Sub-agent task briefs
+
+When work needs to be handed off to another agent (e.g. a designer or researcher), create a **task brief** in `projects/<project>/tasks/`. Each file is one self-contained deliverable request.
+
+### Naming
+
+`<agent>-<subject>.md` — e.g. `design-persona-cards.md`, `research-quantization-benchmarks.md`.
+
+### Format
+
+```yaml
+---
+type: Task Brief
+title: <descriptive title>
+agent: <target agent, e.g. designer, researcher>
+status: draft | ready | in-progress | done
+project: <project slug>
+project_root: <absolute path to the project directory>
+timestamp: <ISO 8601>
+---
+```
+
+The body should contain:
+- **Objective** — what the deliverable is and how it will be used.
+- **Specs** — dimensions, format, style constraints, etc.
+- **Context** — point the sub-agent to files in the project (outline, brief) rather than duplicating content. The `project_root` field gives the sub-agent an absolute path to read from.
+- **References** — style examples, past assets, wiki pages.
+
+### Principles
+
+- **One file per deliverable.** Don't bundle unrelated requests.
+- **Task briefs live in the originating project**, not in the sub-agent's workspace. The sub-agent reads from here; outputs go to `projects/<project>/assets/`.
+- **Use absolute paths** in `project_root` so sub-agents with different working directories can resolve references unambiguously.
+- **Don't duplicate the outline** — the task brief provides focused instructions; the sub-agent reads the project files for broader context.
 
 ## Conventions
 
