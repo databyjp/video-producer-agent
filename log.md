@@ -323,6 +323,41 @@ All briefs follow semantics-only convention (no styling prescriptions). Each ref
 
 **Rationale:** Script draft for right-index-options showed classic LLM completionism — listing MTEB scores (68.32, 67.71, 70.58, 69.44) in spoken text, expanding Matryoshka/hosting into full subsections despite the outline saying "deep dive is Video 2", and adding tuning knobs (m, ef_construction, cluster_size, bits, corrective factors) that belong in later videos. Rules address the mechanical failures; editorial judgment about what earns its place remains human-led.
 
+## 2026-06-30 — Built rough cut pipeline (video → FCPXML)
+
+**Action:** Implemented a full three-stage automated rough cut pipeline in `code/rough_cut/`.
+
+**Pipeline stages:**
+1. **Transcribe** (`transcribe.py`) — ffmpeg extracts 16 kHz mono audio; faster-whisper `large-v3` transcribes with word-level timestamps and VAD; outputs `transcript.json` + `transcript.txt`
+2. **Detect retakes** (`retake_detector.py`) — formats annotated transcript (marking ⚠ low-confidence words, `[TRIGGER:"rephrase"]`/`[TRIGGER:"cut"]`, silence gaps); calls OpenAI-compatible LLM with script + transcript; parses JSON keep-segments; snaps timestamps to nearest word boundary; outputs `edit_plan.json` + `edit_plan.txt`
+3. **Export FCPXML** (`fcpxml_writer.py`) — probes video with ffprobe; builds valid FCPXML v1.11 referencing original source file (no re-encode); outputs `rough_cut.fcpxml` for direct FCP import
+
+**Files created:**
+- `code/__init__.py`, `code/rough_cut/__init__.py`
+- `code/rough_cut/models.py` — TranscriptWord, TranscriptSegment, KeepSegment, EditPlan dataclasses
+- `code/rough_cut/transcribe.py` — ffmpeg + faster-whisper
+- `code/rough_cut/retake_detector.py` — LLM call, transcript formatter, timestamp snapper, persistence
+- `code/rough_cut/fcpxml_writer.py` — ffprobe, FCPXML v1.11 builder
+- `code/rough_cut/pipeline.py` — top-of-file config block, 3-stage orchestrator, skip flags
+- `code/rough_cut/prompts/retake_detection.txt` — full system+user prompt template
+- `code/rough_cut/README.md` — usage guide, config vars, output file descriptions, troubleshooting
+
+**Dependencies added:** `openai>=2.44.0` (used with LiteLLM credentials via `OPENAI_BASE_URL`)
+
+**Key design decisions:**
+- FCPXML (not re-encoded video) — preserves quality, FCP handles final editing
+- `SKIP_TRANSCRIBE` / `SKIP_DETECT` flags — iterate on LLM prompt without re-running Whisper
+- Timestamp snapping — all LLM-returned timestamps snapped to nearest word boundary
+- Trigger words: only `"rephrase"` and `"cut"` (explicit, not filler-word heuristics)
+- Pause threshold default: 2.0s
+- `edit_plan.txt` — human-readable cut summary to review before FCP import
+
+**Wiki updated:**
+- `wiki/rough-cut-pipeline.md` — new How-To page
+- `index.md` — added to How-Tos
+
+---
+
 ## 2026-06-30 — Aligned outline and brief to script draft (right-index-options)
 
 **Action:** Updated `projects/right-index-options/outline.md` and `brief.md` to match the canonical script draft. Key changes:
