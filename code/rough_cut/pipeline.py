@@ -27,7 +27,7 @@ OUTPUT_DIR  = "/Users/jphwang/code/agent-sandboxes/video-producer/projects/right
 
 WHISPER_MODEL    = "large-v3"   # "base" is ~10x faster; "large-v3" is most accurate
 PAUSE_THRESHOLD  = 2.0          # seconds; silences longer than this become cut points
-LLM_MODEL        = "llm-gateway/gpt-5.4-nano"    # any model name your OpenAI / LiteLLM proxy accepts
+LLM_MODEL        = "llm-gateway/gpt-5.4-mini"    # any model name your OpenAI / LiteLLM proxy accepts
 
 SKIP_TRANSCRIBE  = False        # True → reuse existing transcript.json
 SKIP_DETECT      = False        # True → reuse existing edit_plan.json

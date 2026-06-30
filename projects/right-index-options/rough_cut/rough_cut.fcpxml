@@ -3,44 +3,32 @@
 <fcpxml version="1.11">
   <resources>
     <format id="r1" name="FFVideoFormat1080p2997" frameDuration="1/30s" width="1920" height="1080" colorSpace="1-1-1 (Rec. 709)" />
-    <asset id="r2" name="auto-edit-test-raw" uid="7002BA6E-72ED-4919-99B6-9208AC1C7A38" start="0s" duration="3451/30s" hasVideo="1" hasAudio="1" format="r1">
-      <media-rep kind="original-media" sig="688A676C-A73C-45A0-BA7F-0E1764358881" src="file:///Users/jphwang/Downloads/auto-edit-test-raw.mp4" />
+    <asset id="r2" name="auto-edit-test-raw" uid="A00A8826-4181-49D7-B6E9-35907276B654" start="0s" duration="3451/30s" hasVideo="1" hasAudio="1" format="r1">
+      <media-rep kind="original-media" sig="4DE68934-6EE8-46C7-9F90-BE3A49E4E758" src="file:///Users/jphwang/Downloads/auto-edit-test-raw.mp4" />
     </asset>
   </resources>
   <library>
     <event name="Rough Cut — right-index-options">
       <project name="right-index-options">
-        <sequence format="r1" duration="464/5s" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="44.1k">
+        <sequence format="r1" duration="1007/15s" tcStart="0s" tcFormat="NDF" audioLayout="stereo" audioRate="44.1k">
           <spine>
-            <asset-clip ref="r2" offset="0s" name="section_1_hook_intro_question" start="93/10s" duration="199/10s">
-              <note>Keeps the clean opening setup of the three-engineers hook through the line 'at the actual' up to 'actual' where the next thought continues.</note>
+            <asset-clip ref="r2" offset="0s" name="hook_intro" start="21/5s" duration="313/15s">
+              <note>Keeps the clean opening hook from the first complete take, starting after the testing preamble and ending before the broken retake phrase."</note>
             </asset-clip>
-            <asset-clip ref="r2" offset="199/10s" name="section_1_hook_quora_expensive_setup" start="297/10s" duration="233/30s">
-              <note>Keeps Quora's expensive setup description through 'embedding model', excluding the botched 'and did the other two screw up?' fragment.</note>
+            <asset-clip ref="r2" offset="313/15s" name="hook_architectures_setup" start="173/6s" duration="193/15s">
+              <note>Keeps the transition into the actual architectures and Cora setup, stopping before the retaken question prompt.</note>
             </asset-clip>
-            <asset-clip ref="r2" offset="83/3s" name="section_1_hook_quora_details" start="381/10s" duration="113/15s">
-              <note>Keeps 'full precision vectors' through 'happy' up to the retake trigger, omitting the earlier low-conf fragment before the restart.</note>
+            <asset-clip ref="r2" offset="506/15s" name="hook_samantha_ben_transition" start="127/3s" duration="107/15s">
+              <note>Keeps the clean rephrased question prompt up to the next trigger, then stops before the repeated restart.</note>
             </asset-clip>
-            <asset-clip ref="r2" offset="176/5s" name="section_1_hook_samantha_intro" start="1501/30s" duration="91/10s">
-              <note>Keeps the Samantha recap segment starting from 'embedding model' to before the 'done two' retake trigger repetition.</note>
+            <asset-clip ref="r2" offset="613/15s" name="hook_samantha_setup" start="1501/30s" duration="257/30s">
+              <note>Keeps the complete, clean Cora description through the end of the first repeat of the hook line before Samantha is introduced.</note>
             </asset-clip>
-            <asset-clip ref="r2" offset="443/10s" name="section_1_hook_samantha_details" start="898/15s" duration="53/6s">
-              <note>Keeps Samantha's 'same embedding model family' through 'third with Matryoshka, configured her index...' up to the second attempt continuation.</note>
+            <asset-clip ref="r2" offset="1483/30s" name="hook_samantha_ben_setup" start="898/15s" duration="143/15s">
+              <note>Keeps Samantha's architecture description through the point where the take breaks and is restarted again at the trigger words.</note>
             </asset-clip>
-            <asset-clip ref="r2" offset="797/15s" name="section_1_hook_ben_intro_cost_reduction" start="687/10s" duration="311/30s">
-              <note>Keeps Samantha's continued description into the long pause boundary and then Ben's 'self-hosted open-source model...' start, using the clean parts after the retake cut point.</note>
-            </asset-clip>
-            <asset-clip ref="r2" offset="127/2s" name="section_1_hook_ben_re_ranker_cleanup" start="1186/15s" duration="23/3s">
-              <note>Keeps Ben's cloud/dashboard and 'tiny reranker... clean things up' portion, bounded after the low-conf/trigger context ends.</note>
-            </asset-clip>
-            <asset-clip ref="r2" offset="427/6s" name="section_1_hook_ben_happy_bill" start="2633/30s" duration="119/30s">
-              <note>Keeps the 'His cloud dashboard... which makes him very happy' sentence.</note>
-            </asset-clip>
-            <asset-clip ref="r2" offset="1127/15s" name="section_1_hook_final_question" start="2783/30s" duration="23/3s">
-              <note>Keeps 'Now should they all be happy...' through 'What do you' up to the retake trigger.</note>
-            </asset-clip>
-            <asset-clip ref="r2" offset="414/5s" name="section_1_hook_final_question_retake_clean" start="1534/15s" duration="10/1s">
-              <note>Keeps the final clean retake of 'What do you think?' followed immediately by 'Let's learn more about these decisions.'</note>
+            <asset-clip ref="r2" offset="1769/30s" name="hook_ben_setup" start="743/10s" duration="49/6s">
+              <note>Keeps the clean restart into Ben's setup after the silence, ending before the next script section continues.</note>
             </asset-clip>
           </spine>
         </sequence>

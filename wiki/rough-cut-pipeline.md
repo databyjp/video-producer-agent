@@ -36,7 +36,7 @@ export OPENAI_BASE_URL="http://localhost:4000"  # if using LiteLLM
 | Stage | Tool | Input | Output | Slow? |
 |---|---|---|---|---|
 | 1 — Transcribe | faster-whisper `large-v3`, VAD | video file | `transcript.json`, `transcript.txt` | Yes (~1× realtime on CPU) |
-| 2 — Detect retakes | LLM (llm-gateway/gpt-5.4-nano / LiteLLM) | script + transcript | `edit_plan.json`, `edit_plan.txt` | Fast (one API call) |
+| 2 — Detect retakes | LLM (llm-gateway/gpt-5.4-mini / LiteLLM) | script + transcript | `edit_plan.json`, `edit_plan.txt` | Fast (one API call) |
 | 3 — Export FCPXML | ffprobe + XML builder | edit plan + video path | `rough_cut.fcpxml` | Instant |
 
 Set `SKIP_TRANSCRIBE=True` or `SKIP_DETECT=True` in `pipeline.py` to reuse earlier outputs when iterating.
@@ -49,7 +49,7 @@ SCRIPT_PATH      = "projects/<project>/script.md"
 OUTPUT_DIR       = "projects/<project>/rough_cut"
 WHISPER_MODEL    = "large-v3"   # "base" is ~10× faster
 PAUSE_THRESHOLD  = 2.0          # seconds; longer gaps become cut points
-LLM_MODEL        = "llm-gateway/gpt-5.4-nano"    # any OpenAI-compatible model name
+LLM_MODEL        = "llm-gateway/gpt-5.4-mini"    # any OpenAI-compatible model name
 SKIP_TRANSCRIBE  = False
 SKIP_DETECT      = False
 ```

@@ -266,7 +266,7 @@ def detect_retakes(
     segments: list[TranscriptSegment],
     source_duration: float,
     pause_threshold: float = 2.0,
-    llm_model: str = "llm-gateway/gpt-5.4-nano",
+    llm_model: str = "llm-gateway/gpt-5.4-mini",
 ) -> EditPlan:
     """
     Call the LLM to identify retake zones and return an EditPlan.
