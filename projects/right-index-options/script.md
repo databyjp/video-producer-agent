@@ -13,29 +13,23 @@ status: draft
 
 ## SECTION 1 — HOOK
 
-Three engineers have the same task — set up vector search for their project.
+Imagine three engineers, each building a vector search feature. One setup costs the most to run, one runs incredibly fast but misses hits sometimes, and the third runs on very low budget but hits the disk constantly.
+[show simplified version of persona cards]
 
-Cora's done. She's using a high-dimensional embedding model, float thirty-two (float32) precision, deep reranking on every query. She checks the search quality through recall, and goes home happy.
+Who's done the best job? And did the other two screw up?
 
-Samantha's done too. Same embedding model as Cora — but she truncated the vectors to twenty-five percent (25%) with Matryoshka, applied quantization with BBQ, and skipped reranking entirely. Her results come back lightning fast.
+Hold that thought, and lets take a look at the actual architectures.
 
-Ben just pushed to production. He's using a self-hosted open-source model, with vectors living almost entirely on disk, aggressive quantization everywhere — and then a tiny reranker at the end to clean things up. His cloud dashboard shows a tiny bill, which makes him very happy.
+Cora's built the expensive one. She is using a high-dimensional embedding model, full precision vectors, deep reranking on every query. She checks the search quality through recall, and goes home happy.
 
-[beat]
+Samantha's done, too. She picks the same embedding model as Cora — but she's truncated the vectors to twenty-five percent with Matryoshka, applied quantization with BBQ, and skipped reranking entirely. Her results come back lightning fast.
 
-These are three very different configurations. But which one is the best? Or even the worst?
+And Ben's pushed to production. He's using a self-hosted open-source model, with vectors living almost entirely on disk, aggressive quantization everywhere — and then a tiny reranker at the end to clean things up. His cloud dashboard shows a tiny bill, which makes him very happy.
 
-If you ask me, I'd say everybody's done a great job. [Insert Oprah meme — "you get a gold star" text] And it's not just because I'm avoiding conflict. What I didn't show you yet is that I'd given each of Cora, Samantha, and Ben different tasks.
-
-So the real question isn't "which config is best." It's — what's the job at hand? What constraints is each person optimising for?
-
-Let's find out.
-
------
-
+Should they all be happy with these vastly different outcomes? What do you think? Let's learn more about these decisions.
 ## SECTION 2 — THE FRAMEWORK: 3 ASPECTS
 
-To configure vector search, you're really making three big decisions.
+To configure vector search, you're really setting up three big subsystems, each playing a big part.
 
 [show 3-aspect control panel graphic — all three panels visible]
 
@@ -43,19 +37,21 @@ To configure vector search, you're really making three big decisions.
 
 **Two — vector indexing and storage.** How those vectors are stored, compressed, and searched. The index type, the quantization, the recovery mechanisms.
 
-**Three — reranking.** Do you run a second model to rescore the top results? Which model, how deep, and is it worth the latency?
+**Three — reranking.** Do you run a second model to rescore the top results? Which model, how many results do you feed.it, and is it worth the latency?
 
-Every one of these has parameters you can tune toward quality, speed, or cost. The hard part is knowing where to set each one for *your* situation.
+Every one of these subsystems has parameters you can tune. So, while the defaults are sensible, you can tune all these parameters to get your system better optimised for accuracy, speed, or cost
 
-Quick aside. If you've used `semantic_text` in Elasticsearch, it picks sensible defaults for most of these. This video is about understanding what those defaults are doing, and when you'd want to override them. Think of `semantic_text` as the automatic transmission. We're looking under the hood.
+The hard part is knowing where to set each one for *your* situation.
 
------
+[a pause and overlay in different camera angle]
+In Elasticsearch, you can just use 'semantic_text' and get sensible defaults for most of these. Think of `semantic_text` as the 'easy mode' that works for common cases. This video is about 'advanced mode', understanding what those defaults are doing, and when you'd want to override them.
+
 
 ## SECTION 3 — THE PERSONAS
 
 [show all three persona cards]
 
-Three engineers, three different problems.
+Here's what our engineers are working on.
 
 [highlight persona card: CORA — dim the others]
 
@@ -71,7 +67,9 @@ Three engineers, three different problems.
 
 [show all three persona cards together]
 
-These are very divergent needs. Sure, they all need vector search — but their configurations are about as similar as an iPhone, a supercomputer, and a Tickle-Me Elmo. They're all "computers" in the loosest sense.
+These are very divergent needs. Sure, they all need vector search — but their configurations are about as similar as a computer is in.an iPhone, a supercomputer, and a Tickle-Me Elmo.
+
+and as a result, our decisions diverge a lot - heres how.
 
 -----
 
@@ -79,33 +77,39 @@ These are very divergent needs. Sure, they all need vector search — but their 
 
 [show control panel — Aspect 1 highlighted, others dimmed]
 
-The embedding model sets the ceiling on your search quality — and a big chunk of your costs. But "choosing a model" is really several decisions packed into one.
+The embedding model has biggest impact on your search quality — and a big chunk of your costs. But "choosing a model" is a bit more nuanced than picking a name from a list.
 
 [show MTEB leaderboard snapshot — June 2026 retrieval tier]
 
-In mid-twenty-twenty-six (2026), the landscape is competitive. Open-weight models like Qwen three Embedding (Qwen3-Embedding) are matching or beating commercial APIs on retrieval benchmarks. And Elastic now ships Jina v5 natively — if you use `semantic_text`, it picks Jina v5 on Elastic Inference Service automatically. You don't configure anything.
+We can talk in detail about model choice in another video, but lets keep it short here.
 
-One caveat — MTEB scores are self-reported across generic benchmarks. Your domain might look very different. Always test on your actual data.
+In mid-twenty-twenty-six (2026), the landscape is competitive. Open-weight models like Qwen three Embedding (Qwen3-Embedding) are matching or beating commercial APIs on retrieval benchmarks. And Elastic now ships Jina v5 models natively, which are small, fast and very competive. As a bonus — if you use `semantic_text`, it picks Jina v5 on Elastic Inference Service automatically. You don't configure anything. It's quite handy, really.
+
+when choosing a model, make sure it supports the input you will use, like modalities. So do you need to embed images, audio, or video, for example, as well as text. and then whether it supports the languages you need.
+
+Then. the MTEB is a great starting point for choosing a model. You get a great deal of information  about the model and benchmarks on standard tasks. Just keep in mind that scores are self-reported across generic benchmarks.
+
+and since your actual task is unlikely to involve the benchmark dataset, its a good idea to test on your actual data.
 
 Beyond the model itself, there's a powerful trick — Matryoshka Representation Learning.
 
 [popup: matryoshka truncation visual]
 
-It trains the model so the *first* N dimensions carry the most important information. You can just chop off the end. Take a one-thousand-and-twenty-four-dimensional (1024-dim) vector, keep the first five twelve (512), and you've halved your storage with typically under one percent (1%) quality loss. Nearly every major model supports this now.
+It trains the model so the *first* N dimensions carry the most important information. You can just chop off the end. Take a one-thousand-and-twenty-four-dimensional (1024-dim) vector like that from jina v5 text model. if you only keep the first five twelve (512), and you've halved your storage with typically under one percent (1%) quality loss.
 
 That means dimension choice is a *separate* decision from model choice. Pick the best model you can afford, then truncate to the smallest dimension your recall tolerates.
 
-And then there's hosting — managed inference through Elastic or a commercial API, versus self-hosting open-weight models on your own GPUs. Self-hosting eliminates per-token costs, which starts mattering a lot above a hundred million tokens a month.
+And then there's hosting — managed inference through Elastic, or another API like Jina, versus self-hosting open-weight models on your own GPUs. Self-hosting eliminates per-token costs, which starts mattering a lot above a hundred million tokens a month.
 
 ### How the personas choose
 
 [show model comparison table as overlay]
 
-**Cora** uses Jina v5-text-small through Elastic Inference Service at full one thousand and twenty-four (1024) dimensions. Managed infrastructure, no truncation, maximum recall. Every dimension earning its keep.
+Remember that **Cora** priorities search quality. So she uses Jina v5-text-small through Elastic Inference Service at full one thousand and twenty-four (1024) dimensions. High performance model, with full length and full precision vectors helps her get maximum recall.
 
-**Samantha** uses the same model but truncates to five twelve (512) dimensions via Matryoshka. Half the storage, same quality ceiling.
+**Samantha** is after speed. She uses the even smaller version of the Jina model, the v5-text-nano through Elastic Inference Service. It's not as good as the v5-text-small, but is faster, and she gains even further search speeds by truncating the resulting vectors with Matryoshka embeddings.
 
-**Ben** self-hosts Qwen three Embedding zero-point-six B (Qwen3-Embedding-0.6B) via vLLM. Six hundred million (600M) parameters, Apache two-point-oh (2.0) license, surprisingly strong benchmark scores — and it runs on a single GPU he's already paying for. At his scale, eliminating per-token API costs is the difference between viable and not.
+**Ben** does his research and finds that self-hosting is the way to go, with the lowest long-term costs. He picks the Qwen3-Embedding-0.6B model, with six hundred million (600M) parameters. It provides relatively strong benchmark scores, and it runs on a single GPU he's already paying for. Crucially, and this is key - it is released under the Apache 2.0 license so he can use it commercially. At his scale, eliminating per-token API costs is the difference between viable and not.
 
 [demo: dense_vector field mapping (dims, similarity) alongside semantic_text with Jina v5 on EIS — both side by side.]
 
@@ -115,41 +119,52 @@ And then there's hosting — managed inference through Elastic or a commercial A
 
 [show control panel — Aspect 2 highlighted, others dimmed]
 
-You've got vectors. Now — how are they stored, compressed, and searched?
+They've now got some sort of an embedding model outputting vectors. What they need is a vector index and storage configuration, which will determine how they are stored, compressed, and searched.
 
-In Elasticsearch, this starts with `index_options.type` on your `dense_vector` field. But the index type doesn't just pick a search algorithm — it determines your quantization level and recovery mechanism too. One configuration, many knobs.
+The key configuration targets here are the vector index type, parameters within that vector index type, and quantisation.
 
 [show index type table]
 
-There are two families. The HNSW family — `hnsw`, `int8_hnsw`, `int4_hnsw`, `bbq_hnsw` — builds a multi-layer graph where each vector is connected to its nearest neighbors. Fast, high recall, but the graph needs to fit in memory. The quantized variants compress the vectors in the graph nodes — `bbq_hnsw` gets you thirty-two times (32×) memory reduction by compressing each dimension to a single bit.
+Broadly, there are two families of common vector index types these days. One is HNSW, which is memory-based, and the other is a disk-based index.
+
+The HNSW family builds a multi-layer graph where each vector is connected to its nearest neighbours. This is the fast, high recall, type of vector index, with the requirement that the graph and the vectors needs to fit in memory.
+
+You can reduce the memory footprint of an HNSW index by quantising, in other words, reducing the precision of the vectors - that's what types like these do: `int8_hnsw`, `int4_hnsw`, `bbq_hnsw`. For example `bbq_hnsw` gets you sixteen times memory reduction by compressing each dimension to a single bit.
 
 [popup: simplified HNSW graph — query navigating layers]
 
-Then there's `bbq_disk`, which takes a fundamentally different approach. It partitions vectors into clusters. Only the centroids live in memory — vectors stay on disk. Targets up to about ninety-five percent (95%) recall, but with dramatically lower memory.
+Then there are disk-based indexes, like `DiskBBQ`. They take a fundamentally different approach to avoid this memory limitation of HNSW. DiskBBQ for example partitions vectors into clusters, and only puts the centroids into memory, leaving the actual vectors on disk. This hugely reduces the required memory. And while the search latency isn't as good with DiskBBQ as with HNSW, the difference isn't as big as you might think, and other operations like indexing or ingestion, is actually faster with DiskBBQ than HNSW.
 
-[popup: hierarchical k-means clusters — query finds centroid, scores within cluster]
+[popup: diskbbq]
 
+Both HNSW and DiskBBQ also have further detailed parameters for tuning the indexes further. When it comes to HNSW, the key parameters are `m` which defines how many connections each node can have in the graph, and `ef_construction` which is the size of candidates to keep in memory while building the graph.
+
+Moving to DiskBBQ, the key parameter is `default_visit_percentage`, which sets the default fraction of vectors to be visited per shard during search.
 ### The recovery mechanism
 
-Here's what makes quantized search actually work. Quantized index types don't just throw away precision — they *recover* it at query time.
+And let's talk a bit more about quantisation, like DiskBBQ for example. By default, vectors might be made of 32 bits each, or 16 bits like in the case of Elastic. But, it turns out that a lot of that information can be thrown away with fairly limited accuracy penalty. So we can actually only use 8 or 4 bits, or even a single bit, in the case of DiskBBQ, to represent each number.
+
+Important detail here is that quantisation saves RAM, not disk. Elasticsearch always keeps the raw vectors on disk for rescoring.
+
+Rescoring, in combination with oversampling, is what vector search engines use these days to recover most of the lost information. At query time, let's say you ask for the top 10 results. Then, what a system like Elasticsearch does is to apply oversampling, grabbing additional, like three-times the requested number.
+
+So that's be the top 30 candidates, using the quantised vectors. It then rescores all thirty against the original, unquantized vectors on disk and returns the best ten. For most datasets, this recovers nearly all the recall loss.
 
 [popup: two-stage oversampling + rescoring visual]
 
-If you ask for the top ten (10) results with three-times (3×) oversampling, Elasticsearch retrieves thirty (30) candidates using the fast quantized index, then rescores all thirty against the original float thirty-two (float32) vectors on disk and returns the best ten. For most datasets, this recovers nearly all the recall loss.
-
-Important detail — quantization saves RAM, not disk. Elasticsearch always keeps the raw vectors on disk for rescoring.
-
 ### How the personas choose
 
-**Cora** picks `hnsw` — unquantized, full precision. She tunes `m: 32` and `ef_construction: 200` for a denser graph. About five gigabytes (5 GB) of RAM per million vectors. No oversampling needed — there's nothing to recover from. Indexing is two to three times (2–3×) slower, but query quality matters more.
+Knowing all these, here's what our engineers choose:
 
-**Samantha** picks `bbq_hnsw` — same graph algorithm, but with thirty-two times (32×) less memory thanks to BBQ. Default params, three-times (3×) oversampling. About two hundred and fifty to three hundred megabytes (250–300 MB) per million vectors. The oversampling fits inside her latency budget and recovers most of the recall loss.
+**Cora** picks `hnsw` unquantized, full precision.  `m: 32` and `ef_construction: 400` for a denser graph. Roughly, she might require five gigabytes of RAM per million vectors - or 100 gigabytes of RAM per 20 million vectors.
 
-**Ben** picks `bbq_disk`. At his scale, HNSW would need hundreds of gigabytes of RAM — and if the graph falls out of memory, latency spikes *exponentially*. DiskBBQ degrades *linearly* and gracefully. Under a hundred megabytes (100 MB) per million vectors. He sets `bits: 2` for better precision than the one-bit (1-bit) default, and `on_disk_rescore: true` so even the rescoring step doesn't blow his RAM budget.
+You can see how this starts to get expensive as her dataset grows in size - but she'll get the best search quality possible.
 
-Notice — Cora and Samantha both chose HNSW but configured it for opposite ends. Same algorithm, completely different precision trade.
+**Samantha** picks `bbq_hnsw`. This is the same graph algorithm as Cora's, but with sixteen times less memory for the vectors thanks to BBQ quantisation. With default params, and three-times oversampling. As a result, Samantha might only need about a gigabyte of RAM or just under it per million vectors. The oversampling fits inside her latency budget and recovers a big part of the recall loss.
 
-[demo: index_options.type — `hnsw`, `bbq_hnsw`, `bbq_disk` configs side by side. Then kNN query with rescore_vector settings.]
+**Ben** picks `bbq_disk`. At his scale, HNSW would need hundreds of gigabytes of RAM; which he can't afford - and if the graph falls out of memory, latency spikes significantly.
+
+So instead, he uses DiskBBQ, which needs much less RAM to start with, and when it runs out, it degrades *linearly* and gracefully. He might only need a hundred megabytes per million vectors, and enjoys faster ingestion. He can even set `on_disk_rescore: true` so even the rescoring step happens on disk, and doesn't blow his RAM budget.
 
 -----
 
@@ -157,80 +172,83 @@ Notice — Cora and Samantha both chose HNSW but configured it for opposite ends
 
 [show control panel — Aspect 3 highlighted, others dimmed]
 
-A second model to fix what the first one got wrong.
+All of them have chosen their models, and configured the indices. They could stop here, but they would be missing out on a nice improvement from something called a reranker.
 
-Embedding models encode query and document *separately* — they never see each other. A reranker reads them *together* and produces a much more accurate relevance score. Elastic's built-in reranker averages a forty percent (40%) improvement over BM25 on BEIR.
+Embedding models need pre-process every document and turn them into embeddings before knowing what the query is. So the query and the document are processed separately, meaning they never see each other. This is a shame, because knowing the query, as you can imagine, would let a model make a more informed decision about what part of the document to pay attention to. But this just isn't possible with embedding models, which have to process millions of documents. It would simply take too long to do this once you have the query.
 
-The tradeoff — you're running model inference for every document you rerank. That's why rerankers operate on a small window, not the whole corpus.
+This is where reranking models come in.
 
-There's an important architectural split. **Pointwise** rerankers score each pair independently — a hundred (100) documents means a hundred inferences. **Listwise** rerankers like Jina v3 score up to sixty-four (64) documents in a single call. One inference, not sixty-four. That fundamentally changes the latency math.
+These models read the query and the document together, and produce a much more accurate relevance score, with better context. These types of models are also called a cross-encoder model.
 
+So a really good way to use cross-encoder of model is to use it on the set of results that you've retrieved with the embedding model. And because of this, cross-encoder or other similar models used as a second stage of a pipeline are also called "reranker" models.
+
+Of course, this is another model to run - so that means you have make *another* set of decisions, like we did with the embedding models. What model to use, how to run them, and so on.
+
+But they do provide yet further uplift in retrieval performance, so they are big parts of people's toolkits in retrieval.
+
+Having said all this, you might think the choices for our heroes are obvious - but are they? Let's take a look.
 ### How the personas choose
 
-Let's start with the surprising one.
+**Cora** uses deep reranking with the `.jina-reranker-v2` model. The advantage of the v2 model is that it's a `pointwise` reranker, meaning she can input as many documents as she'd like. She actually over-retrieves a larger results set than she needs with the initial embedding model, and puts them into the reranker to get the best possible result.
 
-**Ben** uses Jina Reranker v3 — listwise, top-thirty (30), one inference call. This is the payoff of his whole strategy. He saved aggressively at every prior step — self-hosted model, disk-based index, two-bit (2-bit) quantization. Each trade lost some recall. But the listwise reranker at the end recovers a meaningful chunk of that quality for almost nothing. This is the "cheap first stage, smart second stage" pattern — and it's the most interesting configuration in the video.
+On the other hand, **Samantha** skips reranking entirely. Again, she prioritises speed here and doesn't want to pay for the extra latency. The three-times oversampling on `bbq_hnsw` is effectively her quality recovery, just using the original vectors rather than a separate model.
 
-**Cora** uses deep reranking — Elastic dot-rerank-v-one (.rerank-v1), pointwise, `rank_window_size: 100` with `chunk_rescorer` enabled since her legal documents are long. She sets `min_score: 0.5` — in legal research, returning an irrelevant case is worse than returning nothing. One caveat — Elastic Rerank is still in technical preview. For Cora's low-volume, high-stakes use case, that's acceptable.
+Now - what about **Ben**? He actually uses `jina-reranker-v3`. That might be surprising, since it's another inference step. But, the `v3` reranker is a `listwise` model, which can rerank up to 64 results in one inference call - whereas for a `pointwise` reranker like the `v2` reranker that Cora used, a hundred documents means a hundred inferences.
 
-**Samantha** skips reranking entirely. Even shallow reranking adds latency she can't spare. The three-times (3×) oversampling on `bbq_hnsw` is effectively her quality recovery — just using the original vectors rather than a separate model.
-
-[demo: text_similarity_reranker — Jina v3 for Ben vs .rerank-v1 for Cora, side by side.]
+[figure: pointwise vs listwise reranker?]
 
 -----
 
 ## SECTION 7 — THE TABLE + COMPOUND EFFECTS
 
-Let's put it all together.
+Let's recap - this is what our heroes have chosen:
 
-[show full config table — color-coded: Cora (green), Samantha (blue), Ben (orange)]
+[show full config table]
 
-|  | Cora (Quality) | Samantha (Speed) | Ben (Cost) |
-|---|---|---|---|
-| **Embedding** | Jina v5, 1024d, EIS | Jina v5, 512d (Matryoshka), EIS | Qwen3-0.6B, self-hosted |
-| **Index** | `hnsw`, float32, m:32 | `bbq_hnsw`, 3× oversample | `bbq_disk`, bits:2, disk rescore |
-| **Reranking** | .rerank-v1, top-100 | None | Jina v3 listwise, top-30 |
-| **RAM / 1M vectors** | ~5 GB | ~250–300 MB | <100 MB |
-
-[beat]
+|                      | Cora (Quality)                     | Samantha (Speed)                     | Ben (Cost)                 |
+| -------------------- | ---------------------------------- | ------------------------------------ | -------------------------- |
+| **Embedding**        | Jina v5-small, 1024d, EIS          | Jina v5-nano, 256d (Matryoshka), EIS | Qwen3-0.6B, self-hosted    |
+| **Index**            | `hnsw`, m:32, ef_construction: 400 | `bbq_hnsw`, 3× oversample            | `bbq_disk`, `disk_rescore` |
+| **Reranking**        | Jina rerank v2, top-100            | None                                 | Jina rerank v3, top-30     |
+| **RAM / 1M vectors** | ~5 GB                              | ~1 GB                                | ~100 MB                    |
 
 Now look at the compound effects.
 
 Ben stacked savings at every layer — and then used a cheap reranker to recover quality at the end. He's not "cheap and worse." He's running a cost-optimized pipeline with a quality recovery strategy built in.
 
-Cora and Samantha both picked HNSW, but configured it for opposite ends. Same algorithm, completely different trade.
+Cora and Samantha both picked HNSW, but configured it for opposite ends. Same core algorithm, but each with some key tradeoffs.
 
-And model choice cascades through everything. The RAM difference between these three — five gigabytes (5 GB) versus three hundred megabytes (300 MB) versus under a hundred (100 MB) — comes from the combination of dimension choice, quantization, and whether the graph lives in memory.
+And model choice cascades through everything. The RAM difference between these three — five gigabytes versus a gig versus about a hundred megabytes per a million vectors — comes from the combination of dimension choice, quantisation, and whether the graph lives in memory.
 
-All three are correct. None of them would work well for the other two.
+All three are correct, but none of them would work well for the other two.
 
 -----
 
 ## SECTION 8 — WHAT ELSE YOU SHOULD KNOW
 
-A few things worth knowing that didn't fit the framework.
+Now - here are a couple of further tips for our heroes, and you.
 
-These are archetypes, not recipes. Real projects mix constraints.
+We focussed on vector search here, you can get even more accuracy from search by introducing BM25 via hybrid search. For our heroes, it's yet another option, and for someone like Samantha, source of latency. But BM25 and vector are such good complementary options, most production systems these days  rely on hybrid search.
 
-Most production systems combine vector search with BM25 via hybrid search. That changes the sensitivity of some of these dials — BM25 catches what embeddings miss, so your vector path doesn't have to be perfect.
+Another point is that these options don't lock you in for ever. Elasticsearch lets you update the index type, introduce a reranker step down the line, or even change your embedding model if one's not working for you. Although, keep in mind that this will require you to re-embed your entire dataset, which can be very time-consuming and potentially also costly.
 
-And you're not locked in. Elasticsearch lets you update `index_options.type` via the Update Mapping API. New segments use the new type, old ones keep the old until you force-merge. Start somewhere reasonable and tune from there.
+So it's always better to get your system right at the start, or during prototyping, rather than have to change it down the line.
 
 -----
 
 ## SECTION 9 — WRAP-UP
 
-Three aspects. Three personas. Three different right answers.
+So here we are - with our three personas, optimising the three key aspects of vector search, and getting different answers that are somehow still correct.
 
-The embedding model sets the quality ceiling. The index type determines how you store and compress. And reranking is the optional precision layer that can rescue quality after aggressive compression.
+The key takeaway to repeat are these - the embedding model is still the most important aspect. The index type drives your resource requirements, and reranking is the optional precision layer that can rescue and uplift quality.
 
-None of these setups would work well for the other two. The right config depends on what you're optimizing for.
+None of these setups would work well for the other two. The right config depends on what you're optimising for.
 
 Docs for everything we covered are linked in the description.
 
-If this was helpful, hit subscribe. Tell me in the comments — which persona are you closest to? Are you a Cora, a Samantha, or a Ben? I read every comment.
+If this was helpful, please hit like subscribe. And tell me in the comments — which persona are you closest to? Are you a Cora, a Samantha, or a Ben? And what other vector search areas you'd like me to cover next - I read every comment, so I'd love to hear from you.
 
-See you next time.
+Thanks and see you next time.
 
 -----
 
