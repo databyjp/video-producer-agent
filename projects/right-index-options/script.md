@@ -22,7 +22,7 @@ Hold that thought, and lets take a look at the actual architectures.
 
 Cora's built the expensive one. She is using a high-dimensional embedding model, full precision vectors, deep reranking on every query. She checks the search quality through recall, and goes home happy.
 
-Samantha's done, too. She picks the same embedding model family as Cora — but she's using a slightly smaller model, and truncated the vectors to a third with Matryoshka, applied quantization with BBQ, and skipped reranking entirely. Her results come back lightning fast.
+Samantha's done, too. She picks the same embedding model family as Cora — but she's using a slightly smaller model, truncated the vectors to a third with Matryoshka, configued her index with BBQ quantization, and skipped reranking entirely. Her results come back lightning fast.
 
 And Ben's pushed to production. He's using a self-hosted open-source model, with vectors living almost entirely on disk, aggressive quantization everywhere — and then a tiny reranker at the end to clean things up. His cloud dashboard shows a tiny bill, which makes him very happy.
 
@@ -141,13 +141,13 @@ Both HNSW and DiskBBQ also have further detailed parameters for tuning the index
 Moving to DiskBBQ, the key parameter is `default_visit_percentage`, which sets the default fraction of vectors to be visited per shard during search.
 ### The recovery mechanism
 
-And let's talk a bit more about quantisation, like DiskBBQ for example. By default, vectors might be made of 32 bits each. But, it turns out that a lot of that information can be thrown away with fairly limited accuracy penalty. So we can actually only use 8 or 4 bits, or even a single bit, in the case of DiskBBQ, to represent each number.
+And let's talk a bit more about quantisation, like DiskBBQ for example. By default, vectors might be made of 32 bits each. But, it turns out that a lot of that information can be thrown away with fairly limited accuracy penalty. So we can actually only use 8 or 4 bits, or even a single bit, with BBQ or Better Binary Quantization, to represent each number.
 
 Important detail here is that quantisation saves RAM, not disk. Elasticsearch always keeps the raw vectors on disk for rescoring.
 
 Rescoring, in combination with oversampling, is what vector search engines use these days to recover most of the lost information. At query time, let's say you ask for the top 10 results. Then, what a system like Elasticsearch does is to apply oversampling, grabbing additional, like three-times the requested number.
 
-So that's be the top 30 candidates, using the quantised vectors. It then rescores all thirty against the original, unquantized vectors on disk and returns the best ten. For most datasets, this recovers nearly all the recall loss.
+So that would be the top 30 candidates, using the quantised vectors. It then rescores all thirty against the original, unquantized vectors on disk and returns the best ten. For most datasets, this recovers nearly all the recall loss.
 
 [popup: two-stage oversampling + rescoring visual]
 
@@ -179,7 +179,7 @@ This is where reranking models come in.
 
 These models read the query and the document together, and produce a much more accurate relevance score, with better context. These types of models are also called a cross-encoder model.
 
-So a really good way to use cross-encoder of model is to use it on the set of results that you've retrieved with the embedding model. And because of this, cross-encoder or other similar models used as a second stage of a pipeline are also called "reranker" models.
+So a really good way to use cross-encoder model is to use it on the set of results that you've retrieved with the embedding model. And because of this, cross-encoder or other similar models used as a second stage of a pipeline are also called "reranker" models.
 
 Of course, this is another model to run - so that means you have make *another* set of decisions, like we did with the embedding models. What model to use, how to run them, and so on.
 
@@ -232,11 +232,13 @@ We focused on vector search here, but most production systems actually combine v
 We'll cover hybrid search properly in another video.
 
 Another thing — these choices don't lock you in forever. Elasticsearch lets you upgrade between HNSW types — say, from
-upgrade to quantized HNSW types like `int8_hnsw` or `bbq_hnsw` - without reindexing. New data picks up the new settings, old data keeps the old ones until you merge it. In a pinch, you can reindex your data, too of course. So you can start somewhere reasonable and tune from there.
+unquantised to quantised HNSW types like `int8_hnsw` or `bbq_hnsw` - without reindexing. New data picks up the new settings, old data keeps the old ones until you merge it. In a pinch, you can reindex your data, too of course. So you can start somewhere reasonable and tune from there.
 
 The one thing that is expensive to change is your embedding model. Switching models means re-embedding your entire dataset — every single document. At Ben's scale, that's potentially billions of vectors to recompute. So spend time getting your model choice right during prototyping, not after you've indexed everything.
 
 And look — if all of this feels like a lot? Just use `semantic_text` with Elasticsearch. It picks a solid model, sets good defaults for the index, handles inference. Start there. Figure out whether you're a Cora, a Samantha, or a Ben. And then come back and start turning the knobs.
+
+Note that bbq_disk requires an Enterprise license of Elasticsearch — for other tiers, bbq_hnsw is the most aggressive quantization available.
 
 -----
 
