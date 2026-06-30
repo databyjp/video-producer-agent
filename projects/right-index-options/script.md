@@ -27,6 +27,9 @@ Samantha's done, too. She picks the same embedding model as Cora — but she's t
 And Ben's pushed to production. He's using a self-hosted open-source model, with vectors living almost entirely on disk, aggressive quantization everywhere — and then a tiny reranker at the end to clean things up. His cloud dashboard shows a tiny bill, which makes him very happy.
 
 Should they all be happy with these vastly different outcomes? What do you think? Let's learn more about these decisions.
+
+-----
+
 ## SECTION 2 — THE FRAMEWORK: 3 ASPECTS
 
 To configure vector search, you're really setting up three big subsystems, each playing a big part.
@@ -43,9 +46,7 @@ Every one of these subsystems has parameters you can tune. So, while the default
 
 The hard part is knowing where to set each one for *your* situation.
 
-[a pause and overlay in different camera angle]
-In Elasticsearch, you can just use 'semantic_text' and get sensible defaults for most of these. Think of `semantic_text` as the 'easy mode' that works for common cases. This video is about 'advanced mode', understanding what those defaults are doing, and when you'd want to override them.
-
+-----
 
 ## SECTION 3 — THE PERSONAS
 
@@ -110,8 +111,6 @@ Remember that **Cora** priorities search quality. So she uses Jina v5-text-small
 **Samantha** is after speed. She uses the even smaller version of the Jina model, the v5-text-nano through Elastic Inference Service. It's not as good as the v5-text-small, but is faster, and she gains even further search speeds by truncating the resulting vectors with Matryoshka embeddings.
 
 **Ben** does his research and finds that self-hosting is the way to go, with the lowest long-term costs. He picks the Qwen3-Embedding-0.6B model, with six hundred million (600M) parameters. It provides relatively strong benchmark scores, and it runs on a single GPU he's already paying for. Crucially, and this is key - it is released under the Apache 2.0 license so he can use it commercially. At his scale, eliminating per-token API costs is the difference between viable and not.
-
-[demo: dense_vector field mapping (dims, similarity) alongside semantic_text with Jina v5 on EIS — both side by side.]
 
 -----
 
@@ -226,13 +225,17 @@ All three are correct, but none of them would work well for the other two.
 
 ## SECTION 8 — WHAT ELSE YOU SHOULD KNOW
 
-Now - here are a couple of further tips for our heroes, and you.
+Now — here are a couple more things worth knowing.
 
-We focussed on vector search here, you can get even more accuracy from search by introducing BM25 via hybrid search. For our heroes, it's yet another option, and for someone like Samantha, source of latency. But BM25 and vector are such good complementary options, most production systems these days  rely on hybrid search.
+We focused on vector search here, but most production systems actually combine vector search with BM25 — keyword search — through hybrid search. And they're surprisingly good partners. BM25 catches the exact keyword matches that embeddings miss, and embeddings catch the semantic stuff that keywords miss. For our heroes, it's yet another configuration choice, but it's one that also acts as a safety net. It makes your whole system less sensitive to any single vector config decision.
 
-Another point is that these options don't lock you in for ever. Elasticsearch lets you update the index type, introduce a reranker step down the line, or even change your embedding model if one's not working for you. Although, keep in mind that this will require you to re-embed your entire dataset, which can be very time-consuming and potentially also costly.
+We'll cover hybrid search properly in another video.
 
-So it's always better to get your system right at the start, or during prototyping, rather than have to change it down the line.
+Another thing — these choices don't lock you in forever. Elasticsearch lets you upgrade your index type — say, from unquantized HNSW to quantized — without reindexing. New data picks up the new settings, old data keeps the old ones until you merge it. So you can start somewhere reasonable and tune from there.
+
+The one thing that is expensive to change is your embedding model. Switching models means re-embedding your entire dataset — every single document. At Ben's scale, that's potentially billions of vectors to recompute. So spend time getting your model choice right during prototyping, not after you've indexed everything.
+
+And look — if all of this feels like a lot? Just use `semantic_text` with Elasticsearch. It picks a solid model, sets good defaults for the index, handles inference. Start there. Figure out whether you're a Cora, a Samantha, or a Ben. And then come back and start turning the knobs.
 
 -----
 
