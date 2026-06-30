@@ -128,7 +128,7 @@ Three options:
 
 **Cora** wants high-quality. She uses `jina-embeddings-v5-text-small` through EIS at full 1024 dims with the retrieval-specific LoRA adapter. Managed infrastructure, no truncation, maximum recall. Every dimension is earning its keep.
 
-**Samantha** wants speed. She uses the same Jina v5-text-small model, but truncates to 512 dims via Matryoshka. Half the vector storage, roughly the same model quality — the truncation loss at 512 dims is typically under 1% on retrieval benchmarks. Same quality ceiling, smaller footprint.
+**Samantha** wants speed. She uses the smaller `jina-embeddings-v5-text-nano` (239M params, 768 dims) through EIS — it's not as good as the v5-text-small, but it's faster. She then truncates to 256 dims via Matryoshka for even faster search and less storage. A smaller model *and* aggressive truncation — she's trading quality ceiling for speed at every step.
 
 **Ben** needs embedding costs near zero at scale. He self-hosts Qwen3-Embedding-0.6B via vLLM — 600M parameters, Apache 2.0, scores 64.34 on MMTEB multilingual and a surprisingly strong 70.70 on English MTEB v2 — competitive with models 10× its size. Runs on a single GPU he's already paying for. At tens of millions of documents, eliminating per-token API costs is the difference between viable and not.
 
@@ -136,7 +136,7 @@ Three options:
 | Model | Params | Dims | Hosting | Cost |
 |---|---|---|---|---|
 | jina-v5-text-small | 677M | 1024 (full) | EIS managed | Included with Elastic Cloud |
-| jina-v5-text-small | 677M | 512 (Matryoshka) | EIS managed | Included with Elastic Cloud |
+| jina-v5-text-nano | 239M | 256 (Matryoshka) | EIS managed | Included with Elastic Cloud |
 | Qwen3-Embedding-0.6B | 600M | 1024 | Self-hosted (vLLM) | ~$0 per-token (GPU amortized) | 64.34 MMTEB / 70.70 Eng v2 |
 | Gemini Embedding 001 | — | 3072 | Google API | ~$0.004/1K chars | 68.32 overall / 67.71 retrieval |
 | Qwen3-Embedding-8B | 8B | 4096 | Self-hosted | ~$0 per-token (A100 required) | 70.58 MMTEB / 69.44 retrieval |
@@ -166,7 +166,7 @@ In Elasticsearch, this starts with `index_options.type` on your `dense_vector` f
 
 Notice how each step down the table increases compression and reduces memory. The index type *is* the quantization decision — you don't pick them separately.
 
-Let's look at the two main families and what you can tune on each.
+Broadly, there are two families: HNSW (memory-based graph) and disk-based indexes.
 
 ### HNSW-based types (`hnsw`, `int8_hnsw`, `int4_hnsw`, `bbq_hnsw`)
 
@@ -231,15 +231,15 @@ Two more field-level settings worth knowing:
 
 ### How the personas choose
 
-**Cora** has tens of millions of vectors at 1024 dims. She picks `hnsw` — unquantized, full float32 precision. She tunes for quality: `m: 32` and `ef_construction: 200` for a denser, more connected graph. At roughly ~5GB RAM per million vectors (raw vectors plus the HNSW graph overhead — `m: 32` means a lot of edges to store), she needs well-specced nodes, but maximum recall justifies the cost. No oversampling needed — there's nothing to recover from. The tradeoff? Indexing takes significantly longer with these settings — potentially 2–3× slower than defaults. But in her world, query quality matters more than ingestion speed.
+**Cora** has tens of millions of vectors at 1024 dims. She picks `hnsw` — unquantized, full float32 precision. She tunes for quality: `m: 32` and `ef_construction: 400` for a denser, more connected graph. At roughly ~5GB RAM per million vectors (raw vectors plus the HNSW graph overhead — `m: 32` means a lot of edges to store), she needs well-specced nodes, but maximum recall justifies the cost. No oversampling needed — there's nothing to recover from. The tradeoff? Indexing takes significantly longer with these settings — potentially 2–3× slower than defaults. But in her world, query quality matters more than ingestion speed.
 
-**Samantha** has millions of SKUs and needs speed. She picks `bbq_hnsw` — same HNSW graph algorithm as Cora, but with 32× less memory thanks to BBQ compression. Default graph params (`m: 16`), default 3× oversampling. At roughly ~250–300MB RAM per million vectors (the quantized vectors are tiny, but the HNSW graph itself still needs ~200MB), it's dramatically cheaper than Cora's setup. The oversampling fits inside her latency SLO and recovers most of the recall loss. One thing worth noting: her e-commerce queries almost always have filters — size, color, availability. Elasticsearch's filtered kNN optimizations mean those facets don't kill performance — for HNSW, filtered kNN intersects after graph traversal, keeping it fast.
+**Samantha** has millions of SKUs and needs speed. She picks `bbq_hnsw` — same HNSW graph algorithm as Cora, but with 32× less memory thanks to BBQ compression. Default graph params (`m: 16`), default 3× oversampling. At roughly ~1GB RAM per million vectors, it's dramatically cheaper than Cora's setup. The oversampling fits inside her latency SLO and recovers most of the recall loss. One thing worth noting: her e-commerce queries almost always have filters — size, color, availability. Elasticsearch's filtered kNN optimizations mean those facets don't kill performance — for HNSW, filtered kNN intersects after graph traversal, keeping it fast.
 
 **Ben** has potentially hundreds of millions of vectors after chunking. HNSW at this scale would require hundreds of gigabytes of RAM — and worse, if the HNSW graph falls out of RAM, latency spikes *exponentially*. DiskBBQ degrades *linearly* and gracefully under memory pressure — that's the real reason it works for his dusty archive. He picks `bbq_disk` — vectors live on disk, only centroids in memory. Under 100MB RAM per million vectors, ballpark. He sets `bits: 2` (more precise than the 1-bit default, auto-adjusts to 1.5× oversampling), `cluster_size: 256` for tighter clusters, and `on_disk_rescore: true` in his index options so even the rescoring step doesn't blow his RAM budget. The infrastructure cost is a fraction of what HNSW would require.
 
 Notice that Cora and Samantha both chose HNSW — the same graph algorithm — but configured it for opposite ends. Cora keeps it unquantized with a denser graph (`m: 32`). Samantha quantizes aggressively with the default graph. Same algorithm, completely different precision trade.
 
-[demo: show index_options.type in a dense_vector mapping — `hnsw` with m/ef_construction, `bbq_hnsw` with defaults, `bbq_disk` with bits/cluster_size side by side. Walk through each config, explain what each parameter does in context. Then show a kNN query with rescore_vector settings — the oversample parameter and how it changes the candidate count. ~30–45s total.]
+[demo: show index_options.type in a dense_vector mapping — `hnsw` with m:32/ef_construction:400, `bbq_hnsw` with defaults, `bbq_disk` with bits/cluster_size side by side. Walk through each config, explain what each parameter does in context. Then show a kNN query with rescore_vector settings — the oversample parameter and how it changes the candidate count. ~30–45s total.]
 
 -----
 
@@ -288,11 +288,11 @@ Let's start with the surprising one.
 
 This is the "cheap first stage, smart second stage" pattern. Save aggressively on storage and retrieval, then spend a little on precision at the very end where it counts. It's the most interesting configuration in this video.
 
-**Cora** uses deep reranking — Elastic `.rerank-v1` (pointwise) with `rank_window_size: 100` and `chunk_rescorer` enabled, since her legal and medical documents are long and would otherwise be truncated at the 512-token limit. One caveat: Elastic Rerank (`.rerank-v1`) is still in **technical preview** as of recording — check the docs for its current status. The performance docs also note it's "cost prohibitive for high query rates" and they plan to address this for GA. For Cora's use case — low query volume, high-stakes results — the preview status is acceptable. She sets `min_score: 0.5` as a hard relevance floor — in legal research, returning an irrelevant case is worse than returning nothing.
+**Cora** uses deep reranking — Jina Reranker v2 (pointwise cross-encoder) with `rank_window_size: 100`. The advantage of the v2 model is that it's pointwise, meaning she can input as many documents as she'd like. She over-retrieves a larger results set than she needs with the initial embedding model, and puts them into the reranker to get the best possible result.
 
 **Samantha** skips reranking entirely. Her latency budget is the binding constraint — even shallow reranking adds inference time she can't spare. She relies on the oversampling + rescore from the BBQ quantization layer to do the quality recovery work. The 3× oversampling on `bbq_hnsw` is effectively her "reranker" — it's just using the original vectors rather than a separate model. For e-commerce product search, this is usually good enough.
 
-[demo: show text_similarity_reranker in a retriever pipeline — Jina v3 listwise for Ben (rank_window_size: 30) vs Elastic .rerank-v1 for Cora (rank_window_size: 100, chunk_rescorer enabled). Walk through both configs, show how the retriever nests inside the search request. ~30–45s.]
+[demo: show text_similarity_reranker in a retriever pipeline — Jina v3 listwise for Ben (rank_window_size: 30) vs Jina Reranker v2 for Cora (rank_window_size: 100). Walk through both configs, show how the retriever nests inside the search request. ~30–45s.]
 
 ---
 
@@ -304,10 +304,10 @@ This is the "cheap first stage, smart second stage" pattern. Save aggressively o
 
 |  | Cora (Quality) | Samantha (Speed) | Ben (Cost) |
 |---|---|---|---|
-| **Embedding model** | Jina v5-text-small, 1024 dims (EIS) | Jina v5-text-small, 512 dims (Matryoshka, EIS) | Qwen3-0.6B, 1024 dims (self-hosted vLLM) |
-| **Index & storage** | `hnsw`, float32, m:32, ef:200 | `bbq_hnsw`, BBQ 1-bit, 3× oversample | `bbq_disk`, bits:2, 1.5× oversample, disk rescore |
-| **Reranking** | Elastic .rerank-v1, top-100, chunk_rescorer | No | Jina v3 listwise, top-30, min_score:0.3 |
-| **Approx RAM / 1M vectors** | ~5 GB (vectors + graph) | ~250–300 MB (quantized + graph) | <100 MB (centroids + metadata) |
+| **Embedding model** | Jina v5-text-small, 1024 dims (EIS) | Jina v5-text-nano, 256 dims (Matryoshka, EIS) | Qwen3-0.6B, 1024 dims (self-hosted vLLM) |
+| **Index & storage** | `hnsw`, float32, m:32, ef:400 | `bbq_hnsw`, BBQ 1-bit, 3× oversample | `bbq_disk`, bits:2, 1.5× oversample, disk rescore |
+| **Reranking** | Jina Reranker v2, top-100 | No | Jina v3 listwise, top-30, min_score:0.3 |
+| **Approx RAM / 1M vectors** | ~5 GB (vectors + graph) | ~1 GB (quantized + graph) | <100 MB (centroids + metadata) |
 | **Embedding cost** | Included with Elastic Cloud | Included with Elastic Cloud | ~$0 (self-hosted) |
 | **Query latency** | Slower (100 reranker inferences) | Fastest | Moderate (disk I/O + 1 listwise rerank call) |
 
@@ -319,7 +319,7 @@ Now look at the compound effects — this is where it gets interesting.
 
 **Cora and Samantha both picked HNSW** — the same graph algorithm — but configured it for opposite ends. Cora keeps it unquantized with a dense graph (`m: 32`). Samantha quantizes aggressively with BBQ and uses default graph params. Same algorithm, completely different precision-vs-memory trade.
 
-**Model choice cascades through everything.** Cora's 1024-dim float32 HNSW setup costs roughly 5GB per million vectors in RAM (vectors plus graph). Samantha's 512-dim BBQ-HNSW setup costs ~250–300MB (quantized vectors are tiny, but the graph still needs memory). Ben's disk-based setup keeps under 100MB in RAM. The ratio between these three is the important thing — driven by the combination of dimension choice, quantization level, and whether the graph lives in memory.
+**Model choice cascades through everything.** Cora's 1024-dim float32 HNSW setup costs roughly 5GB per million vectors in RAM (vectors plus graph). Samantha's 256-dim BBQ-HNSW setup costs ~1GB (quantized vectors are tiny, but the graph still needs memory). Ben's disk-based setup keeps under 100MB in RAM. The ratio between these three is the important thing — driven by the combination of dimension choice, quantization level, and whether the graph lives in memory.
 
 [beat]
 
@@ -329,25 +329,15 @@ All three are correct. None of them would work well for the other two.
 
 ## SECTION 8 — WHAT ELSE YOU SHOULD KNOW
 
-**Things this framework doesn't cover — and a few easy wins.**
+**A few more things worth knowing — and a reminder of where to start.**
 
-These are archetypes, not recipes. Real projects mix constraints — maybe you care about quality *and* cost, just with different weights.
+Most production systems combine vector search with BM25 via hybrid search. BM25 catches the exact keyword matches that embeddings miss, and embeddings catch the semantic stuff that keywords miss. It also acts as a safety net — makes your whole system less sensitive to any single vector config decision. Hybrid search is a whole topic of its own.
 
-We covered vector search config in isolation — but most production systems combine vector search with BM25 via hybrid search using RRF. That changes the sensitivity of some of these dials. BM25 catches keyword matches the embedding misses, which means your vector path doesn't have to be perfect. Hybrid search is a whole topic of its own.
+These choices don't lock you in forever. Elasticsearch lets you upgrade your index type — say, from unquantized HNSW to quantized — without reindexing. New data picks up the new settings, old data keeps the old ones until you merge it. Start somewhere reasonable and tune from there.
 
-One easy win that applies to all three setups: as of ES 9.2, dense vectors are excluded from `_source` by default for newly created indices (`index.mapping.exclude_source_vectors: true`). Vectors are rehydrated from their internal format when needed for reindex or recovery. If you're on an older index, make sure this is enabled — at Ben's scale especially, it saves real disk and network overhead.
+The one thing that *is* expensive to change is your embedding model. Switching models means re-embedding your entire dataset — every single document. At Ben's scale, that's potentially billions of vectors to recompute. So spend time getting your model choice right during prototyping, not after you've indexed everything.
 
-Reranking caveat: Elastic's built-in `.rerank-v1` is English-only, 512 tokens max, and still in **technical preview** — Elastic says they "plan to address performance issues for GA." For multilingual or long-context reranking, use Jina Reranker v3 (multilingual, listwise, on EIS) or Jina Reranker v2 (multilingual, cross-encoder, 1024 tokens). The `chunk_rescorer` feature also helps with long documents by chunking text before sending to any reranker.
-
-A few more things worth knowing:
-
-**Query-time tuning for `bbq_disk`:** Ben can pass `visit_percentage` directly in his kNN query to trade recall for speed on a per-query basis. Higher = better recall, slower. This is his "escape hatch" when users want better results from the archive on a specific query. Related: `num_candidates` sets the ANN search depth for HNSW-based types; oversampling then rescores from that pool. More candidates = better recall, more compute.
-
-**Advanced: `precondition`** (ES 9.4+): A `bbq_disk` index option that applies random orthogonal projection to indexed vectors. Can improve accuracy when vector components aren't normally distributed. Defaults to `false`.
-
-**Segment optimization for speed:** Approximate kNN latency is sensitive to the number of index segments. For Samantha's speed-first setup, force-merging to fewer, larger segments — or tuning `index.merge.policy.max_merged_segment` — can meaningfully reduce query latency.
-
-And finally — you're not locked in. Elasticsearch lets you update `index_options.type` via the Update Mapping API, following a defined upgrade path: `flat → int8_flat → int4_flat → bbq_flat → hnsw → int8_hnsw → int4_hnsw → bbq_hnsw`. New segments use the new type; old ones keep the old until you force-merge. The `bbq_disk.bits` parameter can also be changed at any time without reindexing. So start somewhere reasonable and tune from there.
+And if all of this feels like a lot — start with `semantic_text`. It picks a solid model, sets good defaults for the index, handles inference. Start there. Figure out whether you're a Cora, a Samantha, or a Ben. Then come back and start turning the knobs.
 
 ---
 
@@ -387,7 +377,7 @@ Each aspect section includes a brief demo moment (15–20s). These can be static
 
 - **Aspect 1 (Embedding):** dense_vector field mapping (dims, similarity, element_type) + semantic_text with Jina v5 on EIS
 - **Aspect 2 (Indexing & Storage):** index_options.type — `hnsw` with m/ef_construction, `bbq_hnsw` with defaults, `bbq_disk` with bits/cluster_size side by side. Then kNN query with rescore_vector settings.
-- **Aspect 3 (Reranking):** text_similarity_reranker retriever with rank_window_size, min_score, and chunk_rescorer — showing Jina v3 listwise for Ben vs Elastic .rerank-v1 for Cora
+- **Aspect 3 (Reranking):** text_similarity_reranker retriever with rank_window_size, min_score, and chunk_rescorer — showing Jina v3 listwise for Ben vs Jina Reranker v2 for Cora
 
 ### Callbacks / Cross-References
 - Jina v5 text (2026-02): brief callback on embedding model selection context — now the default for semantic_text on EIS

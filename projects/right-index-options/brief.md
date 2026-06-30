@@ -4,7 +4,7 @@ title: "Right Index Options — Vector Search Configuration"
 description: Persona-driven guide to vector search config tradeoffs (quality vs speed vs cost)
 tags: [vector-search, elasticsearch, configuration]
 timestamp: 2026-06-29T00:00:00Z
-status: outline-complete
+status: script-draft
 ---
 
 # Right Index Options — Project Brief
@@ -25,7 +25,7 @@ Three engineers, same task (set up vector search), three different correct confi
 
 - **Cora** — legal/medical research tool, ~500k–1M docs, quality-first (wrong answers have real consequences)
 - **Samantha** — e-commerce product search, millions of SKUs, speed-first (latency costs conversions)
-- **Ben** — doc archive, tens of millions of docs, cost-first (budget is the binding constraint). Uses aggressive quantization + disk-based index, with shallow reranking as a cheap quality recovery mechanism.
+- **Ben** — doc archive, tens of millions of docs, cost-first (budget is the binding constraint). Uses aggressive quantization + disk-based index, with Jina Reranker v3 (listwise) as a cheap quality recovery mechanism.
 
 ## Packaging
 

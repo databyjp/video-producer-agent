@@ -322,3 +322,17 @@ All briefs follow semantics-only convention (no styling prescriptions). Each ref
 **Action:** Added "Scripts are spoken, not read" convention with four sub-rules: don't enumerate specs (teach intuition, put numbers in overlays), respect scope boundaries (if outline says "deep dive is Video X" don't include it), personas are the narrative spine (not spec lists), one idea per paragraph.
 
 **Rationale:** Script draft for right-index-options showed classic LLM completionism — listing MTEB scores (68.32, 67.71, 70.58, 69.44) in spoken text, expanding Matryoshka/hosting into full subsections despite the outline saying "deep dive is Video 2", and adding tuning knobs (m, ef_construction, cluster_size, bits, corrective factors) that belong in later videos. Rules address the mechanical failures; editorial judgment about what earns its place remains human-led.
+
+## 2026-06-30 — Aligned outline and brief to script draft (right-index-options)
+
+**Action:** Updated `projects/right-index-options/outline.md` and `brief.md` to match the canonical script draft. Key changes:
+- Samantha's embedding model: v5-text-small 512d → v5-text-nano 256d (Matryoshka)
+- Cora's reranker: Elastic .rerank-v1 → Jina Reranker v2 (pointwise)
+- Cora's ef_construction: 200 → 400
+- Samantha's RAM estimate: ~250–300MB → ~1GB per million vectors
+- Section 8: replaced detailed technical tips with streamlined spoken version (hybrid search, upgrade path, model lock-in, semantic_text as starting point)
+- Summary table in Section 7: aligned all values
+- Demo beats: updated to match persona choices
+- Brief status: outline-complete → script-draft; Ben's description updated to mention Jina v3 specifically
+
+**Rationale:** Script had evolved during drafting with deliberate persona choice changes. Outline and brief were stale, creating confusion about canonical values.
