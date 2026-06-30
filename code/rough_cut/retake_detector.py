@@ -70,17 +70,26 @@ def format_transcript_for_llm(
     """
     Render the transcript as an annotated block of text suitable for the LLM.
 
-    Each Whisper segment becomes one numbered line.  Annotations are added
-    inline so the LLM can spot trouble without having to reason about raw
-    probability values:
+    Word-level timestamps are shown for every word so the LLM can reference
+    any individual word as a cut point — not just segment boundaries.
 
-        S001 [00:00:00.00 → 00:00:05.23]  "Imagine three engineers…"
-        S002 [00:00:05.40 → 00:00:08.10]  "One ⚠setu- [TRIGGER:"rephrase"]"
-        --- SILENCE: 2.4s gap ---
-        S003 [00:00:10.50 → 00:00:15.80]  "One setup costs the most to run."
+    Format:
+
+        S001 [00:00:01.11 → 00:00:11.82]
+          [00:00:01.11]⚠Okay.  [00:00:02.69]Testing,  [00:00:03.59]testing.
+          [00:00:06.20]Okay,  [00:00:06.50]let's  [00:00:06.80]go.
+          [00:00:07.40]Imagine  [00:00:07.90]three  [00:00:08.20]engineers,
+        --- SILENCE: 4.9s gap ---
+        S002 [00:00:10.50 → 00:00:15.80]
+          [00:00:10.50]One  [00:00:10.80]setup  ...
+
+    Each `[HH:MM:SS.ss]` timestamp is the start of the following word.
+    The segment closing timestamp (after →) is the end of the last word.
+    Both are valid values for keep_segment start/end fields.
     """
     lines: list[str] = []
     prev_end: float | None = None
+    WORDS_PER_LINE = 8  # wrap long segments for readability
 
     for i, seg in enumerate(segments):
         # Silence gap marker
@@ -92,25 +101,31 @@ def format_transcript_for_llm(
         seg_label = f"S{i + 1:03d}"
         start_str = _fmt_time(seg.start)
         end_str = _fmt_time(seg.end)
+        lines.append(f"{seg_label} [{start_str} → {end_str}]")
 
-        # Build word-by-word annotated text
+        # Build word-level annotated tokens, each prefixed with its timestamp.
         if seg.words:
-            parts: list[str] = []
+            tokens: list[str] = []
             for w in seg.words:
                 bare = w.word.strip()
                 if not bare:
                     continue
+                ts = f"[{_fmt_time(w.start)}]"
                 if _is_trigger(w):
-                    parts.append(f'[TRIGGER:"{_clean_word(w.word)}"]')
+                    tokens.append(f'{ts}[TRIGGER:"{_clean_word(w.word)}"]')
                 elif _is_low_conf(w):
-                    parts.append(f"⚠{bare}")
+                    tokens.append(f"{ts}⚠{bare}")
                 else:
-                    parts.append(bare)
-            text = " ".join(parts)
-        else:
-            text = seg.text
+                    tokens.append(f"{ts}{bare}")
 
-        lines.append(f'{seg_label} [{start_str} → {end_str}]  "{text}"')
+            # Wrap into WORDS_PER_LINE-wide lines for readability.
+            for j in range(0, len(tokens), WORDS_PER_LINE):
+                chunk = tokens[j : j + WORDS_PER_LINE]
+                lines.append("  " + "  ".join(chunk))
+        else:
+            # No word-level data — show segment text without timestamps.
+            lines.append(f"  {seg.text.strip()}")
+
         prev_end = seg.end
 
     return "\n".join(lines)
@@ -156,6 +171,53 @@ def snap_to_word_boundaries(
             reason=ks.reason,
         ))
     return snapped
+
+
+def _resolve_overlaps(keep_segments: list[KeepSegment]) -> list[KeepSegment]:
+    """
+    Remove or trim segments that overlap a previous segment.
+
+    Segments must already be sorted by start time.  Two cases:
+
+    1. Segment B is entirely inside segment A (B.end ≤ A.end):
+       Skip B — A already covers it.
+
+    2. Segment B partially overlaps A (B.start < A.end < B.end):
+       Trim B's start to A.end.  We keep the later portion because
+       the pipeline prefers the last clean take of each section.
+
+    Any resulting zero/negative-duration segment is dropped.
+    """
+    if not keep_segments:
+        return []
+
+    resolved: list[KeepSegment] = [keep_segments[0]]
+
+    for seg in keep_segments[1:]:
+        prev = resolved[-1]
+        if seg.start >= prev.end:
+            # Clean gap — no overlap.
+            resolved.append(seg)
+        elif seg.end <= prev.end:
+            # Fully contained inside previous segment — drop.
+            print(
+                f"  ⚠  Dropping '{seg.label}' ({seg.start:.2f}s–{seg.end:.2f}s): "
+                f"fully overlapped by '{prev.label}' (…{prev.end:.2f}s)."
+            )
+        else:
+            # Partial overlap — trim start to previous end.
+            print(
+                f"  ⚠  Trimming '{seg.label}' start from {seg.start:.2f}s "
+                f"to {prev.end:.2f}s (overlap with '{prev.label}')."
+            )
+            resolved.append(KeepSegment(
+                start=prev.end,
+                end=seg.end,
+                label=seg.label,
+                reason=seg.reason,
+            ))
+
+    return resolved
 
 
 # ── LLM call ─────────────────────────────────────────────────────────────────
@@ -229,8 +291,8 @@ def detect_retakes(
     print(f"  Transcript: {len(segments)} segments, prompt ~{sum(len(m['content']) for m in messages):,} chars")
 
     client = openai.OpenAI(
-        api_key=os.getenv("GENERAL_LITELLM_API_KEY"),
-        base_url=os.getenv("LITELLM_BASE_URL"),
+        api_key=os.getenv("OPENAI_API_KEY"),
+        base_url=os.getenv("OPENAI_BASE_URL"),
     )
 
     response = client.chat.completions.create(
@@ -270,9 +332,10 @@ def detect_retakes(
     # Snap to actual word boundaries (corrects small LLM timestamp errors).
     keep_segments = snap_to_word_boundaries(keep_segments, segments)
 
-    # Basic sanity: sort by start, ensure no negative durations.
+    # Sort by start, drop zero/negative-duration entries, resolve overlaps.
     keep_segments.sort(key=lambda s: s.start)
     keep_segments = [s for s in keep_segments if s.duration > 0.0]
+    keep_segments = _resolve_overlaps(keep_segments)
 
     return EditPlan(keep_segments=keep_segments, source_duration=source_duration)
 

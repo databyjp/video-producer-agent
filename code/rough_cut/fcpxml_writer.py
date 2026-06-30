@@ -15,6 +15,7 @@ import os
 import subprocess
 import uuid
 import xml.etree.ElementTree as ET
+from math import gcd
 from pathlib import Path
 
 from .models import EditPlan, KeepSegment
@@ -88,22 +89,45 @@ def probe_video(video_path: str) -> dict:
 
 # ── Time helpers ──────────────────────────────────────────────────────────────
 
-def _to_rational(t: float) -> str:
+def _to_rational(t: float, fps_num: int, fps_den: int) -> str:
     """
-    Convert a float number of seconds to an FCPXML rational time string.
+    Convert seconds to an FCPXML rational time string, snapped to the nearest
+    frame boundary.
 
-    We use millisecond precision (denominator = 1000), which gives ±1 ms
-    accuracy.  Final Cut Pro snaps this to the nearest frame on import.
+    FCP requires every time value to be an exact multiple of frameDuration
+    (= fps_den / fps_num seconds).  Using raw ms precision causes the
+    "not on an edit frame boundary" import error.
 
-    Examples:
+    The canonical form is:  (frame_number × fps_den) / fps_num  seconds.
+    The fraction is reduced by GCD so FCP sees the simplest equivalent.
+
+    Examples at 30 fps (fps_num=30, fps_den=1):
         0.0   → "0s"
-        1.5   → "1500/1000s"
-        12.34 → "12340/1000s"
+        0.42  → round(0.42×30) = 13 frames → "13/30s"
+        5.0   → 150 frames → "5s"  (150/30 reduces to 5/1)
+
+    Examples at 29.97 fps (fps_num=30000, fps_den=1001):
+        0.42  → round(0.42×30000/1001) = 13 frames → "13013/30000s"
     """
-    if t == 0.0:
+    if t <= 0.0:
         return "0s"
-    ms = round(t * 1000)
-    return f"{ms}/1000s"
+    frame_number = round(t * fps_num / fps_den)
+    if frame_number == 0:
+        return "0s"
+    num = frame_number * fps_den
+    den = fps_num
+    common = gcd(num, den)
+    return f"{num // common}/{den // common}s"
+
+
+def _frames_to_rational(frames: int, fps_num: int, fps_den: int) -> str:
+    """Convert an integer frame count to an FCPXML rational time string."""
+    if frames == 0:
+        return "0s"
+    num = frames * fps_den
+    den = fps_num
+    common = gcd(num, den)
+    return f"{num // common}/{den // common}s"
 
 
 def _frame_duration(fps_num: int, fps_den: int) -> str:
@@ -162,15 +186,17 @@ def _validate(plan: EditPlan, video_duration: float) -> list[str]:
             raise ValueError(
                 f"Segment {i} ({s.label}) has start >= end: {s.start} >= {s.end}"
             )
-    # Check chronological order
+    # Check chronological order — warn rather than crash so Stage 3 always
+    # produces a file; the user can correct remaining issues in FCP.
     for i in range(1, len(plan.keep_segments)):
         prev = plan.keep_segments[i - 1]
         curr = plan.keep_segments[i]
         if curr.start < prev.end - 0.001:
-            raise ValueError(
-                f"Segments {i-1} and {i} overlap: "
-                f"{prev.label} ends at {prev.end:.3f}s, "
-                f"{curr.label} starts at {curr.start:.3f}s"
+            warnings.append(
+                f"Segments {i-1} ({prev.label}) and {i} ({curr.label}) still overlap "
+                f"after retake-detector resolution: {prev.label} ends at {prev.end:.3f}s, "
+                f"{curr.label} starts at {curr.start:.3f}s. "
+                f"Clip {i} will appear truncated or out-of-order in FCP — trim manually."
             )
     return warnings
 
@@ -242,7 +268,10 @@ def write_fcpxml(
     asset_elem.set("name",     Path(abs_video).stem)
     asset_elem.set("uid",      asset_uid)
     asset_elem.set("start",    "0s")
-    asset_elem.set("duration", _to_rational(video_dur))
+    fps_num = info["fps_num"]
+    fps_den = info["fps_den"]
+
+    asset_elem.set("duration", _to_rational(video_dur, fps_num, fps_den))
     asset_elem.set("hasVideo", "1")
     asset_elem.set("hasAudio", "1")
     asset_elem.set("format",   fmt_id)
@@ -257,7 +286,12 @@ def write_fcpxml(
 
     sequence = ET.Element("sequence")
     sequence.set("format",      fmt_id)
-    sequence.set("duration",    _to_rational(total_timeline_dur))
+    # Compute total timeline duration in whole frames to avoid float drift.
+    total_timeline_frames = sum(
+        round(s.end * fps_num / fps_den) - round(s.start * fps_num / fps_den)
+        for s in segments
+    )
+    sequence.set("duration",    _frames_to_rational(total_timeline_frames, fps_num, fps_den))
     sequence.set("tcStart",     "0s")
     sequence.set("tcFormat",    "NDF")
     sequence.set("audioLayout", _audio_layout(info["channels"]))
@@ -265,20 +299,24 @@ def write_fcpxml(
 
     spine = ET.SubElement(sequence, "spine")
 
-    timeline_offset = 0.0
+    # Track timeline offset in whole frames to prevent float accumulation error.
+    timeline_offset_frames = 0
     for i, seg in enumerate(segments):
-        duration = seg.end - seg.start
+        start_frame    = round(seg.start * fps_num / fps_den)
+        end_frame      = round(seg.end   * fps_num / fps_den)
+        duration_frames = end_frame - start_frame
+
         clip = ET.SubElement(spine, "asset-clip")
         clip.set("ref",      asset_id)
-        clip.set("offset",   _to_rational(timeline_offset))
+        clip.set("offset",   _frames_to_rational(timeline_offset_frames, fps_num, fps_den))
         clip.set("name",     seg.label)
-        clip.set("start",    _to_rational(seg.start))
-        clip.set("duration", _to_rational(duration))
+        clip.set("start",    _frames_to_rational(start_frame, fps_num, fps_den))
+        clip.set("duration", _frames_to_rational(duration_frames, fps_num, fps_den))
         # Add the LLM's reason as a note (visible in FCP's inspector).
         if seg.reason:
             note = ET.SubElement(clip, "note")
             note.text = seg.reason
-        timeline_offset += duration
+        timeline_offset_frames += duration_frames
 
     # ── Full FCPXML tree ──────────────────────────────────────────────────────
     root = ET.Element("fcpxml")
@@ -303,5 +341,6 @@ def write_fcpxml(
         f.write(xml_body)
         f.write("\n")
 
+    total_kept_s = total_timeline_frames * fps_den / fps_num
     print(f"  Saved: {output_path}")
-    print(f"  Timeline: {len(segments)} clips, {total_timeline_dur:.1f}s total")
+    print(f"  Timeline: {len(segments)} clips, {total_kept_s:.1f}s ({total_timeline_frames} frames @ {info['fps']:.3f} fps)")

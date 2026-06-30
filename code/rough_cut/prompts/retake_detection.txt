@@ -22,12 +22,17 @@ Everything before a retake — including the trigger word itself — is cut.
 
 ## Transcript annotation legend
 
-  S### [HH:MM:SS.ss → HH:MM:SS.ss]  "text"
-        ^segment number  ^timestamps    ^spoken words
+  S### [HH:MM:SS.ss → HH:MM:SS.ss]          ← segment header (start → end)
+    [HH:MM:SS.ss]word  [HH:MM:SS.ss]word …  ← each word prefixed by its START timestamp
 
-  ⚠word              — low-confidence word (partial/broken utterance)
-  [TRIGGER:"rephrase"] — presenter said the retake trigger word "rephrase"
-  [TRIGGER:"cut"]      — presenter said the retake trigger word "cut"
+  The timestamp in [brackets] before each word is the precise moment that word
+  begins.  The closing timestamp in the segment header (after →) is the end of
+  the last word in that segment.  You may use ANY of these timestamps as a
+  start or end value in keep_segments — you are not limited to segment boundaries.
+
+  ⚠word                — low-confidence word (partial/broken utterance)
+  [TRIGGER:"rephrase"]  — presenter said the retake trigger word "rephrase"
+  [TRIGGER:"cut"]       — presenter said the retake trigger word "cut"
   --- SILENCE: X.Xs gap --- — gap between segments longer than the pause threshold
 
 
@@ -58,10 +63,15 @@ Everything before a retake — including the trigger word itself — is cut.
 
 ## Timestamp rules
 
-- Every start/end value MUST be taken verbatim from a timestamp visible in
-  the TRANSCRIPT — the segment-level [HH:MM:SS.ss] values.
-- "start" = the opening timestamp of the first segment you are keeping.
-- "end"   = the closing timestamp of the last segment you are keeping.
+- Every start/end value MUST be taken verbatim from a timestamp that appears
+  in the TRANSCRIPT — either a word-level [HH:MM:SS.ss] prefix OR the segment
+  header's closing timestamp (after →).
+- "start" = the [HH:MM:SS.ss] timestamp of the FIRST WORD you want to keep.
+  Use the word-level timestamp, not the segment header, when the desired start
+  is mid-segment (e.g. to skip preamble like "okay, testing, testing").
+- "end"   = the closing timestamp (after →) of the LAST SEGMENT you are keeping,
+  OR the [HH:MM:SS.ss] timestamp of the first word you want to EXCLUDE if you
+  need to trim the end of a segment.
 - Do NOT interpolate, estimate, or invent timestamps.
 - Segments in keep_segments must be strictly chronological with no overlaps.
 

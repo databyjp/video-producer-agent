@@ -167,7 +167,7 @@ Opening this in FCP creates a new project in a new event. The clips in the timel
 | `OUTPUT_DIR` | — | Directory for all output files (created if absent) |
 | `WHISPER_MODEL` | `"large-v3"` | faster-whisper model. `"base"` is ~10× faster but less accurate. |
 | `PAUSE_THRESHOLD` | `2.0` | Gaps ≥ this many seconds are annotated as silences in the transcript sent to the LLM, and become natural cut points. |
-| `LLM_MODEL` | `"gpt-4o"` | Model name your OpenAI / LiteLLM endpoint accepts. |
+| `LLM_MODEL` | `"llm-gateway/gpt-5.4-nano"` | Model name your OpenAI / LiteLLM endpoint accepts. |
 | `SKIP_TRANSCRIBE` | `False` | Skip Stage 1 and reuse `transcript.json` from a previous run. |
 | `SKIP_DETECT` | `False` | Skip Stage 2 and reuse `edit_plan.json` from a previous run. |
 
