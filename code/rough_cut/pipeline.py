@@ -21,9 +21,9 @@ import time
 from pathlib import Path
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
-VIDEO_PATH  = "raw/assets/recording.mov"                # raw recorded video
-SCRIPT_PATH = "projects/right-index-options/script.md"  # intended script
-OUTPUT_DIR  = "projects/right-index-options/rough_cut"  # all outputs go here
+VIDEO_PATH  = "/Users/jphwang/Downloads/auto-edit-test-raw.mp4"                # raw recorded video
+SCRIPT_PATH = "/Users/jphwang/code/agent-sandboxes/video-producer/projects/right-index-options/script.md"
+OUTPUT_DIR  = "/Users/jphwang/code/agent-sandboxes/video-producer/projects/right-index-options/rough_cut"
 
 WHISPER_MODEL    = "large-v3"   # "base" is ~10x faster; "large-v3" is most accurate
 PAUSE_THRESHOLD  = 2.0          # seconds; silences longer than this become cut points
