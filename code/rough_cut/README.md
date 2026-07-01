@@ -1,4 +1,4 @@
-# Rough Cut Pipeline
+# Rough Cut Pipeline - WORK IN PROGRESS
 
 Takes a raw recorded video and its script, and produces a **Final Cut Pro–ready FCPXML** rough cut — removing retakes, long silences, and duplicate lines automatically.
 
