@@ -22,7 +22,7 @@ Hold that thought, and lets take a look at the actual architectures.
 
 Cora's built the expensive one. She is using a high-dimensional embedding model, full precision vectors, deep reranking on every query. She checks the search quality through recall, and goes home happy.
 
-Samantha's done, too. She picks the same embedding model family as Cora — but she's using a slightly smaller model, truncated the vectors to a third with Matryoshka, configued her index with BBQ quantization, and skipped reranking entirely. Her results come back lightning fast.
+Samantha's done, too. She picks the same embedding model family as Cora — but she's using a slightly smaller model, truncated the vectors to a third with Matryoshka, configured her index with BBQ quantization, and skipped reranking entirely. Her results come back lightning fast.
 
 And Ben's pushed to production. He's using a self-hosted open-source model, with vectors living almost entirely on disk, aggressive quantization everywhere — and then a tiny reranker at the end to clean things up. His cloud dashboard shows a tiny bill, which makes him very happy.
 
@@ -68,9 +68,9 @@ Here's what our engineers are working on.
 
 [show all three persona cards together]
 
-These are very divergent needs. Sure, they all need vector search — but their configurations are about as similar as a computer is in.an iPhone, a supercomputer, and a Tickle-Me Elmo.
+These are very different tasks. In fact, the only similarity really is here is that they all need vector search. But, that doesn’t mean the same system can serve their needs, any more than the same computer chip can be used for an iPhone, a supercomputer, and a Tickle-Me Elmo.
 
-and as a result, our decisions diverge a lot - heres how.
+Let’s take a look at how the specific decisions change as a result.
 
 -----
 
@@ -84,7 +84,7 @@ The embedding model has biggest impact on your search quality — and a big chun
 
 We can talk in detail about model choice in another video, but lets keep it short here.
 
-In mid-twenty-twenty-six (2026), the landscape is competitive. Open-weight models like Qwen three Embedding (Qwen3-Embedding) are matching or beating commercial APIs on retrieval benchmarks. And Elastic now ships Jina v5 models natively, which are small, fast and very competitive. As a bonus — if you use `semantic_text`, it picks Jina v5 on Elastic Inference Service automatically. You don't configure anything. It's quite handy, really.
+In mid-twenty-twenty-six (2026), the landscape is competitive. Open-weight models like Qwen three Embedding (Qwen3-Embedding) are matching or beating commercial APIs on retrieval benchmarks. And Elastic now ships Jina v5 models natively, which are small, fast and very competitive.
 
 when choosing a model, make sure it supports the input you will use, like modalities. So do you need to embed images, audio, or video, for example, as well as text. and then whether it supports the languages you need.
 

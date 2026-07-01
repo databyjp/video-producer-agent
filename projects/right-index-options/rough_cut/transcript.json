@@ -1,0 +1,1672 @@
+[
+  {
+    "id": 1,
+    "start": 1.11,
+    "end": 11.82,
+    "text": "Okay. Testing, testing. Okay, let's go. Imagine three engineers, each building a",
+    "avg_logprob": -0.10264856787398458,
+    "no_speech_prob": 0.007293314207345247,
+    "words": [
+      {
+        "word": " Okay.",
+        "start": 1.11,
+        "end": 1.53,
+        "probability": 0.41475528478622437
+      },
+      {
+        "word": " Testing,",
+        "start": 2.69,
+        "end": 3.25,
+        "probability": 0.897373616695404
+      },
+      {
+        "word": " testing.",
+        "start": 3.59,
+        "end": 3.79,
+        "probability": 0.9991395473480225
+      },
+      {
+        "word": " Okay,",
+        "start": 4.21,
+        "end": 4.77,
+        "probability": 0.992854654788971
+      },
+      {
+        "word": " let's",
+        "start": 6.01,
+        "end": 6.21,
+        "probability": 0.9994495511054993
+      },
+      {
+        "word": " go.",
+        "start": 6.21,
+        "end": 6.33,
+        "probability": 0.9998968839645386
+      },
+      {
+        "word": " Imagine",
+        "start": 9.3,
+        "end": 9.7,
+        "probability": 0.9849247336387634
+      },
+      {
+        "word": " three",
+        "start": 9.7,
+        "end": 10.1,
+        "probability": 0.9841744303703308
+      },
+      {
+        "word": " engineers,",
+        "start": 10.1,
+        "end": 10.7,
+        "probability": 0.9987770915031433
+      },
+      {
+        "word": " each",
+        "start": 10.88,
+        "end": 11.28,
+        "probability": 0.9997408986091614
+      },
+      {
+        "word": " building",
+        "start": 11.28,
+        "end": 11.66,
+        "probability": 0.9998819828033447
+      },
+      {
+        "word": " a",
+        "start": 11.66,
+        "end": 11.82,
+        "probability": 0.998822033405304
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "start": 11.82,
+    "end": 18.32,
+    "text": "vector search feature. One setup costs the most to run, one runs incredibly fast but misses hits",
+    "avg_logprob": -0.10264856787398458,
+    "no_speech_prob": 0.007293314207345247,
+    "words": [
+      {
+        "word": " vector",
+        "start": 11.82,
+        "end": 12.1,
+        "probability": 0.8893001079559326
+      },
+      {
+        "word": " search",
+        "start": 12.1,
+        "end": 12.38,
+        "probability": 0.9982606768608093
+      },
+      {
+        "word": " feature.",
+        "start": 12.38,
+        "end": 12.74,
+        "probability": 0.9998592138290405
+      },
+      {
+        "word": " One",
+        "start": 13.42,
+        "end": 13.72,
+        "probability": 0.9994844198226929
+      },
+      {
+        "word": " setup",
+        "start": 13.72,
+        "end": 14.06,
+        "probability": 0.890688419342041
+      },
+      {
+        "word": " costs",
+        "start": 14.06,
+        "end": 14.56,
+        "probability": 0.9746559262275696
+      },
+      {
+        "word": " the",
+        "start": 14.56,
+        "end": 14.84,
+        "probability": 0.9999138116836548
+      },
+      {
+        "word": " most",
+        "start": 14.84,
+        "end": 15.2,
+        "probability": 0.999919056892395
+      },
+      {
+        "word": " to",
+        "start": 15.2,
+        "end": 15.38,
+        "probability": 0.9288156628608704
+      },
+      {
+        "word": " run,",
+        "start": 15.38,
+        "end": 15.62,
+        "probability": 0.9998821020126343
+      },
+      {
+        "word": " one",
+        "start": 15.76,
+        "end": 16.3,
+        "probability": 0.9988749623298645
+      },
+      {
+        "word": " runs",
+        "start": 16.3,
+        "end": 16.52,
+        "probability": 0.9996905326843262
+      },
+      {
+        "word": " incredibly",
+        "start": 16.52,
+        "end": 16.92,
+        "probability": 0.9995018243789673
+      },
+      {
+        "word": " fast",
+        "start": 16.92,
+        "end": 17.44,
+        "probability": 0.9999436140060425
+      },
+      {
+        "word": " but",
+        "start": 17.44,
+        "end": 17.8,
+        "probability": 0.8279106020927429
+      },
+      {
+        "word": " misses",
+        "start": 17.8,
+        "end": 18.08,
+        "probability": 0.9997830986976624
+      },
+      {
+        "word": " hits",
+        "start": 18.08,
+        "end": 18.32,
+        "probability": 0.9905481934547424
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "start": 18.32,
+    "end": 24.64,
+    "text": "sometimes, and the third runs on very low budget but hits the disk consistently. Who's done the",
+    "avg_logprob": -0.10264856787398458,
+    "no_speech_prob": 0.007293314207345247,
+    "words": [
+      {
+        "word": " sometimes,",
+        "start": 18.32,
+        "end": 18.7,
+        "probability": 0.9987240433692932
+      },
+      {
+        "word": " and",
+        "start": 18.96,
+        "end": 19.38,
+        "probability": 0.9996961355209351
+      },
+      {
+        "word": " the",
+        "start": 19.38,
+        "end": 19.52,
+        "probability": 0.9641199111938477
+      },
+      {
+        "word": " third",
+        "start": 19.52,
+        "end": 19.86,
+        "probability": 0.9998329877853394
+      },
+      {
+        "word": " runs",
+        "start": 19.86,
+        "end": 20.3,
+        "probability": 0.9996528625488281
+      },
+      {
+        "word": " on",
+        "start": 20.3,
+        "end": 20.46,
+        "probability": 0.9997946619987488
+      },
+      {
+        "word": " very",
+        "start": 20.46,
+        "end": 20.72,
+        "probability": 0.9206880331039429
+      },
+      {
+        "word": " low",
+        "start": 20.72,
+        "end": 20.98,
+        "probability": 0.9999552965164185
+      },
+      {
+        "word": " budget",
+        "start": 20.98,
+        "end": 21.34,
+        "probability": 0.9971475005149841
+      },
+      {
+        "word": " but",
+        "start": 21.34,
+        "end": 21.74,
+        "probability": 0.9407869577407837
+      },
+      {
+        "word": " hits",
+        "start": 21.74,
+        "end": 21.9,
+        "probability": 0.9990932941436768
+      },
+      {
+        "word": " the",
+        "start": 21.9,
+        "end": 22.08,
+        "probability": 0.9998279809951782
+      },
+      {
+        "word": " disk",
+        "start": 22.08,
+        "end": 22.34,
+        "probability": 0.9671703577041626
+      },
+      {
+        "word": " consistently.",
+        "start": 22.34,
+        "end": 22.92,
+        "probability": 0.9996161460876465
+      },
+      {
+        "word": " Who's",
+        "start": 23.96,
+        "end": 24.38,
+        "probability": 0.9994145035743713
+      },
+      {
+        "word": " done",
+        "start": 24.38,
+        "end": 24.48,
+        "probability": 0.9998503923416138
+      },
+      {
+        "word": " the",
+        "start": 24.48,
+        "end": 24.64,
+        "probability": 0.9997320771217346
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "start": 24.64,
+    "end": 29.69,
+    "text": "best job and did the other two screw up? Hold that thought and let's take a look at the actual",
+    "avg_logprob": -0.10264856787398458,
+    "no_speech_prob": 0.007293314207345247,
+    "words": [
+      {
+        "word": " best",
+        "start": 24.64,
+        "end": 24.78,
+        "probability": 0.9978150129318237
+      },
+      {
+        "word": " job",
+        "start": 24.78,
+        "end": 25.06,
+        "probability": 0.9998044371604919
+      },
+      {
+        "word": " and",
+        "start": 25.06,
+        "end": 25.58,
+        "probability": 0.3664536476135254
+      },
+      {
+        "word": " did",
+        "start": 25.66,
+        "end": 25.8,
+        "probability": 0.9996589422225952
+      },
+      {
+        "word": " the",
+        "start": 25.8,
+        "end": 25.92,
+        "probability": 0.9993463158607483
+      },
+      {
+        "word": " other",
+        "start": 25.92,
+        "end": 26.2,
+        "probability": 0.9998453855514526
+      },
+      {
+        "word": " two",
+        "start": 26.2,
+        "end": 26.4,
+        "probability": 0.9994055032730103
+      },
+      {
+        "word": " screw",
+        "start": 26.4,
+        "end": 26.72,
+        "probability": 0.9996383190155029
+      },
+      {
+        "word": " up?",
+        "start": 26.72,
+        "end": 26.96,
+        "probability": 0.9997976422309875
+      },
+      {
+        "word": " Hold",
+        "start": 27.71,
+        "end": 27.89,
+        "probability": 0.9934493899345398
+      },
+      {
+        "word": " that",
+        "start": 27.89,
+        "end": 28.03,
+        "probability": 0.9912658333778381
+      },
+      {
+        "word": " thought",
+        "start": 28.03,
+        "end": 28.25,
+        "probability": 0.9997400641441345
+      },
+      {
+        "word": " and",
+        "start": 28.25,
+        "end": 28.59,
+        "probability": 0.9130026698112488
+      },
+      {
+        "word": " let's",
+        "start": 28.59,
+        "end": 28.83,
+        "probability": 0.9998043477535248
+      },
+      {
+        "word": " take",
+        "start": 28.83,
+        "end": 28.93,
+        "probability": 0.99482262134552
+      },
+      {
+        "word": " a",
+        "start": 28.93,
+        "end": 29.01,
+        "probability": 0.9994882345199585
+      },
+      {
+        "word": " look",
+        "start": 29.01,
+        "end": 29.09,
+        "probability": 0.9997108578681946
+      },
+      {
+        "word": " at",
+        "start": 29.09,
+        "end": 29.21,
+        "probability": 0.9997106194496155
+      },
+      {
+        "word": " the",
+        "start": 29.21,
+        "end": 29.31,
+        "probability": 0.9994161128997803
+      },
+      {
+        "word": " actual",
+        "start": 29.31,
+        "end": 29.69,
+        "probability": 0.9976747632026672
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "start": 29.69,
+    "end": 37.66,
+    "text": "architecture. Quora's built the expensive one. She's using a high-dimensional embedding model",
+    "avg_logprob": -0.10264856787398458,
+    "no_speech_prob": 0.007293314207345247,
+    "words": [
+      {
+        "word": " architecture.",
+        "start": 29.69,
+        "end": 30.11,
+        "probability": 0.9997884631156921
+      },
+      {
+        "word": " Quora's",
+        "start": 31.61,
+        "end": 31.99,
+        "probability": 0.7000527183214823
+      },
+      {
+        "word": " built",
+        "start": 31.99,
+        "end": 32.21,
+        "probability": 0.9703049063682556
+      },
+      {
+        "word": " the",
+        "start": 32.21,
+        "end": 32.33,
+        "probability": 0.9747666716575623
+      },
+      {
+        "word": " expensive",
+        "start": 32.33,
+        "end": 32.49,
+        "probability": 0.9733468890190125
+      },
+      {
+        "word": " one.",
+        "start": 33.63,
+        "end": 35.31,
+        "probability": 0.9984353184700012
+      },
+      {
+        "word": " She's",
+        "start": 35.54,
+        "end": 36.02,
+        "probability": 0.9663810133934021
+      },
+      {
+        "word": " using",
+        "start": 36.02,
+        "end": 36.28,
+        "probability": 0.998992383480072
+      },
+      {
+        "word": " a",
+        "start": 36.28,
+        "end": 36.42,
+        "probability": 0.9998397827148438
+      },
+      {
+        "word": " high",
+        "start": 36.42,
+        "end": 36.68,
+        "probability": 0.9974966645240784
+      },
+      {
+        "word": "-dimensional",
+        "start": 36.68,
+        "end": 37.02,
+        "probability": 0.7701200842857361
+      },
+      {
+        "word": " embedding",
+        "start": 37.02,
+        "end": 37.46,
+        "probability": 0.9923069477081299
+      },
+      {
+        "word": " model",
+        "start": 37.46,
+        "end": 37.66,
+        "probability": 0.999265730381012
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "start": 37.66,
+    "end": 43.1,
+    "text": "full precision vectors, deep re-ranking on every query. She checks the search quality through",
+    "avg_logprob": -0.08115020556978776,
+    "no_speech_prob": 5.440678432933055e-05,
+    "words": [
+      {
+        "word": " full",
+        "start": 37.66,
+        "end": 38.1,
+        "probability": 0.10680637508630753
+      },
+      {
+        "word": " precision",
+        "start": 38.1,
+        "end": 38.64,
+        "probability": 0.7829163670539856
+      },
+      {
+        "word": " vectors,",
+        "start": 38.64,
+        "end": 38.94,
+        "probability": 0.98899906873703
+      },
+      {
+        "word": " deep",
+        "start": 39.2,
+        "end": 39.64,
+        "probability": 0.9607506394386292
+      },
+      {
+        "word": " re",
+        "start": 39.64,
+        "end": 39.9,
+        "probability": 0.784469723701477
+      },
+      {
+        "word": "-ranking",
+        "start": 39.9,
+        "end": 40.26,
+        "probability": 0.9892721772193909
+      },
+      {
+        "word": " on",
+        "start": 40.26,
+        "end": 40.34,
+        "probability": 0.9894936084747314
+      },
+      {
+        "word": " every",
+        "start": 40.34,
+        "end": 40.64,
+        "probability": 0.9896317720413208
+      },
+      {
+        "word": " query.",
+        "start": 40.64,
+        "end": 40.98,
+        "probability": 0.9980853796005249
+      },
+      {
+        "word": " She",
+        "start": 41.2,
+        "end": 41.62,
+        "probability": 0.9733814597129822
+      },
+      {
+        "word": " checks",
+        "start": 41.7,
+        "end": 41.92,
+        "probability": 0.984413206577301
+      },
+      {
+        "word": " the",
+        "start": 41.92,
+        "end": 42.06,
+        "probability": 0.9703387022018433
+      },
+      {
+        "word": " search",
+        "start": 42.06,
+        "end": 42.34,
+        "probability": 0.9805186986923218
+      },
+      {
+        "word": " quality",
+        "start": 42.34,
+        "end": 42.7,
+        "probability": 0.9831060767173767
+      },
+      {
+        "word": " through",
+        "start": 42.7,
+        "end": 43.1,
+        "probability": 0.9867897629737854
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "start": 43.1,
+    "end": 50.04,
+    "text": "recall and goes home happy. Rephrase. Quora's built the expensive one. She's using a high-dimensional",
+    "avg_logprob": -0.08115020556978776,
+    "no_speech_prob": 5.440678432933055e-05,
+    "words": [
+      {
+        "word": " recall",
+        "start": 43.1,
+        "end": 43.42,
+        "probability": 0.7147237658500671
+      },
+      {
+        "word": " and",
+        "start": 43.42,
+        "end": 43.9,
+        "probability": 0.7401942610740662
+      },
+      {
+        "word": " goes",
+        "start": 43.9,
+        "end": 44.12,
+        "probability": 0.9914473295211792
+      },
+      {
+        "word": " home",
+        "start": 44.12,
+        "end": 44.36,
+        "probability": 0.9972977042198181
+      },
+      {
+        "word": " happy.",
+        "start": 44.36,
+        "end": 44.58,
+        "probability": 0.9955973029136658
+      },
+      {
+        "word": " Rephrase.",
+        "start": 45.62,
+        "end": 46.18,
+        "probability": 0.8012250562508901
+      },
+      {
+        "word": " Quora's",
+        "start": 46.9,
+        "end": 47.46,
+        "probability": 0.5976065024733543
+      },
+      {
+        "word": " built",
+        "start": 47.46,
+        "end": 47.66,
+        "probability": 0.9371454119682312
+      },
+      {
+        "word": " the",
+        "start": 47.66,
+        "end": 47.78,
+        "probability": 0.7912323474884033
+      },
+      {
+        "word": " expensive",
+        "start": 47.78,
+        "end": 48.02,
+        "probability": 0.9888437986373901
+      },
+      {
+        "word": " one.",
+        "start": 48.02,
+        "end": 48.3,
+        "probability": 0.9843928217887878
+      },
+      {
+        "word": " She's",
+        "start": 48.72,
+        "end": 49.12,
+        "probability": 0.9806743562221527
+      },
+      {
+        "word": " using",
+        "start": 49.12,
+        "end": 49.36,
+        "probability": 0.9940203428268433
+      },
+      {
+        "word": " a",
+        "start": 49.36,
+        "end": 49.48,
+        "probability": 0.9798796772956848
+      },
+      {
+        "word": " high",
+        "start": 49.48,
+        "end": 49.78,
+        "probability": 0.9925962090492249
+      },
+      {
+        "word": "-dimensional",
+        "start": 49.78,
+        "end": 50.04,
+        "probability": 0.679628923535347
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "start": 50.04,
+    "end": 55.44,
+    "text": "embedding model, full precision vectors, deep re-ranking on every query. She checks the search",
+    "avg_logprob": -0.08115020556978776,
+    "no_speech_prob": 5.440678432933055e-05,
+    "words": [
+      {
+        "word": " embedding",
+        "start": 50.04,
+        "end": 50.5,
+        "probability": 0.9811178743839264
+      },
+      {
+        "word": " model,",
+        "start": 50.5,
+        "end": 50.72,
+        "probability": 0.9987366795539856
+      },
+      {
+        "word": " full",
+        "start": 50.88,
+        "end": 51.28,
+        "probability": 0.9985643029212952
+      },
+      {
+        "word": " precision",
+        "start": 51.28,
+        "end": 51.68,
+        "probability": 0.9834722280502319
+      },
+      {
+        "word": " vectors,",
+        "start": 51.68,
+        "end": 52.0,
+        "probability": 0.9989652633666992
+      },
+      {
+        "word": " deep",
+        "start": 52.3,
+        "end": 52.74,
+        "probability": 0.9668892025947571
+      },
+      {
+        "word": " re",
+        "start": 52.74,
+        "end": 52.96,
+        "probability": 0.9909065961837769
+      },
+      {
+        "word": "-ranking",
+        "start": 52.96,
+        "end": 53.3,
+        "probability": 0.9986416498819987
+      },
+      {
+        "word": " on",
+        "start": 53.3,
+        "end": 53.4,
+        "probability": 0.9986948370933533
+      },
+      {
+        "word": " every",
+        "start": 53.4,
+        "end": 53.66,
+        "probability": 0.9989563226699829
+      },
+      {
+        "word": " query.",
+        "start": 53.66,
+        "end": 53.98,
+        "probability": 0.9998461008071899
+      },
+      {
+        "word": " She",
+        "start": 54.28,
+        "end": 54.84,
+        "probability": 0.9985880255699158
+      },
+      {
+        "word": " checks",
+        "start": 54.84,
+        "end": 55.16,
+        "probability": 0.9984474778175354
+      },
+      {
+        "word": " the",
+        "start": 55.16,
+        "end": 55.24,
+        "probability": 0.9658463001251221
+      },
+      {
+        "word": " search",
+        "start": 55.24,
+        "end": 55.44,
+        "probability": 0.9975208640098572
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "start": 55.44,
+    "end": 61.21,
+    "text": "quality through recall and goes home happy. Samantha's done two. She picks the same embedding",
+    "avg_logprob": -0.08115020556978776,
+    "no_speech_prob": 5.440678432933055e-05,
+    "words": [
+      {
+        "word": " quality",
+        "start": 55.44,
+        "end": 55.76,
+        "probability": 0.9980339407920837
+      },
+      {
+        "word": " through",
+        "start": 55.76,
+        "end": 56.1,
+        "probability": 0.9991344809532166
+      },
+      {
+        "word": " recall",
+        "start": 56.1,
+        "end": 56.44,
+        "probability": 0.9954773783683777
+      },
+      {
+        "word": " and",
+        "start": 56.44,
+        "end": 57.0,
+        "probability": 0.9409979581832886
+      },
+      {
+        "word": " goes",
+        "start": 57.0,
+        "end": 57.28,
+        "probability": 0.998986542224884
+      },
+      {
+        "word": " home",
+        "start": 57.28,
+        "end": 57.48,
+        "probability": 0.9951619505882263
+      },
+      {
+        "word": " happy.",
+        "start": 57.48,
+        "end": 57.74,
+        "probability": 0.9984965324401855
+      },
+      {
+        "word": " Samantha's",
+        "start": 58.59,
+        "end": 59.15,
+        "probability": 0.9880342781543732
+      },
+      {
+        "word": " done",
+        "start": 59.15,
+        "end": 59.33,
+        "probability": 0.9982233643531799
+      },
+      {
+        "word": " two.",
+        "start": 59.33,
+        "end": 59.57,
+        "probability": 0.4096355736255646
+      },
+      {
+        "word": " She",
+        "start": 59.85,
+        "end": 60.25,
+        "probability": 0.9986048340797424
+      },
+      {
+        "word": " picks",
+        "start": 60.25,
+        "end": 60.41,
+        "probability": 0.9942986965179443
+      },
+      {
+        "word": " the",
+        "start": 60.41,
+        "end": 60.57,
+        "probability": 0.9994120597839355
+      },
+      {
+        "word": " same",
+        "start": 60.57,
+        "end": 60.83,
+        "probability": 0.9989306330680847
+      },
+      {
+        "word": " embedding",
+        "start": 60.83,
+        "end": 61.21,
+        "probability": 0.9942326843738556
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "start": 61.21,
+    "end": 65.97,
+    "text": "model family as Quora, but she's using a slightly smaller model, truncated the vectors to a third",
+    "avg_logprob": -0.08115020556978776,
+    "no_speech_prob": 5.440678432933055e-05,
+    "words": [
+      {
+        "word": " model",
+        "start": 61.21,
+        "end": 61.37,
+        "probability": 0.9970201849937439
+      },
+      {
+        "word": " family",
+        "start": 61.37,
+        "end": 61.61,
+        "probability": 0.990230143070221
+      },
+      {
+        "word": " as",
+        "start": 61.61,
+        "end": 61.95,
+        "probability": 0.9995385408401489
+      },
+      {
+        "word": " Quora,",
+        "start": 61.95,
+        "end": 62.19,
+        "probability": 0.9982206225395203
+      },
+      {
+        "word": " but",
+        "start": 62.31,
+        "end": 62.69,
+        "probability": 0.9994496703147888
+      },
+      {
+        "word": " she's",
+        "start": 62.69,
+        "end": 62.89,
+        "probability": 0.9965644180774689
+      },
+      {
+        "word": " using",
+        "start": 62.89,
+        "end": 63.13,
+        "probability": 0.997952938079834
+      },
+      {
+        "word": " a",
+        "start": 63.13,
+        "end": 63.27,
+        "probability": 0.9978945851325989
+      },
+      {
+        "word": " slightly",
+        "start": 63.27,
+        "end": 63.51,
+        "probability": 0.9943469166755676
+      },
+      {
+        "word": " smaller",
+        "start": 63.51,
+        "end": 63.85,
+        "probability": 0.9993651509284973
+      },
+      {
+        "word": " model,",
+        "start": 63.85,
+        "end": 64.21,
+        "probability": 0.9997078776359558
+      },
+      {
+        "word": " truncated",
+        "start": 64.39,
+        "end": 64.97,
+        "probability": 0.9982663691043854
+      },
+      {
+        "word": " the",
+        "start": 64.97,
+        "end": 65.13,
+        "probability": 0.9990054965019226
+      },
+      {
+        "word": " vectors",
+        "start": 65.13,
+        "end": 65.43,
+        "probability": 0.9994485974311829
+      },
+      {
+        "word": " to",
+        "start": 65.43,
+        "end": 65.63,
+        "probability": 0.9992886781692505
+      },
+      {
+        "word": " a",
+        "start": 65.63,
+        "end": 65.71,
+        "probability": 0.9531207084655762
+      },
+      {
+        "word": " third",
+        "start": 65.71,
+        "end": 65.97,
+        "probability": 0.9951254725456238
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "start": 65.97,
+    "end": 69.39,
+    "text": "with Matryoshka, configured her index with barbecue quantization, and then she's done two.",
+    "avg_logprob": -0.08115020556978776,
+    "no_speech_prob": 5.440678432933055e-05,
+    "words": [
+      {
+        "word": " with",
+        "start": 65.97,
+        "end": 66.15,
+        "probability": 0.9970409274101257
+      },
+      {
+        "word": " Matryoshka,",
+        "start": 66.15,
+        "end": 66.71,
+        "probability": 0.9807738363742828
+      },
+      {
+        "word": " configured",
+        "start": 66.89,
+        "end": 67.55,
+        "probability": 0.9964520931243896
+      },
+      {
+        "word": " her",
+        "start": 67.55,
+        "end": 67.81,
+        "probability": 0.9979074001312256
+      },
+      {
+        "word": " index",
+        "start": 67.81,
+        "end": 68.19,
+        "probability": 0.997815728187561
+      },
+      {
+        "word": " with",
+        "start": 68.19,
+        "end": 68.39,
+        "probability": 0.9950574636459351
+      },
+      {
+        "word": " barbecue",
+        "start": 68.39,
+        "end": 68.69,
+        "probability": 0.7216476798057556
+      },
+      {
+        "word": " quantization,",
+        "start": 68.69,
+        "end": 69.31,
+        "probability": 0.9857281744480133
+      },
+      {
+        "word": " and",
+        "start": 69.39,
+        "end": 69.39,
+        "probability": 0.9102723002433777
+      },
+      {
+        "word": " then",
+        "start": 69.39,
+        "end": 69.39,
+        "probability": 0.25390827655792236
+      },
+      {
+        "word": " she's",
+        "start": 69.39,
+        "end": 69.39,
+        "probability": 0.2654460519552231
+      },
+      {
+        "word": " done",
+        "start": 69.39,
+        "end": 69.39,
+        "probability": 0.23921604454517365
+      },
+      {
+        "word": " two.",
+        "start": 69.39,
+        "end": 69.39,
+        "probability": 0.30643537640571594
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "start": 74.31,
+    "end": 81.8,
+    "text": "She's using a self-hosted open source model with vectors living almost entirely on disk,",
+    "avg_logprob": -0.17349343979731202,
+    "no_speech_prob": 0.00015174734289757907,
+    "words": [
+      {
+        "word": " She's",
+        "start": 74.31,
+        "end": 74.87,
+        "probability": 0.1265212720463751
+      },
+      {
+        "word": " using",
+        "start": 75.68,
+        "end": 76.24,
+        "probability": 0.24691234529018402
+      },
+      {
+        "word": " a",
+        "start": 76.24,
+        "end": 77.8,
+        "probability": 0.8747092485427856
+      },
+      {
+        "word": " self",
+        "start": 77.92,
+        "end": 78.18,
+        "probability": 0.9835853576660156
+      },
+      {
+        "word": "-hosted",
+        "start": 78.18,
+        "end": 78.68,
+        "probability": 0.9403623739878336
+      },
+      {
+        "word": " open",
+        "start": 78.68,
+        "end": 78.84,
+        "probability": 0.753069281578064
+      },
+      {
+        "word": " source",
+        "start": 78.84,
+        "end": 79.08,
+        "probability": 0.7222116589546204
+      },
+      {
+        "word": " model",
+        "start": 79.08,
+        "end": 79.36,
+        "probability": 0.9938281178474426
+      },
+      {
+        "word": " with",
+        "start": 79.36,
+        "end": 79.84,
+        "probability": 0.4140235483646393
+      },
+      {
+        "word": " vectors",
+        "start": 79.84,
+        "end": 80.18,
+        "probability": 0.9435728788375854
+      },
+      {
+        "word": " living",
+        "start": 80.18,
+        "end": 80.46,
+        "probability": 0.9795551896095276
+      },
+      {
+        "word": " almost",
+        "start": 80.46,
+        "end": 80.92,
+        "probability": 0.9095707535743713
+      },
+      {
+        "word": " entirely",
+        "start": 80.92,
+        "end": 81.3,
+        "probability": 0.9869028329849243
+      },
+      {
+        "word": " on",
+        "start": 81.3,
+        "end": 81.52,
+        "probability": 0.9956967830657959
+      },
+      {
+        "word": " disk,",
+        "start": 81.52,
+        "end": 81.8,
+        "probability": 0.8964548110961914
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "start": 81.94,
+    "end": 87.22,
+    "text": "aggressive quantization everywhere, and then a tiny re-ranker at the end to clean things up.",
+    "avg_logprob": -0.17349343979731202,
+    "no_speech_prob": 0.00015174734289757907,
+    "words": [
+      {
+        "word": " aggressive",
+        "start": 81.94,
+        "end": 82.46,
+        "probability": 0.9551244974136353
+      },
+      {
+        "word": " quantization",
+        "start": 82.46,
+        "end": 82.96,
+        "probability": 0.9576826691627502
+      },
+      {
+        "word": " everywhere,",
+        "start": 82.96,
+        "end": 83.66,
+        "probability": 0.9678280353546143
+      },
+      {
+        "word": " and",
+        "start": 83.92,
+        "end": 84.42,
+        "probability": 0.9062734246253967
+      },
+      {
+        "word": " then",
+        "start": 84.42,
+        "end": 84.64,
+        "probability": 0.8001037836074829
+      },
+      {
+        "word": " a",
+        "start": 84.64,
+        "end": 84.86,
+        "probability": 0.964818000793457
+      },
+      {
+        "word": " tiny",
+        "start": 84.86,
+        "end": 85.18,
+        "probability": 0.9850045442581177
+      },
+      {
+        "word": " re",
+        "start": 85.18,
+        "end": 85.46,
+        "probability": 0.7241965532302856
+      },
+      {
+        "word": "-ranker",
+        "start": 85.46,
+        "end": 85.76,
+        "probability": 0.9699654579162598
+      },
+      {
+        "word": " at",
+        "start": 85.76,
+        "end": 85.84,
+        "probability": 0.8994161486625671
+      },
+      {
+        "word": " the",
+        "start": 85.84,
+        "end": 85.94,
+        "probability": 0.9968962669372559
+      },
+      {
+        "word": " end",
+        "start": 85.94,
+        "end": 86.14,
+        "probability": 0.9983838796615601
+      },
+      {
+        "word": " to",
+        "start": 86.14,
+        "end": 86.46,
+        "probability": 0.9688555598258972
+      },
+      {
+        "word": " clean",
+        "start": 86.46,
+        "end": 86.74,
+        "probability": 0.9826734662055969
+      },
+      {
+        "word": " things",
+        "start": 86.74,
+        "end": 86.94,
+        "probability": 0.9685739874839783
+      },
+      {
+        "word": " up.",
+        "start": 86.94,
+        "end": 87.22,
+        "probability": 0.9980827569961548
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "start": 87.77,
+    "end": 91.75,
+    "text": "His cloud dashboard shows a tiny bill which makes him very happy.",
+    "avg_logprob": -0.17349343979731202,
+    "no_speech_prob": 0.00015174734289757907,
+    "words": [
+      {
+        "word": " His",
+        "start": 87.77,
+        "end": 88.25,
+        "probability": 0.9426477551460266
+      },
+      {
+        "word": " cloud",
+        "start": 88.25,
+        "end": 88.55,
+        "probability": 0.9710859060287476
+      },
+      {
+        "word": " dashboard",
+        "start": 88.55,
+        "end": 88.91,
+        "probability": 0.9786723852157593
+      },
+      {
+        "word": " shows",
+        "start": 88.91,
+        "end": 89.29,
+        "probability": 0.9889074563980103
+      },
+      {
+        "word": " a",
+        "start": 89.29,
+        "end": 89.49,
+        "probability": 0.980888307094574
+      },
+      {
+        "word": " tiny",
+        "start": 89.49,
+        "end": 89.89,
+        "probability": 0.9901254177093506
+      },
+      {
+        "word": " bill",
+        "start": 89.89,
+        "end": 90.19,
+        "probability": 0.9519424438476562
+      },
+      {
+        "word": " which",
+        "start": 90.19,
+        "end": 90.71,
+        "probability": 0.7444655895233154
+      },
+      {
+        "word": " makes",
+        "start": 90.71,
+        "end": 90.91,
+        "probability": 0.9917803406715393
+      },
+      {
+        "word": " him",
+        "start": 90.91,
+        "end": 91.19,
+        "probability": 0.9876950979232788
+      },
+      {
+        "word": " very",
+        "start": 91.19,
+        "end": 91.39,
+        "probability": 0.8584243059158325
+      },
+      {
+        "word": " happy.",
+        "start": 91.39,
+        "end": 91.75,
+        "probability": 0.9995237588882446
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "start": 92.78,
+    "end": 102.28,
+    "text": "Now should they all be happy with these vastly different outcomes? What do you think? Rephrase.",
+    "avg_logprob": -0.17349343979731202,
+    "no_speech_prob": 0.00015174734289757907,
+    "words": [
+      {
+        "word": " Now",
+        "start": 92.78,
+        "end": 93.12,
+        "probability": 0.8018475770950317
+      },
+      {
+        "word": " should",
+        "start": 93.12,
+        "end": 93.36,
+        "probability": 0.40801358222961426
+      },
+      {
+        "word": " they",
+        "start": 93.36,
+        "end": 93.52,
+        "probability": 0.9915710687637329
+      },
+      {
+        "word": " all",
+        "start": 93.52,
+        "end": 93.74,
+        "probability": 0.9902787804603577
+      },
+      {
+        "word": " be",
+        "start": 96.03,
+        "end": 97.15,
+        "probability": 0.6225431561470032
+      },
+      {
+        "word": " happy",
+        "start": 97.15,
+        "end": 97.39,
+        "probability": 0.9948805570602417
+      },
+      {
+        "word": " with",
+        "start": 97.39,
+        "end": 97.67,
+        "probability": 0.9964420199394226
+      },
+      {
+        "word": " these",
+        "start": 97.67,
+        "end": 97.91,
+        "probability": 0.989216685295105
+      },
+      {
+        "word": " vastly",
+        "start": 97.91,
+        "end": 98.33,
+        "probability": 0.9993442893028259
+      },
+      {
+        "word": " different",
+        "start": 98.33,
+        "end": 98.59,
+        "probability": 0.9993937015533447
+      },
+      {
+        "word": " outcomes?",
+        "start": 98.59,
+        "end": 98.95,
+        "probability": 0.9970940351486206
+      },
+      {
+        "word": " What",
+        "start": 99.28,
+        "end": 99.74,
+        "probability": 0.9609801173210144
+      },
+      {
+        "word": " do",
+        "start": 99.74,
+        "end": 99.84,
+        "probability": 0.9992414712905884
+      },
+      {
+        "word": " you",
+        "start": 99.84,
+        "end": 100.02,
+        "probability": 0.9923741221427917
+      },
+      {
+        "word": " think?",
+        "start": 100.02,
+        "end": 100.42,
+        "probability": 0.999541163444519
+      },
+      {
+        "word": " Rephrase.",
+        "start": 101.72,
+        "end": 102.28,
+        "probability": 0.8530285159746805
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "start": 102.38,
+    "end": 106.12,
+    "text": "Should they all be happy with these vastly different outcomes?",
+    "avg_logprob": -0.17349343979731202,
+    "no_speech_prob": 0.00015174734289757907,
+    "words": [
+      {
+        "word": " Should",
+        "start": 102.38,
+        "end": 102.88,
+        "probability": 0.9744195342063904
+      },
+      {
+        "word": " they",
+        "start": 104.04,
+        "end": 104.18,
+        "probability": 0.9994472861289978
+      },
+      {
+        "word": " all",
+        "start": 104.18,
+        "end": 104.42,
+        "probability": 0.9995074272155762
+      },
+      {
+        "word": " be",
+        "start": 104.42,
+        "end": 104.56,
+        "probability": 0.9998691082000732
+      },
+      {
+        "word": " happy",
+        "start": 104.56,
+        "end": 104.78,
+        "probability": 0.9994311928749084
+      },
+      {
+        "word": " with",
+        "start": 104.78,
+        "end": 104.94,
+        "probability": 0.9994128942489624
+      },
+      {
+        "word": " these",
+        "start": 104.94,
+        "end": 105.14,
+        "probability": 0.9989653825759888
+      },
+      {
+        "word": " vastly",
+        "start": 105.14,
+        "end": 105.56,
+        "probability": 0.9997550845146179
+      },
+      {
+        "word": " different",
+        "start": 105.56,
+        "end": 105.82,
+        "probability": 0.9998036026954651
+      },
+      {
+        "word": " outcomes?",
+        "start": 105.82,
+        "end": 106.12,
+        "probability": 0.9931835532188416
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "start": 106.14,
+    "end": 112.28,
+    "text": "What do you think? Rephrase. Let's learn more about these decisions.",
+    "avg_logprob": -0.2335028402507305,
+    "no_speech_prob": 0.0034959593322128057,
+    "words": [
+      {
+        "word": " What",
+        "start": 106.14,
+        "end": 106.9,
+        "probability": 0.42705124616622925
+      },
+      {
+        "word": " do",
+        "start": 106.98,
+        "end": 107.16,
+        "probability": 0.9937466382980347
+      },
+      {
+        "word": " you",
+        "start": 107.16,
+        "end": 107.34,
+        "probability": 0.9888542890548706
+      },
+      {
+        "word": " think?",
+        "start": 107.34,
+        "end": 107.72,
+        "probability": 0.997186005115509
+      },
+      {
+        "word": " Rephrase.",
+        "start": 109.47,
+        "end": 109.97,
+        "probability": 0.6644261258625193
+      },
+      {
+        "word": " Let's",
+        "start": 110.46,
+        "end": 110.96,
+        "probability": 0.9821198582649231
+      },
+      {
+        "word": " learn",
+        "start": 110.96,
+        "end": 111.16,
+        "probability": 0.9929932951927185
+      },
+      {
+        "word": " more",
+        "start": 111.16,
+        "end": 111.44,
+        "probability": 0.9959659576416016
+      },
+      {
+        "word": " about",
+        "start": 111.44,
+        "end": 111.68,
+        "probability": 0.9973471164703369
+      },
+      {
+        "word": " these",
+        "start": 111.68,
+        "end": 111.94,
+        "probability": 0.9923668503761292
+      },
+      {
+        "word": " decisions.",
+        "start": 111.94,
+        "end": 112.28,
+        "probability": 0.9946197271347046
+      }
+    ]
+  }
+]

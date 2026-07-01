@@ -1,0 +1,17 @@
+[00:00:01.11 → 00:00:11.82]  Okay. Testing, testing. Okay, let's go. Imagine three engineers, each building a
+[00:00:11.82 → 00:00:18.32]  vector search feature. One setup costs the most to run, one runs incredibly fast but misses hits
+[00:00:18.32 → 00:00:24.64]  sometimes, and the third runs on very low budget but hits the disk consistently. Who's done the
+[00:00:24.64 → 00:00:29.69]  best job and did the other two screw up? Hold that thought and let's take a look at the actual
+[00:00:29.69 → 00:00:37.66]  architecture. Quora's built the expensive one. She's using a high-dimensional embedding model
+[00:00:37.66 → 00:00:43.10]  full precision vectors, deep re-ranking on every query. She checks the search quality through
+[00:00:43.10 → 00:00:50.04]  recall and goes home happy. Rephrase. Quora's built the expensive one. She's using a high-dimensional
+[00:00:50.04 → 00:00:55.44]  embedding model, full precision vectors, deep re-ranking on every query. She checks the search
+[00:00:55.44 → 00:01:01.21]  quality through recall and goes home happy. Samantha's done two. She picks the same embedding
+[00:01:01.21 → 00:01:05.97]  model family as Quora, but she's using a slightly smaller model, truncated the vectors to a third
+[00:01:05.97 → 00:01:09.39]  with Matryoshka, configured her index with barbecue quantization, and then she's done two.
+[00:01:14.31 → 00:01:21.80]  She's using a self-hosted open source model with vectors living almost entirely on disk,
+[00:01:21.94 → 00:01:27.22]  aggressive quantization everywhere, and then a tiny re-ranker at the end to clean things up.
+[00:01:27.77 → 00:01:31.75]  His cloud dashboard shows a tiny bill which makes him very happy.
+[00:01:32.78 → 00:01:42.28]  Now should they all be happy with these vastly different outcomes? What do you think? Rephrase.
+[00:01:42.38 → 00:01:46.12]  Should they all be happy with these vastly different outcomes?
+[00:01:46.14 → 00:01:52.28]  What do you think? Rephrase. Let's learn more about these decisions.
