@@ -168,6 +168,7 @@ Opening this in FCP creates a new project in a new event. The clips in the timel
 | `WHISPER_MODEL` | `"large-v3"` | faster-whisper model. `"base"` is ~10× faster but less accurate. |
 | `PAUSE_THRESHOLD` | `2.0` | Gaps ≥ this many seconds are annotated as silences in the transcript sent to the LLM, and become natural cut points. |
 | `LLM_MODEL` | `"llm-gateway/gpt-5.4-mini"` | Model name your OpenAI / LiteLLM endpoint accepts. |
+| `MAX_CONTEXT_TOKENS` | `80_000` | If the estimated prompt exceeds this, the pipeline splits into chunks automatically. |
 | `SKIP_TRANSCRIBE` | `False` | Skip Stage 1 and reuse `transcript.json` from a previous run. |
 | `SKIP_DETECT` | `False` | Skip Stage 2 and reuse `edit_plan.json` from a previous run. |
 
@@ -181,24 +182,41 @@ Similarly, set `SKIP_DETECT=True` to re-run only the FCPXML export after manuall
 
 ## How retake detection works
 
-The LLM receives:
-1. **The full script** — treated as ground truth for what should be in the final cut.
-2. **The annotated transcript** — each Whisper segment on its own numbered line, with inline markers:
-   - `⚠word` — low-confidence word (Whisper probability < 0.6); likely a broken utterance
-   - `[TRIGGER:"rephrase"]` / `[TRIGGER:"cut"]` — presenter explicitly flagged a restart
-   - `--- SILENCE: 2.3s gap ---` — long pause between segments
+The LLM uses a **"latest complete take wins"** approach:
 
-The LLM is instructed to:
-- Match transcript chunks to script sections
-- For each section, identify all takes (retakes triggered by any of the above signals)
-- Keep only the **last complete, clean take** of each section
-- Return exact timestamps (snapped to word boundaries from the transcript)
+1. It works through the **script** section by section (in order).
+2. For each section, it scans the **transcript backwards** (from end toward start) to find the **latest complete rendition** of that content.
+3. If the latest attempt is incomplete (broken words, trigger words, trails off), it falls back to the next earlier attempt.
+4. Everything not selected — pre-roll chatter, earlier takes, off-script asides — is cut.
+
+This backwards-anchoring approach means the LLM doesn't need to detect *why* a take was abandoned. It simply finds the last good version. This reliably handles:
+- **Pre-roll** ("okay let's get started", mic checks) — not in the script, so never matched.
+- **Aborted sentences** without explicit triggers — the latest complete version wins regardless.
+- **Multiple retakes** — earlier takes are implicitly cut.
+
+The LLM receives:
+1. **The full script** — treated as ground truth for content and order.
+2. **The annotated transcript** — each Whisper segment with word-level timestamps and inline markers:
+   - `⚠word` — low-confidence word (Whisper probability < 0.6); signals a broken utterance
+   - `[TRIGGER:"rephrase"]` / `[TRIGGER:"cut"]` — presenter explicitly flagged a restart
+   - `--- SILENCE: 2.3s gap ---` — long pause between segments (natural cut boundary)
 
 The pipeline then snaps every LLM-returned timestamp to the nearest actual word boundary to ensure cuts land cleanly.
 
 ### Trigger words
 
-Only `"rephrase"` and `"cut"` are recognised as explicit retake triggers (spoken as standalone words). Other filler words (`"um"`, `"uh"`, etc.) are preserved by default — the LLM uses context from the script to decide whether a take is clean, rather than filtering on filler words.
+Only `"rephrase"` and `"cut"` are recognised as explicit retake triggers (spoken as standalone words). Other filler words (`"um"`, `"uh"`, etc.) are preserved by default — the LLM uses context from the script to decide whether a take is complete, rather than filtering on filler words.
+
+### Chunked processing
+
+For long recordings where the full prompt would exceed the LLM's effective context, the pipeline automatically splits the work:
+
+1. The script is divided into section groups (split on `##` headings).
+2. Each group is sent with the relevant transcript window (with overlap buffers at boundaries).
+3. Chunks are processed **sequentially** — each chunk knows where the previous one ended, enforcing chronological order across the full edit plan.
+4. Results are merged and any cross-chunk overlaps are resolved.
+
+Chunking kicks in automatically when the estimated prompt size exceeds `MAX_CONTEXT_TOKENS` (default: 80,000). You can adjust this threshold in the config block.
 
 ---
 

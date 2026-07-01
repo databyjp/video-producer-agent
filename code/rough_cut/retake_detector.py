@@ -6,9 +6,14 @@ detect_retakes()             : call the LLM and parse keep segments from the res
 snap_to_word_boundaries()    : correct any LLM timestamps to the nearest actual word edge
 save_edit_plan()             : write edit_plan.json + edit_plan.txt
 load_edit_plan()             : reload a previous edit_plan.json (for SKIP_DETECT runs)
+
+Chunking: when the prompt exceeds *max_context_tokens*, the script is split
+into section groups and each group is processed with the relevant transcript
+window.  Results are merged at the end.
 """
 
 import json
+import math
 import os
 import re
 from pathlib import Path
@@ -32,6 +37,9 @@ MIN_WORD_LEN_FOR_CONF: int = 2
 
 # Path to the prompt template file (relative to this module).
 PROMPT_PATH = Path(__file__).parent / "prompts" / "retake_detection.txt"
+
+# Rough chars-per-token ratio for token estimation.
+_CHARS_PER_TOKEN: int = 4
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -59,6 +67,15 @@ def _is_low_conf(word: TranscriptWord) -> bool:
         and len(stripped) >= MIN_WORD_LEN_FOR_CONF
         and not _is_trigger(word)   # triggers are already annotated separately
     )
+
+
+def _estimate_tokens(text: str) -> int:
+    """Rough token count — conservative for English + timestamps."""
+    return len(text) // _CHARS_PER_TOKEN
+
+
+def _estimate_messages_tokens(messages: list[dict]) -> int:
+    return sum(_estimate_tokens(m["content"]) for m in messages)
 
 
 # ── Transcript formatter ──────────────────────────────────────────────────────
@@ -220,38 +237,62 @@ def _resolve_overlaps(keep_segments: list[KeepSegment]) -> list[KeepSegment]:
     return resolved
 
 
+# ── Script section splitting (for chunked processing) ────────────────────────
+
+def _split_script_sections(script_text: str) -> list[str]:
+    """
+    Split a markdown script into logical sections by headings.
+
+    Splits on any markdown heading (## or deeper).  If the script has no
+    headings, falls back to splitting on double-blank-line boundaries.
+    Returns a list of section strings, each including its heading line.
+    """
+    # Try heading-based split first.
+    parts = re.split(r"(?=^#{2,}\s)", script_text, flags=re.MULTILINE)
+    sections = [p.strip() for p in parts if p.strip()]
+
+    if len(sections) >= 2:
+        return sections
+
+    # Fallback: split on double blank lines.
+    parts = re.split(r"\n\s*\n\s*\n", script_text)
+    sections = [p.strip() for p in parts if p.strip()]
+
+    if len(sections) >= 2:
+        return sections
+
+    # Can't split meaningfully — return the whole script as one section.
+    return [script_text.strip()]
+
+
 # ── LLM call ─────────────────────────────────────────────────────────────────
 
 def _build_messages(
     script_text: str,
     formatted_transcript: str,
     pause_threshold: float,
+    chunk_context: str = "",
 ) -> list[dict]:
     """
-    Load the prompt template and substitute the three variables:
-    {SCRIPT}, {TRANSCRIPT}, {PAUSE_THRESHOLD}.
+    Load the prompt template and substitute variables.
 
-    The template uses a SYSTEM / USER split marker so we can return
-    a proper messages list for the chat API.
+    Placeholders: {SCRIPT}, {TRANSCRIPT}, {PAUSE_THRESHOLD}, {CHUNK_CONTEXT}.
     """
     template = PROMPT_PATH.read_text(encoding="utf-8")
 
-    # Substitute placeholders (template uses {SCRIPT} etc., not Python f-string
-    # syntax, to avoid conflicts with JSON braces in the template itself).
     filled = (
         template
         .replace("{SCRIPT}", script_text)
         .replace("{TRANSCRIPT}", formatted_transcript)
         .replace("{PAUSE_THRESHOLD}", str(pause_threshold))
+        .replace("{CHUNK_CONTEXT}", chunk_context)
     )
 
     # Split into system and user sections on the "USER\n====" marker.
     if "USER\n====" in filled:
         system_part, user_part = filled.split("USER\n====", 1)
-        # Strip the "SYSTEM\n====" header from the system part.
         system_part = re.sub(r"^SYSTEM\s*\n=+\s*\n?", "", system_part, flags=re.IGNORECASE)
     else:
-        # Fallback: whole template is the user message.
         system_part = "You are a professional video editor."
         user_part = filled
 
@@ -261,56 +302,45 @@ def _build_messages(
     ]
 
 
-def detect_retakes(
-    script_text: str,
-    segments: list[TranscriptSegment],
-    source_duration: float,
-    pause_threshold: float = 2.0,
-    llm_model: str = "llm-gateway/gpt-5.4-mini",
-) -> EditPlan:
+def _call_llm(messages: list[dict], llm_model: str) -> list[dict]:
     """
-    Call the LLM to identify retake zones and return an EditPlan.
+    Send *messages* to the LLM and return the parsed keep_segments list (raw dicts).
 
-    The OpenAI client reads credentials from the environment:
-      OPENAI_API_KEY   — required (use any non-empty string for LiteLLM)
-      OPENAI_BASE_URL  — optional; set to your LiteLLM proxy URL if applicable
-                         e.g. http://localhost:4000
-
-    Parameters
-    ----------
-    script_text      : raw text of the script (markdown is fine)
-    segments         : transcript segments from Stage 1
-    source_duration  : total video duration in seconds (for EditPlan stats)
-    pause_threshold  : seconds; gaps longer than this are marked in the transcript
-    llm_model        : model name recognised by your OpenAI / LiteLLM setup
+    Raises ValueError if the response is not valid JSON or has no keep_segments.
     """
-    formatted = format_transcript_for_llm(segments, pause_threshold)
-    messages  = _build_messages(script_text, formatted, pause_threshold)
-
-    print(f"  Sending transcript to LLM ({llm_model})…")
-    print(f"  Transcript: {len(segments)} segments, prompt ~{sum(len(m['content']) for m in messages):,} chars")
-
     client = openai.OpenAI(
         api_key=os.getenv("OPENAI_API_KEY"),
         base_url=os.getenv("OPENAI_BASE_URL"),
     )
 
+    prompt_chars = sum(len(m["content"]) for m in messages)
+    print(f"  Sending prompt to LLM ({llm_model}) — ~{prompt_chars:,} chars…")
+
     response = client.chat.completions.create(
         model=llm_model,
         messages=messages,
         response_format={"type": "json_object"},
-        temperature=0,        # deterministic; edit decisions should be consistent
-        max_tokens=4096,
+        temperature=0,
+        max_tokens=16384,
     )
 
     raw_json = response.choices[0].message.content
     print(f"  LLM responded ({len(raw_json):,} chars).")
 
-    # ── Parse response ────────────────────────────────────────────────────────
+    # Check for possible truncation — if the JSON doesn't close properly.
+    stripped = raw_json.rstrip()
+    if not (stripped.endswith("}") or stripped.endswith("]")):
+        print(
+            "  ⚠  LLM response may be truncated (does not end with } or ]). "
+            "If parsing fails, try raising max_tokens or enabling chunking."
+        )
+
     try:
         payload = json.loads(raw_json)
     except json.JSONDecodeError as exc:
-        raise ValueError(f"LLM returned invalid JSON: {exc}\n\nRaw response:\n{raw_json}") from exc
+        raise ValueError(
+            f"LLM returned invalid JSON: {exc}\n\nRaw response:\n{raw_json}"
+        ) from exc
 
     raw_segments = payload.get("keep_segments", [])
     if not raw_segments:
@@ -319,7 +349,12 @@ def detect_retakes(
             "Check the transcript and prompt."
         )
 
-    keep_segments = [
+    return raw_segments
+
+
+def _parse_keep_segments(raw_segments: list[dict]) -> list[KeepSegment]:
+    """Convert raw dicts from the LLM response into KeepSegment objects."""
+    return [
         KeepSegment(
             start=float(item["start"]),
             end=float(item["end"]),
@@ -329,15 +364,226 @@ def detect_retakes(
         for i, item in enumerate(raw_segments)
     ]
 
-    # Snap to actual word boundaries (corrects small LLM timestamp errors).
-    keep_segments = snap_to_word_boundaries(keep_segments, segments)
 
-    # Sort by start, drop zero/negative-duration entries, resolve overlaps.
+def _postprocess(
+    keep_segments: list[KeepSegment],
+    segments: list[TranscriptSegment],
+) -> list[KeepSegment]:
+    """Snap to word boundaries, sort, drop zero-duration, resolve overlaps."""
+    keep_segments = snap_to_word_boundaries(keep_segments, segments)
     keep_segments.sort(key=lambda s: s.start)
     keep_segments = [s for s in keep_segments if s.duration > 0.0]
     keep_segments = _resolve_overlaps(keep_segments)
+    return keep_segments
+
+
+# ── Single-call path ─────────────────────────────────────────────────────────
+
+def _detect_single(
+    script_text: str,
+    segments: list[TranscriptSegment],
+    source_duration: float,
+    pause_threshold: float,
+    llm_model: str,
+) -> EditPlan:
+    """Process the entire script + transcript in one LLM call."""
+    formatted = format_transcript_for_llm(segments, pause_threshold)
+    messages = _build_messages(script_text, formatted, pause_threshold)
+
+    raw = _call_llm(messages, llm_model)
+    keep_segments = _parse_keep_segments(raw)
+    keep_segments = _postprocess(keep_segments, segments)
 
     return EditPlan(keep_segments=keep_segments, source_duration=source_duration)
+
+
+# ── Chunked path ─────────────────────────────────────────────────────────────
+
+def _detect_chunked(
+    script_text: str,
+    segments: list[TranscriptSegment],
+    source_duration: float,
+    pause_threshold: float,
+    llm_model: str,
+    max_context_tokens: int,
+) -> EditPlan:
+    """
+    Split the script into section groups and process each with the relevant
+    transcript window.  Chunks are processed sequentially — each chunk knows
+    where the previous one ended so the LLM can enforce chronological order.
+    """
+    script_sections = _split_script_sections(script_text)
+    n_sections = len(script_sections)
+
+    if n_sections < 2:
+        print("  Cannot split script into sections — falling back to single call.")
+        return _detect_single(
+            script_text, segments, source_duration, pause_threshold, llm_model,
+        )
+
+    # Estimate how many chunks we need.
+    formatted_full = format_transcript_for_llm(segments, pause_threshold)
+    full_messages = _build_messages(script_text, formatted_full, pause_threshold)
+    total_tokens = _estimate_messages_tokens(full_messages)
+    # Use 0.7× budget to leave room for chunk context overhead.
+    n_chunks = max(2, math.ceil(total_tokens / (max_context_tokens * 0.7)))
+    # Don't create more chunks than sections.
+    n_chunks = min(n_chunks, n_sections)
+
+    sections_per_chunk = math.ceil(n_sections / n_chunks)
+
+    print(
+        f"  Chunking: {n_sections} script sections → {n_chunks} chunks "
+        f"(~{sections_per_chunk} sections each)."
+    )
+
+    all_keep_segments: list[KeepSegment] = []
+    prev_end_time: float = 0.0
+
+    for chunk_idx in range(n_chunks):
+        sec_start = chunk_idx * sections_per_chunk
+        sec_end = min(n_sections, sec_start + sections_per_chunk)
+
+        if sec_start >= n_sections:
+            break
+
+        chunk_script = "\n\n".join(script_sections[sec_start:sec_end])
+
+        # ── Select transcript window ──────────────────────────────────────────
+        # Start: 30s before where the previous chunk ended (overlap buffer).
+        # End:   proportional estimate + 60s buffer.
+        window_start = max(0.0, prev_end_time - 30.0)
+        progress_ratio = sec_end / n_sections
+        window_end = min(source_duration, source_duration * progress_ratio + 60.0)
+
+        chunk_segments = [
+            s for s in segments
+            if s.end > window_start and s.start < window_end
+        ]
+
+        if not chunk_segments:
+            print(f"  ⚠  Chunk {chunk_idx + 1}: no transcript segments in window "
+                  f"{_fmt_time(window_start)}–{_fmt_time(window_end)}. Skipping.")
+            continue
+
+        chunk_formatted = format_transcript_for_llm(chunk_segments, pause_threshold)
+
+        # ── Chunk context for the LLM ─────────────────────────────────────────
+        chunk_context = ""
+        if chunk_idx > 0:
+            chunk_context = (
+                f"\n## Chunk context\n\n"
+                f"This is chunk {chunk_idx + 1} of {n_chunks} "
+                f"(script sections {sec_start + 1}–{sec_end} of {n_sections}).\n"
+                f"The previous chunk's last kept segment ended at "
+                f"{_fmt_time(prev_end_time)} ({prev_end_time:.2f}s).\n"
+                f"All your keep_segments MUST start AFTER {prev_end_time:.2f}s.\n"
+                f"Only match content from the script sections shown above.\n"
+            )
+        else:
+            chunk_context = (
+                f"\n## Chunk context\n\n"
+                f"This is chunk 1 of {n_chunks} "
+                f"(script sections 1–{sec_end} of {n_sections}).\n"
+                f"Only match content from the script sections shown above.\n"
+            )
+
+        print(f"\n  ── Chunk {chunk_idx + 1}/{n_chunks} "
+              f"(sections {sec_start + 1}–{sec_end}, "
+              f"transcript {_fmt_time(window_start)}–{_fmt_time(window_end)}) ──")
+
+        messages = _build_messages(
+            chunk_script, chunk_formatted, pause_threshold, chunk_context,
+        )
+
+        try:
+            raw = _call_llm(messages, llm_model)
+        except ValueError as exc:
+            print(f"  ⚠  Chunk {chunk_idx + 1} failed: {exc}")
+            print("     Continuing with remaining chunks.")
+            continue
+
+        chunk_keeps = _parse_keep_segments(raw)
+        chunk_keeps = _postprocess(chunk_keeps, segments)
+
+        # Enforce monotonicity with previous chunk: drop any segments that
+        # start before the previous chunk's end (can happen due to the
+        # overlap buffer).
+        if prev_end_time > 0:
+            before = len(chunk_keeps)
+            chunk_keeps = [s for s in chunk_keeps if s.start >= prev_end_time]
+            dropped = before - len(chunk_keeps)
+            if dropped:
+                print(f"  Dropped {dropped} segment(s) overlapping with previous chunk.")
+
+        all_keep_segments.extend(chunk_keeps)
+
+        if chunk_keeps:
+            prev_end_time = chunk_keeps[-1].end
+            print(f"  Chunk {chunk_idx + 1}: {len(chunk_keeps)} segments kept, "
+                  f"ends at {_fmt_time(prev_end_time)}.")
+        else:
+            print(f"  Chunk {chunk_idx + 1}: no segments kept.")
+
+    # ── Final merge ───────────────────────────────────────────────────────────
+    all_keep_segments.sort(key=lambda s: s.start)
+    all_keep_segments = [s for s in all_keep_segments if s.duration > 0.0]
+    all_keep_segments = _resolve_overlaps(all_keep_segments)
+
+    return EditPlan(keep_segments=all_keep_segments, source_duration=source_duration)
+
+
+# ── Public API ────────────────────────────────────────────────────────────────
+
+def detect_retakes(
+    script_text: str,
+    segments: list[TranscriptSegment],
+    source_duration: float,
+    pause_threshold: float = 2.0,
+    llm_model: str = "llm-gateway/gpt-5.4-mini",
+    max_context_tokens: int = 80_000,
+) -> EditPlan:
+    """
+    Call the LLM to identify retake zones and return an EditPlan.
+
+    If the full prompt fits within *max_context_tokens*, a single LLM call is
+    made.  Otherwise the script is split into section groups and each is
+    processed with its relevant transcript window.
+
+    The OpenAI client reads credentials from the environment:
+      OPENAI_API_KEY   — required
+      OPENAI_BASE_URL  — optional (LiteLLM proxy URL)
+
+    Parameters
+    ----------
+    script_text        : raw text of the script (markdown is fine)
+    segments           : transcript segments from Stage 1
+    source_duration    : total video duration in seconds
+    pause_threshold    : gaps longer than this are marked in the transcript
+    llm_model          : model name for your OpenAI / LiteLLM setup
+    max_context_tokens : if the estimated prompt exceeds this, chunk
+    """
+    # Estimate full-prompt token count to decide single vs chunked.
+    formatted = format_transcript_for_llm(segments, pause_threshold)
+    messages = _build_messages(script_text, formatted, pause_threshold)
+    est_tokens = _estimate_messages_tokens(messages)
+
+    print(f"  Estimated prompt size: ~{est_tokens:,} tokens.")
+
+    if est_tokens <= max_context_tokens:
+        print("  Processing in a single LLM call.")
+        return _detect_single(
+            script_text, segments, source_duration, pause_threshold, llm_model,
+        )
+    else:
+        print(
+            f"  Prompt exceeds {max_context_tokens:,} token budget — "
+            f"switching to chunked processing."
+        )
+        return _detect_chunked(
+            script_text, segments, source_duration, pause_threshold,
+            llm_model, max_context_tokens,
+        )
 
 
 # ── Persistence ───────────────────────────────────────────────────────────────

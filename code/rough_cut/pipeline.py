@@ -28,6 +28,7 @@ OUTPUT_DIR  = "/Users/jphwang/code/agent-sandboxes/video-producer/projects/right
 WHISPER_MODEL    = "large-v3"   # "base" is ~10x faster; "large-v3" is most accurate
 PAUSE_THRESHOLD  = 2.0          # seconds; silences longer than this become cut points
 LLM_MODEL        = "llm-gateway/gpt-5.4-mini"    # any model name your OpenAI / LiteLLM proxy accepts
+MAX_CONTEXT_TOKENS = 80_000     # if prompt exceeds this, split into chunks automatically
 
 SKIP_TRANSCRIBE  = False        # True → reuse existing transcript.json
 SKIP_DETECT      = False        # True → reuse existing edit_plan.json
@@ -89,6 +90,7 @@ def main() -> None:
     print(f"  Whisper model    : {WHISPER_MODEL}")
     print(f"  Pause threshold  : {PAUSE_THRESHOLD}s")
     print(f"  LLM model        : {LLM_MODEL}")
+    print(f"  Max context tkns : {MAX_CONTEXT_TOKENS:,}")
     print(f"  Skip transcribe  : {SKIP_TRANSCRIBE}")
     print(f"  Skip detect      : {SKIP_DETECT}")
 
@@ -147,6 +149,7 @@ def main() -> None:
             source_duration=source_duration,
             pause_threshold=PAUSE_THRESHOLD,
             llm_model=LLM_MODEL,
+            max_context_tokens=MAX_CONTEXT_TOKENS,
         )
         save_edit_plan(plan, OUTPUT_DIR)
 
