@@ -464,3 +464,10 @@ All briefs follow semantics-only convention (no styling prescriptions). Each ref
 - Created `sources/lwt-transcripts-s12-s13.md`
 - Updated `wiki/writing-for-the-ear.md` — added "Primary Source Analysis" intro, full "Structural Devices" section (8 devices with developer-content examples), asymmetric rhythm note, and "Comparing to Our Scripts" gap analysis table
 - Updated `index.md`
+
+## 2026-07-03 — Trimmed "For developer advocacy" sections in writing-for-the-ear
+
+Reviewed `wiki/writing-for-the-ear.md` and trimmed the "For developer advocacy" paragraphs in the Structural Devices section. The LWT analysis is strong but the application paragraphs were over-explaining the obvious — each one restated the device in different words before giving an example. Cut the explanatory framing and kept just the examples with light "E.g." leads. The examples serve as quick templates; the analysis speaks for itself.
+
+**Updates:**
+- Edited `wiki/writing-for-the-ear.md` — trimmed 9 "For developer advocacy" blocks down to example-only

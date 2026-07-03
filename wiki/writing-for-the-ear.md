@@ -39,7 +39,7 @@ These are higher-order moves — they operate at the paragraph and section level
 
 Oliver almost never transitions silently. He explicitly names what's coming next: *"So given that, tonight, let's talk about DHS. And let's start with its origins."* Every major transition is spoken. The equivalent of a slide heading is a sentence.
 
-For developer advocacy video: don't assume a cut or a new section header carries the audience across. Say it. *"So that's the model side. Let's look at what happens when you actually store and search those vectors."* The spoken announcement is the transition.
+In practice: *"So that's the model side. Let's look at what happens when you actually store and search those vectors."*
 
 ### Callbacks and running threads
 
@@ -47,7 +47,7 @@ Oliver introduces a detail early — often as a throwaway — then returns to it
 
 Callbacks do something structural: they give the viewer the feeling that an author is in control, that the piece has hidden architecture. Long-form videos that just march linearly through topics feel like lectures. Videos with callbacks feel like essays.
 
-For developer advocacy: a callback doesn't require comedy. *"Remember Cora from the intro — the engineer who checked recall and went home happy? This is the moment her choice starts mattering."* Returning to an established character or example is a callback. It creates continuity and rewards the audience for paying attention.
+E.g. *"Remember Cora from the intro — the engineer who checked recall and went home happy? This is the moment her choice starts mattering."*
 
 ### Reaction narration — naming the processing moment
 
@@ -57,13 +57,13 @@ After presenting a fact, quote, or clip, Oliver routinely narrates the emotional
 2. They **model** the correct response — they validate the audience's reaction without forcing it.
 3. They **establish judgment** — they signal that the speaker is evaluating, not just reporting.
 
-For developer advocacy: *"And that actually surprised me when I first saw it."* / *"That's the part that took me longest to internalize."* / *"Which means Samantha's getting nearly all of Cora's quality at half the storage cost. That's the whole game."* The processing beat doesn't have to be funny. It just has to be present.
+E.g. *"And that actually surprised me when I first saw it."* / *"That's the part that took me longest to internalize."* / *"Which means Samantha's getting nearly all of Cora's quality at half the storage cost. That's the whole game."*
 
 ### Escalating triplets
 
 Oliver's lists of three are never flat parallel structures. The third item is always more absurd, more specific, or more surprising than the first two: *"Anti-ICE sentiment has spread from Pop-Tart the cat, who posted a video with 'Fuck ICE' on it, to the subreddit 'Massive Cock,' where users captioned dick pics... to an AEW match in Vegas."* The escalation in specificity creates rhythm AND delivers a surprise at the position where the audience expects resolution.
 
-For developer advocacy: even technical lists benefit from escalating specificity. Don't just list three options — make the third one the most vivid or the most unexpected. *"You can tune the number of candidates, the quantization level, or — if you're really trying to squeeze performance — the actual dimensionality of the vectors themselves."* The third item earns more attention.
+E.g. *"You can tune the number of candidates, the quantization level, or — if you're really trying to squeeze performance — the actual dimensionality of the vectors themselves."*
 
 ### Conversational navigation markers
 
@@ -71,31 +71,31 @@ For developer advocacy: even technical lists benefit from escalating specificity
 
 These are oral GPS signals. They tell the listener that a register shift is coming, that an important claim is next, or that the speaker is about to step back from the argument for a moment. They are not filler — they are pacing and signaling mechanisms. Without them, spoken content feels like a wall of equally-weighted information.
 
-For developer advocacy, the natural equivalents: *"And here's the thing that changes everything," "Now — and this matters — ," "But let's be honest about the tradeoff here," "Which brings us to the part that actually surprised me."* These don't require comedy. They require awareness that the listener needs orientation at regular intervals.
+E.g. *"And here's the thing that changes everything," "Now — and this matters — ," "But let's be honest about the tradeoff here," "Which brings us to the part that actually surprised me."*
 
 ### Specificity as the punchline
 
 *"Fancy press conference clothes for uncharismatic business Shreks."* The extreme specificity of the description IS the joke. A generic analogy doesn't land. The more precisely ridiculous the comparison, the more memorable.
 
-For developer advocacy: don't stop at the generic analogy. Oliver uses a very specific construction in the Medicare Advantage episode — *"It's like buying a flight that leaves at 6 AM to save money. Oh sure, seems like a good idea until you're at the airport at 4 AM... and can't check into your hotel for another five hours. Aren't you glad you saved $35?"* Vivid specificity in technical analogies works the same way — the detail is what makes the comparison land, not the structure of it.
+Oliver's Medicare Advantage analogy shows the pattern: *"It's like buying a flight that leaves at 6 AM to save money. Oh sure, seems like a good idea until you're at the airport at 4 AM... and can't check into your hotel for another five hours. Aren't you glad you saved $35?"* The detail is what makes the comparison land, not the structure of it.
 
 ### Concrete comparisons for numbers and abstractions
 
 Oliver almost never lets a large number or an abstraction stand alone: *"If ICE was a military, it would be the 17th richest in the world — worth about the same as Canada's entire armed forces."* Big numbers are meaningless in audio without an anchor. This goes further than rounding — it finds a comparison that itself carries weight.
 
-For developer advocacy: *"At 600 million parameters, it's small enough to run on a single GPU — the kind you're already paying for."* / *"Matryoshka lets you cut that storage in half. In a real deployment, that's the difference between a $400/month cluster and an $800 one."* The comparison does the cognitive work for the viewer; the abstract number alone doesn't.
+E.g. *"At 600 million parameters, it's small enough to run on a single GPU — the kind you're already paying for."* / *"Matryoshka lets you cut that storage in half. In a real deployment, that's the difference between a $400/month cluster and an $800 one."*
 
 ### Self-interruption as a rhythm device
 
 Oliver frequently interrupts himself to voice his own reaction to something he just said or heard: *"Wait, what?"* / *"Really? Well, first and least importantly: you're standing."* This creates a spoken aside that both delivers a beat and explicitly models the audience's confusion or surprise.
 
-For developer advocacy, the non-comedy version: *"Hold on — let's sit with that for a second."* / *"And I do mean that literally."* / *"Which, if you've been following along, you'll recognize as the opposite of what Ben's doing."* The self-interruption creates a pause for emphasis without requiring a [PAUSE] marker — the words themselves slow the reader down.
+E.g. *"Hold on — let's sit with that for a second."* / *"And I do mean that literally."* / *"Which, if you've been following along, you'll recognize as the opposite of what Ben's doing."*
 
 ### Permission and credibility framing
 
 *"And I don't say this lightly."* / *"For the record."* / *"To be clear."* These phrases establish that the speaker has evaluated the claim seriously. They frame extraordinary statements so the audience doesn't experience them as casual or hyperbolic.
 
-For developer advocacy: *"And I want to be honest about this tradeoff — it's not obvious which choice is better."* / *"To be clear: this isn't a flaw in the design. It's an intentional choice."* These phrases tell the viewer the speaker knows the difference between a strong claim and a casual one.
+E.g. *"And I want to be honest about this tradeoff — it's not obvious which choice is better."* / *"To be clear: this isn't a flaw in the design. It's an intentional choice."*
 
 ## Core Rules
 
