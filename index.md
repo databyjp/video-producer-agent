@@ -18,6 +18,7 @@ Master catalog of all pages in this knowledge bundle.
 - [Konabayev — YouTube SEO Tools 2026](sources/konabayev-youtube-seo-tools.md) — Vendor-neutral tool comparison with pricing and honest limitations
 - [AIR Media Tech — YouTube Title Study](sources/air-media-tech-youtube-title-study.md) — 18,080-channel data study on title patterns across 11 niches
 - [Hooksnap — Viral Thumbnail Data Study 2026](sources/hooksnap-viral-thumbnail-data-study.md) — Data-backed thumbnail CTR analysis including faces, colors, text, composition
+- [Last Week Tonight Transcripts S12–S13](sources/lwt-transcripts-s12-s13.md) — Five full LWT episodes studied as primary source evidence of professional ear-writing craft
 
 ## Raw Assets
 

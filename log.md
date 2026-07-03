@@ -453,3 +453,14 @@ All briefs follow semantics-only convention (no styling prescriptions). Each ref
 - `projects/0-ideas/202607-video-search-tutorial/outline.md` — Phase 1 structural outline (11 sections + visual assets needed table)
 
 **Notes:** Four new diagrams needed (video-search-approaches, per-scene-dual-embedding, omnimodal-ingestion, search-pipeline). Three diagrams already exist in `figs/` (architecture, codebase-overview, local-vs-production). Script v4 had review notes calling out missing tension and personality beats — outline preserves the structural gaps those notes identified (wrong-path beats before decisions, dedup wrinkle, production urgency) so the scriptwriter can add stakes in Phase 2.
+
+## 2026-07-03 — LWT transcript analysis: primary source study of ear-writing craft
+
+**Action:** Fetched and studied five full *Last Week Tonight* transcripts (S12 E23, E27, E30; S13 E1, E2) from scrapsfromtheloft.com. Compared structural devices in Oliver's writing against past JP scripts (202607-right-index-options, 202606-visual-plan-mode) to identify specific gaps.
+
+**Key finding:** LWT's ear-writing craft is primarily structural (paragraph/section level), not just sentence-level. Our scripts handle sentences reasonably well but are missing: the Bracket Move (spoken structural announcements), callbacks, reaction narration, escalating triplets, and conversational navigation markers.
+
+**Updates:**
+- Created `sources/lwt-transcripts-s12-s13.md`
+- Updated `wiki/writing-for-the-ear.md` — added "Primary Source Analysis" intro, full "Structural Devices" section (8 devices with developer-content examples), asymmetric rhythm note, and "Comparing to Our Scripts" gap analysis table
+- Updated `index.md`
