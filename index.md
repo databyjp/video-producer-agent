@@ -8,6 +8,7 @@ Master catalog of all pages in this knowledge bundle.
 
 ## Sources
 
+- [Natural Scripted Delivery — Research Report](sources/natural-scripted-delivery-research.md) — Late-night TV writing pipeline, teleprompter technique, and solo creator takeaways
 - [IBM Technology — Martin Keen Interview](sources/ibm-technology-martin-keen-interview.md) — Audience-first YouTube strategy, 1M+ subscribers
 - [YouTube Based DevRel — Greg Baugues](sources/greg-baugues-youtube-devrel-talk.md) — Growing a personal dev YouTube channel, packaging, respecting viewer time
 - [Clerk YouTube Creator Program](sources/clerk-youtube-creator-program.md) — From failed brand videos to 30% sign-up increase via organic integration
@@ -30,10 +31,12 @@ Master catalog of all pages in this knowledge bundle.
 - [Script Structure Patterns](wiki/script-structure-patterns.md) — Hooks, sections, CTAs, pacing archetypes
 - [Visual Direction Conventions](wiki/visual-direction-conventions.md) — Square-bracket notation for popups, b-roll, overlays, demos
 - [YouTube SEO Fundamentals](wiki/youtube-seo-fundamentals.md) — How the algorithm works, ranking factor tiers, what matters for developer content
+- [Writing for the Ear](wiki/writing-for-the-ear.md) — Why scripts need to be written differently for speech: the Delivery Gap, structure-first pipeline, sentence-level rules, formatting conventions
 
 ### Playbooks
 
 - [Developer Video Production Guidelines](wiki/developer-video-production-guidelines.md) — Principles for effective developer-facing videos (viewer-first, quality, packaging, honesty)
+- [Blog + Video Companion Strategy](wiki/blog-video-companion-strategy.md) — Best practices for cross-posting a blog alongside a YouTube video: timing, format, SEO mechanics
 
 ### Topics
 
@@ -41,7 +44,11 @@ Master catalog of all pages in this knowledge bundle.
 
 ### How-Tos
 
-- [Rough Cut Pipeline](wiki/rough-cut-pipeline.md) — Automated video → FCPXML pipeline using Whisper + LLM retake detection
+`wiki/howto/` for task-oriented workflow guides; other how-to pages currently in `wiki/` root.
+
+- [Script Writing Process](wiki/howto/script-writing-process.md) — End-to-end workflow from blank page to speakable draft (5-phase process)
+- [On-Camera Delivery](wiki/howto/on-camera-delivery.md) — Rehearsal workflow, teleprompter setup and technique, delivery habits for natural on-camera presence
+- [Rough Cut Pipeline](wiki/howto/rough-cut-pipeline.md) — Automated video → FCPXML pipeline using Whisper + LLM retake detection
 - [YouTube Title Optimization](wiki/youtube-title-optimization.md) — Data-driven title patterns, formulas, and testing for developer content
 - [YouTube Thumbnail Design](wiki/youtube-thumbnail-design.md) — Design rules, CTR benchmarks, A/B testing, developer-specific guidance
 - [YouTube Description and Metadata](wiki/youtube-description-metadata.md) — Descriptions, tags, chapters, captions, end screens

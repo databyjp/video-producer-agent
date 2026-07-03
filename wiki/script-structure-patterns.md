@@ -77,4 +77,4 @@ Most videos follow this arc:
 - Some include the actual prompts used in demos (visual plan mode).
 - Scripts reference sources at the bottom with URLs.
 
-See also: [Script Voice and Style](script-voice-and-style.md), [Visual Direction Conventions](visual-direction-conventions.md)
+See also: [Script Voice and Style](script-voice-and-style.md), [Visual Direction Conventions](visual-direction-conventions.md), [Writing for the Ear](writing-for-the-ear.md)

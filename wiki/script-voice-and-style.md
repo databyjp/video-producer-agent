@@ -48,4 +48,4 @@ Patterns extracted from [past videos](past-videos-catalog.md). Use these to main
 - Dry, monotone sections — even benchmark walkthroughs get framed as a story ("the picture is consistent").
 - Overpromising — limitations and tradeoffs always get their own section.
 
-See also: [Script Structure Patterns](script-structure-patterns.md), [Visual Direction Conventions](visual-direction-conventions.md)
+See also: [Script Structure Patterns](script-structure-patterns.md), [Visual Direction Conventions](visual-direction-conventions.md), [Writing for the Ear](writing-for-the-ear.md), [On-Camera Delivery](howto/on-camera-delivery.md)

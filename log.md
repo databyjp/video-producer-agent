@@ -371,3 +371,62 @@ All briefs follow semantics-only convention (no styling prescriptions). Each ref
 - Brief status: outline-complete → script-draft; Ben's description updated to mention Jina v3 specifically
 
 **Rationale:** Script had evolved during drafting with deliberate persona choice changes. Outline and brief were stale, creating confusion about canonical values.
+
+
+---
+
+## 2026-07-03 — Added script writing process how-to; reorganised wiki structure
+
+**Action:** Created `wiki/howto/` subdirectory for task-oriented workflow guides (Diátaxis how-to type), distinct from concept/explanation pages in `wiki/` root. Created script writing process page. Fixed `writing-for-the-ear.md` type classification.
+
+**Pages created:**
+- `wiki/howto/script-writing-process.md` — 5-phase workflow: structure-only → speak a first draft → perform and revise → mechanics pass → pre-record ritual. Grounded in LWT/Oliver, Daily Show/Parang, Teleprompter.com, journalism.university sources.
+
+**Pages updated:**
+- `wiki/writing-for-the-ear.md` — type corrected from `How-To` to `Concept` (it explains principles, not a workflow)
+- `index.md` — Writing for the Ear moved to Concepts; Script Writing Process added to How-Tos; note added about `wiki/howto/` subdir
+
+**Note:** `wiki/howto/` is a natural future home for other task-oriented pages currently in `wiki/` root (on-camera-delivery, rough-cut-pipeline, youtube how-tos) if a fuller Diátaxis reorganisation is wanted later.
+
+## 2026-07-03 — Research: Natural scripted delivery
+
+**Task:** Review an AI-generated research brief on natural scripted delivery (late-night TV writing pipeline + teleprompter technique), verify primary sources, and update the wiki with a script writing guide and speaker tips.
+
+**Primary sources fetched and verified:**
+- Teleprompter.com — [How to Read a Teleprompter Naturally](https://www.teleprompter.com/blog/how-to-read-a-teleprompter-naturally-and-engage-your-audience) — step-by-step delivery workflow, eye-lead technique, scroll calibration, muted playback review
+- WGA East — [Zhubin Parang interview](https://www.wgaeast.org/onwriting/zhubin-parang-the-daily-show-with-trevor-noah/) — The Daily Show head writer (Trevor Noah era): daily schedule, bunker rewrite process, "joke is supreme but clarity wins"
+- NBCU Academy — [How to Use a Teleprompter](https://nbcuacademy.com/read-teleprompter/) — first-person tips from NBC/MSNBC anchors: read ahead, slow down, edit into your voice, treat it as conversation
+- Journalism University — [Writing for the Ear](https://journalism.university/audio-podcast/writing-scriptwriting-tips-audio-presentation/) — broadcast journalism rules: one idea per sentence, active voice, aural pitfalls, script formatting conventions
+
+**Key findings:**
+- LWT uses a structure-first pipeline: joke-free narrative outline → comedy injection in second pass. Same principle applies to dev advocacy: argument first, personality second.
+- Naturalness comes from the compound of: words written for the ear, personal ownership of the material, professional teleprompter technique, and post-production as safety net.
+- Eye-lead (reading one line ahead of your voice) is the single most important teleprompter skill — takes 3–4 sessions to click.
+- "Don't stop at periods" and "slow down more than you think" are the two most cited delivery habits from broadcast practitioners.
+- Short-segment recording is not a workaround — it's the professional approach for pre-taped content.
+
+**Pages created:**
+- `sources/natural-scripted-delivery-research.md` — Source summary with all references and quality notes
+- `wiki/writing-for-the-ear.md` — Script drafting guide: Delivery Gap, structure-first pipeline, core sentence-level rules, formatting conventions, read-aloud test, aural pitfalls
+- `wiki/on-camera-delivery.md` — Speaker tips: Three-Read Method, teleprompter setup, eye-lead technique, delivery variation (pace/pitch/emphasis), muted playback review, short-segment recording, long-term presence building
+
+**Existing pages updated:**
+- `wiki/script-voice-and-style.md` — Added cross-references to writing-for-the-ear and on-camera-delivery
+- `wiki/script-structure-patterns.md` — Added cross-reference to writing-for-the-ear
+
+**Index updated** with new source summary and two new How-To pages.
+
+## 2026-07-02 — Research: Blog + Video companion strategy
+
+**Task:** Research best practices for cross-posting a blog post alongside a YouTube video — timing, format, and whether it makes a meaningful difference.
+
+**Research sources:** Authority Specialist (YouTube SEO + Companion Content Stack), Nadia Mohamed/Humble&Brag (YouTube SEO + AI citations), BlogSEO (video-to-blog workflow), EarnifyHub (dual blog+YouTube strategy), VidNo (developer content repurposing timing), multiple additional cross-posting and content scaling sources.
+
+**Key findings:**
+- Combination is multiplicative, not just additive — blog drives external referral traffic to YouTube that influences algorithmic distribution; YouTube drives engaged traffic to blog that improves time-on-page and Google ranking signals.
+- The 48-Hour Velocity Window: YouTube makes its provisional distribution decision in days 1–2 based on early velocity. Blog must publish same day as video to contribute referral traffic in this window.
+- AI citation is the strongest argument: Claude has no YouTube access; ChatGPT reads transcripts/descriptions only; Perplexity crawls text; only Gemini can watch. Without a text companion, content is invisible to most of the AI ecosystem.
+- Format: not a raw transcript. Add code blocks, tables, screenshots, links — what video can't do. Embed video above the fold. Use question-based H2s and answer-first structure for AI readability.
+- Same keyword, different optimization: keyword in H1/first 100 words for blog; keyword spoken in first 30 seconds and in title for YouTube.
+
+**Wiki added:** [Blog + Video Companion Strategy](wiki/blog-video-companion-strategy.md)
