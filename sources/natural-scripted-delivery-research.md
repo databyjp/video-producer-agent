@@ -34,7 +34,7 @@ Research into the end-to-end pipeline — writing → rehearsal → teleprompter
 - 9:15am morning meeting → 10am writer assignments → 11:30am first draft review → 2pm rehearsal draft locked → 4pm rehearsal → post-rehearsal bunker rewrite → 6pm tape.
 - After rehearsal, head writer Zhubin Parang and a small team project the script on a wall and blast through what worked and what didn't — rewriting jokes with ~90 minutes to taping.
 
-**Core editorial principle (Parang):** *"It's more important for it to be clear and funny than to muddle things up."* Clarity beats a good-but-confusing joke. Always.
+**Core editorial principle (Parang):** *"It's more important for it to be clear and funny than to muddle things up with a bunch of jokes that might not go together well."* Clarity beats a good-but-confusing joke. Always.
 
 By taping, hosts are delivering words they've personally shaped and revised. That's a big part of why it sounds natural — the words feel like theirs because they essentially are.
 

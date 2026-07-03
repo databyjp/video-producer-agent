@@ -430,3 +430,26 @@ All briefs follow semantics-only convention (no styling prescriptions). Each ref
 - Same keyword, different optimization: keyword in H1/first 100 words for blog; keyword spoken in first 30 seconds and in title for YouTube.
 
 **Wiki added:** [Blog + Video Companion Strategy](wiki/blog-video-companion-strategy.md)
+
+## 2026-07-03 — Phase 1 outline: video search tutorial
+
+**Action:** Reviewed all project files for `202607-video-search-tutorial`, researched the Jina v5-omni model (GELATO architecture, audio modality gap, shared vector space), and produced a Phase 1 structural outline.
+
+**Research sources:**
+- Elastic DevRel Wiki: `wiki/vector-search.md`, `wiki/search-approaches.md`, `wiki/vector-search-howto.md`
+- Jina v5-omni blog post (elastic.co/search-labs)
+- GELATO paper (arxiv 2605.08384)
+- jina-embeddings-v5-omni-small and -nano Hugging Face model pages
+
+**Key research findings:**
+- Audio path in jina-v5-omni is weaker than visual path for speech retrieval (audio modality gap > visual modality gap per Table 3 in paper) — this is the technical justification for the dual-embedding strategy
+- Model extracts 32 evenly-spaced frames from any video — long videos need chunking before embedding
+- Text embeddings are bit-identical to jina-v5-text — shared vector space is guaranteed, not approximate
+- Both omni-small and omni-nano available on Elastic Inference Service (EIS)
+
+**Files reviewed:** `idea-yt-video.md`, `scratch-pad/outline-proposals.md`, `scratch-pad/framing-recommendation.md`, `scratch-pad/content-form.md`, `scratch-pad/title-thumbnail.md`, `script-yt-video.md` through `script-yt-video-v4.md`
+
+**Deliverable:**
+- `projects/0-ideas/202607-video-search-tutorial/outline.md` — Phase 1 structural outline (11 sections + visual assets needed table)
+
+**Notes:** Four new diagrams needed (video-search-approaches, per-scene-dual-embedding, omnimodal-ingestion, search-pipeline). Three diagrams already exist in `figs/` (architecture, codebase-overview, local-vs-production). Script v4 had review notes calling out missing tension and personality beats — outline preserves the structural gaps those notes identified (wrong-path beats before decisions, dedup wrinkle, production urgency) so the scriptwriter can add stakes in Phase 2.

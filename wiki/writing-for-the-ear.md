@@ -21,7 +21,7 @@ The *Last Week Tonight* approach:
 1. **Structure first** — write the narrative or argument without worrying about jokes, wit, or energy. What is the story? What does the viewer need to understand, and in what order? Get that right before adding any personality.
 2. **Inject personality second** — once the structure is solid, go back through and add humor, analogies, emphasis, and voice. Jokes or vivid examples that don't serve the argument are easy to cut because the structure exists independently.
 
-*The Daily Show*'s head writer Zhubin Parang put the editorial principle plainly: *"It's more important for it to be clear and funny than to muddle things up with a bunch of jokes that don't go together well."* Clarity wins. Energy serves clarity, not the other way around.
+*The Daily Show*'s head writer Zhubin Parang put the editorial principle plainly: *"It's more important for it to be clear and funny than to muddle things up with a bunch of jokes that might not go together well."* Clarity wins. Energy serves clarity, not the other way around.
 
 For developer advocacy video, this maps directly: nail the technical argument and the viewer's journey through it first. Then inject the analogies, the humor, and the relatable moments. A joke that obscures the technical point gets cut — it would have with LWT too.
 
