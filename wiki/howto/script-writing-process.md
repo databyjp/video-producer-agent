@@ -18,7 +18,7 @@ The through-line: **the script is a draft until it's been spoken**.
 
 Write the argument or narrative without touching language or voice. What does the viewer need to understand, and in what order? Lock this before anything else.
 
-No jokes, no analogies, no personality yet. Those come later and are easier to add once the structure exists independently.
+No jokes, analogies, or personality. Those come later.
 
 *Source: LWT model — the joke-free outline forces you to solve the structural problem and the voice problem separately, rather than both at once.*
 
