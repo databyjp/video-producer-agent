@@ -1,219 +1,254 @@
----
-type: Outline
-title: Build a Video Search App in Python + Elasticsearch
-description: Phase 1 structural outline — argument and narrative sequence only, no language or voice
-status: draft
-project: 202607-video-search-tutorial
-timestamp: 2026-07-03T00:00:00Z
----
+Argument or narrative only. What does the viewer need to understand, and in what order? 
 
-# Outline: Build a Video Search App in Python + Elasticsearch
+==========
 
-**Phase 1 — structure only.** What the viewer needs to understand, and in what order. No language, no voice, no personality. Lock this before scripting.
+- Show a video search example, the goal is novelty and appealing (aspirational) to the viewer. Elicit reaction “wow, video search is cool - how did they do that?”
+- Briefly explain how previous solutions for searching videos come up short. Establish a need in the viewers minds for the new solution, and confirm that what they are learning is different. 
+- Architecture outline, and omni model intro; establish the key decisions: set the scene for the user. This will anchor the viewer for the rest of the video. 
+- Step 1: Chunking videos - why it’s needed, decisions, and how to do it
+- Step 2: What to embed, exactly: - video? audio? transcript? How to go about deciding, and how to do it. 
+- Side note: RAG with video. Learn that it’s not straightforward, because models can’t take video input. Briefly describe options and guidelines on how to choose. Learn about my choice. 
+- Recap of full search app architecture. See the codebase in context of the knowledge. See more demos and learn how to copy and run the repo for yourself. Learn also about elastic cloud options that would make life easier. 
 
-See: [Script Writing Process](../../../wiki/howto/script-writing-process.md)
 
----
 
-## Section 1 — Demo (cold open)
 
-**Structural purpose:** Establish immediately that this is worth watching. The viewer should see the payoff before any explanation. Two queries are needed, not one: a query that matches on visual content (no transcript would contain the answer), and a query that matches on spoken content. Both should succeed. The contrast is the point.
 
-**What the viewer needs to understand:** This app takes a natural language text query and returns the correct video scene — including scenes where the match is purely visual. It runs locally.
 
-**Queries to show:**
-- A visual match: something on screen that no transcript would capture — e.g. "Jen holding a Kindle" or a prop/background detail
-- A spoken match: something said aloud that isn't visually distinctive — e.g. "how BM25 works"
 
-[screen recording — app on screen, face cam; run both queries; show results with timestamps and modality badges]
+
+
+# Video Outline — Build a Video Search App in Python + Elasticsearch
+
+**Status:** First draft — decisions pending (see inline 🔷 markers)
+**Repo:** https://github.com/databyjp/video-search-elastic-jina-demo
+**Format:** Pre-recorded tutorial, polished
 
 ---
 
-## Section 2 — The problem with video search
-
-**Structural purpose:** Establish the gap. The viewer needs to understand why naive approaches fall short before the architecture makes sense. Two existing approaches, both incomplete.
-
-**What the viewer needs to understand:**
-
-1. Video is not searchable by default — there is no `grep` for video.
-2. The standard fix is metadata (title, description, tags). This finds what a video is *about*, but only if someone manually labeled it. It misses anything on screen that wasn't tagged.
-3. The more modern fix is transcript search (Whisper). This finds what was *said* — accurate, useful, but structurally blind to visual content. A video of someone silently demonstrating a tool, or a conference talk where the slides are the content, is invisible to transcript search.
-4. The gap: nothing in either approach captures what appears visually on screen.
-
-[diagram: 202607-video-search-approaches.svg — three-column approach diagram, progressive reveal: metadata → transcript → omnimodal]
+> 🔷 **DECISION 0 — Title**
+>
+> Two options are on the table:
+> - **A:** *"Build a Video Search App in Python + Elasticsearch"* — leads with the developer action, "build" + "video search" + "Python" are the exact search terms. Clear tutorial signal.
+> - **B:** *"Search Any Video with Text — Python + Elasticsearch"* — leads with the capability ("wait, you can do that?"), stronger hook energy, slightly weaker on keyword density.
+>
+> Option A is the safer bet for evergreen search traffic. Option B has more scroll-stop energy and could A/B well. **Which do you prefer, or would you want to test both?**
 
 ---
 
-## Section 3 — The enabling insight: shared embedding space
+## Section 1 — Cold Open: Demo
 
-**Structural purpose:** Introduce the one model fact with architectural consequences. Keep this tight — it is setup for the architecture, not the main content. A pointer to the deep-dive model video is sufficient for viewers who want more.
+*No setup, no intro. App is already on screen. Speak a query.*
 
-**What the viewer needs to understand:**
+[screen recording — the search app, full screen]
 
-1. The jina-v5-omni model (from Jina AI, now part of Elastic) can embed text, images, video, and audio using a single shared vector space — the GELATO architecture.
-2. Because all modalities map into the same space, cosine similarity scores are directly comparable across modalities. A text query and a video clip, embedded independently, can be scored against each other.
-3. This makes cross-modal search possible with a standard kNN query — no special multi-index machinery required.
-4. Two sizes available: `omni-small` (higher quality) and `omni-nano` (smaller, faster, enough for many use cases). Both run locally; both available on Elastic Inference Service.
+Speak: *"Find the video where Jen is holding a Kindle."*
 
-[popup/overlay: "jina-v5-omni — text, image, video, audio → one shared vector space"]
+Wait for result. Let it land. Maybe a beat of silence.
 
-*Do not dwell here. One slide's worth of explanation, then move to architecture.*
+*"How easy was that?"*
 
----
+Brief orientation: this is running locally — Jina's open-weight model, Elasticsearch. By the end, you'll understand the architecture, know the key decisions, and have the full code. Let's get into it.
 
-## Section 4 — Architecture overview
-
-**Structural purpose:** Give the viewer the full picture before any deep-dive. They need a mental model to hang the decisions on.
-
-**What the viewer needs to understand:**
-
-The system has three stages:
-
-1. **Ingest**: Take videos → detect scenes → for each scene, produce two documents and index both into Elasticsearch
-2. **Index**: One Elasticsearch index; each document has a `dense_vector` field plus metadata (video_id, scene_index, timestamps, modality label, transcript text)
-3. **Search**: Embed the query as text → one kNN query against the index → deduplicate by scene → return results with timestamps and playable clips
-
-The key structural choice — two documents per scene — is what makes both the visual and speech retrieval paths work from a single search query. This is the load-bearing architectural decision.
-
-[diagram: 202607-omnimodal-architecture.svg]
+[facecam visible, comfortable, not performative]
 
 ---
 
-## Section 5 — Decision 1: How to chunk video
+## Section 2 — The Problem with Video Search
 
-**Structural purpose:** Explain why the chunking strategy matters and why scene detection is the right choice for this content type. Acknowledge that a different content type (e.g. meetings) might call for a different approach.
+*Set up the need before going to the solution. Keep this tight.*
 
-**What the viewer needs to understand:**
+[b-roll — conference talks, product demo recordings, meeting footage]
 
-1. The jina-v5-omni model samples up to 32 frames evenly from any video input. A 30-minute video → one frame per ~56 seconds. Long videos produce coarse, unreliable embeddings.
-2. You need to chunk. Two approaches:
-   - **Fixed-length time windows** (e.g. every 30 seconds): simple, but results start and end at arbitrary points, often mid-sentence or mid-action.
-   - **Scene detection** (PySceneDetect ContentDetector): splits at visual transitions — cuts, slide changes, camera angle changes. Produces semantically coherent chunks that make sense as standalone results.
-3. Scene detection is the right choice for talks, demos, tutorials — content where the visual state changes discretely.
-4. Sub-second scenes (flash cuts, transitions) are filtered out — they are noise, not content.
-5. The right chunking strategy depends on content type: meeting recordings with static shots might use topic-based transcript segmentation instead.
+Most people assume the world is cat videos. But think about your org's knowledge: recorded meetings, internal demos, conference talks, tutorial recordings. All of it is theoretically searchable. None of it practically is.
 
-[screen recording — video.py, `find_scenes` function; show example scene boundaries on a sample video clip]
+[diagram: progressive reveal — three approaches side by side]
+`[show 202607-video-search-approaches.svg — reveal one row at a time]`
 
----
+- **Metadata search** — title and description go into Elasticsearch, you keyword-search them. Works if someone remembered to write good metadata.
+- **Transcript search** — Whisper extracts what was *said*, you embed and search that. A real step forward.
+- **The gap** — both of these find what a video is *about* or what was *said*. Neither finds what was *shown*.
 
-## Section 6 — Decision 2: Two embeddings per scene
+That gap is the problem. Someone searching *"presenter holding a Kindle"* has no hope with either of those approaches — unless someone wrote "presenter holds Kindle" in the description.
 
-**Structural purpose:** Explain why the fused embedding alone is not enough, and why the Whisper + text path fills the gap. This is the decision that is least obvious and most important to explain.
-
-**What the viewer needs to understand:**
-
-1. For each scene, the model is given the video clip and its audio track together — this produces a **fused embedding** that captures both visual content and non-verbal audio. The model watches and listens directly. No text intermediary.
-2. However, the audio path in jina-v5-omni is weaker for speech specifically. The model benchmarks confirm this: the audio modality gap (how well audio embeddings align with text) is larger than the visual modality gap. Whisper-transcribed speech re-embedded as text retrieves spoken content more reliably than the raw audio path.
-3. So each scene gets a **second document**: Whisper transcribes the scene's audio → the transcript text is embedded → stored as a separate document, tagged with the same `video_id` and `scene_index`.
-4. Both documents live in the same index. When a query matches spoken content, the transcript document wins. When a query matches visual content, the fused document wins. The viewer doesn't choose — the kNN search finds whichever is closer.
-5. The alternative of splitting further — separate visual, audio, and transcript vectors — adds retrieval pipeline complexity without proportional benefit. The alternative of combining everything into one vector muddles the signals: what is shown and what is said in a video are often unrelated.
-
-[diagram: 202607-per-scene-dual-embedding.svg — one scene → fused doc + transcript doc → same ES index]
-[screen recording — embedding.py (model loading); es.py `index_videos` function (the two-document indexing loop)]
+> 🔷 **DECISION 1 — Demo placement**
+>
+> The v4 script includes a "more searches" beat here (§2A), before the architecture section — showing the batman background, etc. This breaks the narrative flow slightly but gives viewers a second chance to hook before the more technical material.
+>
+> **Option A:** Do the additional searches here (Jen + batman examples), then go into architecture.
+> **Option B:** Save all the "wow" demos for Section 5 (the second demo round), keeping Section 2 pure problem-framing and moving faster to the architecture.
+>
+> My lean: **Option B** — one demo is enough to hook, and the second demo hits harder after the explanation.
 
 ---
 
-## Section 7 — Decision 3: Search and deduplication
+## Section 3 — Architecture Overview
 
-**Structural purpose:** Show that the search layer is surprisingly simple — one kNN query — and explain the one wrinkle (deduplication).
+*The punchline first, then the explanation.*
 
-**What the viewer needs to understand:**
+[show `202607-omnimodal-architecture.svg`]
 
-1. Because all documents are in the same shared vector space, a single kNN query against the entire index finds the best matches regardless of which modality they came from. The query text is embedded and compared against both fused documents and transcript documents in the same search pass.
-2. No weighted combination, no multi-query merging, no RRF needed. One query, one result set.
-3. The wrinkle: each scene produced two documents. A kNN query can return both the fused doc and the transcript doc for the same scene — the viewer would see the same moment listed twice.
-4. Fix: deduplicate results by `(video_id, scene_index)` in the client, keeping whichever document scored highest. Three lines of code. Important for UX; invisible if done correctly.
-5. Optional extensions: add a `filter` on the `modality` field to search only the fused or transcript path; build a hybrid search that explicitly combines both; add metadata filters (e.g. only search a specific video, or only the first N minutes).
+Simpler than you'd expect: take videos, split them into scenes, create two embeddings per scene, put everything in one Elasticsearch index, search with kNN.
 
-[screen recording — app.py `_search_hits` function; kNN query + dedup logic visible]
+The key insight is those two embedding paths — and why you need both.
 
----
+**Path 1: Fused embedding** — video frames + audio fed together into Jina's v5-omni model. When I searched for "Jen holding a Kindle," the model *saw* Jen holding a Kindle. No transcript. No description. The model watched the video.
 
-## Section 8 — Code tour
+**Path 2: Transcript embedding** — Whisper transcribes the speech, that text gets embedded. A search for "how BM25 scoring works" finds a scene where someone *explains* it — because the fused path would pick up background visuals, not the explanation.
 
-**Structural purpose:** Give the viewer a map of the repo so they can navigate it themselves. Not a line-by-line walkthrough — a file-level orientation.
+Same index, one kNN query, both paths covered. You don't choose which to search — you get both.
 
-**What the viewer needs to understand:**
+This is all possible because the Jina v5-omni model maps video, audio, and text into the same vector space. Scores from different modalities are directly comparable. If you want the deep-dive on the model itself, the previous video is linked in the description — here, one sentence is enough.
 
-Repo structure:
-- `src/omnimodal_search/`
-  - `video.py` — scene detection and clip cutting
-  - `embedding.py` — model loading
-  - `es.py` — Elasticsearch indexing and search logic
-- `ingest.py` — entry point: detects scenes, cuts clips, calls embedding + indexing
-- `app.py` — FastAPI server: handles text queries, voice search pipeline, direct audio mode; serves the UI
-- `data/videos/` — source videos; `data/blogs/` — blog posts (the index also holds text docs)
-
-One detail: idempotent ingest. Video files are hashed; scene detection results are cached per hash. Re-running ingestion skips unchanged videos. The document count in Elasticsearch is checked before re-indexing a video. This matters when iterating on the model or index configuration.
-
-[show 202607-codebase-overview.svg]
-[screen recording — repo root, brief `tree` output, navigate to key files]
+> 🔷 **DECISION 2 — Model explanation depth**
+>
+> How much do you want to explain *why* shared embedding space works (GELATO architecture, cross-modal training)?
+>
+> - **Shallow (current):** One sentence — "the model maps everything into the same space, so scores are comparable." Move on.
+> - **Moderate:** Add a beat: "The intuition is that text, audio, and video all refer to the same world — a shared backbone lets the model learn to align them." ~30 seconds.
+>
+> Given that the previous Jina video exists as a reference, shallow is probably right. **Confirm?**
 
 ---
 
-## Section 9 — Voice search and direct audio mode
+## Section 4 — The Three Decisions
 
-**Structural purpose:** Show the two voice-driven query modes. Mode 1 is demonstrated in the cold open; Mode 2 is architecturally interesting and illustrates the generality of the shared embedding space.
+*This is the heart of the video. Each decision = one short segment. Code shown in passing, not taught line-by-line.*
 
-**What the viewer needs to understand:**
+[show `202607-codebase-overview.svg` — quick orientation]
 
-- **Mode 1 (Whisper + LLM → text query):** User speaks → Whisper transcribes → LLM cleans the transcript into a search query (people don't speak in search keywords) → text embedding → kNN. This is the standard pipeline.
-- **Mode 2 (direct audio embedding):** User speaks → audio embedding directly → kNN. Whisper and LLM are skipped entirely. The raw audio is the query vector, compared directly against the fused document embeddings in the index.
-
-Mode 2 means the query doesn't have to be speech. Any audio — a sound, a piece of music, a tone — can be a query. This is narrow in practice but illustrates the architecture's generality: the shared embedding space doesn't care what the query modality is.
-
-[screen recording — app.py voice pipeline; show the toggle between modes]
+Repo orientation: `src/omnimodal_search/` is the core library — video processing, embeddings, Elasticsearch. `ingest.py` ingests, `app.py` searches. That's the whole thing.
 
 ---
 
-## Section 10 — Demo reprise: now you know
+### 4a — Decision 1: How to chunk video
 
-**Structural purpose:** Revisit the app with the architecture visible. The viewer should now be able to interpret *why* a result appeared — which embedding path produced it. Make that legible on screen.
+[show `202607-omnimodal-ingestion.svg` — highlight chunking step]
+[code on screen: `video.py`, `find_scenes` function]
 
-**What the viewer needs to understand:**
+**The choice:** How do you break a video into searchable pieces?
 
-1. When a query matches visual content (e.g. a prop, a slide, a background detail not mentioned in any transcript), it is the fused document that scores highest. The result badge shows "fused." The transcript document for the same scene either doesn't appear or scores lower.
-2. When a query matches spoken content (e.g. a concept being explained, a name mentioned), it is the transcript document that scores highest. The result badge shows "transcript." The fused document may score lower.
-3. Demonstrate Mode 1 voice search (narrate each step: transcription → query extraction → search).
-4. Demonstrate Mode 2 voice search (same spoken input, different path, potentially different results — this is informative about what the model is capturing from raw audio vs. clean text).
+Fixed time windows (every 10 seconds) feel obvious. They're also wrong for this use case — a search result that starts mid-sentence or cuts off halfway through a demo is useless as a standalone clip.
 
-[screen recording — app on screen, face cam; annotate results with which embedding path fired; narrate the pipeline for voice modes]
+Scene detection watches for visual changes — a cut, a new slide, a camera angle shift — and splits there. Natural boundaries. When a result comes back, it makes sense in isolation.
 
----
+One detail: filter out anything under a second. Flash cuts and transitions are noise.
 
-## Section 11 — Production path and next steps
+**When you'd do it differently:** Meeting recordings, where the camera never changes. There, you'd split on transcript topic changes, or use fixed windows tuned to natural speaking pauses. Scene detection is for content where the visual carries meaning.
 
-**Structural purpose:** Close the loop on practicality. The viewer has seen everything running locally; they need to know the path to production and what the code changes look like.
-
-**What the viewer needs to understand:**
-
-Two things change at production scale, both of which are API/config changes in the code:
-
-1. **Elasticsearch**: Local Docker → Elastic Cloud Serverless. Same API, no infrastructure management, auto-scaling. DiskBBQ quantization keeps vector storage costs manageable as the index grows. The connection string changes; nothing else does.
-2. **Model inference**: Local model → Elastic Inference Service (EIS) or Jina API. The local jina-v5-omni-small model is large and slow to embed on CPU. Hosted inference is dramatically faster and can process videos in parallel. The `model.encode()` calls become API calls; the rest of the code is unchanged.
-
-Also worth knowing: `jina-v5-omni-nano` is smaller and faster. For content where the visual differences between scenes are large and clear, nano may be sufficient — worth benchmarking on your own videos before committing to small.
-
-What else you could extend:
-- Add image search (photos, slides, PDF pages) — same model, same index, same query
-- Serve from Elastic Cloud with the full Elasticsearch API available (filters, facets, aggregations)
-- Bulk ingest with parallelized embedding for large video libraries
-
-[show 202607-local-vs-production.svg]
-[show repo on screen — README, clone instructions]
+[show example: detected scene boundaries on a real video clip]
 
 ---
 
-## Visual Assets Needed
+### 4b — Decision 2: How to embed video content
 
-*Assets that must be created as standalone deliverables by the designer before scripting. Inline visual directions above refer to these by filename.*
+[code on screen: `embedding.py`, `es.py → index_videos`]
+[keep `202607-omnimodal-ingestion.svg` visible — highlight embedding step]
 
-| Filename | Section | Description |
-|---|---|---|
-| `202607-video-search-approaches.svg` | §2 | Three-column comparison diagram: metadata search / transcript search / omnimodal search. Progressive reveal (three beats). Shows what each approach finds and what each misses. |
-| `202607-per-scene-dual-embedding.svg` | §6 | One scene box → two arrows → fused document + transcript document → single Elasticsearch index. Should be separable into "before" (scene alone) and "after" (both docs in index) states for progressive reveal. |
-| `202607-omnimodal-ingestion.svg` | §5/§6 | Full ingestion pipeline: video → scene detection → clip cutting → fused embedding (model, video+audio) AND transcript embedding (Whisper → text → model) → two docs in ES. |
-| `202607-search-pipeline.svg` | §7/§9 | Search flow: query (text or audio) → embedding → kNN → dedup → results. Include both text query path and the two voice query paths (Mode 1 and Mode 2). |
+**The choice:** What goes into the vector?
 
-*Existing diagrams (in `figs/`): `202607-omnimodal-architecture.svg`, `202607-codebase-overview.svg`, `202607-local-vs-production.svg` — used as-is.*
+The fused path: cut the clip, extract audio, pass both as a tuple to `model.encode`. This is *direct* video embedding — not "describe the frame with GPT-4o then embed the description." No text middleman, no telephone game.
+
+The transcript path: Whisper transcribes, embed the text. Why bother, given the fused embedding? Because what's being *said* and what's being *shown* are often completely different things.
+
+[freeze frame — background object visible, unrelated to what's being said]
+
+That has nothing to do with what I'm talking about. A single combined embedding would muddle those signals. Two documents per scene let visual and speech content each speak for themselves.
+
+Bonus: hash each video, cache scene detection. Re-running ingestion skips anything unchanged. Saves significant time when iterating.
+
+---
+
+### 4c — Decision 3: How to search
+
+[code on screen: `app.py → _search_hits`]
+
+**The choice:** How do you query across two embedding types in one index?
+
+Answer: one kNN query. Because the model put everything in the same vector space, the query vector just finds the right things — whether the match is fused or transcript doesn't matter. Same index, one search.
+
+The alternative is running separate searches per embedding type and merging ranked results. Ranking fusion is a can of worms — how do you weight them? Do you interleave? That complexity is real, and here it's completely unnecessary.
+
+One wrinkle: each scene has two documents, so kNN can return both for the same scene. Fix: deduplicate by `video_id` + `scene_index`, keep the higher scorer. Three lines. Skip it and your results page looks broken.
+
+---
+
+> 🔷 **DECISION 3 — Voice search section**
+>
+> The app supports two voice input modes: (1) speak → Whisper → LLM query cleanup → embed as text; (2) speak → embed raw audio directly as query vector. Mode 2 means you could theoretically hum a melody and find a video where it plays.
+>
+> The v4 script has this as §4d, ~1 min. It's genuinely impressive but tangential to the main architecture story.
+>
+> **Option A:** Include as §4d. It's a strong "wow" moment and demonstrates the model's full capability.
+> **Option B:** Cut it. Keep the architecture tight and mention it in the repo readme / description as a bonus feature.
+> **Option C:** Brief mention only — "the app also supports direct audio embedding as a query, which means you could theoretically hum a melody and find the matching video. I'll leave that for you to explore." One sentence, no code.
+>
+> **Which do you prefer?**
+
+---
+
+## Section 5 — Second Demo: Now You Know
+
+*Replay a few searches, but this time narrate what's happening under the hood.*
+
+[screen recording — app on screen]
+[facecam]
+
+Same app, but now pay attention to which embedding path fired.
+
+- Query: *"presenter with glasses"* → fused embedding match. No transcript says "presenter with glasses." The model matched visual content.
+- Query: *"how BM25 scoring works"* → transcript embedding match. The top hit is someone explaining it — you can see the transcript text in the result metadata.
+
+This is the dual-path strategy made tangible. Same search box, same kNN query, different part of the architecture firing each time.
+
+> 🔷 **DECISION 4 — Second demo beat**
+>
+> This section needs 2–3 good search examples that clearly contrast the two paths. The current examples (visual query vs. spoken-content query) work well in principle.
+>
+> **Question:** Do you have specific queries from the demo that work reliably and clearly show the split? And is the result metadata (which embedding type matched) visible in the UI, or do we need to add that for this segment to work?
+
+---
+
+## Section 6 — Wrap-up and Next Steps
+
+*Repo, how to run it, what changes for production.*
+
+[show `202607-local-vs-production.svg`]
+[repo on screen]
+
+Everything here runs locally. That's the right starting point — you should understand the system before you hand it off to managed infrastructure.
+
+If you're scaling this: two things change.
+
+**Elasticsearch:** Local is fine for dev. For production — more videos, multiple users, uptime requirements — Elastic Cloud Serverless gives you auto-scaling, security, and backups without managing shards and replicas yourself. The code change is one line: swap the connection string.
+
+**Inference:** Local embedding is slow. A 20-minute video takes [X] minutes on a laptop, [Y] seconds on a hosted inference endpoint. Jina API and Elasticsearch inference endpoints both work; choose based on what's easier to integrate. Also: there's a `v5-omni-nano` variant if you want faster inference at some accuracy tradeoff — worth benchmarking.
+
+Repo is linked in the description and pinned in the comments. Clone it, point it at your own videos, and let us know what you build.
+
+> 🔷 **DECISION 5 — Production section prominence**
+>
+> The production/cloud section currently reads as a natural "what's next" close. It could also be cut or shortened to just "clone the repo, here's what you'd change for production" without the Elastic Cloud / hosted inference specifics.
+>
+> - **Keep as-is:** Adds genuine value for developers thinking about scaling. Subtle Elastic Cloud mention is fine in context.
+> - **Shorten:** Just "repo + here's what to swap for production" without named services.
+> - **Cut entirely:** End after the second demo with "clone, run, build."
+>
+> **Which feels right for the intended audience?** (The framing doc positions this as a tutorial for developers new to Elastic, so the cloud mention could be natural orientation — or it could feel like an ad.)
+
+---
+
+## Figures Needed
+
+Existing figures (in `figs/`):
+- ✅ `202607-omnimodal-architecture.svg`
+- ✅ `202607-codebase-overview.svg`
+- ✅ `202607-local-vs-production.svg`
+
+Still needed (referenced in earlier script drafts, not yet created):
+- 🔲 `202607-video-search-approaches.svg` — three-row progressive reveal: metadata → transcript → visual gap
+- 🔲 `202607-omnimodal-ingestion.svg` — ingestion pipeline diagram (video → scene detection → two embedding paths → index)
+
+> 🔷 **DECISION 6 — Figure creation**
+>
+> The two missing figures are both meaningful to the narrative (the approaches diagram sets up the problem; the ingestion diagram grounds decisions 1 & 2). Would you like designer task briefs created for these, or will you sketch/build them yourself?

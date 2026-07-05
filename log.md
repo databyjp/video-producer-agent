@@ -471,3 +471,10 @@ Reviewed `wiki/writing-for-the-ear.md` and trimmed the "For developer advocacy" 
 
 **Updates:**
 - Edited `wiki/writing-for-the-ear.md` — trimmed 9 "For developer advocacy" blocks down to example-only
+
+## 2026-07-03 — Removed dev advocacy examples from writing-for-the-ear
+
+Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structural Devices section. The LWT analysis names the devices and shows them with Oliver's own examples — the writer doesn't need pre-fab translations. Kept the Oliver quotes and the analytical observations intact.
+
+**Updates:**
+- Edited `wiki/writing-for-the-ear.md` — removed 9 dev advocacy example blocks from Structural Devices section
