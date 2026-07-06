@@ -472,6 +472,34 @@ Reviewed `wiki/writing-for-the-ear.md` and trimmed the "For developer advocacy" 
 **Updates:**
 - Edited `wiki/writing-for-the-ear.md` — trimmed 9 "For developer advocacy" blocks down to example-only
 
+## 2026-07-06 — Wrote Phase 1 outline for columnar-store video
+
+**Project:** 202606-columnar-store
+**Action:** Evaluated the video concept against all six primary source articles, the Elastic DevRel Wiki (TSDS, doc values, columnar storage pages), the third-party benchmark critique, and the LogsDB evolution post. Wrote the Phase 1 structural outline.
+
+**Sources consulted (fetched & read):**
+- Brasetvik, "Elasticsearch from the Bottom Up, Part 1" (2013) — inverted index, segments, immutability
+- McCandless, "The Evolution of Numeric Range Filters in Apache Lucene" (2016) — text-encoded numbers → numeric tries → BKD trees
+- Grand, "Better Query Planning for Range Queries in Elasticsearch" (2017) — dual-structure problem (BKD tree + doc values), IndexOrDocValuesQuery
+- Grand, "Disk-Based Field Data a.k.a. Doc Values" (2013) — origin of doc values, off-heap field data
+- Woodward, "How DocValuesSkippers in Lucene 10 make range queries faster" (2026) — block-level min/max skip index, correlation requirement
+- Krikellas et al., "30x faster than Prometheus" (2026) — four storage changes, ES|QL TS command, zero-copy decode, benchmarks
+- Wintergerst, "How LogsDB cuts index size by up to 75%" (2026) — shared ancestry (synthetic _source, sort-first compression, doc value skippers)
+- Elastic docs, "Time series data streams" — _tsid, sort order, dimension routing
+- Elastic DevRel Wiki: wiki/tsds.md, wiki/doc-values.md, wiki/columnar-storage.md
+- Goutham Ve, "Lies, damned lies, and Elastic's benchmarks" (via wiki) — ingestion reproduction struggles, benchmark critique
+
+**Key concept decisions:**
+- Angle: explain the mechanism, not the benchmarks. Acknowledge benchmark controversy in one sentence, then move on.
+- Narrative arc: dual-structure tax → TSDS sort guarantee (the pivot) → doc value skippers as replacement → four compounding changes → columnar query engine coupling → tradeoffs named honestly
+- Sections I–II kept tight (~2–3 min combined) since audience already knows inverted indexes exist
+- Dedicated Section VI for tradeoffs (OCC disabled, _id lookups slower, sequence numbers ephemeral, PromQL tech preview)
+- Two visual assets flagged for designer: byte-block breakdown graphic, storage-to-query pipeline diagram
+
+**Deliverable:** `projects/202606-columnar-store/outline.md` — 7-section outline + visual assets table
+
+---
+
 ## 2026-07-03 — Removed dev advocacy examples from writing-for-the-ear
 
 Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structural Devices section. The LWT analysis names the devices and shows them with Oliver's own examples — the writer doesn't need pre-fab translations. Kept the Oliver quotes and the analytical observations intact.
