@@ -33,6 +33,11 @@ The mechanism itself. What a skipper is, how it skips blocks using min/max, and 
 https://www.elastic.co/search-labs/blog/elasticsearch-columnar-metrics-engine-30x-faster-prometheus
 The primary reference. All four storage changes with byte-level accounting, the ES|QL `TS` command, and benchmarks. The video explains the mechanism behind this post's claims — don't repeat the claims, understand them.
 
+Further reading material found:
+https://www.elastic.co/blog/disk-based-field-data-a-k-a-doc-values
+https://www.elastic.co/observability-labs/blog/elasticsearch-logsdb-storage-evolution
+
+
 **Optional depth:**
 - Synthetic `_id` detail → https://www.elastic.co/search-labs/blog/elasticsearch-synthetic-id-time-series-storage
 - Sequence number trimming detail → https://www.elastic.co/search-labs/blog/elasticsearch-time-series-storage-sequence-numbers
