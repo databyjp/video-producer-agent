@@ -1,6 +1,6 @@
 ---
 type: outline
-title: "How Elasticsearch Became a Columnar Metrics Engine"
+title: "How Elasticsearch Became a Metrics Engine"
 status: phase-1-structure
 timestamp: 2026-07-06
 ---
@@ -44,11 +44,55 @@ The primary reference. All four storage changes with byte-level accounting, the 
 
 ---
 
-# Video Outline
+# Video Brief
+
+**Title Ideas:**
+- How Elasticsearch Became a Metrics Engine
+- How Elasticsearch Got Fast at Metrics
 
 **Viewer:** SREs and platform engineers evaluating observability stack consolidation. They know metrics pipelines. They need internal mechanics, not Elasticsearch basics.
 
-**Aim**: Explain Elasticsearch's recent improvements as a columnar store for metrics. Rather than discuss benchmark numbers, which depend on subjective setup conditions and input data, this video dives into the engineering challenges and implemented solutions. With it, viewers can gain a fuller understanding of what caused the inefficiencies in the past, whether the solutions will work for them, and what was traded away, if any. They leave able to form their own evaluation, while establishing the engineering bona-fides.
+**Aim**:
+- Explain the engineering behind Elasticsearch’s time-series storage changes clearly enough that a technical viewer trusts the claims, understands the tradeoffs, and can judge whether the approach fits their own metrics workload.
+- Build trust in Elasticsearch’s evolving time-series capabilities by clearly explaining the engineering behind them, showing where they fit operationally, and helping technical viewers understand when Elasticsearch is a strong choice for metrics workloads.
 
 ---
 
+# Video Structural Outline
+
+(*Argument or narrative only. What does the viewer need to understand, and in what order?*)
+
+- Hook (TBD)
+- Problem introduction
+    - Acknowledge Elastic's reputation as not ideal for Metrics
+    - Overview of reasons behind the additional data storage & slow queries for Elastic
+    - Discuss the resulting technical stack bifucation (e.g. Elastic + Prometheus)
+- Engineering deep dive
+    - How Elastic stores data for retrieval - builds indexes, doc values, and BKD trees - speeds up retrieval, but costs
+    - Introduce TSDS - what is it, why does it exist
+        - Talk about sorting guarantees - time series data is unique (like metrics), this makes sorting inherent at ingestion
+    - Doc value skippers to the rescue
+        - Solves a lot of pain for numerical data vs BKD trees
+        - Especially powerful when it comes to TSDS, because of the sorting guarantees
+    - Additional changes across time
+        - | 9.1 | Synthetic recovery source | –50% disk I/O at ingest (throughput, not at-rest) |
+        - | 9.3 | Doc value skippers | –10 bytes/point |
+        - | 9.3 | Larger codec blocks (128→512 elements) | –2 bytes/point |
+        - | 9.4 | Synthetic `_id` | –5 bytes/point |
+        - | 9.4 | Sequence number trimming | –4 bytes/point |
+        - Gets us to 25 → 3.75 bytes per OTel data point
+    - TSDS after the changes
+        - Every field in its own doc values file with a skipper
+        - But - query engine also needs to change - it must take advantage of this - enter ES|QL
+    - The ES|QL `TS` source command
+        - Columnar access of data
+        - Decodes column data directly into typed arrays, applies vectorised operations, and processes data in `_tsid` order
+- Impact
+    - TSDS no longer pays the overhead of a general-purpose search engine on dimension and timestamp fields.
+    - Ingest throughput is higher, footprint smaller
+    - Query performance on time-range and dimension significantly faster (discuss speedup vs older versions of Elastic)
+- Tradeoffs & Evaluation
+    - At this point, general indices (logs, documents) are unaffected - i.e. they are not columnar
+    - No sequences numbers by default on TSDS in 9.4 (re-enable with `index.disable_sequence_numbers: false`)
+    - PromQL support and Prometheus remote write are 9.4 tech preview, not GA.
+    - The historical performance gap was due to building index structures designed for a different access pattern. Those structures are no longer built for the fields that define a time series; as a result - that type of access (e.g. searches using the index) will now be slower
