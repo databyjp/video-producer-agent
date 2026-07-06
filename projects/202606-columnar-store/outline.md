@@ -35,7 +35,6 @@ The primary reference. All four storage changes with byte-level accounting, the 
 
 Further reading material found:
 https://www.elastic.co/blog/disk-based-field-data-a-k-a-doc-values
-https://www.elastic.co/observability-labs/blog/elasticsearch-logsdb-storage-evolution
 
 
 **Optional depth:**
@@ -45,7 +44,7 @@ https://www.elastic.co/observability-labs/blog/elasticsearch-logsdb-storage-evol
 
 ---
 
-# Outline — Phase 1: Structure
+# Video Outline: Phase 1: Structure
 
 **Scope:** TSDS in `time_series` index mode only. General Elasticsearch indices are unaffected.
 
@@ -55,19 +54,17 @@ https://www.elastic.co/observability-labs/blog/elasticsearch-logsdb-storage-evol
 
 ## Value Proposition
 
-The benchmark numbers (30x faster queries, 3.75 bytes/data point) are public. The viewer's problem is not finding them — it's knowing whether to trust them for their workload.
+The viewer's problem is not finding them — it's knowing whether to trust them for their workload.
 
-This video provides the mechanism. With it, viewers can assess: whether the gains are structural or benchmark-specific; what conditions are required to get them; and what was traded away. They leave able to form their own evaluation, not just cite Elastic's.
+This video aims to explain Elasticsearch's recent improvements as a columnar store for metrics. Rather than to claim benchmark numbers, which depend on subjective setup conditions and input data, this video dives into the engineering challenges and implemented solutions. With it, viewers can gain a fuller understanding of what caused the inefficiencies in the past, whether the solutions will work for them, and what was traded away, if any. They leave able to form their own evaluation, while establishing the engineering bona-fides.
 
 ---
 
 ## Hook
 
-Elasticsearch has a well-earned reputation as a poor fit for high-cardinality metrics. Prometheus, Mimir, and ClickHouse are the defaults for good reasons. Elastic is now claiming that gap is closed — in some cases reversed.
+Elasticsearch has a reputation as a poor fit for metrics, especially those with high cardinality, compared to its competitors such as Prometheus, Mimir, and ClickHouse. Elastic is now claiming that gap is closed, and in some cases even superior performance over those.
 
 The video opens on that tension: the claim is large, the prior reputation is established, and the viewer has no framework to reconcile them. The implicit promise: *something structurally changed, not just the benchmark setup.* Here is what changed and how to verify it.
-
-Don't open with the benchmark numbers. Open with the question they raise: is this architecture or marketing?
 
 ---
 
