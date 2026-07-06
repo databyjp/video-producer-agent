@@ -7,8 +7,6 @@ timestamp: 2026-07-06
 
 # Pre-Script Reading List
 
-Read in order. Each builds on the last.
-
 **1. Elasticsearch from the Bottom Up, Part 1**
 https://www.elastic.co/blog/found-elasticsearch-from-the-bottom-up
 Foundational. Covers the inverted index, immutable segments, and segment merging. Establishes vocabulary for everything else.
@@ -58,7 +56,13 @@ The primary reference. All four storage changes with byte-level accounting, the 
 
 ---
 
-# Video Structural Outline
+# Video outline
+
+## Hook
+
+In just about a year, Elasticsearch dramatically improved its Metrics engine. Queries became 160 times faster, and each data point uses 85% less data. While these are genuinely impressive numbers, what's even more impressive is that a lot of this comes from *removing* the right components, like the inverted index, the BKD tree and sequence numbers. So let's talk about the engineering behind these changes, starting with why those structures were there in the first place.
+
+## Video Structural Outline
 
 (*Argument or narrative only. What does the viewer need to understand, and in what order?*)
 
