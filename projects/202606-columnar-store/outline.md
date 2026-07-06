@@ -64,25 +64,28 @@ The primary reference. All four storage changes with byte-level accounting, the 
 
 - Hook (TBD)
 - Problem introduction
-    - Acknowledge Elastic's reputation as not ideal for Metrics
-    - Overview of reasons behind the additional data storage & slow queries for Elastic
-    - Discuss the resulting technical stack bifucation (e.g. Elastic + Prometheus)
+    - Acknowledge Elasticsearch's reputation as not ideal for Metrics
+    - Why Elasticsearch historically paid a storage and query tax for metrics workloads
+    - Discuss the resulting technical stack bifurcation (e.g. Elasticsearch + Prometheus)
 - Engineering deep dive
-    - How Elastic stores data for retrieval - builds indexes, doc values, and BKD trees - speeds up retrieval, but costs
-    - Introduce TSDS - what is it, why does it exist
+    - Elasticsearch speeds up retrieval by building indexes, doc values, and BKD trees
+        - Why did they do this
+        - Costs of doing this
+    - Introduce TSDS
+        - What is it, why does it exist, what does this change about the data shape
         - Talk about sorting guarantees - time series data is unique (like metrics), this makes sorting inherent at ingestion
-    - Doc value skippers to the rescue
-        - Solves a lot of pain for numerical data vs BKD trees
-        - Especially powerful when it comes to TSDS, because of the sorting guarantees
-    - Additional changes across time
-        - | 9.1 | Synthetic recovery source | –50% disk I/O at ingest (throughput, not at-rest) |
+        - How Doc value skippers take advantage of this shape
+            - Solves a lot of pain for numerical data vs BKD trees
+            - Especially powerful when it comes to TSDS, because of the sorting guarantees
+    - Long concerted effort - evidenced by timeline of storage reduction
+        - | 9.1 | Synthetic recovery source |–50% recovery-source disk I/O; significant ingest throughput boost |
         - | 9.3 | Doc value skippers | –10 bytes/point |
         - | 9.3 | Larger codec blocks (128→512 elements) | –2 bytes/point |
         - | 9.4 | Synthetic `_id` | –5 bytes/point |
         - | 9.4 | Sequence number trimming | –4 bytes/point |
         - Gets us to 25 → 3.75 bytes per OTel data point
     - TSDS after the changes
-        - Every field in its own doc values file with a skipper
+        - @timestamp and dimensions fields gain skippers
         - But - query engine also needs to change - it must take advantage of this - enter ES|QL
     - The ES|QL `TS` source command
         - Columnar access of data
@@ -90,9 +93,11 @@ The primary reference. All four storage changes with byte-level accounting, the 
 - Impact
     - TSDS no longer pays the overhead of a general-purpose search engine on dimension and timestamp fields.
     - Ingest throughput is higher, footprint smaller
-    - Query performance on time-range and dimension significantly faster (discuss speedup vs older versions of Elastic)
+    - Query performance on time-range and dimension significantly faster (discuss 160x vs older TSDS a year ago)
+    - "So what" - focus on user benefits - faster & cheaper at the end of the day, and one unified stack for logs, metrics & traces
 - Tradeoffs & Evaluation
-    - At this point, general indices (logs, documents) are unaffected - i.e. they are not columnar
+    - The optimization works because time-series data has structure and ordering guarantees.
+    - works best on append-only time series
     - No sequences numbers by default on TSDS in 9.4 (re-enable with `index.disable_sequence_numbers: false`)
     - PromQL support and Prometheus remote write are 9.4 tech preview, not GA.
     - The historical performance gap was due to building index structures designed for a different access pattern. Those structures are no longer built for the fields that define a time series; as a result - that type of access (e.g. searches using the index) will now be slower
