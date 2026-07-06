@@ -68,6 +68,7 @@ The primary reference. All four storage changes with byte-level accounting, the 
     - Why Elasticsearch historically paid a storage and query tax for metrics workloads
     - Discuss the resulting technical stack bifurcation (e.g. Elasticsearch + Prometheus)
 - Engineering deep dive
+    - Row-oriented vs columnar: Elasticsearch traditionally stores documents row-by-row (all fields of a doc together). For metrics, we want columnar: each field in its own file, read independently. This is the layout TSDS moves toward.
     - Elasticsearch speeds up retrieval by building indexes, doc values, and BKD trees
         - Why did they do this
         - Costs of doing this
@@ -85,19 +86,25 @@ The primary reference. All four storage changes with byte-level accounting, the 
         - | 9.4 | Sequence number trimming | –4 bytes/point |
         - Gets us to 25 → 3.75 bytes per OTel data point
     - TSDS after the changes
-        - @timestamp and dimensions fields gain skippers
-        - But - query engine also needs to change - it must take advantage of this - enter ES|QL
+        - Dimension and timestamp fields drop their separate inverted indices and BKD trees; they now live as doc values with skippers. Metric values were already stored as doc values. Every field is now in its own file, with no duplicated structure.
+        - But the query engine also needs to change to take advantage of this — enter ES|QL
     - The ES|QL `TS` source command
-        - Columnar access of data
-        - Decodes column data directly into typed arrays, applies vectorised operations, and processes data in `_tsid` order
+        - Two-level aggregation model: inner function per time series (RATE, AVG_OVER_TIME), then outer aggregation across groups (SUM, AVG). Because data is in `_tsid` order, the engine applies the inner function vectorized over a fetched column until the series changes, fetching dimensions only once.
+        - Zero-copy decoding: the codec reads on-disk data directly into primitive arrays the compute engine aggregates over — no extra copies.
+        - Run-length constant blocks for repeated `_tsid` and dimension values; null metric values filtered at the Lucene level before decoding.
+        - Filters on timestamp and dimensions pushed down to Lucene, which uses skippers to exclude non-matching blocks.
+        - Counter rate evaluation assigns in-order `_tsid` ranges to threads so resets are detected correctly while scanning in order.
 - Impact
     - TSDS no longer pays the overhead of a general-purpose search engine on dimension and timestamp fields.
     - Ingest throughput is higher, footprint smaller
-    - Query performance on time-range and dimension significantly faster (discuss 160x vs older TSDS a year ago)
-    - "So what" - focus on user benefits - faster & cheaper at the end of the day, and one unified stack for logs, metrics & traces
+    - Query performance: up to 160x faster than Elasticsearch's own TSDS from a year ago; up to 30x faster than Prometheus on the same workload
+    - "So what" - user benefits
+        - Faster and cheaper at the end of the day
+        - One unified stack for logs, metrics, and traces
+        - Native OTLP (9.3 GA) and Prometheus remote-write (9.4 tech preview): point existing collectors directly at Elasticsearch, no JSON-to-bulk translation needed
 - Tradeoffs & Evaluation
     - The optimization works because time-series data has structure and ordering guarantees.
     - works best on append-only time series
     - No sequences numbers by default on TSDS in 9.4 (re-enable with `index.disable_sequence_numbers: false`)
     - PromQL support and Prometheus remote write are 9.4 tech preview, not GA.
-    - The historical performance gap was due to building index structures designed for a different access pattern. Those structures are no longer built for the fields that define a time series; as a result - that type of access (e.g. searches using the index) will now be slower
+    - Dimension and timestamp filtering that previously used dedicated BKD trees and inverted indices now relies on doc value skippers. Benchmarks showed no measured regression for typical metrics queries, but ad-hoc text search or complex non-time-range filtering on dimension fields may not perform as well as before.
