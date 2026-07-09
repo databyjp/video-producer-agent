@@ -1,0 +1,4 @@
+- Shorts - let's try wide versions for LinkedIn - portrait versions might not do as well
+- Videos 
+	- columnar mode
+- 

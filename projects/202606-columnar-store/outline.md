@@ -41,7 +41,7 @@ The primary reference. All four storage changes with byte-level accounting, the 
 - Summary / cross-check → https://www.elastic.co/search-labs/blog/elasticsearch-metrics-columnar-engine
 
 ---
-
+NOTE: Prefer "TSDB" over "TSDS", due to change in nomenclature
 # Video Brief
 
 **Title Ideas:**
@@ -72,16 +72,16 @@ In just about a year, Elasticsearch dramatically improved its Metrics engine. Qu
     - Why Elasticsearch historically paid a storage and query tax for metrics workloads
     - Discuss the resulting technical stack bifurcation (e.g. Elasticsearch + Prometheus)
 - Engineering deep dive
-    - Row-oriented vs columnar: Elasticsearch traditionally stores documents row-by-row (all fields of a doc together). For metrics, we want columnar: each field in its own file, read independently. This is the layout TSDS moves toward.
+    - Row-oriented vs columnar: Elasticsearch traditionally stores documents row-by-row (all fields of a doc together). For metrics, we want columnar: each field in its own file, read independently. This is the layout TDSB moves toward.
     - Elasticsearch speeds up retrieval by building indexes, doc values, and BKD trees
         - Why did they do this
         - Costs of doing this
-    - Introduce TSDS
+    - Introduce TSDB
         - What is it, why does it exist, what does this change about the data shape
         - Talk about sorting guarantees - time series data is unique (like metrics), this makes sorting inherent at ingestion
         - How Doc value skippers take advantage of this shape
             - Solves a lot of pain for numerical data vs BKD trees
-            - Especially powerful when it comes to TSDS, because of the sorting guarantees
+            - Especially powerful when it comes to TSDB, because of the sorting guarantees
     - Long concerted effort - evidenced by timeline of storage reduction
         - | 9.1 | Synthetic recovery source |–50% recovery-source disk I/O; significant ingest throughput boost |
         - | 9.3 | Doc value skippers | –10 bytes/point |
@@ -89,7 +89,7 @@ In just about a year, Elasticsearch dramatically improved its Metrics engine. Qu
         - | 9.4 | Synthetic `_id` | –5 bytes/point |
         - | 9.4 | Sequence number trimming | –4 bytes/point |
         - Gets us to 25 → 3.75 bytes per OTel data point
-    - TSDS after the changes
+    - TSDB after the changes
         - Dimension and timestamp fields drop their separate inverted indices and BKD trees; they now live as doc values with skippers. Metric values were already stored as doc values. Every field is now in its own file, with no duplicated structure.
         - But the query engine also needs to change to take advantage of this — enter ES|QL
     - The ES|QL `TS` source command
@@ -99,9 +99,9 @@ In just about a year, Elasticsearch dramatically improved its Metrics engine. Qu
         - Filters on timestamp and dimensions pushed down to Lucene, which uses skippers to exclude non-matching blocks.
         - Counter rate evaluation assigns in-order `_tsid` ranges to threads so resets are detected correctly while scanning in order.
 - Impact
-    - TSDS no longer pays the overhead of a general-purpose search engine on dimension and timestamp fields.
+    - TSDB no longer pays the overhead of a general-purpose search engine on dimension and timestamp fields.
     - Ingest throughput is higher, footprint smaller
-    - Query performance: up to 160x faster than Elasticsearch's own TSDS from a year ago; up to 30x faster than Prometheus on the same workload
+    - Query performance: up to 160x faster than Elasticsearch's own TSDB from a year ago; up to 30x faster than Prometheus on the same workload
     - "So what" - user benefits
         - Faster and cheaper at the end of the day
         - One unified stack for logs, metrics, and traces
@@ -109,6 +109,6 @@ In just about a year, Elasticsearch dramatically improved its Metrics engine. Qu
 - Tradeoffs & Evaluation
     - The optimization works because time-series data has structure and ordering guarantees.
     - works best on append-only time series
-    - No sequences numbers by default on TSDS in 9.4 (re-enable with `index.disable_sequence_numbers: false`)
+    - No sequences numbers by default on TSDB in 9.4 (re-enable with `index.disable_sequence_numbers: false`)
     - PromQL support and Prometheus remote write are 9.4 tech preview, not GA.
     - Dimension and timestamp filtering that previously used dedicated BKD trees and inverted indices now relies on doc value skippers. Benchmarks showed no measured regression for typical metrics queries, but ad-hoc text search or complex non-time-range filtering on dimension fields may not perform as well as before.

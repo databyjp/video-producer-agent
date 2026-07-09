@@ -62,7 +62,7 @@ Let me show you how this app works.
 
 ## 3. Architecture Overview (~2 min)
 
-![202607-omnimodal-architecture.svg](figs/202607-omnimodal-architecture.svg)
+![202607-omnimodal-architecture.svg](202607-omnimodal-architecture.svg)
 
 - High-level: videos → scene chunks → dual embeddings → single Elasticsearch index → kNN search
 - The key insight: two embedding paths per scene, one index
@@ -77,7 +77,7 @@ Let me show you how this app works.
 
 [This is the meat of the video. Walk through the key decisions **while showing the code** — "here's the decision, and here's how it looks."]
 
-![202607-codebase-overview](figs/202607-codebase-overview.svg)
+![202607-codebase-overview](202607-codebase-overview.svg)
 
 [flash briefly as a roadmap before diving in]
 
@@ -164,7 +164,7 @@ My choices:
 
 "So — everything you just saw ran locally on my Mac. That's great for learning and prototyping. But if you're building this for real, you might consider something like this."
 
-![202607-local-vs-production](figs/202607-local-vs-production.svg)
+![202607-local-vs-production](202607-local-vs-production.svg)
 
 [Keep diagram on screen through Beat 2, highlight each row as you discuss it]
 

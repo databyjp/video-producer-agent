@@ -1,1 +1,0 @@
-Producer with elastic? 

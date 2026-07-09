@@ -2,18 +2,41 @@ Argument or narrative only. What does the viewer need to understand, and in what
 
 ==========
 
-- Show a video search example, the goal is novelty and appealing (aspirational) to the viewer. Elicit reaction “wow, video search is cool - how did they do that?”
-- Briefly explain how previous solutions for searching videos come up short. Establish a need in the viewers minds for the new solution, and confirm that what they are learning is different. 
-- Architecture outline, and omni model intro; establish the key decisions: set the scene for the user. This will anchor the viewer for the rest of the video. 
-- Step 1: Chunking videos - why it’s needed, decisions, and how to do it
-- Step 2: What to embed, exactly: - video? audio? transcript? How to go about deciding, and how to do it. 
-- Side note: RAG with video. Learn that it’s not straightforward, because models can’t take video input. Briefly describe options and guidelines on how to choose. Learn about my choice. 
-- Recap of full search app architecture. See the codebase in context of the knowledge. See more demos and learn how to copy and run the repo for yourself. Learn also about elastic cloud options that would make life easier. 
+- Hook: show video search example (e.g. "kindle" -> find video clip of Jen holding a kindle,)
+	- Incite aspiration - "wouldn't it be nice to find information like this" / remind people how much information is captured visually
+	- "I'll show you how it works, and how I built it, in this video"
+- Intro (background): Briefly explain how previous solutions for searching videos come up short. 
+	- "Before this, if I wanted to find that Kindle clip, I'd have two options. Search the title and description — which only works if someone wrote "Jen holds Kindle" in the metadata (like a big creep). Or transcribe the audio and search what was said, which wouldn't help, because nobody says 'Kindle' in that scene. Both find what a video is about. Neither finds what was shown."
+	- Establish a need in the viewers' minds
+- Body
+	- Architecture (brief)
+		- Establish the key architectural components & the model used (jina v5 omni)
+		- Set the scene for the user. This will anchor the viewer for the rest of the video. 
+	- Step 1: Chunking videos
+		- Briefly discuss why it's needed
+		- Briefly discuss potential options (by fixed length, by visual scene transition, by transcript)
+		- My decision (visual scene transition)
+			- Show another demo, talk about what it means
+		- Briefly discuss tooling (ffmpeg, PySceneDetect, faster-whisper) and see the code
+	- Step 2: What to embed, exactly
+		- You can embed the video, audio, transcript, or any combination of these - how to decide
+			- Went with video+audio + transcript separately
+			- Separate embeddings: no muddling of waters
+		- Demos
+			- "Remember that Kindle search? The transcript of that same scene is completely irrelevant, and wouldn't have found it."
+			- Another one - "batman" - just shows clips of me with batman figure in bg
+		- Briefly discuss tooling (ffmpeg, faster-whisper, Elasticsearch) and see the code
+- What does this all mean for you? (more examples)
+	- 1 - Can find information by "Oh, what video did I see that had XYZ on screen"
+		- Find scenes containing "movie poster", "code snippet", "chef meme"
+	- 2 - Can still find information by transcript - 
+	- What I would do differently if did it again (semantic chunking by transcript, as these tech videos are not as visual-driven, but more script-driven)
+- Thanks & bye
+	- "What's the video library you'd want to search? Conference talks? Team recordings? Let me know in the comments."
+	- Show where the repo is and how to run it
 
 
-
-
-
+- Side note: RAG with video is not straightforward, because models can’t take video input. Briefly describe options and guidelines on how to choose. 
 
 
 

@@ -60,7 +60,7 @@ Let me show you how this app works.
 
 ## 3. Architecture Overview (~2 min)
 
-![202607-omnimodal-architecture.svg](figs/202607-omnimodal-architecture.svg)
+![202607-omnimodal-architecture.svg](202607-omnimodal-architecture.svg)
 
 Here's the high-level picture. We take our videos, split them into scenes, and for each scene we create two embeddings. Those all go into a single Elasticsearch index, and we search with kNN.
 
@@ -80,7 +80,7 @@ What makes this possible is Jina's v5 omni model. It puts video, audio, and text
 
 Now let's look at the actual code. I want to walk you through the key decisions I made while building this - and for each one, I'll show you the code, and mention what you might do differently.
 
-![202607-codebase-overview](figs/202607-codebase-overview.svg)
+![202607-codebase-overview](202607-codebase-overview.svg)
 
 Here's the layout. There's a core library under `src/omnimodal_search/` with three modules - one for video processing, one for embeddings, one for Elasticsearch. Then `ingest.py` uses those to index videos, and `app.py` is the search UI. Simple.
 
@@ -173,7 +173,7 @@ Same question, different path. Sometimes you get the same results, sometimes int
 
 So - everything you just saw ran locally on my Mac. That's great for learning and prototyping. But if you're building this for real, here's what I'd change.
 
-![202607-local-vs-production](figs/202607-local-vs-production.svg)
+![202607-local-vs-production](202607-local-vs-production.svg)
 
 [Keep diagram on screen, highlight each row as discussed]
 
