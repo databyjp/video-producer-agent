@@ -55,3 +55,6 @@ through a lens of a selection framework - so you'll know which pattern to reach 
 - **Agent Skill closer** (~2 min)
   - Show the agent skill that encodes all patterns + decision guidance
   - Link to repo
+
+Inspo links
+https://www.reddit.com/r/Rag/comments/1usojml/what_does_production_rag_looks_like/

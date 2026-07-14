@@ -506,3 +506,24 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 
 **Updates:**
 - Edited `wiki/writing-for-the-ear.md` — removed 9 dev advocacy example blocks from Structural Devices section
+
+## 2026-07-14 — Created designer task briefs for video search tutorial infographics
+
+**Project:** 202607-video-search-tutorial
+**Action:** Read `script v4.md`, cross-referenced with `Outline.md` and existing figures in `figs/`, and identified 2 infographics that need designer work. Created task briefs in `projects/202607-video-search-tutorial/tasks/`.
+
+**Existing figures (already in `figs/`):**
+- ✅ `202607-omnimodal-architecture.svg` — referenced in script as `[show architecture diagram]`
+- ✅ `202607-codebase-overview.svg` — referenced in outline
+- ✅ `202607-local-vs-production.svg` — referenced in outline
+
+**Task briefs created:**
+1. `tasks/design-multimodal-embedding-diagram.md` — Diagram showing how text, image, audio, and video all map into a shared vector space via a multimodal embedding model. Referenced in script as `[show multimodal embedding diagram]`. Inputs → model → shared space with proximity showing semantic similarity.
+2. `tasks/design-tradeoffs-slide.md` — 4-note composite graphic for the "what it all means" section. Notes: Explainability (black box vs BM25), Frame Sampling (32 frames max), Chunking Strategy (scene vs transcript), Processing Time (local is slow). Must support progressive reveal (highlight one panel, dim the rest).
+
+**Not briefed (handled during editing, not standalone design work):**
+- Code snippet overlays (Jina API, PySceneDetect, ffmpeg, dual embedding, etc.) — produced from codebase during editing
+- Screen recordings / app demos (kindle, superhero, presenter, inference service) — recorded by presenter
+- Screenshots (Reddit thread, Elastic Inference Service, GitHub repo) — captured during editing
+- Joke images (superhero photoshop, Batman zoom) — produced during editing
+- Popup thumbnails and transcript overlays — editor-time assets
