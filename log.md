@@ -527,3 +527,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Screenshots (Reddit thread, Elastic Inference Service, GitHub repo) — captured during editing
 - Joke images (superhero photoshop, Batman zoom) — produced during editing
 - Popup thumbnails and transcript overlays — editor-time assets
+
+## 2026-07-15 — YouTube metadata for video-search-tutorial
+
+- **Task:** Generated YouTube publishing metadata from the as-recorded script, outline, and idea doc.
+- **Output:** `projects/202607-video-search-tutorial/youtube-metadata.md`
+- **Contents:** Title options (3 variants with rationale), full description with chapter stubs and links, thumbnail title suggestions, pinned comment, tags.
+- **Wiki pages consulted:** youtube-title-optimization.md, youtube-description-metadata.md, youtube-thumbnail-design.md, past-videos-catalog.md.
