@@ -1,6 +1,6 @@
 ---
 type: outline
-title: "How Elasticsearch Became a Metrics Engine"
+title: "How Elasticsearch Stopped Storing Everything Three Times"
 status: phase-1-structure
 timestamp: 2026-07-06
 ---
@@ -31,6 +31,8 @@ The mechanism itself. What a skipper is, how it skips blocks using min/max, and 
 https://www.elastic.co/search-labs/blog/elasticsearch-columnar-metrics-engine-30x-faster-prometheus
 The primary reference. All four storage changes with byte-level accounting, the ES|QL `TS` command, and benchmarks. The video explains the mechanism behind this post's claims — don't repeat the claims, understand them.
 
+New: https://www.elastic.co/search-labs/blog/elasticsearch-columnar-storage
+
 **Further reading:**
 - https://www.elastic.co/blog/disk-based-field-data-a-k-a-doc-values
 - https://www.elastic.co/observability-labs/blog/elasticsearch-logsdb-storage-evolution
@@ -47,6 +49,7 @@ NOTE: Prefer "TSDB" over "TSDS", due to change in nomenclature
 **Title Ideas:**
 - How Elasticsearch Became a Metrics Engine
 - How Elasticsearch Got Fast at Metrics
+- How Elasticsearch Stopped Storing Everything Three Times
 
 **Viewer:** SREs and platform engineers evaluating observability stack consolidation. They know metrics pipelines. They need internal mechanics, not Elasticsearch basics.
 
@@ -60,7 +63,7 @@ NOTE: Prefer "TSDB" over "TSDS", due to change in nomenclature
 
 ## Hook
 
-In just about a year, Elasticsearch dramatically improved its Metrics engine. Queries became 160 times faster, and each data point uses 85% less data. While these are genuinely impressive numbers, what's even more impressive is that a lot of this comes from *removing* the right components, like the inverted index, the BKD tree and sequence numbers. So let's talk about the engineering behind these changes, starting with why those structures were there in the first place.
+If you run Elasticsearch for logs, you probably also run another platform like Prometheus for metrics. Not because Elastic couldn't do metrics, but because it was too expensive to. In the last year, Elastic changed that—by removing structures, not adding them. The inverted index, the BKD tree, sequence numbers, and even the stored document itself got stripped away. What's left is a storage layout that looks a lot more like a columnar database. So let's talk about how that works, and whether it changes your calculus.
 
 ## Video Structural Outline
 
@@ -102,10 +105,14 @@ In just about a year, Elasticsearch dramatically improved its Metrics engine. Qu
     - TSDB no longer pays the overhead of a general-purpose search engine on dimension and timestamp fields.
     - Ingest throughput is higher, footprint smaller
     - Query performance: up to 160x faster than Elasticsearch's own TSDB from a year ago; up to 30x faster than Prometheus on the same workload
-    - "So what" - user benefits
-        - Faster and cheaper at the end of the day
-        - One unified stack for logs, metrics, and traces
-        - Native OTLP (9.3 GA) and Prometheus remote-write (9.4 tech preview): point existing collectors directly at Elasticsearch, no JSON-to-bulk translation needed
+    - "So what" - who this is actually for
+        - If you're already running Elastic for logs: metrics are now economically viable in the same stack. No new operational model.
+        - If you're running Prometheus + Elastic today: collapsing that stack has become technically credible. Whether you should depends on your failure-mode tolerance.
+        - If you're greenfield: start with the tool purpose-built for your primary workload. This isn't a reason to choose Elastic.
+- Honest assessment
+    - The structural changes are real and verifiable: skippers replace BKD trees, synthetic `_id` removes the `_id` index, sequence numbers are trimmed. The byte-level trajectory (25 → 3.75 bytes/point) is internally consistent and documented per release.
+    - The headline multipliers are self-reported by Elastic and have not been independently reproduced. The open-source `prom-elastic-benchmark` reproduction found Elasticsearch struggled to ingest datasets that Prometheus handled in ~2 hours, projecting >40 hours with high I/O churn. The storage comparison against Prometheus is suspected to have measured pre-WAL-compaction data.
+    - What you actually get: a storage layout that enables cheaper operation and faster queries for your own workload, but the magnitude depends on your cardinality, ingestion pattern, and hardware. The architecture makes improvement possible; the exact multiplier is workload-dependent.
 - Tradeoffs & Evaluation
     - The optimization works because time-series data has structure and ordering guarantees.
     - works best on append-only time series
