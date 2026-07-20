@@ -47,6 +47,7 @@ Master catalog of all pages in this knowledge bundle.
 
 ### Topics
 
+- [Channel Findings — July 2026](wiki/channel-findings-july-2026.md) — Initial age-normalized channel analysis, interpretation limits, and hypotheses for future video strategy
 - [Past Videos Catalog](wiki/past-videos-catalog.md) — All produced videos with topics, formats, sponsor tie-ins, cross-references
 
 ### How-Tos

@@ -3,7 +3,7 @@ type: How-To
 title: Script Writing Process
 description: End-to-end workflow for writing a video script that sounds natural when delivered — from blank page to speakable draft
 tags: [scripting, writing, process, workflow]
-timestamp: 2026-07-03T00:00:00Z
+timestamp: 2026-07-20T21:04:00Z
 ---
 
 # Script Writing Process
@@ -19,6 +19,23 @@ The through-line: **the script is a draft until it's been spoken**.
 Write the argument or narrative without touching language or voice. What does the viewer need to understand, and in what order? Lock this before anything else.
 
 No jokes, analogies, or personality. Those come later.
+
+### Define the viewer job
+
+Write one sentence describing the primary job the viewer hired the video to do:
+
+- **Learn** — understand one idea or mechanism.
+- **Build** — complete one practical outcome.
+- **Choose** — make a decision between options.
+- **Diagnose** — recognize or solve one problem.
+
+One job must dominate. If the outline gives two or more jobs equal weight, narrow the scope or split the concept into separate videos.
+
+### Audit the packaging promise
+
+Write the title-and-thumbnail promise in one sentence, then label the first point where the script delivers tangible evidence of that promise—a result, demonstration, answer, or decision. Move that evidence earlier if the opening spends too long on context.
+
+Check every major section against the promise. Cut material that is interesting but does not advance it. When using an external story, transition into JP's own experiment or application before the story becomes the subject of the video.
 
 *Source: LWT model — the joke-free outline forces you to solve the structural problem and the voice problem separately, rather than both at once.*
 

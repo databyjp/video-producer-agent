@@ -3,7 +3,7 @@ type: Concept
 title: Script Structure Patterns
 description: Recurring structural patterns in video scripts — hooks, sections, CTAs, pacing
 tags: [scripting, structure, video-production]
-timestamp: 2026-06-29T00:00:00Z
+timestamp: 2026-07-20T21:04:00Z
 ---
 
 # Script Structure Patterns
@@ -18,7 +18,7 @@ Most videos follow this arc:
 - Opens with a **relatable pain point or provocative question**: "Should you let an AI agent run loose on your machine?", "What if search could be as easy as this?"
 - Immediately establishes **stakes** — why should the viewer care?
 - Often includes a quick visual payoff (headlines, demo clip, benchmark screenshot).
-- Sometimes the hook is a **story** (Laurenzo's detective work in the black box agents video).
+- Sometimes the hook is a **story** (Laurenzo's detective work in the black box agents video). Use an external story to create the question, then move quickly into JP's experiment, result, or application.
 
 ### 2. Problem / Context
 - Explains **why** the problem exists, not just what it is.
@@ -64,6 +64,29 @@ Most videos follow this arc:
 - **Cycles:** Multi-stage build with plan → review → execute → code review per stage.
 - **Summary:** Back to scripted, on-camera (~1 min).
 - **CTA:** Scripted.
+
+## Demo-Led Practical Build
+
+Use when the viewer's primary job is to build or see whether something works:
+
+1. **Outcome preview** — show the finished behavior or result immediately.
+2. **Problem and constraints** — explain what is being solved and what a successful build must do.
+3. **Build or experiment** — progress through meaningful decisions, not every setup step.
+4. **Finding** — show what worked, what failed, and what changed.
+5. **Tradeoffs and next step** — define where the approach is useful and give the viewer a practical continuation.
+
+The demo is the evidence, not decoration after a long explanation. Introduce architecture or benchmarks only when they explain a decision the viewer has just encountered.
+
+## Decision-Led Technical Explainer
+
+Use when the viewer's primary job is to choose between configurations, tools, or approaches:
+
+1. State the decision and the consequence of choosing poorly.
+2. Introduce two or three criteria that actually change the answer.
+3. Compare options through representative personas or workloads.
+4. End with a compact decision heuristic.
+
+Avoid comprehensive configuration tours. Include a detail only when it can change the recommendation.
 
 ## Section Dividers
 

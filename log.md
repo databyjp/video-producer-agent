@@ -586,3 +586,24 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Target:** Approximately 9–11 minutes, preserving the four-part structure while leaving detailed engineering for standalone videos.
 - **Cuts:** Compressed setup exposition, repeated preview warnings, vector mechanics, alert lifecycle narration, and the closing recap.
 - **Retained:** Working demo beats, workload boundaries, preview and cost caveats, deployment-dependent licensing notes, and all pre-record validation markers.
+
+## 2026-07-20 — Batch raw-video transcription script
+
+- **Output:** `code/transcribe_videos.py`
+- **Workflow:** Uses `uv run` and faster-whisper to recursively transcribe `raw/videos/` into timestamped JSON, text, and SRT files under `raw/videos/transcripts/`, preserving the input directory structure.
+- **Defaults:** `large-v3`, English, CPU `int8`, word timestamps, and VAD. Existing complete output sets are skipped unless `--overwrite` is supplied.
+
+## 2026-07-20 — Channel findings integrated into writing and review guidance
+
+- **Analysis captured:** Added `wiki/channel-findings-july-2026.md` with age-normalized findings from 22 YouTube exports, including explicit sample and interpretation limits.
+- **Writing workflow:** Added a dominant-viewer-job check and packaging-promise audit to `wiki/howto/script-writing-process.md`.
+- **Structure guidance:** Added demo-led and decision-led patterns, plus a faster transition from external stories into JP's own experiment, to `wiki/script-structure-patterns.md`.
+- **Production review:** Updated `wiki/developer-video-production-guidelines.md` to distinguish reach, depth, and conversion; diagnose packaging separately from distribution; and compare like with like.
+- **Evidence boundary:** All conclusions are recorded as channel findings or hypotheses to test, not causal findings or platform behavior.
+
+## 2026-07-20 — Explicit script review workflow
+
+- **Agent guidance:** Added a dedicated script-review workflow to `AGENTS.md`.
+- **Context loading:** Reviews now require the target script, available project brief, outline, packaging/metadata, baseline writing guidance, channel findings, and topic-specific wiki pages.
+- **Review order:** Promise and scope, opening, structure, spoken delivery, accuracy, visual communication, and product integration.
+- **Review behavior:** Findings are prioritized by viewer impact, must-fix issues are separated from optional polish, and review requests do not authorize rewriting files by default.

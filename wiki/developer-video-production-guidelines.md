@@ -3,7 +3,7 @@ type: Playbook
 title: Developer Video Production Guidelines
 description: Principles for making effective developer-facing videos that serve the viewer and the company
 tags: [video-production, devrel, guidelines, quality]
-timestamp: 2026-07-20T00:00:00Z
+timestamp: 2026-07-20T21:04:00Z
 ---
 
 # Developer Video Production Guidelines
@@ -69,7 +69,7 @@ The fastest way to lose a developer audience is to be perceived as selling. The 
 Title and thumbnail determine whether anyone sees your content. This isn't vanity — it's distribution mechanics.
 
 - **Title + thumbnail before scripting.** Patty Galloway (MrBeast consultant) recommends spending ~30% of effort on packaging before any recording. The title determines the keyword signal, the audience, and the click-through promise. ([source](../sources/greg-baugues-youtube-devrel-talk.md))
-- **Lead with the developer's question, not the product name.** "The problem with running AI agents on your machine" outperforms "Docker AI Sandboxes Explained."
+- **Test problem-led and product-led framing.** Lead with the developer's question when it broadens the relevance, but retain a product name when it makes the subject concrete or captures existing interest. Channel data does not yet establish that one framing consistently outperforms the other.
 - **"Versus" content performs reliably well.** Confirmed independently by Martin Keen (IBM) and Greg Baugues. Comparisons are "catnip for YouTube." ([source](../sources/ibm-technology-martin-keen-interview.md))
 - **Thumbnails need to work at thumbnail size.** One focal point, high contrast, 4 words or fewer. Developer audiences respond to clarity and credibility, not clickbait.
 
@@ -80,6 +80,16 @@ For detailed, data-driven guidance on packaging: [YouTube Title Optimization](yo
 ## 5. Hook Hard, Deliver Immediately
 
 The opening should quickly fulfill the title and thumbnail promise. Early retention is useful diagnostic evidence, but it is one of several viewer-satisfaction signals rather than a promote-or-bury gate.
+
+### Run a promise audit
+
+Before recording, state the packaging promise in one sentence and check:
+
+1. What specific outcome, answer, or experience did the title and thumbnail promise?
+2. When does the script begin delivering it?
+3. Does every major section advance that promise?
+
+If the opening uses someone else's story or an industry example, move into JP's experiment, result, or demonstration quickly. The story should create the question, not postpone the answer.
 
 ### What works for developer hooks:
 
@@ -99,7 +109,9 @@ The first minute gets disproportionate editing investment. Polish the opening; t
 
 ## 6. Structure for Comprehension
 
+- **One dominant viewer job.** A video may help the viewer learn, build, choose, or diagnose, but one of those jobs must clearly dominate. If the outline tries to serve several equally, narrow it or split it.
 - **One clear through-line per video.** The viewer should be able to state the video's argument in one sentence.
+- **Prefer concrete outcomes over inventories.** Demonstrations, decisions, and worked examples are easier to follow than broad surveys of features, models, or benchmark results.
 - **Sections as self-contained units.** Each section answers one question. Clearly labeled. A viewer who skips ahead should be able to understand a section in isolation.
 - **Chapters/timestamps by default for substantial videos.** They improve navigation and show respect for the viewer's time. They are not a documented direct ranking boost. ([official source](../sources/youtube-search-discovery-official.md))
 - **End with a genuine question.** Not "what do you think?" but a specific, answerable prompt that the viewer has context to respond to after watching the video.
@@ -156,7 +168,10 @@ Every video should ship with:
 
 - **Distribute where the content is genuinely useful.** A well-placed community post, newsletter, or social post can reach the intended audience. Do this for the viewer and the topic—not because of an assumed 48-hour ranking window.
 - **Review metrics at 24h (CTR, early drop), 7d (traffic mix, retention), 28d (loyalty).**
-- **Note one improvement** to apply to the next video. Compounding small improvements over time is more valuable than occasional overhauls.
+- **Diagnose the stage, not a single score.** Healthy impressions with weak CTR suggest a packaging review. A sharp drop before the promised value appears suggests an opening review. Strong retention or subscriber conversion with limited impressions may indicate valuable niche content rather than a failed video.
+- **Compare like with like.** Interpret retention, CTR, and conversion alongside video length, format, topic, and traffic source. Small channel samples produce hypotheses, not universal rules.
+- **Review three outcomes separately:** reach (views and impressions), depth (retention and watch time), and conversion (subscribers or another intended action). A video need not maximize all three to be useful.
+- **Note one improvement** to apply to the next comparable video. Compounding small improvements over time is more valuable than occasional overhauls.
 - **Update old videos.** Published metadata can be changed at any time. Change one variable at a time, avoid changing assets that are working, and use enough impressions to make the comparison meaningful.
 
 ---

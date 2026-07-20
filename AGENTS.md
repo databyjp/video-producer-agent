@@ -114,6 +114,33 @@ When the human asks for production work (e.g. "research topic X", "generate thum
 
 The wiki should never slow down a task. If there's nothing relevant yet, just do the work and capture the learnings after.
 
+### Script review
+
+When the human asks to review a script or draft (for example, `review projects/<project>/script.md`):
+
+1. **Read the project context** — read the target script in full, then inspect its project directory. Read `brief.md`, `outline.md`, and any current title/thumbnail or metadata document when present. Treat these as the source of truth for the video's scope and promise.
+2. **Load the review guidance** — read both wiki indexes as required by the Task workflow, then consult this baseline set:
+   - [Developer Video Production Guidelines](wiki/developer-video-production-guidelines.md)
+   - [Script Voice and Style](wiki/script-voice-and-style.md)
+   - [Writing for the Ear](wiki/writing-for-the-ear.md)
+   - [Script Writing Process](wiki/howto/script-writing-process.md)
+   - [Script Structure Patterns](wiki/script-structure-patterns.md)
+   - [Visual Direction Conventions](wiki/visual-direction-conventions.md)
+   - [Channel Findings — July 2026](wiki/channel-findings-july-2026.md)
+3. **Load topic knowledge** — use the local and Elastic DevRel indexes to find pages relevant to the script's subject. Verify time-sensitive technical claims against current primary sources; do not rely on the writing-guidance pages for factual accuracy.
+4. **Review in priority order:**
+   - **Promise and scope** — Does the script fulfill the brief, outline, title/thumbnail promise, and one dominant viewer job? Does it respect boundaries with other planned videos?
+   - **Opening and value delivery** — Does it establish stakes and begin delivering evidence, a result, demonstration, answer, or decision quickly?
+   - **Structure and comprehension** — Is there one clear through-line? Does each section advance it? Are broad surveys, benchmark lists, or setup details obscuring the useful outcome?
+   - **Spoken delivery and voice** — Does it sound like JP, work when heard once, use one idea per paragraph, and avoid dense written-register sentences or unabsorbable enumerations?
+   - **Accuracy and evidence** — Are claims current, appropriately qualified, and supported by the right evidence class? Are demos, commands, and code valid?
+   - **Visual communication** — Are visuals placed where they materially improve comprehension? Are designer deliverables separated from editor-time screenshots, code overlays, and demos?
+   - **Trust and product integration** — Are limitations explicit and company/product mentions earned by the viewer's problem-solving narrative?
+5. **Report findings before suggestions** — lead with the highest-impact issues, cite the relevant script sections, explain the viewer impact, and recommend a concrete fix. Separate must-fix issues from optional polish. Preserve the author's intent and voice.
+6. **Do not rewrite by default** — a review request authorizes analysis, not file edits. Offer or perform a rewrite only when the human asks for changes.
+
+If no meaningful issues are found, say so plainly and note any remaining verification risks. Feed reusable lessons back into the wiki and append the completed review to `log.md` as required by the Task workflow.
+
 ### Ingest (add knowledge)
 
 When the human provides sources (URLs or files in `raw/`):
