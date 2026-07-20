@@ -13,23 +13,14 @@ timestamp: 2026-07-20T20:10:00+01:00
 
 ## HOOK — ON CAMERA
 
-Elasticsearch nine point five does something slightly unusual.
+Elasticsearch nine point five does something slightly unusual. Its biggest new features are about doing less unnecessary work.
 
-Its biggest new features are about doing less unnecessary work.
-
-[fast montage: duplicated index structures collapsing → S3 queried from Kibana → vector settings being selected → alert moving from pending to active]
-
-There's a new Columnar Mode that stores fewer copies of analytical data.
-
+There's a new Columnar Mode that stores fewer copies of data.
 Data Federation can query files in S3 without ingesting them first.
-
 Vector search gets workload-specific defaults and data-aware calibration.
-
 And Kibana alerting is being rebuilt around a much cleaner model.
 
-This isn't every item in the release notes. These are the changes that could actually affect how you store, query, and operate your data.
-
-Much of it is preview technology, and I'll call that out as we go.
+Let me tell you about what they mean, because these changes will materially change how you store, query, and operate your data.
 
 -----
 

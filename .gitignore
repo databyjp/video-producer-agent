@@ -1,5 +1,7 @@
 temp
 .obsidian/
+analytics/videos
+analytics/yt-analytics-*
 
 # General
 .DS_Store
