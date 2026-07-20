@@ -607,3 +607,11 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Context loading:** Reviews now require the target script, available project brief, outline, packaging/metadata, baseline writing guidance, channel findings, and topic-specific wiki pages.
 - **Review order:** Promise and scope, opening, structure, spoken delivery, accuracy, visual communication, and product integration.
 - **Review behavior:** Findings are prioritized by viewer impact, must-fix issues are separated from optional polish, and review requests do not authorize rewriting files by default.
+
+## 2026-07-20 — Elastic 9.5 release script editorial revision
+
+- **Revision:** Updated `projects/202607-elastic-9-5-release-highlights/script.md` from draft v2 to draft v3 after a full editorial review.
+- **Packaging:** Broadened the title from Elasticsearch 9.5 to Elastic 9.5 so it matches the Kibana and Agent Observability coverage.
+- **Structure:** Reworked the hook around the selective “what matters” promise, added explicit audience decisions to each major section, and moved Alerting v2's weak-signal example ahead of its abstract model.
+- **Delivery:** Split dense technical sentences, strengthened spoken navigation, restored an opening visual payoff, and made the closing question consistent with all four major features.
+- **Evidence boundary:** Factual claims were assumed correct at the user's request; existing pre-record verification markers remain unresolved.

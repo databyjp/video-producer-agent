@@ -47,7 +47,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument(
         "--model",
-        default="large-v3",
+        # default="large-v3",
+        default="distil-large-v3",
         help="faster-whisper model name (use 'turbo' for faster, lower-cost runs).",
     )
     parser.add_argument(
