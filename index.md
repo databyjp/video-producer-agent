@@ -8,6 +8,10 @@ Master catalog of all pages in this knowledge bundle.
 
 ## Sources
 
+- [Draft: Why Elasticsearch Is Becoming a Columnar Database](sources/elastic-columnar-mode-draft-article.md) — Pre-publication rationale, behavior, workload boundaries, and roadmap for Columnar Mode
+- [Draft: Querying S3 Directly with ES|QL Data Federation](sources/esql-data-federation-draft-article.md) — Pre-publication S3 federation architecture, query capabilities, performance claims, and validation risks
+- [YouTube Help — Search, Discovery, and Content Performance](sources/youtube-search-discovery-official.md) — Official YouTube guidance on recommendations, search, analytics, metadata, and experiments
+- [Google Search Central — Video Indexing and Structured Data](sources/google-video-search-official.md) — Official Google guidance for watch pages, VideoObject, key moments, and video sitemaps
 - [Natural Scripted Delivery — Research Report](sources/natural-scripted-delivery-research.md) — Late-night TV writing pipeline, teleprompter technique, and solo creator takeaways
 - [IBM Technology — Martin Keen Interview](sources/ibm-technology-martin-keen-interview.md) — Audience-first YouTube strategy, 1M+ subscribers
 - [YouTube Based DevRel — Greg Baugues](sources/greg-baugues-youtube-devrel-talk.md) — Growing a personal dev YouTube channel, packaging, respecting viewer time
@@ -28,6 +32,8 @@ Master catalog of all pages in this knowledge bundle.
 
 ### Concepts
 
+- [Elasticsearch Columnar Mode](wiki/elasticsearch-columnar-mode.md) — Accurate framing, workload heuristic, evidence boundaries, and relationship to the metrics deep dive
+- [ES|QL Data Federation](wiki/esql-data-federation.md) — Direct S3 querying, strongest demo story, validation gates, and claim boundaries
 - [Script Voice and Style](wiki/script-voice-and-style.md) — JP's writing voice, humor, tone conventions
 - [Script Structure Patterns](wiki/script-structure-patterns.md) — Hooks, sections, CTAs, pacing archetypes
 - [Visual Direction Conventions](wiki/visual-direction-conventions.md) — Square-bracket notation for popups, b-roll, overlays, demos

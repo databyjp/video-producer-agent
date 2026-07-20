@@ -3,7 +3,7 @@ type: Playbook
 title: Developer Video Production Guidelines
 description: Principles for making effective developer-facing videos that serve the viewer and the company
 tags: [video-production, devrel, guidelines, quality]
-timestamp: 2026-06-29T00:00:00Z
+timestamp: 2026-07-20T00:00:00Z
 ---
 
 # Developer Video Production Guidelines
@@ -37,7 +37,7 @@ Product-specific content (deep tutorials, feature releases) has a valid place �
 Developers value their time acutely. This isn't a platitude — it's a measurable production principle.
 
 - **Density over length.** A Fireship "100 Seconds" video compresses hours of research into 2 minutes. Baugues's "47 Claude Code Tips in 9 Minutes" took 50–60 hours to produce. Both respect the viewer's time by doing the compression work for them. ([source](../sources/greg-baugues-youtube-devrel-talk.md))
-- **Don't pad for length.** The YouTube algorithm rewards *retention percentage*, not raw minutes. A 6-minute video at 80% retention beats a 20-minute video at 30% retention.
+- **Don't pad for length.** YouTube uses both average view duration and average percentage viewed; relative watch time matters more for short videos, absolute watch time for longer ones. Make the complete answer, then stop. ([official source](../sources/youtube-search-discovery-official.md))
 - **Front-load value.** Developers will leave if the first 30 seconds don't signal that their time will be well spent. Don't bury the conclusion for engagement — when Baugues spoiled his verdict upfront, the top comments thanked him for respecting their time.
 - **Cut mercilessly.** Edit for clarity first, effects second. Every sentence should earn its place. ([source](../sources/james-coffey-devrel-video-stack.md))
 
@@ -45,9 +45,9 @@ Developers value their time acutely. This isn't a platitude — it's a measurabl
 
 | Format | Typical Length | When to Use |
 |---|---|---|
-| Short / explainer | 60–90 seconds | Single concept, discovery/awareness |
-| Standard tutorial | 8–15 minutes | Algorithm-optimized, focused topic |
-| Deep dive | 15–25 minutes | Complex topic, search/repeat audience |
+| Short vertical video | Up to 3 minutes | One idea, one result, or a clear bridge to a longer resource |
+| Focused tutorial | Often 8–15 minutes | One complete workflow or answer |
+| Deep dive | Often 15–25 minutes | Complex subject that benefits from evidence, tradeoffs, or a fuller demo |
 
 Don't target a length. Target complete coverage of the topic with zero filler, and let the length fall where it falls.
 
@@ -79,7 +79,7 @@ For detailed, data-driven guidance on packaging: [YouTube Title Optimization](yo
 
 ## 5. Hook Hard, Deliver Immediately
 
-The first 10–20 seconds determine whether YouTube promotes the video or buries it. The steepest viewer drop-off occurs in this window.
+The opening should quickly fulfill the title and thumbnail promise. Early retention is useful diagnostic evidence, but it is one of several viewer-satisfaction signals rather than a promote-or-bury gate.
 
 ### What works for developer hooks:
 
@@ -101,7 +101,7 @@ The first minute gets disproportionate editing investment. Polish the opening; t
 
 - **One clear through-line per video.** The viewer should be able to state the video's argument in one sentence.
 - **Sections as self-contained units.** Each section answers one question. Clearly labeled. A viewer who skips ahead should be able to understand a section in isolation.
-- **Chapters/timestamps always.** They reduce drop-off (viewers navigate instead of leaving), improve search ranking, and show respect for the viewer's time.
+- **Chapters/timestamps by default for substantial videos.** They improve navigation and show respect for the viewer's time. They are not a documented direct ranking boost. ([official source](../sources/youtube-search-discovery-official.md))
 - **End with a genuine question.** Not "what do you think?" but a specific, answerable prompt that the viewer has context to respond to after watching the video.
 
 ---
@@ -146,18 +146,18 @@ Every video should ship with:
 
 - [ ] **Timestamps/chapters** in the description
 - [ ] **A working code repo** (where applicable) — not a toy example, but something a developer can clone and run
-- [ ] **Description of 300+ words** — structured, keyword-natural, includes timestamps and links
-- [ ] **Corrected captions/SRT** — auto-captions mis-transcribe technical terms 67% of the time
+- [ ] **Useful, unique description** — lead with the topic and value; include timestamps and relevant links
+- [ ] **Reviewed captions/SRT** — correct API names, CLI flags, library names, and other technical vocabulary
 - [ ] **A pinned comment** with a one-line summary and a specific question
 
 ---
 
 ## 10. After Publishing
 
-- **Seed externally in the first 48 hours.** A small subscriber base means a weak algorithm test pool. One well-placed HN post, Reddit thread, or newsletter mention in the first 48 hours provides the qualified views the algorithm needs.
+- **Distribute where the content is genuinely useful.** A well-placed community post, newsletter, or social post can reach the intended audience. Do this for the viewer and the topic—not because of an assumed 48-hour ranking window.
 - **Review metrics at 24h (CTR, early drop), 7d (traffic mix, retention), 28d (loyalty).**
 - **Note one improvement** to apply to the next video. Compounding small improvements over time is more valuable than occasional overhauls.
-- **Update old videos.** Published metadata can be changed at any time. If CTR is low, revise the title. If impressions are low, revise the description. One change at a time, then wait 2 weeks.
+- **Update old videos.** Published metadata can be changed at any time. Change one variable at a time, avoid changing assets that are working, and use enough impressions to make the comparison meaningful.
 
 ---
 
@@ -170,7 +170,7 @@ These guidelines synthesize findings from:
 - [Clerk YouTube Creator Program](../sources/clerk-youtube-creator-program.md)
 - [The DevRel Video Stack — James Coffey](../sources/james-coffey-devrel-video-stack.md)
 - Hackmamba Developer Video Survey (101 developers, 2025)
-- YouTube algorithm and retention benchmarks (2025–2026)
+- [YouTube Help — Search, Discovery, and Content Performance](../sources/youtube-search-discovery-official.md)
 - Fireship channel analysis (~4M subscribers, edutainment model)
 
 See also: [Script Voice and Style](script-voice-and-style.md) · [Script Structure Patterns](script-structure-patterns.md) · [Visual Direction Conventions](visual-direction-conventions.md)

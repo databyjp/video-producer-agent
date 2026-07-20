@@ -68,8 +68,19 @@ The table below describes the full lifecycle of a video. The user will ask for h
 ## Domain guidance
 
 - **Scope**: Video production workflows, tools, techniques, and automation for developer advocacy content (tutorials, explainers, demos).
-- **Quality principle**: Thumbnails are human-executed (AI ideates only). Captions and chapters are always automated. Editing uses transcript-based tools for speed without losing control.
+- **Quality principle**: Thumbnails are human-executed (AI ideates only). Captions and chapters are automated first passes that receive a human accuracy/usability review. Editing uses transcript-based tools for speed without losing control.
 - **Source evaluation**: Official tool docs are authoritative. Creator workflow posts are useful for patterns but not prescriptive. Marketing claims are noted as such.
+
+### Evidence classes
+
+When writing production strategy pages, make the evidence type explicit:
+
+- **Platform fact** — behavior or a requirement documented by YouTube, Google, or another primary platform source. Cite that source.
+- **Channel finding** — a result measured in JP's own analytics. Include the date range, traffic source, sample size where meaningful, and the metric.
+- **External hypothesis** — a third-party study, creator case study, or vendor analysis. Name the source and treat it as an idea to test, not a universal rule.
+- **Creative principle** — an intentional editorial or design preference. State it as guidance, not empirical fact.
+
+Do not turn correlation, a numerical benchmark, or a creator anecdote into a platform claim. When an official source does not specify a threshold or mechanism, prefer qualitative wording and validate it with channel data over time.
 
 ## Page format (OKF-aligned)
 

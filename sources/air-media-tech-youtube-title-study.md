@@ -3,21 +3,21 @@ type: Source Summary
 title: "AIR Media Tech — YouTube Title Study Across 18,000 Channels"
 description: Data study analyzing title patterns across 18,080 channels and 11 niches to identify what drives clicks and engagement
 tags: [youtube-titles, data-study, ctr, niche-analysis, packaging]
-timestamp: 2026-06-29T00:00:00Z
+timestamp: 2026-07-20T00:00:00Z
 source: https://air.io/en/audience-growth/how-to-write-a-youtube-title-that-gets-clicked-research-across-11-niches
 ---
 
 # AIR Media Tech — YouTube Title Study (18,000 Channels, 11 Niches)
 
-Analysis of titles across 18,080 English-language YouTube channels (100K–100M monthly views, Shorts-heavy channels excluded) measured against engagement rates and p75 views. **Correlational, not causal** — title patterns are associated with performance but don't prove the title alone caused it.
+Analysis of titles across 18,080 English-language YouTube channels (100K–100M monthly views, Shorts-heavy channels excluded) measured against engagement rates and p75 views. **Evidence class: external hypothesis. Correlational, not causal** — title patterns are associated with performance but don't prove the title alone caused it. The primary URL was access-restricted during the July 2026 evidence audit, so use its numerical conclusions as hypotheses to test.
 
-## Universal Findings
+## Reported findings
 
 ### Length
 
-- **30–50 characters is the universal sweet spot.** Outperforms every other bucket across almost every niche and tier.
+- AIR reports that 30–50 characters correlated with performance across many of its sampled niches.
 - Under 30 wins in Gaming, Entertainment, and Food & Drink only.
-- **90+ characters consistently underperform** on views — truncation kills them on mobile (YouTube truncates at ~60–70 chars). Exception: search-optimized content where query match matters more than browse CTR.
+- 90+ character titles correlated with lower views in its sample. Title visibility and truncation are surface-dependent, so do not treat a fixed mobile character count as a platform rule.
 - Counterintuitively, 90+ char titles sometimes show higher engagement *among those who click* — reflecting search-driven audiences.
 
 ### Numbers
@@ -31,7 +31,7 @@ Analysis of titles across 18,080 English-language YouTube channels (100K–100M 
 
 - Work when the viewer already has the question — strong in **Education, Business, Science & Tech**.
 - Fail in Gaming, Food & Drink, Kids — niches where viewers aren't in "seeking mode."
-- Clickbait risk: YouTube suppresses questions that don't get answered in the video.
+- Unanswered questions risk a title/video mismatch; YouTube warns that clickbait patterns can reduce recommendations.
 
 ### ALL CAPS
 
@@ -54,7 +54,7 @@ Analysis of titles across 18,080 English-language YouTube channels (100K–100M 
 
 ### Keyword position
 
-- Front-loading keyword in first 40% of title improves search ranking and survives truncation.
+- Leading with the query phrase is a useful search-intent hypothesis and improves visible clarity.
 - For browse/discovery traffic, **hook strength outweighs keyword placement**.
 - Practical: for search-driven content, keyword first. For browse discovery, hook first and let keyword land naturally.
 

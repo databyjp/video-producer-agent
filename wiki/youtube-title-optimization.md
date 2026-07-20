@@ -3,31 +3,30 @@ type: How-To
 title: YouTube Title Optimization
 description: Data-driven patterns for writing YouTube titles that earn clicks and rank in search
 tags: [youtube-titles, ctr, seo, packaging, data]
-timestamp: 2026-06-29T00:00:00Z
+timestamp: 2026-07-20T00:00:00Z
 ---
 
 # YouTube Title Optimization
 
 Titles are half of the click decision (the other half is the [thumbnail](youtube-thumbnail-design.md)). A title does two jobs simultaneously: tells the algorithm what the video is about (semantic signal for search routing) and tells the viewer whether to click (emotional/informational trigger).
 
-This page synthesizes findings from multiple data studies — primarily AIR Media Tech's analysis of 18,080 channels across 11 niches ([source](../sources/air-media-tech-youtube-title-study.md)) and SubSub's analysis of 120,703 videos.
+This page combines official YouTube guidance with external title studies. Treat external numerical findings as hypotheses to test on this channel, not universal ranking rules. ([official source](../sources/youtube-search-discovery-official.md))
 
 ---
 
 ## The Rules
 
-### 1. Length: 30–50 characters is the universal sweet spot
+### 1. Length: put the useful part first
 
-This is the single most consistent finding across all studies. Long enough to communicate value, short enough to survive mobile truncation (YouTube truncates at ~60–70 chars on mobile).
+Title visibility varies by surface and device. Keep the subject and reason to care early enough that a truncated title remains intelligible.
 
-- **90+ characters consistently underperform** — the title gets cut off before the viewer sees the point.
-- Exception: very long titles can show higher engagement *among those who click* — because they match specific search queries. But absolute view count is lower.
-- For developer/tech/education content, 30–50 chars with a clear subject and optional year signal is the default.
+- AIR's correlational study found 30–50 characters often performed well in its sample; other studies reach different conclusions for long-form videos.
+- Start concise, but preserve the exact technical term or outcome when search intent requires it.
 
 ### 2. Keyword position: front-load for search, hook-first for browse
 
-- YouTube's search algorithm weights keywords appearing earlier in the title more heavily.
-- **Practical rule:** primary keyword within the first 5 words (or first 40% of the title).
+- YouTube recommends putting important words near the beginning so viewers can see them quickly.
+- **Practical rule:** for search-intent videos, lead with the query phrase when it does not make the title awkward.
 - For browse/discovery traffic, **hook strength outweighs keyword placement**. "Why 3 engineers configure vector search differently" outperforms "Vector search configuration: why it differs."
 - If your video will be found primarily through search, keyword first. If through browse, hook first.
 
@@ -40,7 +39,7 @@ The only emotional signal that transfers cleanly across all niches and channel s
 - "I finally found"
 - "actually"
 
-These work because they signal the viewer doesn't already know what's inside. **If you change one thing about your titles, add a curiosity signal.**
+These are optional creative devices. Use them only when the video delivers the implied revelation; specificity can be stronger than curiosity for a technical how-to.
 
 ### 4. Numbers help — but only when specific
 
@@ -52,7 +51,7 @@ These work because they signal the viewer doesn't already know what's inside. **
 
 - Strong positive in **Education, Business, Science & Tech** — niches where viewers arrive in "seeking mode."
 - Developer example: "Should you use an AI agent for code reviews?" works because developers are actively debating this.
-- Clickbait risk: YouTube suppresses questions the video doesn't answer.
+- Clickbait risk: an unanswered question creates a title/video mismatch, which can lead to poor watch time and fewer recommendations.
 
 ### 6. Brackets and parentheses add a modest positive
 
@@ -102,8 +101,8 @@ See [YouTube Thumbnail Design](youtube-thumbnail-design.md) for the other half.
 
 ## Testing Titles
 
-- **YouTube Studio Experiments** (available to YPP channels): A/B test 2–3 titles simultaneously with statistical reporting. Free, uses real audience.
-- **Manual testing:** Publish with Title A, wait for 500+ impressions, record CTR. Switch to Title B, wait for 500+ more. Keep the winner.
+- **YouTube Studio A/B testing** (requires Advanced features): test up to three titles, thumbnails, or combinations concurrently. The winner is selected by watch time.
+- Avoid sequential manual tests when native testing is available: different audience cohorts and timing can make a CTR comparison misleading.
 - Test one variable at a time: hook word vs keyword-first, with/without year, with/without parenthetical.
 - **Always test alongside thumbnail** — changing the title without considering the thumbnail tests the wrong thing.
 - Update old video titles that underperform. YouTube continuously re-evaluates metadata. A title refresh can unlock recommendation traffic on older content.
@@ -113,8 +112,8 @@ See [YouTube Thumbnail Design](youtube-thumbnail-design.md) for the other half.
 ## Quick Checklist
 
 - [ ] Primary keyword within first 5 words
-- [ ] 30–50 characters (60 max before truncation)
-- [ ] At least one curiosity signal or specific hook
+- [ ] Subject and payoff appear early enough to survive truncation
+- [ ] A specific hook; use curiosity only when it is earned
 - [ ] Year included if content is time-sensitive
 - [ ] Reads naturally — not keyword-stuffed
 - [ ] Different from the thumbnail message (complementary, not duplicate)

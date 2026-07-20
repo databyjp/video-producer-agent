@@ -3,21 +3,18 @@ type: Source Summary
 title: "Hooksnap — What Makes a YouTube Thumbnail Go Viral (2026 Data)"
 description: Data-backed breakdown of thumbnail elements that drive viral CTR, including face expressions, colors, text, and composition
 tags: [thumbnails, ctr, data-study, design, youtube]
-timestamp: 2026-06-29T00:00:00Z
+timestamp: 2026-07-20T00:00:00Z
 source: https://www.hooksnap.io/blog/youtube-viral-thumbnail-data-study-2026
 ---
 
 # Hooksnap — What Makes a YouTube Thumbnail Go Viral? (2026 Data)
 
-Data-backed analysis of thumbnail CTR patterns from 2026, including A/B testing results and a study of 300,000+ viral videos.
+**Evidence class: external hypothesis.** This vendor study is useful for thumbnail concepts to test, not for universal CTR targets or documented YouTube ranking behavior. The source URL was unavailable during the July 2026 evidence audit; retain the summary as a traceable hypothesis until the original or an archive is available.
 
-## CTR Benchmarks
+## Reported observations to test
 
-- Average thumbnail CTR: 4–6%
-- Good: 7%+; viral distribution: 9–10%+
-- **Traffic source matters enormously:** Search CTR 8–15%, Browse 3–7%, Suggested 5–10%
+- CTR varies strongly by audience, traffic source, and surface.
 - A thumbnail that works in search (clear, literal) may fail on browse (needs to compete for casual attention)
-- 90% of best-performing videos use custom thumbnails
 
 ## Faces
 
@@ -50,9 +47,9 @@ Data-backed analysis of thumbnail CTR patterns from 2026, including A/B testing 
 - Winning patterns: single subject + clean background, before/after split, subject + object reaction, scale contrast
 - Must be understandable in under half a second
 
-## Quality CTR (Most Important 2026 Shift)
+## Accurate promise
 
-YouTube now evaluates **Quality CTR**: high click-through + low retention in first 15–30 seconds = active demotion. This is YouTube's direct response to clickbait thumbnails.
+YouTube does not publish a metric called “Quality CTR.” Official guidance does warn that a high CTR paired with low watch time is a clickbait pattern that can reduce recommendations.
 
 Algorithm tracks:
 - Whether viewers continue watching after your video (session contribution)

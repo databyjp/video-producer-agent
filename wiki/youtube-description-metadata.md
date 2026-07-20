@@ -3,7 +3,7 @@ type: How-To
 title: YouTube Description and Metadata
 description: How to write descriptions, use tags, chapters, and captions for maximum discoverability
 tags: [youtube-seo, description, metadata, chapters, captions, tags]
-timestamp: 2026-06-29T00:00:00Z
+timestamp: 2026-07-20T00:00:00Z
 ---
 
 # YouTube Description and Metadata
@@ -16,39 +16,38 @@ After the [title](youtube-title-optimization.md) and [thumbnail](youtube-thumbna
 
 ### Structure
 
-The first 150–200 characters appear before "Show more" in search results and suggested videos. This is **prime real estate.**
+The opening lines appear before “Show more” on the watch page. Use them to state the topic and value clearly.
 
 1. **First 150 chars:** Primary keyword + value proposition or hook. Not a generic intro.
-2. **Body (200–300 words minimum):** Target keyword 2–4 times naturally. Include secondary/long-tail keyword variations.
+2. **Body:** Add useful context, relevant links, and terminology naturally. Length should serve the viewer, not a word-count target.
 3. **Chapters/timestamps:** Always. See below.
 4. **Links:** Relevant resources, code repos, referenced docs.
 5. **CTA:** Specific, not generic. "Clone the repo and try the vector config from 4:22" > "Like and subscribe."
 
 ### Key Rules
 
-- **Unique per video.** Duplicate descriptions across videos are treated as a low-quality signal and hurt SEO. Template the structure, but write unique copy each time.
-- **Keyword in first 25 words** of description for Google indexing.
-- **Write for humans first.** YouTube's Gemini-based AI understands semantic meaning; keyword-stuffing is counterproductive.
+- **Unique per video.** Write video-specific copy; reuse only boilerplate such as an affiliation or standard resource footer.
+- **Lead with the topic and outcome.** This gives viewers and search systems clear context without keyword stuffing.
+- **Write for humans first.** Search relevance considers the title, description, and video content; keyword stuffing adds little value.
 - Our [production guidelines](developer-video-production-guidelines.md#9-supporting-materials) spec 300+ words, structured, keyword-natural, with timestamps and links.
 
 ---
 
 ## Chapters / Timestamps
 
-Chapters are no longer optional for videos 8+ minutes. They serve multiple functions:
+Chapters are optional but valuable navigation aids for substantial tutorials. They serve multiple functions:
 
 1. **Retention:** Viewers navigate instead of leaving. Reduces drop-off.
-2. **Multi-query ranking:** A single well-chaptered video can rank for multiple search queries because each chapter functions as a standalone answer.
-3. **Google integration:** YouTube tested AI Overview video carousels that display relevant video portions directly in search. Without chapters, your video can't be "sliced."
-4. **Structured data:** Chapter titles are keyword context for the algorithm.
+2. **Discoverability:** Clear timestamps may be eligible for Google Search key moments; this is not a ranking guarantee.
+3. **Orientation:** Chapter titles help a viewer judge where an answer appears.
 
 ### Requirements
 
 - First timestamp must be `00:00`
 - Minimum 3 chapters
 - Each chapter ≥10 seconds long
-- Titles under 50 characters, keyword-rich
-- **Manual chapters > automatic** — you control the keyword targeting and break points
+- Descriptive, concise titles
+- **Manual chapters give control;** automatic chapters are also available when eligible
 
 ### Chapter title structure
 
@@ -58,10 +57,9 @@ Structure chapters to tell a story: Problem → Context → Solution → Impleme
 
 ## Captions / SRT
 
-- Auto-captions are now used as a ranking input by the algorithm.
-- Uploading your own SRT yields **15–25% better keyword indexing** than auto-captions.
-- For developer content this is especially valuable: auto-captions mis-transcribe API names, CLI flags, and library names ~67% of the time.
-- Mentioning target keywords naturally within the **first 60 seconds** of spoken audio has measurable positive ranking impact.
+- Review captions for accessibility and technical accuracy.
+- Correct API names, CLI flags, library names, and product terminology; do not claim a universal indexing lift without channel evidence.
+- Explain the core topic early because it fulfills the packaging promise, not because of a fixed keyword-placement window.
 
 ---
 
@@ -69,26 +67,23 @@ Structure chapters to tell a story: Problem → Context → Solution → Impleme
 
 Tags barely move rankings in 2026. YouTube's semantic AI understands context without exact keyword matching.
 
-- Use 8–12 tags max
-- Start with your exact primary keyword, then add variations and related terms
-- Stay under 500 characters total
-- Primarily useful for correcting common misspellings
-- **Spend 20–30 seconds on tags and move on.** Don't obsess.
+- Use a small set only when they help correct common misspellings.
+- Tags have a minimal discovery role. Do not over-invest.
 
 ---
 
 ## Hashtags
 
 - Add 2–3 hashtags matching your title's primary keyword
-- They appear above the title and provide a small CTR boost
-- Low-impact signal — not worth significant time
+- Up to three can appear above the title.
+- Use relevant hashtags sparingly; there is no documented CTR lift.
 
 ---
 
 ## End Screens and Cards
 
-- End screens drive session watch time, which is a Tier 1 ranking signal
-- Target 12%+ end-screen CTR
+- Use end screens to point viewers to the most appropriate next video or playlist.
+- Track end-screen performance against your own baseline; YouTube publishes no universal target.
 - Use your most-watched related video as end screen
 - Pin a relevant comment linking to a follow-up video
 

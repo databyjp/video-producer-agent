@@ -3,12 +3,12 @@ type: How-To
 title: Video SEO for Google
 description: How to get videos into Google search results using structured data, sitemaps, and embedding
 tags: [google-seo, structured-data, schema-markup, video-sitemaps, video-seo]
-timestamp: 2026-06-29T00:00:00Z
+timestamp: 2026-07-20T00:00:00Z
 ---
 
 # Video SEO for Google
 
-YouTube SEO and Google Video SEO are **two separate disciplines**. YouTube ranks on engagement signals. Google ranks on structured data. A video can dominate one while being invisible on the other. ([source](../sources/yume-video-seo-google-youtube.md))
+YouTube discovery and Google video visibility are related but distinct. YouTube considers viewer response and personalization; Google considers relevance, quality, and eligibility for video features. Structured data helps Google understand a page but does not itself determine ranking. ([official source](../sources/google-video-search-official.md))
 
 This page covers the Google side. For YouTube-specific ranking factors, see [YouTube SEO Fundamentals](youtube-seo-fundamentals.md).
 
@@ -16,11 +16,7 @@ This page covers the Google side. For YouTube-specific ranking factors, see [You
 
 ## Why It Matters
 
-- ~26% of Google SERPs include a video carousel; 80%+ of those videos are from YouTube
-- 55%+ of how-to query results show a video carousel
-- 88% of videos ranking on Google also rank top 10 on YouTube
-- Pages with embedded YouTube videos have **2×** first-page ranking keywords; visitors spend **2.6×** more time
-- 29.5% of Google AI Overviews cite YouTube (the most-cited domain overall)
+Google can surface eligible videos and key moments for queries where video is a useful answer. For DevRel, this is most relevant when an owned page provides a complete, video-first learning resource rather than merely embedding a supporting clip.
 
 ---
 
@@ -42,8 +38,8 @@ Tell Google about your video with structured data on any page where the video is
 }
 ```
 
-**Required:** `name`, `thumbnailUrl`, `uploadDate`, `description`
-**Strongly recommended:** `contentUrl` or `embedUrl`, `duration` (ISO 8601), `interactionStatistic`
+**Required:** `name`, `thumbnailUrl`, `uploadDate`
+**Useful recommended properties:** `description`, `contentUrl` or `embedUrl`, and `duration` (ISO 8601)
 
 ---
 
@@ -53,7 +49,7 @@ For "key moments" in Google search:
 
 - **Clip markup (manual):** Define segments with name, start/end offset, and URL. Ideal for instructional content where you know which segments viewers search for.
 - **SeekToAction markup (automatic):** Tell Google your URL supports deep-linking (e.g. `?t=30`). Google uses ML to determine valuable segments. Video must be ≥30 seconds.
-- **Hybrid approach:** When both are present, Google prioritizes manual Clip segments and falls back to SeekToAction for the rest. Best of both worlds for a large library.
+- **Choose the appropriate approach:** Google documents Clip and SeekToAction as alternative key-moment strategies. Use Clip when manually curated moments are valuable; use SeekToAction when the player supports timestamp deep links.
 
 ---
 
@@ -72,11 +68,11 @@ Required tags: `<video:title>`, `<video:description>`, `<video:thumbnail_loc>`, 
 
 ## Embedding Best Practices
 
-- Use YouTube embeds (Google favors YouTube over other platforms)
+- Use the video host and embed format that best serves the audience and page
 - Embed above the fold on the relevant page
-- One primary video per page (multiple embeds confuse indexing)
-- Publish transcript below the embedded video
-- **Caveat:** Google now sends clicks on embedded video results to YouTube, not the host page. Embedding still helps your page rank, but the click goes to YouTube.
+- Prefer one primary video per watch page; avoid unrelated embeds
+- Publish a useful transcript or companion content when it serves readers
+- **Caveat:** A supporting embed on an article is not necessarily indexed as a video watch page. A dedicated watch page is the appropriate format when the video itself should be eligible for Google video features.
 
 ### Core Web Vitals
 
@@ -85,14 +81,9 @@ Required tags: `<video:title>`, `<video:description>`, `<video:thumbnail_loc>`, 
 
 ---
 
-## AI Search Optimization
+## Retrieval-Friendly Companion Content
 
-A third layer: AI engines (ChatGPT, Perplexity, Google AI Overviews) are parsing video at scale.
-
-- YouTube cited **200×** more than any other video platform by AI engines
-- Q&A-formatted content is **40% more likely** to be cited by AI tools
-- Content updated within 30 days gets **2.3×** more LLM citations
-- **Brand search volume** (not backlinks) is the strongest predictor of AI citations
+Clear structure improves a page for readers and makes it easier for search and retrieval systems to understand:
 
 ### For transcripts
 
@@ -107,14 +98,13 @@ A third layer: AI engines (ChatGPT, Perplexity, Google AI Overviews) are parsing
 
 For developer advocacy, the Google layer matters when you:
 
-1. **Embed videos on company docs/blog.** Apply VideoObject + Clip schema. This wins the Google video carousel for queries where users land on docs.
-2. **Write companion blog posts.** The video embed helps the post rank; the schema helps the video appear in Google results.
-3. **Target how-to queries.** Over 55% of how-to results show video carousels — if you're not in that carousel, you're missing half the visual real estate.
+1. **Create a dedicated watch page** when Google video-feature eligibility for an owned property is a real goal.
+2. **Write companion blog posts** when they add code, tables, sources, or updated guidance that readers need.
+3. **Target genuine how-to queries** where video is a useful format; do not assume every query produces a video feature.
 
 ---
 
 ## Sources
 
-- [Yume — Video SEO Guide](../sources/yume-video-seo-google-youtube.md)
-- Google Search Central — Video Structured Data (last updated Feb 13, 2026)
-- Google Search Central — Video Sitemaps
+- [Google Search Central — Video Indexing and Structured Data](../sources/google-video-search-official.md)
+- [Yume — Video SEO Guide](../sources/yume-video-seo-google-youtube.md) — external hypotheses and examples

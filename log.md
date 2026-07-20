@@ -534,3 +534,55 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Output:** `projects/202607-video-search-tutorial/youtube-metadata.md`
 - **Contents:** Title options (3 variants with rationale), full description with chapter stubs and links, thumbnail title suggestions, pinned comment, tags.
 - **Wiki pages consulted:** youtube-title-optimization.md, youtube-description-metadata.md, youtube-thumbnail-design.md, past-videos-catalog.md.
+
+## 2026-07-20 — Evidence normalization for YouTube strategy wiki
+
+**Action:** Audited YouTube strategy, packaging, metadata, companion-content, and Google video SEO guidance against current official YouTube Help and Google Search Central documentation.
+
+**Pages created:**
+- `sources/youtube-search-discovery-official.md` — Official source base for recommendations, search, metadata, chapters, and A/B testing.
+- `sources/google-video-search-official.md` — Official source base for watch pages, VideoObject, key moments, and video sitemaps.
+
+**Pages revised:**
+- `wiki/developer-video-production-guidelines.md`
+- `wiki/youtube-seo-fundamentals.md`
+- `wiki/youtube-title-optimization.md`
+- `wiki/youtube-thumbnail-design.md`
+- `wiki/youtube-description-metadata.md`
+- `wiki/youtube-seo-tools.md`
+- `wiki/blog-video-companion-strategy.md`
+- `wiki/video-seo-google.md`
+
+**Source summaries normalized:** CreatorBlade, Yume, Hooksnap, AIR Media Tech, and Konabayev are now clearly framed as external hypotheses, tool comparisons, or creative inputs rather than platform facts.
+
+**Conventions added:** `AGENTS.md` now distinguishes platform facts, channel findings, external hypotheses, and creative principles. Future strategy pages must identify the evidence class and avoid presenting vendor correlations or fixed thresholds as YouTube behavior.
+
+## 2026-07-20 — Elastic 9.5 release highlights outline
+
+- **Task:** Developed a selective release-highlights video strategy and review outline.
+- **Output:** `projects/202607-elastic-9-5-release-highlights/outline.md`
+- **Structure:** “Store less, move less, tune less, page less,” covering Columnar Mode, ES|QL Data Federation, vector index automation, and Alerting v2, with shorter mentions of `IN` / `NOT IN` and Agent Observability.
+- **Editorial constraints:** Preview maturity and licensing are surfaced explicitly; unsupported Columnar Mode benchmarks are excluded; Data Federation, vector, and Alerting details are marked for verification in the final release build.
+
+## 2026-07-20 — Columnar Mode and Data Federation draft ingestion
+
+- **Sources ingested:** Pre-publication Elastic articles on Columnar Mode and ES|QL Data Federation supplied by the user.
+- **Source summaries:** `sources/elastic-columnar-mode-draft-article.md` and `sources/esql-data-federation-draft-article.md`.
+- **Concept pages:** `wiki/elasticsearch-columnar-mode.md` and `wiki/esql-data-federation.md`.
+- **Outline update:** Added the Data Federation registration model, formats, compression, discovery, pushdowns, and a safer external-data-plus-lookup demo to the 9.5 release outline.
+- **Risks retained:** The Data Federation draft explicitly requires snapshot validation and contains inconsistent deployment availability language. Benchmark multipliers lack sufficient methodology for competitor comparisons. The multi-source `FROM` example is a union, not by itself a correlation between branches.
+
+## 2026-07-20 — Elastic 9.5 release highlights script v1
+
+- **Task:** Drafted the first full spoken script for the Elastic 9.5 release video.
+- **Output:** `projects/202607-elastic-9-5-release-highlights/script.md`
+- **Voice:** Selective and editorial rather than a release-note recital, with restrained humor and explicit spoken navigation through “store less, move less, tune less, page less.”
+- **Scope:** Four major sections for Columnar Mode, Data Federation, vector automation, and Alerting v2; brief callbacks for `IN` / `NOT IN` and Agent Observability.
+- **Validation:** Unconfirmed syntax, status, packaging, deployment support, and demo behavior remain marked as pre-record checks. Unsupported benchmark multipliers are excluded.
+
+## 2026-07-20 — Elastic 9.5 release script condensed
+
+- **Revision:** Cut the release script from roughly 2,270 to roughly 1,400 spoken words.
+- **Target:** Approximately 9–11 minutes, preserving the four-part structure while leaving detailed engineering for standalone videos.
+- **Cuts:** Compressed setup exposition, repeated preview warnings, vector mechanics, alert lifecycle narration, and the closing recap.
+- **Retained:** Working demo beats, workload boundaries, preview and cost caveats, deployment-dependent licensing notes, and all pre-record validation markers.
