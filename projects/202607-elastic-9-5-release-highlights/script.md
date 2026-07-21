@@ -13,18 +13,15 @@ timestamp: 2026-07-21T08:35:00+01:00
 
 ## HOOK — ON CAMERA
 
-Elastic nine point five is a preview-heavy release, but four changes reveal where the platform is heading.
+Elastic nine point five includes four changes that indicate where the platform is heading.
 
-[fast montage: duplicated log structures collapse → ES|QL queries S3 → vector settings calibrate → weak signal recorded without a page]
+It allows you to:
+- Store fewer copies of analytical data.
+- Query files in S3 without ingesting them first.
+- Let a vector index adapt to the data it receives.
+- Write smarter, rule-based alerts.
 
-Store fewer copies of analytical data.
-Query files in S3 without ingesting them first.
-Let a vector index adapt to the data it receives.
-And preserve weak signals without paging someone immediately.
-
-This isn't every release note.
-
-These are the four changes I think matter most, who should care about them, and which one I'd test first.
+I think these changes are huge. Let me tell you who should care about them, and why they matter.
 
 -----
 
@@ -32,165 +29,94 @@ These are the four changes I think matter most, who should care about them, and 
 
 The biggest architectural change is Columnar Mode.
 
-[diagram: one document becoming `_source`, inverted indexes, BKD structures, and doc values]
-
 Elasticsearch normally keeps the original document, builds search and filter indexes, and stores field values in columns for sorting and aggregation.
 
-That flexibility is useful. But high-volume logs can end up storing the same information in several forms, even when most fields are only filtered or aggregated.
+This gives you flexibility for searches. But analytics workloads are different. Logs and metrics are only filtered or aggregated, so storing the same information in these forms add an overhead that most don't need.
 
 Columnar Mode flips the default.
 
-[diagram: duplicated structures collapse into doc-value columns]
-
-The column store becomes the primary representation. Elasticsearch reconstructs the document from those columns and only builds additional indexes where they're useful.
-
-[highlight `message` field in a log event]
+With it, the column store is the primary representation. Elasticsearch reconstructs the document from those columns and skips the additional indexes unless told otherwise.
 
 Columnar Logs is the first specialized profile. It keeps full-text search for the log message while making the remaining fields columnar by default.
 
-If high-volume, append-heavy logs are a storage burden—and most fields are only filtered or aggregated—Columnar Logs is worth testing.
+For those of you with high-volume, append-heavy logs and filtering or aggregation-dominant workloads, Columnar Logs might be a game changer.
 
-Keep the existing modes when updates, nested documents, point retrieval, or full-text relevance are the main job.
+Or keep the existing modes when updates, nested documents, point retrieval, or full-text relevance are the main jobs.
 
-Columnar Mode is opt-in and arrives as a Technical Preview. We don't yet have detailed public benchmarks for every workload, so this is something to evaluate—not a reason to migrate every index on release day.
+The takeaway is simple: analytical data no longer has to pay for every search capability by default.
 
-The takeaway is simple: analytical data no longer has to pay for every search capability by default. I've got a separate video in progress on the engineering behind it.
+Columnar Mode is opt-in and arrives as a Technical Preview. So this is a great time to evaluate, and consider whether this is something you might want to move to when it goes GA.
 
 -----
 
 ## MOVE LESS — ES|QL DATA FEDERATION
 
-Next is the feature I'd test first: ES|QL Data Federation.
+Next is ES|QL Data Federation.
 
-Recent operational data stays indexed because you need it to be fast. Older data moves to object storage because you need it to be cheap.
+Here's how a lot of you probably organise data. You keep recent data indexed because you need it to be fast. Older data moves to object storage because you need it to be cheap.
 
-[diagram: recent data in Elasticsearch, archive in S3]
+That works, until an investigation needs six months of history. Then you restore the archive, build a pipeline, or switch query engines.
 
-That works until an investigation needs six months of history. Then you restore the archive, build a pipeline, or switch query engines.
+ES|QL Data Federation removes that handoff, by querying files in Amazon S3 directly.
 
-ES|QL Data Federation removes that handoff by querying files in Amazon S3 directly.
-
-[screen recording: Kibana query beginning with `FROM cloudtrail_parquet`]
-
-You register the S3 connection and define a dataset. That dataset then appears in the same `FROM` command you'd use for an Elasticsearch index.
-
-[PRE-RECORD VERIFY: Validate the API shape, credential configuration, and path syntax against the release build.]
-
-[popup: Parquet · NDJSON · CSV/TSV]
+All you need to do is to register the S3 connection and define a dataset. That dataset then appears in the same `FROM` command you'd use for an Elasticsearch index.
 
 The preview supports common file formats, schema inference, and partitioned datasets. More importantly, external data can meet context that's already indexed.
 
-Imagine your older CloudTrail events live as Parquet in S3. You can filter them for suspicious console logins, then enrich each event using an asset registry in Elasticsearch.
-
-[screen recording — query builds progressively]
-
-```esql
-FROM cloudtrail_parquet
-| WHERE eventName == "ConsoleLogin"
-| RENAME sourceIPAddress AS source_ip
-| LOOKUP JOIN asset_registry ON source_ip
-| KEEP eventTime, source_ip, asset_owner, asset_criticality
-| SORT eventTime DESC
-```
-
-[PRE-RECORD VERIFY: Validate external data as the left side of `LOOKUP JOIN`, plus the REDset/CloudTrail schema, renamed join key, and field types.]
+Imagine security investigations or compliance queries over older archived data, accessing historical data during migrations, or giving AI agents access to indexed and archived context. All this is now possible directly from the archived S3 data.
 
 The archive stays in S3. The asset context stays indexed. And the analyst stays in Kibana.
 
-Sometimes the cheapest ingest pipeline is no ingest pipeline.
+For occasional exploration and investigation of external or archived data, this is an amazing solution that bypasses the need to push all that data through the ingest pipeline.
 
-[diagram: query → projection and filter pushdown → selected Parquet row groups]
+Elasticsearch pushes filters and column selection toward the file reader to reduce the amount scanned.
 
-Elasticsearch pushes filters and column selection toward the file reader to reduce the amount scanned. But “no ingestion” doesn't mean “no cost.” Compute, S3 operations, and data transfer still matter.
+Data Federation is a Technical Preview, starting with S3.
 
-Data Federation is a Technical Preview, starting with S3, and it's currently planned as an Enterprise feature.
-
-[PRE-RECORD VERIFY: Confirm Enterprise packaging and the final Serverless, Hosted, and self-managed availability matrix.]
-
-It won't replace indexed hot data when predictable query performance matters. But if investigations regularly stall while archived data is restored or copied, this is the clearest feature in nine point five to test.
+It won't replace indexed hot data when query performance matters. But if investigations regularly stall while archived data is restored or copied, you should test this out in nine point five.
 
 -----
 
 ## TUNE LESS — VECTOR SEARCH
 
-The specialist change is for vector-search teams.
+There are two big vector search features I want to talk about.
 
-[show configuration table from vector-index video]
+I recently spent an entire video explaining the many tuning options for vector search - index types, quantization, oversampling, rescoring and so on. Nine point five makes these choices simpler with vectordb index mode, and auto-calibration.
 
-I recently spent an entire video explaining index types, quantization, oversampling, rescoring, and the many creative ways to turn RAM into an invoice. Nine point five tries to make some of those choices simpler.
+VectorDB index mode lets you declare an index to be for vector search. Elasticsearch then applies vector-oriented defaults for storage, caching, and merging.
 
-VectorDB index mode lets you declare that an index is for vector search. Elasticsearch then applies vector-oriented defaults for storage, caching, and merging.
+You can still override defaults, as with other index modes, but the starting point now reflects the workload.
 
-[screen recording: create index with `index.mode: vectordb_document`; expand effective settings]
+With auto-calibration enabled on a `bbq_disk` field, Elasticsearch finds the right configuration for you to balance cost and recall, based on your real data.
 
-You can still override them, but the starting point now reflects the workload.
+For sparsely distributed vectors, Elastic will apply more compression and less reranking to gain latency and reduce cost without hurting ranking quality. For very densely populated vectors, Elastic protects ranking quality by applying techiniques like preconditioning.
 
-Some vector datasets are easy to separate, so aggressive compression preserves good retrieval quality. Others have many close neighbours and need more quality recovery.
-
-[diagram: well-separated vector clusters beside tightly packed vectors]
-
-With auto-calibration enabled on a `bbq_disk` field, Elasticsearch samples vectors as segments merge. It tests combinations of compression and quality recovery, then selects the cheapest configuration that meets its recall target.
-
-[popup: “Calibrate per merged segment”]
-
-This isn't magic relevance optimization. Elasticsearch can't judge whether results are right for your users. You still need to test search quality on your own data.
-
-[PRE-RECORD VERIFY: Confirm release status and availability for VectorDB mode and auto-calibration. Confirm the documented calibration threshold and inspection flow in the release build.]
-
-This is narrower than Columnar Mode or Data Federation. But the principle is right: vector-index tuning should increasingly be work the engine does, not work every application team rediscovers.
+Configuring and using vector search is now easier than ever - try these out.
 
 -----
 
-## PAGE LESS — ALERTING V2
+## PAGE LESS — ES|QL BASED ALERTING
 
-The final feature is the longer-term direction: Alerting version two.
+The final feature today is Alerting - version two, or ES|QL-based alerting, .
 
-Elastic isn't adding another rule type. It's changing the model underneath Kibana alerting.
-
-[diagram: multiple specialized rule types, each wired directly to notifications]
-
-One failed login may be noise.
-One unusual process may be noise.
-Together, they may justify an alert.
+This changes the model underneath Kibana alerting.
 
 Teams often choose between paging on weak signals or discarding them and losing useful evidence. Alerting version two separates detection, state, history, and notification.
 
-Alert logic is expressed in ES|QL. Every match writes an append-only rule event, so the history remains searchable.
+One failed login, or one unusual process may be noise.
+Together, they may justify an alert.
 
-[diagram: ES|QL rule → `.rule-events` → signal or alert episode]
+With vee two, alert logic is expressed in ES|QL, and every match writes an append-only rule event, so the history remains searchable. There's signal mode and alert mode:
 
 Signal mode records the event without opening an episode or sending a notification. Those signals can later feed another rule looking for a meaningful combination.
 
-[diagram: three weak signals feeding one correlated alert]
-
 Alert mode groups matching events into an episode. For example, this rule finds services with high p-ninety-five latency and labels them as high or critical.
-
-[screen recording: Alerting v2 query sandbox; show query progressively]
-
-```esql
-FROM checkout-service-logs
-| STATS p95_latency_ms = PERCENTILE(latency_ms, 95) BY service.name
-| WHERE p95_latency_ms > 2000
-| EVAL severity = CASE(
-    p95_latency_ms >= 4000, "critical",
-    "high"
-  )
-```
 
 The first breach creates a pending episode. A second can activate it. When the condition clears, the episode recovers—and the history remains searchable.
 
-[screen recording: pending episode → active → history]
+The rule finds the condition. Then a reusable action policy decides whether a human needs to hear about it - for example, sending an alert to Slack while reserving PagerDuty for critical incidents.
 
-The rule finds the condition. A reusable action policy decides whether a human needs to hear about it—for example, sending high severity to Slack while reserving PagerDuty for critical incidents.
-
-[diagram expands: episode → action policy → workflow → Slack/PagerDuty]
-
-Alerting version two is Experimental.
-It's opt-in and disabled by default.
-
-[PRE-RECORD VERIFY: Confirm supported deployments, notification licensing, Workflows requirements, and which documented capabilities are active in the final release.]
-
-So this isn't a migration recommendation. It's a preview of a cleaner model—one that records more evidence while becoming more selective about interrupting people.
+Alerting version two is experimental and opt-in. So try it out, we'd love to know what you think.
 
 -----
 
