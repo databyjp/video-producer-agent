@@ -655,3 +655,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Editorial changes:** Retained the four-part “store less, move less, tune less, page less” structure; added explicit judgments for each feature; removed the two minor release-note items; compressed mechanics and repeated caveats.
 - **Corrections:** Aligned the hook with the preview-heavy body, removed unexplained “preconditioning,” and made the Alerting v2 severity query consistent with its post-filter results.
 - **Validation:** Preserved pre-record checks for maturity, availability, licensing, API behavior, and demo support. `git diff --check` passed.
+
+## 2026-07-21 — Elastic 9.5 alerting section refocused
+
+- **Revision:** Reframed the final section of `projects/202607-elastic-9-5-release-highlights/script.md` around writing smarter ES|QL-based alert rules.
+- **Concrete example:** Centered the explanation on calculating P95 latency, assigning severity with `CASE`, testing in the query sandbox, requiring persistent breaches, and recovering automatically.
+- **Supporting model:** Kept searchable rule events and action policies as consequences of the rule workflow rather than the section's main subject.
+- **Callback:** Changed the fourth structural label from “page less” to “write smarter” in the section, recap graphic, and closing question.

@@ -56,6 +56,7 @@ Next is ES|QL Data Federation.
 Here's how a lot of you probably organise data. You keep recent data indexed because you need it to be fast. Older data moves to object storage because you need it to be cheap.
 
 That works, until an investigation needs six months of history. Then you restore the archive, build a pipeline, or switch query engines.
+[like & subscribe badge]
 
 ES|QL Data Federation removes that handoff, by querying files in Amazon S3 directly.
 
@@ -95,74 +96,43 @@ Configuring and using vector search is now easier than ever - try these out.
 
 -----
 
-## PAGE LESS — ES|QL BASED ALERTING
+## WRITE SMARTER — RULE-BASED ALERTS
 
-The final feature today is Alerting - version two, or ES|QL-based alerting, .
+The final feature is a new experimental alerting system built around ES|QL rules.
 
-This changes the model underneath Kibana alerting.
+Instead of choosing a specialized rule type and spreading the logic across configuration forms, you write the condition as an ES|QL query.
 
-Teams often choose between paging on weak signals or discarding them and losing useful evidence. Alerting version two separates detection, state, history, and notification.
+That means a rule can do more than check whether one field crossed a threshold. It can calculate, group, and classify the result before deciding there's a problem.
 
-One failed login, or one unusual process may be noise.
-Together, they may justify an alert.
+For example, this rule calculates p-ninety-five latency for each service. It labels anything above two seconds as high severity, anything above four seconds as critical, and filters out everything that isn't a breach.
 
-With vee two, alert logic is expressed in ES|QL, and every match writes an append-only rule event, so the history remains searchable. There's signal mode and alert mode:
+[show ES|QL rule: `STATS` P95 by service → `EVAL severity = CASE(...)` → `WHERE` P95 exceeds threshold]
 
-Signal mode records the event without opening an episode or sending a notification. Those signals can later feed another rule looking for a meaningful combination.
+You can test that logic in the query sandbox before the rule ever runs.
 
-Alert mode groups matching events into an episode. For example, this rule finds services with high p-ninety-five latency and labels them as high or critical.
+Then you decide how persistent the problem must be. One breach can create a pending episode. Requiring a second consecutive breach before it becomes active prevents a brief spike from immediately turning into a page.
 
-The first breach creates a pending episode. A second can activate it. When the condition clears, the episode recovers—and the history remains searchable.
+When the query stops finding a breach, the episode recovers automatically.
 
-The rule finds the condition. Then a reusable action policy decides whether a human needs to hear about it - for example, sending an alert to Slack while reserving PagerDuty for critical incidents.
+Every evaluation also writes a searchable rule event. So you retain the evidence even when it doesn't justify interrupting someone. And a separate action policy can send high-severity alerts to Slack while reserving PagerDuty for critical incidents.
 
-Alerting version two is experimental and opt-in. So try it out, we'd love to know what you think.
+This is smarter alerting because the query defines the problem, the episode tracks it over time, and the notification policy decides who needs to hear about it.
+
+The new alerting system is experimental and opt-in. So try it out - we'd love to know what you think.
 
 -----
 
 ## WRAP-UP — ON CAMERA
 
-[four-panel callback: STORE LESS · MOVE LESS · TUNE LESS · PAGE LESS]
-
 So what does Elastic nine point five add up to?
 
-Columnar Mode is the biggest architectural change.
-Data Federation is the feature I'd test first.
-The vector changes matter most to teams already tuning search infrastructure.
-And Alerting version two is the longer-term direction to watch.
+Columnar Mode is a huge architectural change.
+Data Federation allows you to query without ingestion.
+The vector changes mean optimisation happens for you.
+And ES|QL-based alerting .
 
-It's a preview-heavy release. These are invitations to test Elastic's direction, not instructions to rebuild your production architecture tomorrow morning.
+Some of these are previews, which allow you to see and test Elastic's direction, and plan your future migrations.
 
 Documentation and release notes are linked below.
 
-Which would remove the most complexity from your stack: storing fewer copies, querying S3 without ingesting, tuning fewer vector settings, or separating detection from notification?
-
-Let me know in the comments. I do read all of them. And if this was useful, please give us a like and subscribe. It helps other people find the video—and helps to keep me employed.
-
 Thanks for watching. See you next time.
-
------
-
-## PRE-RECORD VALIDATION CHECKLIST
-
-- Confirm the final Elastic and Elasticsearch version naming.
-- Confirm feature status and subscription tier for every section.
-- Validate all Data Federation API requests and ES|QL examples against the release build.
-- Resolve Data Federation availability across Serverless, Hosted, and self-managed deployments.
-- Confirm external-left `LOOKUP JOIN` support and field compatibility.
-- Confirm VectorDB index mode's final name and effective defaults.
-- Confirm auto-calibration eligibility, fallback behavior, inspection API, and release status.
-- Confirm Alerting v2 deployment support, licensing, Workflows dependency, and feature flags.
-- Replace any unavailable screen recording with an architecture diagram rather than implying a working demo.
-
-## SOURCES
-
-- Elastic 9.5 feature briefs supplied for this project
-- Draft: “Why Elasticsearch Is Becoming a Columnar Database,” Yannis Roussos
-- Draft: “Querying S3 Directly from Elasticsearch with ES|QL Data Federation,” Tyler Perkins
-- https://www.elastic.co/search-labs/blog/elasticsearch-columnar-storage
-- https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/bbq
-- https://www.elastic.co/docs/reference/elasticsearch/mapping-reference/dense-vector
-- https://www.elastic.co/docs/explore-analyze/alerting/experimental-alerting-system/how-it-works
-- https://www.elastic.co/docs/explore-analyze/alerting/experimental-alerting-system/get-started/setup
-- https://www.elastic.co/docs/explore-analyze/alerting/experimental-alerting-system/get-started/create-your-first-rule
