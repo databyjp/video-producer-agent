@@ -1,0 +1,3329 @@
+{
+  "source": "/Users/jphwang/code/agent-sandboxes/video-producer/raw/past-videos/One index for text, images, audio, and video — jina-embeddings-v5-omni on Elastic.mp4",
+  "language": "en",
+  "language_probability": 1,
+  "segments": [
+    {
+      "id": 1,
+      "start": 0.02,
+      "end": 1.04,
+      "text": "Hey everyone.",
+      "avg_logprob": -0.19704743158072233,
+      "no_speech_prob": 0.00042816484346985817,
+      "words": [
+        {
+          "word": " Hey",
+          "start": 0.02,
+          "end": 0.5,
+          "probability": 0.8324574828147888
+        },
+        {
+          "word": " everyone.",
+          "start": 0.5,
+          "end": 1.04,
+          "probability": 0.9763083457946777
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "start": 1.66,
+      "end": 8.28,
+      "text": "Today I would like to show you our new model that's called Gina Embedings V5 Omni.",
+      "avg_logprob": -0.19704743158072233,
+      "no_speech_prob": 0.00042816484346985817,
+      "words": [
+        {
+          "word": " Today",
+          "start": 1.66,
+          "end": 1.78,
+          "probability": 0.996746301651001
+        },
+        {
+          "word": " I",
+          "start": 1.78,
+          "end": 1.98,
+          "probability": 0.934157133102417
+        },
+        {
+          "word": " would",
+          "start": 1.98,
+          "end": 2.08,
+          "probability": 0.9924173355102539
+        },
+        {
+          "word": " like",
+          "start": 2.08,
+          "end": 2.28,
+          "probability": 0.9993626475334167
+        },
+        {
+          "word": " to",
+          "start": 2.28,
+          "end": 2.56,
+          "probability": 0.9995555281639099
+        },
+        {
+          "word": " show",
+          "start": 2.56,
+          "end": 2.9,
+          "probability": 0.9992914199829102
+        },
+        {
+          "word": " you",
+          "start": 2.9,
+          "end": 3.18,
+          "probability": 0.9980150461196899
+        },
+        {
+          "word": " our",
+          "start": 3.18,
+          "end": 3.56,
+          "probability": 0.9954094290733337
+        },
+        {
+          "word": " new",
+          "start": 3.56,
+          "end": 3.84,
+          "probability": 0.9972383975982666
+        },
+        {
+          "word": " model",
+          "start": 3.84,
+          "end": 4.24,
+          "probability": 0.9982757568359375
+        },
+        {
+          "word": " that's",
+          "start": 4.24,
+          "end": 4.94,
+          "probability": 0.8040579855442047
+        },
+        {
+          "word": " called",
+          "start": 4.94,
+          "end": 5.48,
+          "probability": 0.9991323351860046
+        },
+        {
+          "word": " Gina",
+          "start": 5.48,
+          "end": 6.22,
+          "probability": 0.6856030225753784
+        },
+        {
+          "word": " Embedings",
+          "start": 6.22,
+          "end": 6.96,
+          "probability": 0.6768108680844307
+        },
+        {
+          "word": " V5",
+          "start": 6.96,
+          "end": 7.78,
+          "probability": 0.9448593556880951
+        },
+        {
+          "word": " Omni.",
+          "start": 7.78,
+          "end": 8.28,
+          "probability": 0.9152877628803253
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "start": 8.56,
+      "end": 15.95,
+      "text": "There is a small variant and we also have a nano version of this which is much smaller.",
+      "avg_logprob": -0.19704743158072233,
+      "no_speech_prob": 0.00042816484346985817,
+      "words": [
+        {
+          "word": " There",
+          "start": 8.56,
+          "end": 8.72,
+          "probability": 0.9798214435577393
+        },
+        {
+          "word": " is",
+          "start": 8.72,
+          "end": 8.84,
+          "probability": 0.6465449929237366
+        },
+        {
+          "word": " a",
+          "start": 8.84,
+          "end": 9.1,
+          "probability": 0.9964829683303833
+        },
+        {
+          "word": " small",
+          "start": 9.1,
+          "end": 9.42,
+          "probability": 0.9977570176124573
+        },
+        {
+          "word": " variant",
+          "start": 9.42,
+          "end": 9.96,
+          "probability": 0.993956446647644
+        },
+        {
+          "word": " and",
+          "start": 9.96,
+          "end": 11.06,
+          "probability": 0.26921769976615906
+        },
+        {
+          "word": " we",
+          "start": 11.06,
+          "end": 11.28,
+          "probability": 0.9980164766311646
+        },
+        {
+          "word": " also",
+          "start": 11.28,
+          "end": 11.68,
+          "probability": 0.9987974166870117
+        },
+        {
+          "word": " have",
+          "start": 11.68,
+          "end": 12.28,
+          "probability": 0.9991874098777771
+        },
+        {
+          "word": " a",
+          "start": 12.28,
+          "end": 12.46,
+          "probability": 0.9970756769180298
+        },
+        {
+          "word": " nano",
+          "start": 12.46,
+          "end": 12.78,
+          "probability": 0.9272834062576294
+        },
+        {
+          "word": " version",
+          "start": 12.78,
+          "end": 13.2,
+          "probability": 0.9972577691078186
+        },
+        {
+          "word": " of",
+          "start": 13.2,
+          "end": 13.4,
+          "probability": 0.9995076656341553
+        },
+        {
+          "word": " this",
+          "start": 13.4,
+          "end": 13.64,
+          "probability": 0.9981028437614441
+        },
+        {
+          "word": " which",
+          "start": 13.64,
+          "end": 13.88,
+          "probability": 0.8638005256652832
+        },
+        {
+          "word": " is",
+          "start": 13.88,
+          "end": 14.16,
+          "probability": 0.9987781643867493
+        },
+        {
+          "word": " much",
+          "start": 14.25,
+          "end": 15.51,
+          "probability": 0.8573917150497437
+        },
+        {
+          "word": " smaller.",
+          "start": 15.51,
+          "end": 15.95,
+          "probability": 0.9990812540054321
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "start": 17.21,
+      "end": 30.44,
+      "text": "And so what it can do is it can get text as input but also images, video, it can get text as input,",
+      "avg_logprob": -0.19704743158072233,
+      "no_speech_prob": 0.00042816484346985817,
+      "words": [
+        {
+          "word": " And",
+          "start": 17.21,
+          "end": 17.49,
+          "probability": 0.8011035323143005
+        },
+        {
+          "word": " so",
+          "start": 17.49,
+          "end": 18.97,
+          "probability": 0.8462530970573425
+        },
+        {
+          "word": " what",
+          "start": 18.97,
+          "end": 20.33,
+          "probability": 0.96990966796875
+        },
+        {
+          "word": " it",
+          "start": 20.49,
+          "end": 20.79,
+          "probability": 0.9867451786994934
+        },
+        {
+          "word": " can",
+          "start": 20.79,
+          "end": 20.97,
+          "probability": 0.9364622831344604
+        },
+        {
+          "word": " do",
+          "start": 20.97,
+          "end": 21.21,
+          "probability": 0.9997057318687439
+        },
+        {
+          "word": " is",
+          "start": 21.21,
+          "end": 21.61,
+          "probability": 0.9825462102890015
+        },
+        {
+          "word": " it",
+          "start": 21.61,
+          "end": 22.43,
+          "probability": 0.8918319344520569
+        },
+        {
+          "word": " can",
+          "start": 22.43,
+          "end": 22.75,
+          "probability": 0.9994863271713257
+        },
+        {
+          "word": " get",
+          "start": 22.75,
+          "end": 24.13,
+          "probability": 0.9989486336708069
+        },
+        {
+          "word": " text",
+          "start": 24.13,
+          "end": 25.13,
+          "probability": 0.9412364363670349
+        },
+        {
+          "word": " as",
+          "start": 25.13,
+          "end": 25.63,
+          "probability": 0.9987586736679077
+        },
+        {
+          "word": " input",
+          "start": 25.63,
+          "end": 26.09,
+          "probability": 0.9969180822372437
+        },
+        {
+          "word": " but",
+          "start": 26.09,
+          "end": 27.09,
+          "probability": 0.6679603457450867
+        },
+        {
+          "word": " also",
+          "start": 27.12,
+          "end": 27.58,
+          "probability": 0.9992838501930237
+        },
+        {
+          "word": " images,",
+          "start": 27.58,
+          "end": 28.36,
+          "probability": 0.9965533018112183
+        },
+        {
+          "word": " video,",
+          "start": 29.2,
+          "end": 29.54,
+          "probability": 0.9960402250289917
+        },
+        {
+          "word": " it",
+          "start": 30.44,
+          "end": 30.44,
+          "probability": 0.19062943756580353
+        },
+        {
+          "word": " can",
+          "start": 30.44,
+          "end": 30.44,
+          "probability": 0.8034559488296509
+        },
+        {
+          "word": " get",
+          "start": 30.44,
+          "end": 30.44,
+          "probability": 0.43963077664375305
+        },
+        {
+          "word": " text",
+          "start": 30.44,
+          "end": 30.44,
+          "probability": 0.915005624294281
+        },
+        {
+          "word": " as",
+          "start": 30.44,
+          "end": 30.44,
+          "probability": 0.9973629117012024
+        },
+        {
+          "word": " input,",
+          "start": 30.44,
+          "end": 30.44,
+          "probability": 0.9978607296943665
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "start": 30.76,
+      "end": 40.02,
+      "text": "and any combination of these at any number of these and it creates a single embedding and this embeddings can be used",
+      "avg_logprob": -0.16927511927982172,
+      "no_speech_prob": 0.00017564398876857013,
+      "words": [
+        {
+          "word": " and",
+          "start": 30.76,
+          "end": 31.78,
+          "probability": 0.9154481887817383
+        },
+        {
+          "word": " any",
+          "start": 31.78,
+          "end": 32.04,
+          "probability": 0.999067485332489
+        },
+        {
+          "word": " combination",
+          "start": 32.04,
+          "end": 32.56,
+          "probability": 0.9991238713264465
+        },
+        {
+          "word": " of",
+          "start": 32.56,
+          "end": 32.92,
+          "probability": 0.9992294311523438
+        },
+        {
+          "word": " these",
+          "start": 32.92,
+          "end": 33.18,
+          "probability": 0.9485202431678772
+        },
+        {
+          "word": " at",
+          "start": 33.18,
+          "end": 33.38,
+          "probability": 0.35318899154663086
+        },
+        {
+          "word": " any",
+          "start": 33.38,
+          "end": 33.6,
+          "probability": 0.9996870756149292
+        },
+        {
+          "word": " number",
+          "start": 33.6,
+          "end": 33.98,
+          "probability": 0.9998922348022461
+        },
+        {
+          "word": " of",
+          "start": 33.98,
+          "end": 34.24,
+          "probability": 0.9786112904548645
+        },
+        {
+          "word": " these",
+          "start": 34.24,
+          "end": 34.5,
+          "probability": 0.9595560431480408
+        },
+        {
+          "word": " and",
+          "start": 34.76,
+          "end": 36.04,
+          "probability": 0.7595760822296143
+        },
+        {
+          "word": " it",
+          "start": 36.04,
+          "end": 36.72,
+          "probability": 0.9994474053382874
+        },
+        {
+          "word": " creates",
+          "start": 36.72,
+          "end": 37.06,
+          "probability": 0.9995554089546204
+        },
+        {
+          "word": " a",
+          "start": 37.06,
+          "end": 37.2,
+          "probability": 0.9994993209838867
+        },
+        {
+          "word": " single",
+          "start": 37.2,
+          "end": 37.58,
+          "probability": 0.999708354473114
+        },
+        {
+          "word": " embedding",
+          "start": 37.58,
+          "end": 38.4,
+          "probability": 0.9851897954940796
+        },
+        {
+          "word": " and",
+          "start": 38.4,
+          "end": 38.64,
+          "probability": 0.9167319536209106
+        },
+        {
+          "word": " this",
+          "start": 38.64,
+          "end": 38.78,
+          "probability": 0.6287216544151306
+        },
+        {
+          "word": " embeddings",
+          "start": 38.78,
+          "end": 39.16,
+          "probability": 0.7121979892253876
+        },
+        {
+          "word": " can",
+          "start": 39.16,
+          "end": 39.36,
+          "probability": 0.9995259046554565
+        },
+        {
+          "word": " be",
+          "start": 39.36,
+          "end": 39.56,
+          "probability": 0.9999395608901978
+        },
+        {
+          "word": " used",
+          "start": 39.56,
+          "end": 40.02,
+          "probability": 0.9999326467514038
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "start": 40.02,
+      "end": 49.12,
+      "text": "for clustering or for retrieval so it means all the documents you embed consist of combinations of",
+      "avg_logprob": -0.16927511927982172,
+      "no_speech_prob": 0.00017564398876857013,
+      "words": [
+        {
+          "word": " for",
+          "start": 40.02,
+          "end": 40.54,
+          "probability": 0.9998718500137329
+        },
+        {
+          "word": " clustering",
+          "start": 40.54,
+          "end": 41.74,
+          "probability": 0.9988691508769989
+        },
+        {
+          "word": " or",
+          "start": 41.74,
+          "end": 42.44,
+          "probability": 0.9992032647132874
+        },
+        {
+          "word": " for",
+          "start": 42.44,
+          "end": 42.72,
+          "probability": 0.9998553991317749
+        },
+        {
+          "word": " retrieval",
+          "start": 42.72,
+          "end": 43.7,
+          "probability": 0.9996133744716644
+        },
+        {
+          "word": " so",
+          "start": 43.7,
+          "end": 44.2,
+          "probability": 0.9752388000488281
+        },
+        {
+          "word": " it",
+          "start": 44.2,
+          "end": 44.32,
+          "probability": 0.958918571472168
+        },
+        {
+          "word": " means",
+          "start": 44.32,
+          "end": 44.56,
+          "probability": 0.9999105930328369
+        },
+        {
+          "word": " all",
+          "start": 44.56,
+          "end": 44.92,
+          "probability": 0.9999189376831055
+        },
+        {
+          "word": " the",
+          "start": 44.92,
+          "end": 45.16,
+          "probability": 0.9998891353607178
+        },
+        {
+          "word": " documents",
+          "start": 45.16,
+          "end": 45.9,
+          "probability": 0.9996398687362671
+        },
+        {
+          "word": " you",
+          "start": 45.9,
+          "end": 46.1,
+          "probability": 0.9997578263282776
+        },
+        {
+          "word": " embed",
+          "start": 46.1,
+          "end": 46.48,
+          "probability": 0.9989702701568604
+        },
+        {
+          "word": " consist",
+          "start": 46.48,
+          "end": 47.22,
+          "probability": 0.6516585946083069
+        },
+        {
+          "word": " of",
+          "start": 47.22,
+          "end": 47.84,
+          "probability": 0.9999632835388184
+        },
+        {
+          "word": " combinations",
+          "start": 47.84,
+          "end": 48.7,
+          "probability": 0.9995354413986206
+        },
+        {
+          "word": " of",
+          "start": 48.7,
+          "end": 49.12,
+          "probability": 0.9999483823776245
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "start": 49.12,
+      "end": 60.32,
+      "text": "text image audio and video for instance products that has a text description or title and multiple images and you can",
+      "avg_logprob": -0.16927511927982172,
+      "no_speech_prob": 0.00017564398876857013,
+      "words": [
+        {
+          "word": " text",
+          "start": 49.12,
+          "end": 49.74,
+          "probability": 0.9997649788856506
+        },
+        {
+          "word": " image",
+          "start": 49.74,
+          "end": 50.46,
+          "probability": 0.9070054888725281
+        },
+        {
+          "word": " audio",
+          "start": 50.46,
+          "end": 50.9,
+          "probability": 0.9961530566215515
+        },
+        {
+          "word": " and",
+          "start": 50.9,
+          "end": 51.06,
+          "probability": 0.9308627843856812
+        },
+        {
+          "word": " video",
+          "start": 51.06,
+          "end": 51.32,
+          "probability": 0.9996777772903442
+        },
+        {
+          "word": " for",
+          "start": 51.32,
+          "end": 52.18,
+          "probability": 0.9976069927215576
+        },
+        {
+          "word": " instance",
+          "start": 52.18,
+          "end": 52.48,
+          "probability": 0.9980475902557373
+        },
+        {
+          "word": " products",
+          "start": 52.48,
+          "end": 53.1,
+          "probability": 0.9960960745811462
+        },
+        {
+          "word": " that",
+          "start": 53.1,
+          "end": 53.44,
+          "probability": 0.9999151229858398
+        },
+        {
+          "word": " has",
+          "start": 53.44,
+          "end": 53.9,
+          "probability": 0.9632564187049866
+        },
+        {
+          "word": " a",
+          "start": 53.9,
+          "end": 54.5,
+          "probability": 0.9955190420150757
+        },
+        {
+          "word": " text",
+          "start": 54.5,
+          "end": 54.86,
+          "probability": 0.9996179342269897
+        },
+        {
+          "word": " description",
+          "start": 54.86,
+          "end": 55.58,
+          "probability": 0.9998028874397278
+        },
+        {
+          "word": " or",
+          "start": 55.58,
+          "end": 55.88,
+          "probability": 0.8168665766716003
+        },
+        {
+          "word": " title",
+          "start": 55.88,
+          "end": 56.38,
+          "probability": 0.9997385144233704
+        },
+        {
+          "word": " and",
+          "start": 56.38,
+          "end": 57.44,
+          "probability": 0.9996078610420227
+        },
+        {
+          "word": " multiple",
+          "start": 57.44,
+          "end": 58.28,
+          "probability": 0.9993199110031128
+        },
+        {
+          "word": " images",
+          "start": 58.28,
+          "end": 58.9,
+          "probability": 0.9998624324798584
+        },
+        {
+          "word": " and",
+          "start": 58.9,
+          "end": 60.0,
+          "probability": 0.9983695149421692
+        },
+        {
+          "word": " you",
+          "start": 60.06,
+          "end": 60.16,
+          "probability": 0.9998869895935059
+        },
+        {
+          "word": " can",
+          "start": 60.16,
+          "end": 60.32,
+          "probability": 0.9999812841415405
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "start": 60.32,
+      "end": 66.84,
+      "text": "embed the whole product into a single vector and your search query can also contain multiple",
+      "avg_logprob": -0.13671089259974928,
+      "no_speech_prob": 9.351743938168511e-05,
+      "words": [
+        {
+          "word": " embed",
+          "start": 60.32,
+          "end": 60.62,
+          "probability": 0.8741022348403931
+        },
+        {
+          "word": " the",
+          "start": 60.62,
+          "end": 60.86,
+          "probability": 0.9905625581741333
+        },
+        {
+          "word": " whole",
+          "start": 60.86,
+          "end": 61.1,
+          "probability": 0.998519241809845
+        },
+        {
+          "word": " product",
+          "start": 61.1,
+          "end": 61.7,
+          "probability": 0.9983715415000916
+        },
+        {
+          "word": " into",
+          "start": 61.7,
+          "end": 61.98,
+          "probability": 0.9868283271789551
+        },
+        {
+          "word": " a",
+          "start": 61.98,
+          "end": 62.16,
+          "probability": 0.9971933960914612
+        },
+        {
+          "word": " single",
+          "start": 62.16,
+          "end": 62.44,
+          "probability": 0.9986300468444824
+        },
+        {
+          "word": " vector",
+          "start": 62.44,
+          "end": 62.94,
+          "probability": 0.9953677654266357
+        },
+        {
+          "word": " and",
+          "start": 62.94,
+          "end": 63.54,
+          "probability": 0.29465875029563904
+        },
+        {
+          "word": " your",
+          "start": 63.54,
+          "end": 63.68,
+          "probability": 0.9945064187049866
+        },
+        {
+          "word": " search",
+          "start": 63.68,
+          "end": 63.98,
+          "probability": 0.9977498650550842
+        },
+        {
+          "word": " query",
+          "start": 63.98,
+          "end": 64.42,
+          "probability": 0.9974144697189331
+        },
+        {
+          "word": " can",
+          "start": 64.42,
+          "end": 65.06,
+          "probability": 0.9970793724060059
+        },
+        {
+          "word": " also",
+          "start": 65.06,
+          "end": 65.36,
+          "probability": 0.9992097616195679
+        },
+        {
+          "word": " contain",
+          "start": 65.36,
+          "end": 66.08,
+          "probability": 0.9986477494239807
+        },
+        {
+          "word": " multiple",
+          "start": 66.08,
+          "end": 66.84,
+          "probability": 0.9971907734870911
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "start": 66.84,
+      "end": 74.54,
+      "text": "attributes here's a small demo for our model so i have five data sets here each for one modality",
+      "avg_logprob": -0.13671089259974928,
+      "no_speech_prob": 9.351743938168511e-05,
+      "words": [
+        {
+          "word": " attributes",
+          "start": 66.84,
+          "end": 67.48,
+          "probability": 0.9987595081329346
+        },
+        {
+          "word": " here's",
+          "start": 67.48,
+          "end": 68.12,
+          "probability": 0.6367351561784744
+        },
+        {
+          "word": " a",
+          "start": 68.12,
+          "end": 68.22,
+          "probability": 0.9965856075286865
+        },
+        {
+          "word": " small",
+          "start": 68.22,
+          "end": 68.46,
+          "probability": 0.997982382774353
+        },
+        {
+          "word": " demo",
+          "start": 68.46,
+          "end": 68.78,
+          "probability": 0.9993916749954224
+        },
+        {
+          "word": " for",
+          "start": 68.78,
+          "end": 69.06,
+          "probability": 0.9990022778511047
+        },
+        {
+          "word": " our",
+          "start": 69.06,
+          "end": 69.36,
+          "probability": 0.9993913173675537
+        },
+        {
+          "word": " model",
+          "start": 69.36,
+          "end": 69.88,
+          "probability": 0.9989402890205383
+        },
+        {
+          "word": " so",
+          "start": 69.88,
+          "end": 70.76,
+          "probability": 0.9828677177429199
+        },
+        {
+          "word": " i",
+          "start": 70.76,
+          "end": 71.32,
+          "probability": 0.6755245923995972
+        },
+        {
+          "word": " have",
+          "start": 71.32,
+          "end": 71.68,
+          "probability": 0.999885082244873
+        },
+        {
+          "word": " five",
+          "start": 71.68,
+          "end": 72.18,
+          "probability": 0.9882056713104248
+        },
+        {
+          "word": " data",
+          "start": 72.18,
+          "end": 72.46,
+          "probability": 0.9754074215888977
+        },
+        {
+          "word": " sets",
+          "start": 72.46,
+          "end": 72.8,
+          "probability": 0.9984318614006042
+        },
+        {
+          "word": " here",
+          "start": 72.8,
+          "end": 73.14,
+          "probability": 0.9995614886283875
+        },
+        {
+          "word": " each",
+          "start": 73.14,
+          "end": 73.48,
+          "probability": 0.9996961355209351
+        },
+        {
+          "word": " for",
+          "start": 73.48,
+          "end": 73.68,
+          "probability": 0.9988483190536499
+        },
+        {
+          "word": " one",
+          "start": 73.68,
+          "end": 73.92,
+          "probability": 0.9996209144592285
+        },
+        {
+          "word": " modality",
+          "start": 73.92,
+          "end": 74.54,
+          "probability": 0.9994865953922272
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "start": 75.2,
+      "end": 82.06,
+      "text": "and i can build some queries also with all the different modalities to search of these data sets",
+      "avg_logprob": -0.13671089259974928,
+      "no_speech_prob": 9.351743938168511e-05,
+      "words": [
+        {
+          "word": " and",
+          "start": 75.2,
+          "end": 75.62,
+          "probability": 0.9991793036460876
+        },
+        {
+          "word": " i",
+          "start": 75.62,
+          "end": 75.9,
+          "probability": 0.9735312461853027
+        },
+        {
+          "word": " can",
+          "start": 75.9,
+          "end": 76.22,
+          "probability": 0.9999741315841675
+        },
+        {
+          "word": " build",
+          "start": 76.22,
+          "end": 76.7,
+          "probability": 0.9996919631958008
+        },
+        {
+          "word": " some",
+          "start": 76.7,
+          "end": 77.02,
+          "probability": 0.9997721314430237
+        },
+        {
+          "word": " queries",
+          "start": 77.02,
+          "end": 77.56,
+          "probability": 0.9960899353027344
+        },
+        {
+          "word": " also",
+          "start": 77.56,
+          "end": 78.46,
+          "probability": 0.9997289776802063
+        },
+        {
+          "word": " with",
+          "start": 78.46,
+          "end": 78.94,
+          "probability": 0.9998940229415894
+        },
+        {
+          "word": " all",
+          "start": 78.94,
+          "end": 79.12,
+          "probability": 0.9997661709785461
+        },
+        {
+          "word": " the",
+          "start": 79.12,
+          "end": 79.28,
+          "probability": 0.9998002648353577
+        },
+        {
+          "word": " different",
+          "start": 79.28,
+          "end": 79.58,
+          "probability": 0.9999382495880127
+        },
+        {
+          "word": " modalities",
+          "start": 79.58,
+          "end": 80.24,
+          "probability": 0.9997580647468567
+        },
+        {
+          "word": " to",
+          "start": 80.24,
+          "end": 80.82,
+          "probability": 0.9997900128364563
+        },
+        {
+          "word": " search",
+          "start": 80.82,
+          "end": 81.16,
+          "probability": 0.9992710947990417
+        },
+        {
+          "word": " of",
+          "start": 81.16,
+          "end": 81.34,
+          "probability": 0.6911031007766724
+        },
+        {
+          "word": " these",
+          "start": 81.34,
+          "end": 81.48,
+          "probability": 0.8440287709236145
+        },
+        {
+          "word": " data",
+          "start": 81.48,
+          "end": 81.7,
+          "probability": 0.8029668927192688
+        },
+        {
+          "word": " sets",
+          "start": 81.7,
+          "end": 82.06,
+          "probability": 0.9996552467346191
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "start": 82.84,
+      "end": 90.34,
+      "text": "and just for fun let's search on the photos using audio and what other that even means",
+      "avg_logprob": -0.13671089259974928,
+      "no_speech_prob": 9.351743938168511e-05,
+      "words": [
+        {
+          "word": " and",
+          "start": 82.84,
+          "end": 83.32,
+          "probability": 0.9958525896072388
+        },
+        {
+          "word": " just",
+          "start": 83.32,
+          "end": 84.04,
+          "probability": 0.9915183186531067
+        },
+        {
+          "word": " for",
+          "start": 84.04,
+          "end": 84.28,
+          "probability": 0.9999496936798096
+        },
+        {
+          "word": " fun",
+          "start": 84.28,
+          "end": 84.64,
+          "probability": 0.9999758005142212
+        },
+        {
+          "word": " let's",
+          "start": 84.64,
+          "end": 85.16,
+          "probability": 0.9996673464775085
+        },
+        {
+          "word": " search",
+          "start": 85.16,
+          "end": 86.1,
+          "probability": 0.9996819496154785
+        },
+        {
+          "word": " on",
+          "start": 86.1,
+          "end": 86.5,
+          "probability": 0.9999290704727173
+        },
+        {
+          "word": " the",
+          "start": 86.5,
+          "end": 86.66,
+          "probability": 0.9989895224571228
+        },
+        {
+          "word": " photos",
+          "start": 86.66,
+          "end": 87.2,
+          "probability": 0.9985955357551575
+        },
+        {
+          "word": " using",
+          "start": 87.2,
+          "end": 87.86,
+          "probability": 0.9998406171798706
+        },
+        {
+          "word": " audio",
+          "start": 87.86,
+          "end": 88.38,
+          "probability": 0.9997978806495667
+        },
+        {
+          "word": " and",
+          "start": 88.38,
+          "end": 89.42,
+          "probability": 0.997661828994751
+        },
+        {
+          "word": " what",
+          "start": 89.42,
+          "end": 89.62,
+          "probability": 0.9398648738861084
+        },
+        {
+          "word": " other",
+          "start": 89.62,
+          "end": 89.78,
+          "probability": 0.22342048585414886
+        },
+        {
+          "word": " that",
+          "start": 89.78,
+          "end": 89.96,
+          "probability": 0.9912028312683105
+        },
+        {
+          "word": " even",
+          "start": 89.96,
+          "end": 90.14,
+          "probability": 0.9963002800941467
+        },
+        {
+          "word": " means",
+          "start": 90.14,
+          "end": 90.34,
+          "probability": 0.8273941278457642
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "start": 90.36,
+      "end": 92.08,
+      "text": "we can give it a try.",
+      "avg_logprob": -0.1604611003335486,
+      "no_speech_prob": 0.00011795338650699705,
+      "words": [
+        {
+          "word": " we",
+          "start": 90.36,
+          "end": 91.14,
+          "probability": 0.23957978188991547
+        },
+        {
+          "word": " can",
+          "start": 91.14,
+          "end": 91.32,
+          "probability": 0.9979588985443115
+        },
+        {
+          "word": " give",
+          "start": 91.32,
+          "end": 91.46,
+          "probability": 0.9948152899742126
+        },
+        {
+          "word": " it",
+          "start": 91.46,
+          "end": 91.58,
+          "probability": 0.9913455247879028
+        },
+        {
+          "word": " a",
+          "start": 91.58,
+          "end": 91.7,
+          "probability": 0.9859718680381775
+        },
+        {
+          "word": " try.",
+          "start": 91.7,
+          "end": 92.08,
+          "probability": 0.9983974099159241
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "start": 94.4,
+      "end": 95.14,
+      "text": "Meow, meow, meow.",
+      "avg_logprob": -0.1604611003335486,
+      "no_speech_prob": 0.00011795338650699705,
+      "words": [
+        {
+          "word": " Meow,",
+          "start": 94.4,
+          "end": 94.52,
+          "probability": 0.47394946217536926
+        },
+        {
+          "word": " meow,",
+          "start": 94.88,
+          "end": 94.88,
+          "probability": 0.813323438167572
+        },
+        {
+          "word": " meow.",
+          "start": 95.14,
+          "end": 95.14,
+          "probability": 0.894249439239502
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "start": 100.76,
+      "end": 105.4,
+      "text": "So as you can see, our model is truly an omnimodal.",
+      "avg_logprob": -0.1604611003335486,
+      "no_speech_prob": 0.00011795338650699705,
+      "words": [
+        {
+          "word": " So",
+          "start": 100.76,
+          "end": 100.96,
+          "probability": 0.7957943081855774
+        },
+        {
+          "word": " as",
+          "start": 100.96,
+          "end": 101.5,
+          "probability": 0.9427554607391357
+        },
+        {
+          "word": " you",
+          "start": 101.5,
+          "end": 101.58,
+          "probability": 0.999539852142334
+        },
+        {
+          "word": " can",
+          "start": 101.58,
+          "end": 101.72,
+          "probability": 0.9993612170219421
+        },
+        {
+          "word": " see,",
+          "start": 101.72,
+          "end": 102.08,
+          "probability": 0.9998890161514282
+        },
+        {
+          "word": " our",
+          "start": 102.3,
+          "end": 102.42,
+          "probability": 0.9991605281829834
+        },
+        {
+          "word": " model",
+          "start": 102.42,
+          "end": 102.76,
+          "probability": 0.9988068342208862
+        },
+        {
+          "word": " is",
+          "start": 102.76,
+          "end": 103.04,
+          "probability": 0.9994099140167236
+        },
+        {
+          "word": " truly",
+          "start": 103.04,
+          "end": 103.62,
+          "probability": 0.9993558526039124
+        },
+        {
+          "word": " an",
+          "start": 103.62,
+          "end": 104.58,
+          "probability": 0.9985161423683167
+        },
+        {
+          "word": " omnimodal.",
+          "start": 104.58,
+          "end": 105.4,
+          "probability": 0.6842341423034668
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "start": 106.04,
+      "end": 116.3,
+      "text": "So many other models can only search either on text or on image and text or text and audio, these combinations.",
+      "avg_logprob": -0.1604611003335486,
+      "no_speech_prob": 0.00011795338650699705,
+      "words": [
+        {
+          "word": " So",
+          "start": 106.04,
+          "end": 106.06,
+          "probability": 0.9702817797660828
+        },
+        {
+          "word": " many",
+          "start": 106.06,
+          "end": 106.38,
+          "probability": 0.9944543242454529
+        },
+        {
+          "word": " other",
+          "start": 106.38,
+          "end": 106.68,
+          "probability": 0.9991806149482727
+        },
+        {
+          "word": " models",
+          "start": 106.68,
+          "end": 107.28,
+          "probability": 0.9995726943016052
+        },
+        {
+          "word": " can",
+          "start": 107.28,
+          "end": 107.6,
+          "probability": 0.9992283582687378
+        },
+        {
+          "word": " only",
+          "start": 107.6,
+          "end": 107.94,
+          "probability": 0.9882766604423523
+        },
+        {
+          "word": " search",
+          "start": 107.94,
+          "end": 108.46,
+          "probability": 0.9959200620651245
+        },
+        {
+          "word": " either",
+          "start": 108.46,
+          "end": 108.9,
+          "probability": 0.9917279481887817
+        },
+        {
+          "word": " on",
+          "start": 108.9,
+          "end": 109.62,
+          "probability": 0.9981223940849304
+        },
+        {
+          "word": " text",
+          "start": 109.62,
+          "end": 110.1,
+          "probability": 0.9983533620834351
+        },
+        {
+          "word": " or",
+          "start": 110.1,
+          "end": 110.62,
+          "probability": 0.9756532311439514
+        },
+        {
+          "word": " on",
+          "start": 110.62,
+          "end": 111.14,
+          "probability": 0.9922897219657898
+        },
+        {
+          "word": " image",
+          "start": 111.14,
+          "end": 112.28,
+          "probability": 0.9968165755271912
+        },
+        {
+          "word": " and",
+          "start": 112.28,
+          "end": 112.66,
+          "probability": 0.9978929162025452
+        },
+        {
+          "word": " text",
+          "start": 112.66,
+          "end": 113.16,
+          "probability": 0.9989959597587585
+        },
+        {
+          "word": " or",
+          "start": 113.16,
+          "end": 113.58,
+          "probability": 0.9722084403038025
+        },
+        {
+          "word": " text",
+          "start": 113.58,
+          "end": 114.14,
+          "probability": 0.9974155426025391
+        },
+        {
+          "word": " and",
+          "start": 114.14,
+          "end": 114.74,
+          "probability": 0.9996591806411743
+        },
+        {
+          "word": " audio,",
+          "start": 114.74,
+          "end": 115.46,
+          "probability": 0.9996887445449829
+        },
+        {
+          "word": " these",
+          "start": 115.7,
+          "end": 115.76,
+          "probability": 0.9967227578163147
+        },
+        {
+          "word": " combinations.",
+          "start": 115.76,
+          "end": 116.3,
+          "probability": 0.9989770650863647
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "start": 117.26,
+      "end": 122.7,
+      "text": "But in our case, all these modalities come into a shared embedding space.",
+      "avg_logprob": -0.1604611003335486,
+      "no_speech_prob": 0.00011795338650699705,
+      "words": [
+        {
+          "word": " But",
+          "start": 117.26,
+          "end": 117.48,
+          "probability": 0.9980425834655762
+        },
+        {
+          "word": " in",
+          "start": 117.48,
+          "end": 117.7,
+          "probability": 0.9952795505523682
+        },
+        {
+          "word": " our",
+          "start": 117.7,
+          "end": 117.86,
+          "probability": 0.9998492002487183
+        },
+        {
+          "word": " case,",
+          "start": 117.86,
+          "end": 118.24,
+          "probability": 0.9998887777328491
+        },
+        {
+          "word": " all",
+          "start": 118.68,
+          "end": 118.68,
+          "probability": 0.9993795156478882
+        },
+        {
+          "word": " these",
+          "start": 118.68,
+          "end": 118.86,
+          "probability": 0.9896695017814636
+        },
+        {
+          "word": " modalities",
+          "start": 118.86,
+          "end": 119.58,
+          "probability": 0.9996151626110077
+        },
+        {
+          "word": " come",
+          "start": 119.58,
+          "end": 120.38,
+          "probability": 0.9983856678009033
+        },
+        {
+          "word": " into",
+          "start": 120.38,
+          "end": 120.7,
+          "probability": 0.9992913007736206
+        },
+        {
+          "word": " a",
+          "start": 120.7,
+          "end": 120.96,
+          "probability": 0.9988530874252319
+        },
+        {
+          "word": " shared",
+          "start": 120.96,
+          "end": 121.36,
+          "probability": 0.9997783303260803
+        },
+        {
+          "word": " embedding",
+          "start": 121.36,
+          "end": 122.28,
+          "probability": 0.9966263771057129
+        },
+        {
+          "word": " space.",
+          "start": 122.28,
+          "end": 122.7,
+          "probability": 0.9998775720596313
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "start": 123.42,
+      "end": 126.26,
+      "text": "And this allows to have such cross-modalities.",
+      "avg_logprob": -0.1604611003335486,
+      "no_speech_prob": 0.00011795338650699705,
+      "words": [
+        {
+          "word": " And",
+          "start": 123.42,
+          "end": 123.64,
+          "probability": 0.9909452199935913
+        },
+        {
+          "word": " this",
+          "start": 123.64,
+          "end": 123.8,
+          "probability": 0.9984176158905029
+        },
+        {
+          "word": " allows",
+          "start": 123.8,
+          "end": 124.2,
+          "probability": 0.99981290102005
+        },
+        {
+          "word": " to",
+          "start": 124.2,
+          "end": 124.5,
+          "probability": 0.9998164772987366
+        },
+        {
+          "word": " have",
+          "start": 124.5,
+          "end": 124.76,
+          "probability": 0.9998679161071777
+        },
+        {
+          "word": " such",
+          "start": 124.76,
+          "end": 125.16,
+          "probability": 0.998566210269928
+        },
+        {
+          "word": " cross",
+          "start": 125.16,
+          "end": 126.02,
+          "probability": 0.9973852038383484
+        },
+        {
+          "word": "-modalities.",
+          "start": 126.02,
+          "end": 126.26,
+          "probability": 0.6421535760164261
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "start": 126.26,
+      "end": 129.32,
+      "text": "modality search requests, which is quite nice.",
+      "avg_logprob": -0.13241494993368785,
+      "no_speech_prob": 0.00035598097019828856,
+      "words": [
+        {
+          "word": " modality",
+          "start": 126.26,
+          "end": 126.68,
+          "probability": 0.5545337498188019
+        },
+        {
+          "word": " search",
+          "start": 126.68,
+          "end": 127.36,
+          "probability": 0.9922956228256226
+        },
+        {
+          "word": " requests,",
+          "start": 127.36,
+          "end": 127.9,
+          "probability": 0.9759634733200073
+        },
+        {
+          "word": " which",
+          "start": 128.64,
+          "end": 128.66,
+          "probability": 0.9959480166435242
+        },
+        {
+          "word": " is",
+          "start": 128.66,
+          "end": 128.8,
+          "probability": 0.9990012049674988
+        },
+        {
+          "word": " quite",
+          "start": 128.8,
+          "end": 128.98,
+          "probability": 0.996993899345398
+        },
+        {
+          "word": " nice.",
+          "start": 128.98,
+          "end": 129.32,
+          "probability": 0.999190628528595
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "start": 130.18,
+      "end": 132.66,
+      "text": "Let's search for some rock music, for instance.",
+      "avg_logprob": -0.13241494993368785,
+      "no_speech_prob": 0.00035598097019828856,
+      "words": [
+        {
+          "word": " Let's",
+          "start": 130.18,
+          "end": 130.46,
+          "probability": 0.9945486485958099
+        },
+        {
+          "word": " search",
+          "start": 130.46,
+          "end": 130.7,
+          "probability": 0.9990381002426147
+        },
+        {
+          "word": " for",
+          "start": 130.7,
+          "end": 131.0,
+          "probability": 0.9990032315254211
+        },
+        {
+          "word": " some",
+          "start": 131.0,
+          "end": 131.38,
+          "probability": 0.9956461787223816
+        },
+        {
+          "word": " rock",
+          "start": 131.38,
+          "end": 131.66,
+          "probability": 0.9938892126083374
+        },
+        {
+          "word": " music,",
+          "start": 131.66,
+          "end": 132.04,
+          "probability": 0.9979897737503052
+        },
+        {
+          "word": " for",
+          "start": 132.18,
+          "end": 132.2,
+          "probability": 0.998842179775238
+        },
+        {
+          "word": " instance.",
+          "start": 132.2,
+          "end": 132.66,
+          "probability": 0.9990251064300537
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "start": 140.4,
+      "end": 142.58,
+      "text": "So this is the results we get on the photos.",
+      "avg_logprob": -0.13241494993368785,
+      "no_speech_prob": 0.00035598097019828856,
+      "words": [
+        {
+          "word": " So",
+          "start": 140.4,
+          "end": 140.4,
+          "probability": 0.9546416401863098
+        },
+        {
+          "word": " this",
+          "start": 140.4,
+          "end": 140.66,
+          "probability": 0.9582540988922119
+        },
+        {
+          "word": " is",
+          "start": 140.66,
+          "end": 140.78,
+          "probability": 0.9977352619171143
+        },
+        {
+          "word": " the",
+          "start": 140.78,
+          "end": 140.92,
+          "probability": 0.9958043694496155
+        },
+        {
+          "word": " results",
+          "start": 140.92,
+          "end": 141.36,
+          "probability": 0.9916041493415833
+        },
+        {
+          "word": " we",
+          "start": 141.36,
+          "end": 141.6,
+          "probability": 0.9964348077774048
+        },
+        {
+          "word": " get",
+          "start": 141.6,
+          "end": 141.84,
+          "probability": 0.9992290735244751
+        },
+        {
+          "word": " on",
+          "start": 141.84,
+          "end": 142.0,
+          "probability": 0.998674750328064
+        },
+        {
+          "word": " the",
+          "start": 142.0,
+          "end": 142.1,
+          "probability": 0.9984692931175232
+        },
+        {
+          "word": " photos.",
+          "start": 142.1,
+          "end": 142.58,
+          "probability": 0.9931526184082031
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "start": 144.17,
+      "end": 147.58,
+      "text": "And then these are the results we get on the audio.",
+      "avg_logprob": -0.13241494993368785,
+      "no_speech_prob": 0.00035598097019828856,
+      "words": [
+        {
+          "word": " And",
+          "start": 144.17,
+          "end": 144.17,
+          "probability": 0.987466037273407
+        },
+        {
+          "word": " then",
+          "start": 144.17,
+          "end": 144.49,
+          "probability": 0.9936766028404236
+        },
+        {
+          "word": " these",
+          "start": 144.49,
+          "end": 145.79,
+          "probability": 0.9112848043441772
+        },
+        {
+          "word": " are",
+          "start": 145.92,
+          "end": 146.08,
+          "probability": 0.9995946288108826
+        },
+        {
+          "word": " the",
+          "start": 146.08,
+          "end": 146.16,
+          "probability": 0.9991278052330017
+        },
+        {
+          "word": " results",
+          "start": 146.16,
+          "end": 146.66,
+          "probability": 0.9996579885482788
+        },
+        {
+          "word": " we",
+          "start": 146.66,
+          "end": 146.86,
+          "probability": 0.997876763343811
+        },
+        {
+          "word": " get",
+          "start": 146.86,
+          "end": 147.06,
+          "probability": 0.999663233757019
+        },
+        {
+          "word": " on",
+          "start": 147.06,
+          "end": 147.18,
+          "probability": 0.9987645149230957
+        },
+        {
+          "word": " the",
+          "start": 147.18,
+          "end": 147.28,
+          "probability": 0.9972507357597351
+        },
+        {
+          "word": " audio.",
+          "start": 147.28,
+          "end": 147.58,
+          "probability": 0.9981318116188049
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "start": 158.85,
+      "end": 161.57,
+      "text": "You can think about many possible use cases.",
+      "avg_logprob": -0.13241494993368785,
+      "no_speech_prob": 0.00035598097019828856,
+      "words": [
+        {
+          "word": " You",
+          "start": 158.85,
+          "end": 159.51,
+          "probability": 0.9892738461494446
+        },
+        {
+          "word": " can",
+          "start": 159.51,
+          "end": 159.67,
+          "probability": 0.9995827078819275
+        },
+        {
+          "word": " think",
+          "start": 159.67,
+          "end": 159.89,
+          "probability": 0.9995238780975342
+        },
+        {
+          "word": " about",
+          "start": 159.89,
+          "end": 160.17,
+          "probability": 0.9996479749679565
+        },
+        {
+          "word": " many",
+          "start": 160.17,
+          "end": 160.41,
+          "probability": 0.9994006156921387
+        },
+        {
+          "word": " possible",
+          "start": 160.41,
+          "end": 160.85,
+          "probability": 0.9994619488716125
+        },
+        {
+          "word": " use",
+          "start": 160.85,
+          "end": 161.15,
+          "probability": 0.9933329224586487
+        },
+        {
+          "word": " cases.",
+          "start": 161.15,
+          "end": 161.57,
+          "probability": 0.9987473487854004
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "start": 162.23,
+      "end": 165.99,
+      "text": "For instance, here I search on our documents data set",
+      "avg_logprob": -0.13241494993368785,
+      "no_speech_prob": 0.00035598097019828856,
+      "words": [
+        {
+          "word": " For",
+          "start": 162.23,
+          "end": 162.31,
+          "probability": 0.9989349246025085
+        },
+        {
+          "word": " instance,",
+          "start": 162.31,
+          "end": 162.69,
+          "probability": 0.9990134239196777
+        },
+        {
+          "word": " here",
+          "start": 163.27,
+          "end": 163.27,
+          "probability": 0.9934290051460266
+        },
+        {
+          "word": " I",
+          "start": 163.27,
+          "end": 163.65,
+          "probability": 0.7820428013801575
+        },
+        {
+          "word": " search",
+          "start": 163.65,
+          "end": 164.05,
+          "probability": 0.7967916131019592
+        },
+        {
+          "word": " on",
+          "start": 164.05,
+          "end": 164.45,
+          "probability": 0.9994737505912781
+        },
+        {
+          "word": " our",
+          "start": 164.45,
+          "end": 164.71,
+          "probability": 0.9989916682243347
+        },
+        {
+          "word": " documents",
+          "start": 164.71,
+          "end": 165.31,
+          "probability": 0.8549877405166626
+        },
+        {
+          "word": " data",
+          "start": 165.31,
+          "end": 165.59,
+          "probability": 0.9156764149665833
+        },
+        {
+          "word": " set",
+          "start": 165.59,
+          "end": 165.99,
+          "probability": 0.9947456121444702
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "start": 165.99,
+      "end": 170.57,
+      "text": "and I uploaded an invoice to retrieve similar invoices",
+      "avg_logprob": -0.13241494993368785,
+      "no_speech_prob": 0.00035598097019828856,
+      "words": [
+        {
+          "word": " and",
+          "start": 165.99,
+          "end": 166.71,
+          "probability": 0.5911514163017273
+        },
+        {
+          "word": " I",
+          "start": 166.71,
+          "end": 166.93,
+          "probability": 0.9981877207756042
+        },
+        {
+          "word": " uploaded",
+          "start": 166.93,
+          "end": 167.41,
+          "probability": 0.997703492641449
+        },
+        {
+          "word": " an",
+          "start": 167.41,
+          "end": 167.67,
+          "probability": 0.9996145963668823
+        },
+        {
+          "word": " invoice",
+          "start": 167.67,
+          "end": 168.17,
+          "probability": 0.9992212057113647
+        },
+        {
+          "word": " to",
+          "start": 168.17,
+          "end": 168.83,
+          "probability": 0.9980869293212891
+        },
+        {
+          "word": " retrieve",
+          "start": 168.83,
+          "end": 169.37,
+          "probability": 0.9993740916252136
+        },
+        {
+          "word": " similar",
+          "start": 169.37,
+          "end": 169.95,
+          "probability": 0.9997020363807678
+        },
+        {
+          "word": " invoices",
+          "start": 169.95,
+          "end": 170.57,
+          "probability": 0.9985024134318033
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "start": 170.69,
+      "end": 178.02,
+      "text": "as results. So now let's talk about a bit more complex queries we can construct.",
+      "avg_logprob": -0.10548267001286149,
+      "no_speech_prob": 0.00018586235819384456,
+      "words": [
+        {
+          "word": " as",
+          "start": 170.69,
+          "end": 170.95,
+          "probability": 0.940726637840271
+        },
+        {
+          "word": " results.",
+          "start": 170.95,
+          "end": 171.45,
+          "probability": 0.9622686505317688
+        },
+        {
+          "word": " So",
+          "start": 173.84,
+          "end": 173.88,
+          "probability": 0.8653115630149841
+        },
+        {
+          "word": " now",
+          "start": 173.88,
+          "end": 174.26,
+          "probability": 0.9397051930427551
+        },
+        {
+          "word": " let's",
+          "start": 174.26,
+          "end": 174.52,
+          "probability": 0.9913030564785004
+        },
+        {
+          "word": " talk",
+          "start": 174.52,
+          "end": 174.74,
+          "probability": 0.9995958209037781
+        },
+        {
+          "word": " about",
+          "start": 174.74,
+          "end": 175.28,
+          "probability": 0.9919712543487549
+        },
+        {
+          "word": " a",
+          "start": 175.28,
+          "end": 175.48,
+          "probability": 0.997563362121582
+        },
+        {
+          "word": " bit",
+          "start": 175.48,
+          "end": 175.6,
+          "probability": 0.9989872574806213
+        },
+        {
+          "word": " more",
+          "start": 175.6,
+          "end": 175.88,
+          "probability": 0.9996113181114197
+        },
+        {
+          "word": " complex",
+          "start": 175.88,
+          "end": 176.52,
+          "probability": 0.9992128610610962
+        },
+        {
+          "word": " queries",
+          "start": 176.52,
+          "end": 176.98,
+          "probability": 0.9652982950210571
+        },
+        {
+          "word": " we",
+          "start": 176.98,
+          "end": 177.28,
+          "probability": 0.9881501197814941
+        },
+        {
+          "word": " can",
+          "start": 177.28,
+          "end": 177.44,
+          "probability": 0.9986621141433716
+        },
+        {
+          "word": " construct.",
+          "start": 177.44,
+          "end": 178.02,
+          "probability": 0.9986365437507629
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "start": 178.84,
+      "end": 184.28,
+      "text": "So what we can also do is, for instance, giving a drawing here of a car,",
+      "avg_logprob": -0.10548267001286149,
+      "no_speech_prob": 0.00018586235819384456,
+      "words": [
+        {
+          "word": " So",
+          "start": 178.84,
+          "end": 178.92,
+          "probability": 0.9786281585693359
+        },
+        {
+          "word": " what",
+          "start": 178.92,
+          "end": 179.18,
+          "probability": 0.9832137823104858
+        },
+        {
+          "word": " we",
+          "start": 179.18,
+          "end": 179.34,
+          "probability": 0.9996428489685059
+        },
+        {
+          "word": " can",
+          "start": 179.34,
+          "end": 179.48,
+          "probability": 0.9994183778762817
+        },
+        {
+          "word": " also",
+          "start": 179.48,
+          "end": 179.74,
+          "probability": 0.9994165897369385
+        },
+        {
+          "word": " do",
+          "start": 179.74,
+          "end": 180.08,
+          "probability": 0.9995502829551697
+        },
+        {
+          "word": " is,",
+          "start": 180.08,
+          "end": 180.6,
+          "probability": 0.9941523671150208
+        },
+        {
+          "word": " for",
+          "start": 180.82,
+          "end": 180.96,
+          "probability": 0.9994798302650452
+        },
+        {
+          "word": " instance,",
+          "start": 180.96,
+          "end": 181.54,
+          "probability": 0.9990087151527405
+        },
+        {
+          "word": " giving",
+          "start": 182.26,
+          "end": 182.44,
+          "probability": 0.9946411848068237
+        },
+        {
+          "word": " a",
+          "start": 182.44,
+          "end": 182.66,
+          "probability": 0.9990026354789734
+        },
+        {
+          "word": " drawing",
+          "start": 182.66,
+          "end": 183.02,
+          "probability": 0.9970592260360718
+        },
+        {
+          "word": " here",
+          "start": 183.02,
+          "end": 183.42,
+          "probability": 0.9977272152900696
+        },
+        {
+          "word": " of",
+          "start": 183.42,
+          "end": 183.8,
+          "probability": 0.9771372675895691
+        },
+        {
+          "word": " a",
+          "start": 183.8,
+          "end": 183.98,
+          "probability": 0.9989392161369324
+        },
+        {
+          "word": " car,",
+          "start": 183.98,
+          "end": 184.28,
+          "probability": 0.9992305040359497
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "start": 185.29,
+      "end": 194.47,
+      "text": "then retrieving some cars as response, and then we can adjust the query even further by adding more modalities.",
+      "avg_logprob": -0.10548267001286149,
+      "no_speech_prob": 0.00018586235819384456,
+      "words": [
+        {
+          "word": " then",
+          "start": 185.29,
+          "end": 185.53,
+          "probability": 0.9963158965110779
+        },
+        {
+          "word": " retrieving",
+          "start": 185.53,
+          "end": 186.45,
+          "probability": 0.9987595975399017
+        },
+        {
+          "word": " some",
+          "start": 186.45,
+          "end": 186.83,
+          "probability": 0.9995691180229187
+        },
+        {
+          "word": " cars",
+          "start": 186.83,
+          "end": 187.43,
+          "probability": 0.997896671295166
+        },
+        {
+          "word": " as",
+          "start": 187.43,
+          "end": 187.77,
+          "probability": 0.9993852376937866
+        },
+        {
+          "word": " response,",
+          "start": 187.77,
+          "end": 188.37,
+          "probability": 0.9893603324890137
+        },
+        {
+          "word": " and",
+          "start": 189.09,
+          "end": 189.09,
+          "probability": 0.9966276288032532
+        },
+        {
+          "word": " then",
+          "start": 189.09,
+          "end": 189.31,
+          "probability": 0.9997888207435608
+        },
+        {
+          "word": " we",
+          "start": 189.31,
+          "end": 189.57,
+          "probability": 0.9992408752441406
+        },
+        {
+          "word": " can",
+          "start": 189.57,
+          "end": 189.93,
+          "probability": 0.9999237060546875
+        },
+        {
+          "word": " adjust",
+          "start": 189.93,
+          "end": 190.65,
+          "probability": 0.9995629191398621
+        },
+        {
+          "word": " the",
+          "start": 190.65,
+          "end": 190.87,
+          "probability": 0.9996272325515747
+        },
+        {
+          "word": " query",
+          "start": 190.87,
+          "end": 191.31,
+          "probability": 0.9899259805679321
+        },
+        {
+          "word": " even",
+          "start": 191.31,
+          "end": 191.85,
+          "probability": 0.994939923286438
+        },
+        {
+          "word": " further",
+          "start": 191.85,
+          "end": 192.39,
+          "probability": 0.9999147653579712
+        },
+        {
+          "word": " by",
+          "start": 192.39,
+          "end": 192.77,
+          "probability": 0.9973783493041992
+        },
+        {
+          "word": " adding",
+          "start": 192.77,
+          "end": 193.17,
+          "probability": 0.9998558759689331
+        },
+        {
+          "word": " more",
+          "start": 193.17,
+          "end": 193.63,
+          "probability": 0.999707043170929
+        },
+        {
+          "word": " modalities.",
+          "start": 193.63,
+          "end": 194.47,
+          "probability": 0.999482125043869
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "start": 196.02,
+      "end": 200.82,
+      "text": "And for instance, we can specify now white.",
+      "avg_logprob": -0.10548267001286149,
+      "no_speech_prob": 0.00018586235819384456,
+      "words": [
+        {
+          "word": " And",
+          "start": 196.02,
+          "end": 196.38,
+          "probability": 0.983403742313385
+        },
+        {
+          "word": " for",
+          "start": 196.38,
+          "end": 197.36,
+          "probability": 0.9628811478614807
+        },
+        {
+          "word": " instance,",
+          "start": 197.36,
+          "end": 197.64,
+          "probability": 0.9995224475860596
+        },
+        {
+          "word": " we",
+          "start": 197.92,
+          "end": 197.92,
+          "probability": 0.9996943473815918
+        },
+        {
+          "word": " can",
+          "start": 197.92,
+          "end": 198.18,
+          "probability": 0.9999150037765503
+        },
+        {
+          "word": " specify",
+          "start": 198.18,
+          "end": 198.74,
+          "probability": 0.9994394183158875
+        },
+        {
+          "word": " now",
+          "start": 198.74,
+          "end": 199.34,
+          "probability": 0.9968826770782471
+        },
+        {
+          "word": " white.",
+          "start": 199.7,
+          "end": 200.82,
+          "probability": 0.5559115409851074
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "start": 200.82,
+      "end": 207.54,
+      "text": "So now the red car is a bit downranked and we get more white cars as response.",
+      "avg_logprob": -0.06820894287605035,
+      "no_speech_prob": 0.00012455468822736293,
+      "words": [
+        {
+          "word": " So",
+          "start": 200.82,
+          "end": 201.8,
+          "probability": 0.8346826434135437
+        },
+        {
+          "word": " now",
+          "start": 201.8,
+          "end": 202.42,
+          "probability": 0.969048023223877
+        },
+        {
+          "word": " the",
+          "start": 202.42,
+          "end": 202.94,
+          "probability": 0.9906082153320312
+        },
+        {
+          "word": " red",
+          "start": 202.94,
+          "end": 203.48,
+          "probability": 0.9841023087501526
+        },
+        {
+          "word": " car",
+          "start": 203.48,
+          "end": 203.8,
+          "probability": 0.9921311736106873
+        },
+        {
+          "word": " is",
+          "start": 203.8,
+          "end": 203.98,
+          "probability": 0.9992101192474365
+        },
+        {
+          "word": " a",
+          "start": 203.98,
+          "end": 204.08,
+          "probability": 0.999612033367157
+        },
+        {
+          "word": " bit",
+          "start": 204.08,
+          "end": 204.24,
+          "probability": 0.9989270567893982
+        },
+        {
+          "word": " downranked",
+          "start": 204.24,
+          "end": 205.08,
+          "probability": 0.9537168542544047
+        },
+        {
+          "word": " and",
+          "start": 205.08,
+          "end": 205.18,
+          "probability": 0.9578289985656738
+        },
+        {
+          "word": " we",
+          "start": 205.18,
+          "end": 205.32,
+          "probability": 0.9993681311607361
+        },
+        {
+          "word": " get",
+          "start": 205.32,
+          "end": 205.54,
+          "probability": 0.9992689490318298
+        },
+        {
+          "word": " more",
+          "start": 205.54,
+          "end": 205.88,
+          "probability": 0.9997578263282776
+        },
+        {
+          "word": " white",
+          "start": 205.88,
+          "end": 206.26,
+          "probability": 0.994041383266449
+        },
+        {
+          "word": " cars",
+          "start": 206.26,
+          "end": 206.68,
+          "probability": 0.9938847422599792
+        },
+        {
+          "word": " as",
+          "start": 206.68,
+          "end": 206.94,
+          "probability": 0.9925597906112671
+        },
+        {
+          "word": " response.",
+          "start": 206.94,
+          "end": 207.54,
+          "probability": 0.9441571831703186
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "start": 209.0,
+      "end": 215.42,
+      "text": "And the additional attribute we specified here is not an additional filter",
+      "avg_logprob": -0.06820894287605035,
+      "no_speech_prob": 0.00012455468822736293,
+      "words": [
+        {
+          "word": " And",
+          "start": 209.0,
+          "end": 209.9,
+          "probability": 0.9255796670913696
+        },
+        {
+          "word": " the",
+          "start": 209.9,
+          "end": 210.44,
+          "probability": 0.9967986345291138
+        },
+        {
+          "word": " additional",
+          "start": 210.44,
+          "end": 211.1,
+          "probability": 0.9943935871124268
+        },
+        {
+          "word": " attribute",
+          "start": 211.1,
+          "end": 211.78,
+          "probability": 0.9973655343055725
+        },
+        {
+          "word": " we",
+          "start": 211.78,
+          "end": 211.98,
+          "probability": 0.9976939558982849
+        },
+        {
+          "word": " specified",
+          "start": 211.98,
+          "end": 212.72,
+          "probability": 0.9926022887229919
+        },
+        {
+          "word": " here",
+          "start": 212.72,
+          "end": 213.32,
+          "probability": 0.999661922454834
+        },
+        {
+          "word": " is",
+          "start": 213.32,
+          "end": 214.04,
+          "probability": 0.9931401610374451
+        },
+        {
+          "word": " not",
+          "start": 214.04,
+          "end": 214.26,
+          "probability": 0.9997832179069519
+        },
+        {
+          "word": " an",
+          "start": 214.26,
+          "end": 214.46,
+          "probability": 0.9995723366737366
+        },
+        {
+          "word": " additional",
+          "start": 214.46,
+          "end": 214.86,
+          "probability": 0.9988672733306885
+        },
+        {
+          "word": " filter",
+          "start": 214.86,
+          "end": 215.42,
+          "probability": 0.9995973706245422
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "start": 215.42,
+      "end": 221.2,
+      "text": "because there is no filter attribute in the result images.",
+      "avg_logprob": -0.06820894287605035,
+      "no_speech_prob": 0.00012455468822736293,
+      "words": [
+        {
+          "word": " because",
+          "start": 215.42,
+          "end": 216.6,
+          "probability": 0.9664280414581299
+        },
+        {
+          "word": " there",
+          "start": 216.64,
+          "end": 217.48,
+          "probability": 0.9997645020484924
+        },
+        {
+          "word": " is",
+          "start": 217.48,
+          "end": 217.7,
+          "probability": 0.9997945427894592
+        },
+        {
+          "word": " no",
+          "start": 217.7,
+          "end": 218.06,
+          "probability": 0.9998455047607422
+        },
+        {
+          "word": " filter",
+          "start": 218.06,
+          "end": 218.56,
+          "probability": 0.9995357990264893
+        },
+        {
+          "word": " attribute",
+          "start": 218.56,
+          "end": 219.02,
+          "probability": 0.9987519979476929
+        },
+        {
+          "word": " in",
+          "start": 219.02,
+          "end": 219.78,
+          "probability": 0.9994682669639587
+        },
+        {
+          "word": " the",
+          "start": 219.78,
+          "end": 220.08,
+          "probability": 0.9932301044464111
+        },
+        {
+          "word": " result",
+          "start": 220.08,
+          "end": 220.66,
+          "probability": 0.9931691884994507
+        },
+        {
+          "word": " images.",
+          "start": 220.66,
+          "end": 221.2,
+          "probability": 0.99895179271698
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "start": 221.4,
+      "end": 231.2,
+      "text": "It's really another input modality we add to the embedding model together with the car to retrieve these results.",
+      "avg_logprob": -0.06820894287605035,
+      "no_speech_prob": 0.00012455468822736293,
+      "words": [
+        {
+          "word": " It's",
+          "start": 221.4,
+          "end": 222.12,
+          "probability": 0.9971849024295807
+        },
+        {
+          "word": " really",
+          "start": 222.12,
+          "end": 222.32,
+          "probability": 0.9996819496154785
+        },
+        {
+          "word": " another",
+          "start": 222.32,
+          "end": 222.74,
+          "probability": 0.9987452030181885
+        },
+        {
+          "word": " input",
+          "start": 222.74,
+          "end": 223.18,
+          "probability": 0.9985013008117676
+        },
+        {
+          "word": " modality",
+          "start": 223.18,
+          "end": 223.74,
+          "probability": 0.9993503093719482
+        },
+        {
+          "word": " we",
+          "start": 223.74,
+          "end": 224.58,
+          "probability": 0.8742892742156982
+        },
+        {
+          "word": " add",
+          "start": 224.58,
+          "end": 224.98,
+          "probability": 0.9997962117195129
+        },
+        {
+          "word": " to",
+          "start": 224.98,
+          "end": 225.48,
+          "probability": 0.9997597336769104
+        },
+        {
+          "word": " the",
+          "start": 225.48,
+          "end": 225.94,
+          "probability": 0.9998395442962646
+        },
+        {
+          "word": " embedding",
+          "start": 225.94,
+          "end": 226.5,
+          "probability": 0.9957663416862488
+        },
+        {
+          "word": " model",
+          "start": 226.5,
+          "end": 226.82,
+          "probability": 0.9996007084846497
+        },
+        {
+          "word": " together",
+          "start": 226.82,
+          "end": 227.32,
+          "probability": 0.9967856407165527
+        },
+        {
+          "word": " with",
+          "start": 227.32,
+          "end": 227.68,
+          "probability": 0.9999099969863892
+        },
+        {
+          "word": " the",
+          "start": 227.68,
+          "end": 227.84,
+          "probability": 0.9027758836746216
+        },
+        {
+          "word": " car",
+          "start": 227.84,
+          "end": 228.2,
+          "probability": 0.9992063641548157
+        },
+        {
+          "word": " to",
+          "start": 228.2,
+          "end": 229.22,
+          "probability": 0.9956583976745605
+        },
+        {
+          "word": " retrieve",
+          "start": 229.28,
+          "end": 230.16,
+          "probability": 0.9989749193191528
+        },
+        {
+          "word": " these",
+          "start": 230.16,
+          "end": 230.86,
+          "probability": 0.9990084767341614
+        },
+        {
+          "word": " results.",
+          "start": 230.86,
+          "end": 231.2,
+          "probability": 0.9996154308319092
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "start": 231.2,
+      "end": 237.36,
+      "text": "And it might not work in any case, so you can maybe not combine everything with each other.",
+      "avg_logprob": -0.14143510706284468,
+      "no_speech_prob": 0.0005688627134077251,
+      "words": [
+        {
+          "word": " And",
+          "start": 231.2,
+          "end": 232.04,
+          "probability": 0.677208662033081
+        },
+        {
+          "word": " it",
+          "start": 232.04,
+          "end": 232.5,
+          "probability": 0.9774957895278931
+        },
+        {
+          "word": " might",
+          "start": 232.5,
+          "end": 232.62,
+          "probability": 0.990436851978302
+        },
+        {
+          "word": " not",
+          "start": 232.62,
+          "end": 232.82,
+          "probability": 0.9962222576141357
+        },
+        {
+          "word": " work",
+          "start": 232.82,
+          "end": 233.16,
+          "probability": 0.9987651109695435
+        },
+        {
+          "word": " in",
+          "start": 233.16,
+          "end": 233.48,
+          "probability": 0.9948362112045288
+        },
+        {
+          "word": " any",
+          "start": 233.48,
+          "end": 233.82,
+          "probability": 0.9993035793304443
+        },
+        {
+          "word": " case,",
+          "start": 233.82,
+          "end": 234.36,
+          "probability": 0.9987088441848755
+        },
+        {
+          "word": " so",
+          "start": 234.64,
+          "end": 234.64,
+          "probability": 0.9922295212745667
+        },
+        {
+          "word": " you",
+          "start": 234.64,
+          "end": 234.82,
+          "probability": 0.9906394481658936
+        },
+        {
+          "word": " can",
+          "start": 234.82,
+          "end": 235.08,
+          "probability": 0.9913105964660645
+        },
+        {
+          "word": " maybe",
+          "start": 235.08,
+          "end": 235.46,
+          "probability": 0.7900536060333252
+        },
+        {
+          "word": " not",
+          "start": 235.46,
+          "end": 235.72,
+          "probability": 0.9966050386428833
+        },
+        {
+          "word": " combine",
+          "start": 235.72,
+          "end": 236.1,
+          "probability": 0.9932999610900879
+        },
+        {
+          "word": " everything",
+          "start": 236.1,
+          "end": 236.5,
+          "probability": 0.9071457386016846
+        },
+        {
+          "word": " with",
+          "start": 236.5,
+          "end": 236.86,
+          "probability": 0.9988701939582825
+        },
+        {
+          "word": " each",
+          "start": 236.86,
+          "end": 237.02,
+          "probability": 0.9991853833198547
+        },
+        {
+          "word": " other.",
+          "start": 237.02,
+          "end": 237.36,
+          "probability": 0.9978849291801453
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "start": 238.34,
+      "end": 242.76,
+      "text": "And there are a bit of experiments you have to do what works with each other.",
+      "avg_logprob": -0.14143510706284468,
+      "no_speech_prob": 0.0005688627134077251,
+      "words": [
+        {
+          "word": " And",
+          "start": 238.34,
+          "end": 238.4,
+          "probability": 0.983984649181366
+        },
+        {
+          "word": " there",
+          "start": 238.4,
+          "end": 238.52,
+          "probability": 0.9957755208015442
+        },
+        {
+          "word": " are",
+          "start": 238.52,
+          "end": 238.66,
+          "probability": 0.9925165772438049
+        },
+        {
+          "word": " a",
+          "start": 238.66,
+          "end": 238.74,
+          "probability": 0.9878460764884949
+        },
+        {
+          "word": " bit",
+          "start": 238.74,
+          "end": 238.9,
+          "probability": 0.9988129138946533
+        },
+        {
+          "word": " of",
+          "start": 238.9,
+          "end": 239.1,
+          "probability": 0.9998180270195007
+        },
+        {
+          "word": " experiments",
+          "start": 239.1,
+          "end": 239.68,
+          "probability": 0.9981841444969177
+        },
+        {
+          "word": " you",
+          "start": 239.68,
+          "end": 240.06,
+          "probability": 0.9590506553649902
+        },
+        {
+          "word": " have",
+          "start": 240.06,
+          "end": 240.26,
+          "probability": 0.9994295239448547
+        },
+        {
+          "word": " to",
+          "start": 240.26,
+          "end": 240.42,
+          "probability": 0.9996829032897949
+        },
+        {
+          "word": " do",
+          "start": 240.42,
+          "end": 240.7,
+          "probability": 0.999561607837677
+        },
+        {
+          "word": " what",
+          "start": 240.7,
+          "end": 241.16,
+          "probability": 0.917519748210907
+        },
+        {
+          "word": " works",
+          "start": 241.16,
+          "end": 241.68,
+          "probability": 0.9987974166870117
+        },
+        {
+          "word": " with",
+          "start": 241.68,
+          "end": 242.24,
+          "probability": 0.9988725781440735
+        },
+        {
+          "word": " each",
+          "start": 242.24,
+          "end": 242.44,
+          "probability": 0.999398946762085
+        },
+        {
+          "word": " other.",
+          "start": 242.44,
+          "end": 242.76,
+          "probability": 0.9992461204528809
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "start": 243.38,
+      "end": 245.64,
+      "text": "But this shows, in principle, this is possible.",
+      "avg_logprob": -0.14143510706284468,
+      "no_speech_prob": 0.0005688627134077251,
+      "words": [
+        {
+          "word": " But",
+          "start": 243.38,
+          "end": 243.46,
+          "probability": 0.9279087781906128
+        },
+        {
+          "word": " this",
+          "start": 243.46,
+          "end": 243.62,
+          "probability": 0.9959652423858643
+        },
+        {
+          "word": " shows,",
+          "start": 243.62,
+          "end": 244.04,
+          "probability": 0.9993864297866821
+        },
+        {
+          "word": " in",
+          "start": 244.22,
+          "end": 244.34,
+          "probability": 0.9984435439109802
+        },
+        {
+          "word": " principle,",
+          "start": 244.34,
+          "end": 244.78,
+          "probability": 0.9985665678977966
+        },
+        {
+          "word": " this",
+          "start": 245.04,
+          "end": 245.14,
+          "probability": 0.9988048076629639
+        },
+        {
+          "word": " is",
+          "start": 245.14,
+          "end": 245.26,
+          "probability": 0.9997640252113342
+        },
+        {
+          "word": " possible.",
+          "start": 245.26,
+          "end": 245.64,
+          "probability": 0.9996304512023926
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "start": 246.62,
+      "end": 251.2,
+      "text": "You can find it on Heminghamming Face and just give it a try and let us know.",
+      "avg_logprob": -0.14143510706284468,
+      "no_speech_prob": 0.0005688627134077251,
+      "words": [
+        {
+          "word": " You",
+          "start": 246.62,
+          "end": 246.68,
+          "probability": 0.9985740184783936
+        },
+        {
+          "word": " can",
+          "start": 246.68,
+          "end": 246.84,
+          "probability": 0.9998692274093628
+        },
+        {
+          "word": " find",
+          "start": 246.84,
+          "end": 247.1,
+          "probability": 0.9998779296875
+        },
+        {
+          "word": " it",
+          "start": 247.1,
+          "end": 247.24,
+          "probability": 0.9750626087188721
+        },
+        {
+          "word": " on",
+          "start": 247.24,
+          "end": 247.38,
+          "probability": 0.9750898480415344
+        },
+        {
+          "word": " Heminghamming",
+          "start": 247.38,
+          "end": 247.84,
+          "probability": 0.4721597677726095
+        },
+        {
+          "word": " Face",
+          "start": 247.84,
+          "end": 247.98,
+          "probability": 0.5565636157989502
+        },
+        {
+          "word": " and",
+          "start": 247.98,
+          "end": 248.8,
+          "probability": 0.8359562158584595
+        },
+        {
+          "word": " just",
+          "start": 248.8,
+          "end": 249.06,
+          "probability": 0.9995809197425842
+        },
+        {
+          "word": " give",
+          "start": 249.06,
+          "end": 249.26,
+          "probability": 0.9996180534362793
+        },
+        {
+          "word": " it",
+          "start": 249.26,
+          "end": 249.38,
+          "probability": 0.9992972612380981
+        },
+        {
+          "word": " a",
+          "start": 249.38,
+          "end": 249.5,
+          "probability": 0.9995656609535217
+        },
+        {
+          "word": " try",
+          "start": 249.5,
+          "end": 249.86,
+          "probability": 0.999762237071991
+        },
+        {
+          "word": " and",
+          "start": 249.86,
+          "end": 250.32,
+          "probability": 0.9961774349212646
+        },
+        {
+          "word": " let",
+          "start": 250.32,
+          "end": 250.84,
+          "probability": 0.9986416697502136
+        },
+        {
+          "word": " us",
+          "start": 250.84,
+          "end": 251.02,
+          "probability": 0.9998086094856262
+        },
+        {
+          "word": " know.",
+          "start": 251.02,
+          "end": 251.2,
+          "probability": 0.9994897842407227
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "start": 251.84,
+      "end": 253.36,
+      "text": "So, come in.",
+      "avg_logprob": -0.14143510706284468,
+      "no_speech_prob": 0.0005688627134077251,
+      "words": [
+        {
+          "word": " So,",
+          "start": 251.84,
+          "end": 252.36,
+          "probability": 0.9954445362091064
+        },
+        {
+          "word": " come",
+          "start": 253.06,
+          "end": 253.26,
+          "probability": 0.7345758676528931
+        },
+        {
+          "word": " in.",
+          "start": 253.26,
+          "end": 253.36,
+          "probability": 0.603123664855957
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,551 @@
+1
+00:00:00,000 --> 00:00:01,240
+Let's talk agent skills.
+
+2
+00:00:02,100 --> 00:00:04,900
+Skills are portable on-demand extensions for AI agents.
+
+3
+00:00:05,480 --> 00:00:10,580
+Think Neo from the Matrix downloading Kung Fu without the minor issue of forcing a footlong spike
+
+4
+00:00:10,580 --> 00:00:11,400
+right into the skull.
+
+5
+00:00:12,570 --> 00:00:17,230
+Skills have been incredibly popular due to their simplicity and their economic token use.
+
+6
+00:00:18,130 --> 00:00:22,570
+But this research on software engineering skills found that four out of five agent skills
+
+7
+00:00:22,570 --> 00:00:25,850
+yielded zero improvement over not using a skill at all.
+
+8
+00:00:26,470 --> 00:00:29,290
+In fact, some skills are more banana peel than power up mushroom,
+
+9
+00:00:29,290 --> 00:00:32,730
+making the agent even worse than not using a skill at all.
+
+10
+00:00:32,910 --> 00:00:35,470
+It's like if Neo's new skill hadn't improved his fighting,
+
+11
+00:00:35,950 --> 00:00:39,810
+but given him imbalance problems or cause them to directly punch himself repeatedly in the face.
+
+12
+00:00:40,590 --> 00:00:43,350
+Having said all that, some skills are incredibly powerful.
+
+13
+00:00:43,890 --> 00:00:48,130
+One paper found that a small model with the right skill can be the frontier model without one,
+
+14
+00:00:48,410 --> 00:00:50,150
+which has some pretty big cost implications.
+
+15
+00:00:50,900 --> 00:00:54,760
+So what separates a skill that actually boosts performance from one that just
+
+16
+00:00:54,760 --> 00:00:55,960
+clodders the context window?
+
+17
+00:00:56,360 --> 00:00:59,400
+We'll talk about exactly that and how you can write better skills in the
+
+18
+00:00:59,420 --> 00:01:05,230
+this video. Let's start by discussing why skills exist, which is to extend generative models.
+
+19
+00:01:05,930 --> 00:01:11,330
+Yes, these models know a lot, but even the best ones can't know everything, because nothing can
+
+20
+00:01:11,330 --> 00:01:16,870
+is just not how knowledge works. First of all, models can't get access to every piece of private
+
+21
+00:01:16,870 --> 00:01:22,750
+information in the world, like my private diary entry from 1999, anointing the Phantom Menace to be the
+
+22
+00:01:22,750 --> 00:01:29,550
+best movie ever. And second, knowledge changes over time, like how we now know the Phantom Menace to be only the
+
+23
+00:01:29,550 --> 00:01:35,230
+second best movie ever, right behind Morbius. But instead of admitting uncertainty, models still
+
+24
+00:01:35,230 --> 00:01:40,580
+hallucinate with the energy of a random red to argue with the Nobel laureate. In agent form,
+
+25
+00:01:40,860 --> 00:01:44,040
+where models are given tools to interact with the world, this means that an agent can
+
+26
+00:01:44,040 --> 00:01:49,720
+happily delete your work or production database, while explaining in great excruciating detail exactly
+
+27
+00:01:49,720 --> 00:01:54,000
+why that was the right thing to do, at least right before they turn around, then profusely
+
+28
+00:01:54,000 --> 00:02:00,460
+apologize for their mistake. One obvious solution is to stuff the agent with everything that it might need,
+
+29
+00:02:00,640 --> 00:02:04,300
+whether it be a long prompt, tools or MCPs. But unfortunately,
+
+30
+00:02:04,840 --> 00:02:09,290
+more context isn't free. Sure, context windows are getting larger,
+
+31
+00:02:09,690 --> 00:02:14,070
+but every token that you add competes with the actual task, and researchers have found
+
+32
+00:02:14,070 --> 00:02:19,660
+that unnecessary context actively degrades performance. This is why Anthropic built
+
+33
+00:02:19,660 --> 00:02:24,160
+agent skills as an open standard. What makes skills different from other solutions
+
+34
+00:02:24,160 --> 00:02:28,700
+is this idea of progressive disclosure. Skills allow you to organize the information
+
+35
+00:02:28,700 --> 00:02:33,600
+that it might or might not need into packages, which can then be loaded only as it needs
+
+36
+00:02:33,600 --> 00:02:40,270
+it. For an agent, this means a far more efficient, focused use of its context window. And for the user,
+
+37
+00:02:40,630 --> 00:02:46,230
+faster inference, lower compute, and better results. All these benefits and the fact that skills
+
+38
+00:02:46,230 --> 00:02:51,570
+are just text files led to rapid, broad adoption, leading to a huge range of public skills to choose from.
+
+39
+00:02:52,240 --> 00:02:58,240
+This also meant that researchers are able to dig in and evaluate skills in detail. The resulting benchmarks,
+
+40
+00:02:58,240 --> 00:03:04,000
+skills bench and SW skills bench converge on these findings. One, longer skills
+
+41
+00:03:04,000 --> 00:03:09,200
+skills generally perform poorly when compared to focused, concise skills. And two, narrow,
+
+42
+00:03:09,540 --> 00:03:14,240
+specialized skills that fill real knowledge gaps help the most, like those that relate concrete
+
+43
+00:03:14,240 --> 00:03:20,600
+procedures or domain-specific ones. And three, a smaller model like Anthropics Haiku with a well-ridden
+
+44
+00:03:20,600 --> 00:03:25,480
+skill can beat a frontier model like Opus with no skill. Let's spend a minute on that one,
+
+45
+00:03:25,680 --> 00:03:27,780
+because it's a big deal for your bottom line.
+
+46
+00:03:28,460 --> 00:03:33,060
+In case you don't know, Haiku is the smallest model in Anthropics product suite.
+
+47
+00:03:33,900 --> 00:03:38,080
+Smaller models like Haiku are cheaper and faster, but they're also less capable. Think of
+
+48
+00:03:38,080 --> 00:03:43,240
+it like a fast food line cook versus a Michelin-start chef. But under the right circumstances,
+
+49
+00:03:43,860 --> 00:03:48,860
+the line cook can provide great value. For example, if you give that line cook the exact recipe
+
+50
+00:03:48,860 --> 00:03:53,960
+and the right equipment, they'll outperform a chef cooking blinding a tent. That's exactly what
+
+51
+00:03:53,960 --> 00:03:58,440
+research has found here. Haiku with well-written skills, outperformed opus on specific
+
+52
+00:03:58,460 --> 00:04:03,740
+specific tasks. This is a big finding given the cost differences between a frontier model
+
+53
+00:04:03,740 --> 00:04:08,340
+and the smaller one, and even the possibility of running local models. It's a reminder that
+
+54
+00:04:08,340 --> 00:04:13,100
+you don't always need the latest or the biggest model. Size does matter, sure, but, you know,
+
+55
+00:04:13,180 --> 00:04:19,000
+it's not, it's not everything. So far, we've talked about the impact of good skills. In other
+
+56
+00:04:19,000 --> 00:04:23,720
+words, the kung fu kind of useful skill that elevates the agent, not the detrimental kind that might
+
+57
+00:04:23,720 --> 00:04:28,790
+cause the agent to punch itself in the face. So what makes something a good skill? Like,
+
+58
+00:04:28,810 --> 00:04:31,670
+Luckily for us, the research gives us pretty good guidance on this.
+
+59
+00:04:32,050 --> 00:04:34,990
+So let's start with the part that might matter the most, which is triggering.
+
+60
+00:04:36,010 --> 00:04:40,470
+Remember that skills rely on progressive disclosure. This means that an agent must actively
+
+61
+00:04:40,470 --> 00:04:45,270
+choose to read the skill to make use of it. And since an agent can only see the skill description
+
+62
+00:04:45,270 --> 00:04:50,030
+entitled to make this choice, a skill with a poorly written description is unlikely to trigger
+
+63
+00:04:50,030 --> 00:04:54,480
+at the right time. You know, much like how you wouldn't have clicked on this video if we had
+
+64
+00:04:54,480 --> 00:04:57,440
+called it JP Stairs Blank Leans De Void for an hour.
+
+65
+00:04:57,510 --> 00:05:02,030
+With a poor description, the skill won't be loaded at the agent's time of need.
+
+66
+00:05:02,510 --> 00:05:06,710
+Worse, it might be loaded for the wrong job, like how if you did want to watch me
+
+67
+00:05:06,710 --> 00:05:10,810
+stay a blankly at the screen for an hour, you'd be very disappointed at this video right now.
+
+68
+00:05:11,590 --> 00:05:16,930
+The recommendations for skill descriptions are to keep it short but specific and to name concrete
+
+69
+00:05:16,930 --> 00:05:22,010
+trigger scenarios. So don't write cryptic descriptions like helps with documents,
+
+70
+00:05:22,430 --> 00:05:27,030
+which could both trigger on everything or trigger on nothing, depending on what the agent feels
+
+71
+00:05:27,030 --> 00:05:32,470
+like. Instead, write something more specific and precise like, use this skill whenever
+
+72
+00:05:32,470 --> 00:05:38,270
+the user wants to create, read, edit or manipulate word documents. You can read this and concretely
+
+73
+00:05:38,270 --> 00:05:42,610
+tell whether something is in or if something is out. That means the agent can trigger it at the
+
+74
+00:05:42,610 --> 00:05:47,730
+right time and only at the right time. Once you've got the skill to trigger, then you can worry about
+
+75
+00:05:47,730 --> 00:05:52,770
+making the contents useful without being excessive. Progressive disclosure isn't just limited
+
+76
+00:05:52,770 --> 00:05:56,850
+to the idea of will this skill trigger. The skill package itself can have multiple
+
+77
+00:05:56,850 --> 00:06:01,530
+documents with the body referring to additional references. And this kind of nested structure is
+
+78
+00:06:01,530 --> 00:06:06,370
+really helpful because of the finding that excessive length is detrimental. The recommendation
+
+79
+00:06:06,370 --> 00:06:13,320
+is to keep domain skill.md to a maximum length of 500 lines or so. Note that this doesn't put a limit
+
+80
+00:06:13,320 --> 00:06:18,560
+on the total amount of information because of the ability to refer to more files. So for example,
+
+81
+00:06:18,960 --> 00:06:23,280
+Elastic's own Kibana dashboard skill comes with over a dozen additional files, including
+
+82
+00:06:23,280 --> 00:06:26,960
+JavaScript code, API references, and example JSON files.
+
+83
+00:06:26,980 --> 00:06:31,700
+So it's just like a choose-your-own-adventure book, if perhaps the adventure was the
+
+84
+00:06:31,700 --> 00:06:37,200
+wonderful journey of vibe coding. In other words, only include the required information
+
+85
+00:06:37,200 --> 00:06:42,360
+for the job. Before writing any line, ask yourself, would the agent screw this up without being
+
+86
+00:06:42,360 --> 00:06:47,440
+told? So don't explain the obvious, like what a database is. Definitely don't write follow best
+
+87
+00:06:47,440 --> 00:06:54,020
+practices. That's not guidance, that's a fortune cookie. What you should write is the stuff
+
+88
+00:06:54,020 --> 00:06:58,300
+specific to your context that prevents failures. Here are some examples in Anthropos,
+
+89
+00:06:58,300 --> 00:07:02,440
+its own skills creator skill. And look at the specificity here of lines like,
+
+90
+00:07:02,600 --> 00:07:07,600
+save this data immediately to timing.json in the run directory. This is the only opportunity to capture
+
+91
+00:07:07,600 --> 00:07:13,840
+this data. Or the grading.jason expectations array must use the fields, text, past, and evidence,
+
+92
+00:07:14,200 --> 00:07:19,820
+not name, met details, or other variants. You can almost feel the original errors that inspired
+
+93
+00:07:19,820 --> 00:07:24,420
+these lines when they try to do the job before they wrote those skills. So when you're writing
+
+94
+00:07:24,420 --> 00:07:29,680
+skills use the energy of old biff from back to the future, passing on his wisdom to a younger
+
+95
+00:07:29,680 --> 00:07:35,370
+biff before the mistakes. And here's a surprising one. In one study, skills with executable
+
+96
+00:07:35,370 --> 00:07:40,270
+code examples triple the pass rates of not having skills. Even in the age of vibe coding,
+
+97
+00:07:40,670 --> 00:07:45,630
+the vibes vibe better when they're less vibes and more code. Another reminder that where
+
+98
+00:07:45,630 --> 00:07:51,800
+specificity is available, you should use it. Speaking of specificity, this applies to versions and software
+
+99
+00:07:51,800 --> 00:07:57,240
+libraries. So version mismatched skills were a notable failure mode that made agents worse.
+
+100
+00:07:57,840 --> 00:08:02,360
+So don't write React Project if you can write React 18 with TypeScript and Vite instead.
+
+101
+00:08:03,560 --> 00:08:07,460
+Quick recap on skill writing, tight descriptions, compact structure, concrete
+
+102
+00:08:07,460 --> 00:08:12,420
+code examples, and exact versioning. Master those and you'll be closer to a skill that
+
+103
+00:08:12,420 --> 00:08:17,760
+actually triggers and delivers. Let me show you what this looks like in practice. I've been
+
+104
+00:08:17,760 --> 00:08:21,980
+using a skill for ESQL query generation, which is Elastic's newer query language.
+
+105
+00:08:22,280 --> 00:08:28,040
+It's a textbook case for a skill because ESQL is new enough that models don't have deep training
+
+106
+00:08:28,040 --> 00:08:33,960
+data on it. And the name is similar enough to all the Elastic Query DSL or even SQL, that models
+
+107
+00:08:33,960 --> 00:08:39,020
+confidently write the wrong thing. You can see here that without the skill, the model mixed
+
+108
+00:08:39,020 --> 00:08:44,440
+up ESQL with some other syntax, creating a wrong command and inventing functions. But with it
+
+109
+00:08:44,440 --> 00:08:50,460
+loaded, the model writes fluent, correct ESQL. That's the line cook with the recipe right there,
+
+110
+00:08:50,460 --> 00:08:53,840
+versus the confused chef without proper instructions and tools.
+
+111
+00:08:55,680 --> 00:09:00,380
+So how do you prove that a skill is actually helpful and not just punching your agent in the face?
+
+112
+00:09:01,100 --> 00:09:04,740
+Let's say that you've written a skill flogging data into your preferred observability stack,
+
+113
+00:09:05,160 --> 00:09:11,580
+like Elasticsearch. Step 1, compare the outputs. Take 5 or 10 real tasks and run them with and without
+
+114
+00:09:11,580 --> 00:09:15,960
+the skill. The results are your quality signal, like whether the apps were correctly wired,
+
+115
+00:09:16,380 --> 00:09:21,180
+and whether the outputs were passed correctly. Step 2, check your fits if it's been triggering.
+
+116
+00:09:21,840 --> 00:09:26,920
+Throw 20 different prompts at your agent, some logging related, and some not, and record the results.
+
+117
+00:09:27,680 --> 00:09:32,420
+If it's triggering on research this problem or write the read me, your description needs work.
+
+118
+00:09:33,240 --> 00:09:38,520
+Similarly, if it's not triggering on set up logging for this AI agent, it probably needs work.
+
+119
+00:09:40,290 --> 00:09:45,830
+Now, here's something that I found really interesting. Apparently, LLM generated skills are generally not
+
+120
+00:09:45,830 --> 00:09:50,130
+helpful at all. And if you think about it, it kind of makes intuitive sense, right?
+
+121
+00:09:50,130 --> 00:09:55,690
+skills work because they encode expertise the model doesn't have. So asking a model to generate
+
+122
+00:09:55,690 --> 00:10:00,450
+its own skill is a little bit like getting a new grad to write their own onboarding. At best it's
+
+123
+00:10:00,450 --> 00:10:04,710
+going to be a lot of things that they already know, and at worst, they'll pass on incorrect
+
+124
+00:10:04,710 --> 00:10:10,420
+information to the next person. What you should do instead is to start from real work and write
+
+125
+00:10:10,420 --> 00:10:15,320
+skills for patterns of errors that you observe. Or better yet, write the evaluation tasks
+
+126
+00:10:15,320 --> 00:10:20,560
+first and then write the skill to improve on those evaluations. It's also good practice to
+
+127
+00:10:20,580 --> 00:10:25,160
+to periodically evaluate those skills over time. Models and harnesses will get better,
+
+128
+00:10:25,540 --> 00:10:30,600
+and your preferences will change. And you don't always have to start from scratch either. There's
+
+129
+00:10:30,600 --> 00:10:35,950
+already a huge ecosystem of skills out there to choose from. I've been writing my own skills too.
+
+130
+00:10:36,430 --> 00:10:39,530
+I'm working on skills to help me generate visual explainers or playing tutorials,
+
+131
+00:10:40,030 --> 00:10:43,870
+although I've yet to find a skill far outsourcing this job to an agent so I can go and play
+
+132
+00:10:43,870 --> 00:10:47,620
+video games. You know, I'd love to hear about your favorite skills,
+
+133
+00:10:48,000 --> 00:10:50,400
+whether you wrote them to yourself or if it's a public skill.
+
+134
+00:10:51,220 --> 00:10:54,640
+And also, tell us about your experience creating your own skills if you did,
+
+135
+00:10:55,160 --> 00:10:59,400
+what principles or tips do you find useful, and maybe which ones you don't find so useful?
+
+136
+00:11:00,060 --> 00:11:03,440
+You can chime in in in the comments below, which happens to be right below the like button.
+
+137
+00:11:04,430 --> 00:11:08,590
+That's it for me, links to the resources are in the description, so drop your favorite
+
+138
+00:11:08,590 --> 00:11:10,390
+skills in the comments, and I'll see you next time.

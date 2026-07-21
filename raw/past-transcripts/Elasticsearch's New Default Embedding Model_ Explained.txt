@@ -1,0 +1,78 @@
+[00:00:00.000 → 00:00:04.500] What if your Semantic Search just worked across dozens of languages without having to build
+[00:00:04.500 → 00:00:09.480] translation pipelines or having to re-embed your data? Well, that's now the default experience
+[00:00:09.480 → 00:00:15.140] in Elasticsearch. Hey everyone, JD here from Elastic. As of March 30th, 2026 on Elastic Cloud
+[00:00:15.140 → 00:00:20.840] Serverless and later on in Elasticsearch 9.4, the semantic text field now uses the Gina Embedding's
+[00:00:20.840 → 00:00:25.140] V5 text model family by default through the Elastic inference service.
+[00:00:25.280 → 00:00:29.800] Let me show you why that matters, what changes to expect if you're already a user, and how to
+[00:00:29.800 → 00:00:34.180] get started. Let's get into it. Now for some background context, the Elastic Inference
+[00:00:34.180 → 00:00:40.300] Service, or EIS, is a fully managed GPU-powered platform that makes it super easy to generate
+[00:00:40.300 → 00:00:45.000] embeddings without having to patch together different models, pipelines, or infrastructure yourself.
+[00:00:45.220 → 00:00:50.200] Semantic search with EIS starts with a simple mapping change. All you have to do is identify
+[00:00:50.200 → 00:00:54.760] the field that you want to embed, set the field type to semantic text, and from there EIS
+[00:00:54.760 → 00:00:59.520] automatically handles chunking the content, generating those embeddings, and storing them for future
+[00:00:59.520 → 00:01:03.940] retrieval. You also have the option for more control. You can choose a specific embedding model by
+[00:01:03.940 → 00:01:08.420] setting an inference ID, and we'll go through those available options a little later in the video. Once you
+[00:01:08.420 → 00:01:13.580] have that mapping set, that's all you really need to do. When a query comes in, EIS automatically embeds
+[00:01:13.580 → 00:01:18.860] embeds that query using the same embedding model and runs semantic retrieval against your index data.
+[00:01:19.040 → 00:01:24.520] So what's changed? Before March 30th, the default was ELSA. Elser is Elastic's in-house sparse
+[00:01:24.520 → 00:01:29.500] embedding model. Now, as Zena is part of the Elasticse Search AI platform, the default has
+[00:01:29.520 → 00:01:34.740] shifted into the Gina Embedding's V5 text model family. That means when you create a new
+[00:01:34.740 → 00:01:39.400] semantic text field without specifying an inference ID, Elasticsearch will automatically use
+[00:01:39.400 → 00:01:44.380] Gina Embedding's V5 text small instead of ELser. So what does this mean for you as a developer?
+[00:01:44.700 → 00:01:49.580] Switching to the Gina Embedding's V5 family unlock some major upgrades for semantic search
+[00:01:49.580 → 00:01:54.940] right out of the box. First, you get multilingual support across 93 different languages. Second,
+[00:01:55.360 → 00:01:59.500] you get access to longer context windows. And third, stronger dense,
+[00:01:59.520 → 00:02:03.900] embedding quality for your retrieval tasks. Now putting this into action means you can
+[00:02:03.900 → 00:02:09.400] index documents from multiple languages and query in just one, and still retrieve the most semantically
+[00:02:09.400 → 00:02:15.240] relevant results, even when the query language doesn't match the document language. This makes global search,
+[00:02:15.500 → 00:02:19.980] multilingual rack pipelines, and things like cross-language knowledge assistance, much easier
+[00:02:19.980 → 00:02:25.400] to build with almost no extra setup. If you want a deeper look at the different embedding models from
+[00:02:25.400 → 00:02:29.780] the V5 family from Gina, check out my colleague JP's video where he breaks down the specifics.
+[00:02:29.780 → 00:02:34.800] Now, here's the key question. Does this affect your existing indices? Well, the short answer
+[00:02:34.800 → 00:02:39.880] is no, but it can affect future ones in cross-index search behavior. If your index already uses
+[00:02:39.880 → 00:02:45.220] ELSA, nothing changes. If you explicitly set an inference ID, also nothing changes. The only
+[00:02:45.220 → 00:02:49.520] difference is when you create new indices without specifying a model. Those will now default to
+[00:02:49.520 → 00:02:54.560] GINA embedding's V5 text small instead of ELSA. Now there are specific situations where you might
+[00:02:54.560 → 00:02:59.760] notice an impact. The first is multilingual retrieval. Gina embeddings are multilingual, which means
+[00:02:59.780 → 00:03:04.300] your search queries can match documents in other languages if they're semantically related.
+[00:03:04.600 → 00:03:08.180] If you want to keep search restricted to one language, just add a filter on the language field.
+[00:03:08.560 → 00:03:13.880] Second is mixed model scoring across indices. If some indices use ELSA and others use Gina,
+[00:03:14.140 → 00:03:18.440] relevant scores comes from different models, and that can slightly affect your rank and consistency
+[00:03:18.440 → 00:03:24.300] when searching across indices. And in some cases, explicit sparse or K&N queries can fail if they
+[00:03:24.300 → 00:03:28.180] target the wrong embedding type. If you want to keep using ELCR, you definitely still can't.
+[00:03:28.220 → 00:03:29.760] Just explicitly set the inference side.
+[00:03:29.780 → 00:03:31.780] and your field mapping is when you create an index.
+[00:03:32.100 → 00:03:37.860] And one important note here, if you already have an index using ELSA and you decide you want to switch it out to use Gina,
+[00:03:38.100 → 00:03:39.760] that's not something you can do in place.
+[00:03:39.960 → 00:03:44.240] You'll need to re-index and re-embed your data since the embeddings themselves are completely different.
+[00:03:44.380 → 00:03:49.260] So this update makes multilingual semantic search the default developer experience in Elasticsearch.
+[00:03:49.520 → 00:03:53.800] Better embeddings, longer context windows, and global retrieval right out of the box.
+[00:03:54.180 → 00:03:55.980] And full control if you want to stay on ELSER.
+[00:03:57.110 → 00:03:59.650] Now that sounds like some big changes, but how do we use it?
+[00:03:59.650 → 00:04:01.430] Let's go over an example to help you get started.
+[00:04:01.690 → 00:04:03.690] We'll start by creating an index with this mapping.
+[00:04:03.910 → 00:04:07.050] Notice that the field type for the review property is set to semantic text.
+[00:04:07.250 → 00:04:10.510] Again, what this does is automatically generate embeddings at index time,
+[00:04:10.730 → 00:04:13.930] so you don't need to call an embedding model yourself or manage vectors manually.
+[00:04:14.130 → 00:04:16.650] Next, we'll index a few reviews written in different languages,
+[00:04:17.010 → 00:04:20.190] so we can see how the Gina models treat multilingual content.
+[00:04:20.410 → 00:04:22.190] Now let's run a search using an English query.
+[00:04:22.410 → 00:04:25.430] Here we're asking whether these headphones are comfortable for long flights.
+[00:04:25.630 → 00:04:27.090] And here's what we got in our search results.
+[00:04:27.330 → 00:04:29.030] We see that the French review ranks first,
+[00:04:29.030 → 00:04:33.050] even above the English one, because it's a closer semantic match to our query,
+[00:04:33.530 → 00:04:35.130] even though the languages are further apart.
+[00:04:35.470 → 00:04:40.050] This shows that this gena model ranks by semantic relevance and not by language.
+[00:04:40.330 → 00:04:42.650] And we'll see the same thing when we use a query that's in Japanese.
+[00:04:43.050 → 00:04:45.930] Using a query that's translated to ideal for long-haul flight,
+[00:04:46.050 → 00:04:50.630] we still see that the French review ranks on top because, again, it's a closer semantic match.
+[00:04:50.930 → 00:04:53.670] Now think about what this means for the type of data you can now work with.
+[00:04:53.750 → 00:04:58.530] If you're building search, rag, or AI applications, you can now work with global datasets,
+[00:04:58.530 → 00:05:02.770] and still maintain relevance without having to, again, build translation pipelines and
+[00:05:02.770 → 00:05:04.310] a ton of extra manual work.
+[00:05:04.670 → 00:05:05.570] So that's it for this one.
+[00:05:05.870 → 00:05:08.830] As always, if you have any questions, drop them down in the comments below.
+[00:05:09.410 → 00:05:11.610] Please reach out. I'd love to chat about what you're building.
+[00:05:12.010 → 00:05:14.950] I'll have some resources linked in the description if you want to try it out for yourself.
+[00:05:15.330 → 00:05:18.590] Subscribe to this channel if you want to keep up with all things to search and AI,
+[00:05:19.050 → 00:05:21.130] and we'll see you guys for the next one. Thanks for watching.

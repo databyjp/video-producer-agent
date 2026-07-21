@@ -1,0 +1,382 @@
+[00:00:00.000 → 00:00:04.220] Credit where it's due, the format of this video is adapted from this brilliant wired playlist.
+[00:00:04.840 → 00:00:07.720] Hi, I'm John Abbas-Baki and I'm a developer advocate at Elastic.
+[00:00:08.300 → 00:00:13.200] In this video, I'll be covering various search algorithms and their applications in increasing levels of complexity.
+[00:00:13.560 → 00:00:18.220] Search is fundamental to how we interact with all information systems, but software especially.
+[00:00:18.860 → 00:00:24.380] Search engines like Google, Duck, Do, or Bing are probably the most common form of search we encounter on a daily basis,
+[00:00:24.760 → 00:00:29.740] but tons of other applications have search capabilities that you probably use all the time, like Netflix, Uber,
+[00:00:30.000 → 00:00:30.820] Wikipedia and LinkedIn.
+[00:00:31.260 → 00:00:35.960] Even when you're not directly searching for something, you still might be performing some kind of search in the background.
+[00:00:36.520 → 00:00:42.700] Many auto-complete systems are essentially a really fast search happening behind the scenes, looking for the word you're about to type.
+[00:00:43.320 → 00:00:48.740] Antivirus systems are constantly searching databases of malware signatures against the files on your computer.
+[00:00:49.360 → 00:00:52.160] Spam filters in your email inbox are doing something similar.
+[00:00:52.700 → 00:00:54.260] I could go on, but I think you get the idea.
+[00:00:54.400 → 00:00:59.980] Search is everywhere, and I'm going to walk you through the broad spectrum of search, starting from Level 1, LAMLINN.
+[00:01:00.000 → 00:01:03.380] So let's say you want to get into making pizza.
+[00:01:03.660 → 00:01:07.200] Your friend just so happens to own a cookbook all about pizza and lends it to you.
+[00:01:08.520 → 00:01:11.760] They tell you that the recipe on page 72 is a must try.
+[00:01:11.900 → 00:01:15.360] If you were to search for that page using a linear search technique, you could open up the
+[00:01:15.360 → 00:01:20.080] book to page one and then flip to page two and three and four and five, et cetera, until
+[00:01:20.080 → 00:01:21.080] you get to page 72.
+[00:01:21.740 → 00:01:24.760] Linear search is the most rudimentary way to look for something.
+[00:01:25.240 → 00:01:29.780] You, in a linear fashion, start at the beginning, check each page until you finally get to what
+[00:01:29.780 → 00:01:30.400] you're looking for.
+[00:01:30.700 → 00:01:33.780] It's not particularly fast or efficient, but it works.
+[00:01:34.590 → 00:01:36.130] Level 2. Binary Search.
+[00:01:36.950 → 00:01:41.430] So in the real world, you probably wouldn't start looking for a recipe on page 72 at the beginning of the book.
+[00:01:41.790 → 00:01:46.310] You know that these pages are in numeric order, and if there are roughly 130 pages,
+[00:01:46.550 → 00:01:48.990] you know that page 72 is towards the center of the book.
+[00:01:49.390 → 00:01:55.210] So you probably pop the book open to a page roughly in the middle, and maybe you overshoot a little
+[00:01:55.210 → 00:01:55.450] bit.
+[00:01:55.930 → 00:01:58.350] So you go back, and now maybe you undershoot.
+[00:01:58.650 → 00:02:00.770] And so you go forward a little bit, and then back.
+[00:02:00.830 → 00:02:04.310] and until you eventually end up on page 72.
+[00:02:04.570 → 00:02:08.850] A more precise version of what I just described is essentially how a lot of software does
+[00:02:08.850 → 00:02:10.390] search over any data that is ordered.
+[00:02:10.810 → 00:02:14.490] A book is always ordered by page count, so it fits nicely into our example here.
+[00:02:16.730 → 00:02:18.490] But what if the data is unordered?
+[00:02:18.830 → 00:02:20.370] Then linear search makes a bit more sense.
+[00:02:20.590 → 00:02:23.570] There's no reason to start looking for page 72 at the beginning of a book.
+[00:02:24.050 → 00:02:24.870] You know it's not there.
+[00:02:25.030 → 00:02:30.130] Whether or not your data is ordered or unordered is going to continue to be a key detail for every level
+[00:02:30.130 → 00:02:31.430] of complexity going forward.
+[00:02:32.650 → 00:02:33.290] Level three.
+[00:02:33.390 → 00:02:38.070] hash tables. If we wanted to know what page a particular chapter starts, you know that
+[00:02:38.070 → 00:02:42.990] you can open this book to the table of contents. You can check what page corresponds to what
+[00:02:42.990 → 00:02:47.970] chapters. That is, effectively, how a hash table works. I'm skipping over a lot of math,
+[00:02:48.110 → 00:02:51.990] but fundamentally a hash table works by creating a one-to-one mapping between two different sets
+[00:02:51.990 → 00:02:58.210] of information. Chapter 2, page 26. Different example. You drop off your coat at a co-check,
+[00:02:58.470 → 00:03:03.370] come back later that evening, and you give the attendant your ticket, let's say number 98. They know
+[00:03:03.390 → 00:03:07.070] exactly which coat is yours and where it is, all based on a number.
+[00:03:07.290 → 00:03:12.410] License plates, Social Security numbers, credit card numbers, any kind of unique ID is also
+[00:03:12.410 → 00:03:18.170] ultimately a one-to-one mapping between a number and information about a person in this case.
+[00:03:18.850 → 00:03:20.370] Level four, inverted indices.
+[00:03:21.310 → 00:03:25.110] If you want to find every recipe that has mushrooms in it, you know that you can open the
+[00:03:25.110 → 00:03:27.250] back of the book and find the index.
+[00:03:27.590 → 00:03:30.350] You now know exactly what pages have mentions of mushrooms.
+[00:03:30.570 → 00:03:33.270] A digital inverted index is the same thing as the index
+[00:03:33.390 → 00:03:37.610] in the back of a book, powered by the same math that hash tables use. In the context
+[00:03:37.610 → 00:03:42.890] of digital search, just imagine instead of indexing a couple hundred pages in a book, we're creating
+[00:03:42.890 → 00:03:46.490] an index for potentially billions of documents and millions of terms.
+[00:03:47.110 → 00:03:50.610] If you would implement the search feature in your favorite email system, an inverted
+[00:03:50.610 → 00:03:55.870] index would be a solid way to go. When a user searches their inbox for appointment, your email system
+[00:03:55.870 → 00:03:59.630] could check an inverted index against the term appointment and find every email that
+[00:03:59.630 → 00:04:03.470] has that word very easily. Level 5, TF and IDEA.
+[00:04:03.490 → 00:04:08.310] Okay, so now we're officially getting into the deep end. Everything up until now has had a clear
+[00:04:08.310 → 00:04:14.350] final destination. There was always a discrete exact answer to the question, where is page 72? From this
+[00:04:14.350 → 00:04:19.850] point forward, the answers to our search queries are not going to be so exact. Inverted indices get us part
+[00:04:19.850 → 00:04:24.170] of the way there by returning multiple results, but we may not want every mention of mushrooms
+[00:04:24.170 → 00:04:28.450] chronologically. Usually when we get back results from a search engine, they're ranked by what is
+[00:04:28.450 → 00:04:33.470] most relevant to our search query. Here's a more solid example. Say we tried the recipe of the recipe of
+[00:04:33.490 → 00:04:38.250] on page 72 and weren't a fan. So we head to the internet. And find a recipe website
+[00:04:38.250 → 00:04:43.250] and search for tasty artichoke pizza recipe. How does the search feature decide which
+[00:04:43.250 → 00:04:48.390] recipes to give us and in what order? Well, we can't rank any of the recipes without first
+[00:04:48.390 → 00:04:53.490] assigning them some kind of score. So we're going to need scoring functions. Any search feature
+[00:04:53.490 → 00:04:57.210] you use could be using a variety of different scoring functions, depending on the application,
+[00:04:57.550 → 00:05:03.250] but we're going to start with two of the most common scoring functions, the first of which is TF.
+[00:05:04.240 → 00:05:08.940] TF stands for term frequency and it is exactly what it sounds like. It measures the frequency of
+[00:05:08.940 → 00:05:13.860] our search terms in any given recipe. The more one of our search terms is mentioned in a recipe,
+[00:05:14.340 → 00:05:18.380] the higher the chance that it is relevant to our search query. Let's take a look at how
+[00:05:18.380 → 00:05:23.500] TF works by using it on two different recipes. Recipe A opens with a long blog post
+[00:05:23.500 → 00:05:28.400] about how the author was asked to make a cake for a friend's birthday. The author talks
+[00:05:28.400 → 00:05:33.320] extensively about the process of making the cake and the recipe at the bottom is ultimately for
+[00:05:33.320 → 00:05:38.180] cake. But artichoke pizza was served at this party, so gets a couple of mentions when they're
+[00:05:38.180 → 00:05:42.720] describing the birthday. So if we count the number of times the word tasty artichoke pizza
+[00:05:42.720 → 00:05:49.560] and recipe show up here, we get the following numbers. Now, let's look at recipe B. It's minimalist
+[00:05:49.560 → 00:05:54.580] and straight to the point. It's an artichoke pizza recipe, nothing more, nothing less. Again,
+[00:05:54.760 → 00:05:59.970] if we get the term frequency for this recipe, we get these numbers. If I gave you these numbers
+[00:05:59.970 → 00:06:03.490] and nothing else, which recipe would you guess was the better match for our search?
+[00:06:03.510 → 00:06:09.750] query. Again, you don't know that recipe A is for cake and recipe B is for pizza. All you see are
+[00:06:09.750 → 00:06:14.550] these term frequencies. Based on these numbers alone, our search system would assume that
+[00:06:14.550 → 00:06:21.660] recipe A is more relevant to our search query than recipe B. How can we fix this? IDF. The problem with
+[00:06:21.660 → 00:06:27.580] TF is that not all terms are created equal. In our original search query, the term tasty, is probably not
+[00:06:27.580 → 00:06:33.780] as important as the term pizza. IDF, or inverse document frequency, fixes this by measure
+[00:06:33.800 → 00:06:38.480] how rare a search term and your query is across all of the recipes and calculates
+[00:06:38.480 → 00:06:44.400] a score for that term based on its frequency. Let's look at how IDF works on the two recipes
+[00:06:44.400 → 00:06:48.780] we were looking at in the previous section. So these are the term frequencies for recipe A,
+[00:06:49.080 → 00:06:53.780] which we know is ultimately a recipe for cake, not artichoke pizza. What will the IDF
+[00:06:53.780 → 00:06:58.300] scores look like for these terms? Remember, the more common the term is across all the
+[00:06:58.300 → 00:07:03.760] recipes in our database, the lower its IDF score will be. Every recipe on this website probably has
+[00:07:03.800 → 00:07:08.520] the word recipe and tasting in it, so IDF will probably assign very low scores to those words.
+[00:07:09.160 → 00:07:14.460] They don't really help us narrow down what recipes we want. Similarly, words we would classify
+[00:07:14.460 → 00:07:20.200] as stop words like V and R with are equally as unhelpful and usually get assigned very low scores.
+[00:07:20.640 → 00:07:25.200] They show up all the time but aren't specific enough to really help us figure out what results to return
+[00:07:25.200 → 00:07:30.240] to a user. Conversely, the less common a term is, the more useful it will be for us, so we'll give it
+[00:07:30.240 → 00:07:33.940] a higher score. The term pizza is usually only going to show up in the rest of
+[00:07:33.960 → 00:07:39.260] recipes that are for pizza as opposed to sushi, pasta, bread, etc. Artichoke is easily the rarest
+[00:07:39.260 → 00:07:44.160] term in our search query showing up relatively and frequently in the recipe database. It will receive
+[00:07:44.160 → 00:07:50.200] the highest score out of all of our terms. So again, low frequency, high IDF score, high frequency,
+[00:07:50.480 → 00:07:56.620] low IDF score. A term's IDF score is inversely proportional to its frequency across an entire collection,
+[00:07:57.060 → 00:08:02.120] hence the scoring function is named inverse document frequency. For each term in the search
+[00:08:02.120 → 00:08:07.940] query, multiply its term frequency, TF, by its inverse document frequency, IDF, weight,
+[00:08:08.740 → 00:08:13.820] and add up all those values. And you get a score you can assign to each recipe. We can then rank the
+[00:08:13.820 → 00:08:18.500] recipes by these scores, and this way, we're able to generally get the most relevant recipes
+[00:08:18.500 → 00:08:23.740] up at the top and the least relevant recipes towards the bottom. By assigning very low IDF
+[00:08:23.740 → 00:08:28.500] scores to words like tasty and recipe, we're able to make sure that the recipe for artichoke
+[00:08:28.500 → 00:08:32.100] pizza comes out on top and the recipe for cake gets buried lower in the
+[00:08:32.120 → 00:08:38.020] search results. Level 6, BM25. Using TF and IDF together can make for a pretty
+[00:08:38.020 → 00:08:43.760] solid search algorithm all on its own, but it comes with some serious drawbacks. Let's look at two
+[00:08:43.760 → 00:08:49.740] artichoke pizza recipes. They're almost exactly the same, but one has some links at the bottom for other
+[00:08:49.740 → 00:08:54.720] artichoke-based recipes. That doesn't make it more relevant to our search query, but artichoke will
+[00:08:54.720 → 00:08:59.780] get a higher TF score in this recipe. The second major drawback to using TF and IDF together is
+[00:08:59.780 → 00:09:04.460] that it doesn't account for the total length of the document. Again, if I have two identical
+[00:09:04.460 → 00:09:09.720] artichoke pizza recipes, but one opens with a long post about the author's time in Italy and all the
+[00:09:09.720 → 00:09:15.400] pizzas they tried there, and the other recipe is just a recipe, the first one will be rewarded for all the
+[00:09:15.400 → 00:09:21.800] extra mentions of pizza it managed to include there. Best Match, version 25, or BM25, is a search
+[00:09:21.800 → 00:09:27.360] algorithm that uses both the TF and IDF scoring functions, but with some improvements to account
+[00:09:27.360 → 00:09:32.320] for these drawbacks. A saturation curve is applied to how term frequencies are calculated so that
+[00:09:32.320 → 00:09:36.500] mentioning pizza in your recipe one time versus two times significantly moves the score.
+[00:09:37.180 → 00:09:42.900] 11 to 12, not so much. BM25 also takes document length into account and adjust the scores
+[00:09:42.900 → 00:09:49.060] accordingly. Overall, you can think of BM25 as a wrapper around the TF IDF combo that takes what
+[00:09:49.060 → 00:09:54.260] works and runs with it while also fixing what doesn't. Many search engines use BM25 as their default
+[00:09:54.260 → 00:10:00.420] algorithm. As of 2015, Lucene, of which Elastic Search is based on, switch to BM25 as
+[00:10:00.420 → 00:10:06.980] its default. Over a decade later, it's proving to be as reliable as ever. Level 7, text analysis. Up
+[00:10:06.980 → 00:10:11.200] until now, we've essentially just been performing keyword searches. When I ask for a tasty
+[00:10:11.200 → 00:10:17.400] artichoke pizza recipe with TF and IDF or BM25, I'm still just doing a control slash command
+[00:10:17.400 → 00:10:22.200] F on a large recipe database and ranking the recipes, albeit with an intelligent ranking system rather
+[00:10:22.200 → 00:10:27.260] than just seeing the results chronologically. A better way to search adds another level of
+[00:10:27.260 → 00:10:32.280] sophistication to what we search for, not just how we rank results. In order to achieve this, we need
+[00:10:32.280 → 00:10:38.300] to first break up our query through a process known as tokenization. In an effort to ease you into the
+[00:10:38.300 → 00:10:42.380] broad world of search, I've waited until now to explain something happening in the background that you
+[00:10:42.380 → 00:10:47.480] already have an implicit understanding of. Tokenization is the process of breaking down a query into
+[00:10:47.480 → 00:10:52.100] individual tokens that we can then further process. Before any scoring function like TF or I
+[00:10:52.200 → 00:10:57.260] can assign a value to a token, it first needs a token. There's no way to assign scores
+[00:10:57.260 → 00:11:02.860] to individual tokens in a query if you don't first extract those tokens. And I know the process of tokenization
+[00:11:02.860 → 00:11:08.320] sounds basic and probably not worth discussion, just extract words from a query separated by white
+[00:11:08.320 → 00:11:13.560] space. And sometimes it really is that easy. Other times you may need something more elaborate.
+[00:11:14.160 → 00:11:22.180] Should brick oven pizza be tokenized as brick oven pizza or brick oven pizza? If a user
+[00:11:22.200 → 00:11:27.400] types in how to make pizza. Should the pizza token include the question mark? What about
+[00:11:27.400 → 00:11:32.480] queries that look for recipes attributed to a specific person or restaurant? Should Danny's pizza be
+[00:11:32.480 → 00:11:38.740] tokenized as Danny pizza or Danny's pizza? I think you see where I'm going with this. There is no one way
+[00:11:38.740 → 00:11:44.680] to do tokenization. Luckily, you have options. Tokenization as a concept is platform agnostic. Any
+[00:11:44.680 → 00:11:50.120] search system is probably going to need some form of it. Elastic search ships with 15 built-in
+[00:11:50.120 → 00:11:55.220] You have tokenizers that work best with specific languages. Other tokenizers are adapted for
+[00:11:55.220 → 00:12:01.860] specific inputs like system paths or email addresses. Others let you leverage custom reg X. I could go on.
+[00:12:02.080 → 00:12:07.180] You can do a lot with tokenizers, but the basic idea remains the same. Take a query and break it down
+[00:12:07.180 → 00:12:12.160] into individual tokens. From here, we can perform further cleanup on our tokens in a couple of different
+[00:12:12.160 → 00:12:17.840] ways. Let's start with stopwords. I've already briefly talked about stopwords, but they bear mentioning again.
+[00:12:18.340 → 00:12:19.880] Stop words are essentially filler.
+[00:12:20.120 → 00:12:25.200] In English language, this includes words like the of and as are, you get the idea.
+[00:12:25.440 → 00:12:29.600] They're rarely helpful for our search queries, and for that reason, it's usually a good idea to just
+[00:12:29.600 → 00:12:34.580] filter them out. So something like pizza with broccoli will just get tokenized into
+[00:12:34.580 → 00:12:42.520] pizza broccoli. Synonyms. Whether I'm searching for New York-style pizza or NY-style pizza or NYC-style pizza
+[00:12:42.520 → 00:12:47.060] is totally irrelevant. The recipes I ultimately want are all the same regardless of which
+[00:12:47.060 → 00:12:52.800] of these queries I go with. So even if I type in NY style pizza, this recipe for New York
+[00:12:52.800 → 00:12:57.620] style pizza is still potentially a good fit. If we know we're going to encounter interchangeable terms
+[00:12:57.620 → 00:13:02.400] like this, we need to manually define these synonyms so that our search system knows to look for them.
+[00:13:02.800 → 00:13:06.780] That way, when I search for New York style pizza, I'm not just searching for New York,
+[00:13:07.220 → 00:13:12.160] but every other variation. Stemming. There are many variations of a single word depending on
+[00:13:12.160 → 00:13:17.040] its tense or plurality, but that usually isn't super relevant for our search. We really really
+[00:13:17.060 → 00:13:22.080] just care about capturing the stem form of the word. Essentially, its most basic representation.
+[00:13:22.800 → 00:13:27.880] So a query like charred, crispy crust pizza will get transformed to account for that. It doesn't
+[00:13:27.880 → 00:13:32.340] really matter to us that the word charred is in the past tense, so the search we're going to perform
+[00:13:32.340 → 00:13:38.460] will be using the word char. Whether a recipe describes its crust as crisp or crispy is
+[00:13:38.460 → 00:13:44.420] equally irrelevant. So we're going to transform crispy into its simpler form crisp. Spel
+[00:13:44.420 → 00:13:50.780] If I search for P-I-Z-A instead of pizza, I should still get the same results. Pretty
+[00:13:50.780 → 00:13:55.120] straightforward, and I'm sure you've seen this in your preferred search engine. How spell checkers work
+[00:13:55.120 → 00:13:59.380] can vary depending on the search system. In Elastic Search, we have a couple of different ways
+[00:13:59.380 → 00:14:04.780] of doing this. You could register incorrect spellings of words as synonyms. So P-I-Z-A becomes
+[00:14:04.780 → 00:14:10.740] a synonym of the word pizza. Alternatively, you could leverage Levenstein distance, which works by
+[00:14:10.740 → 00:14:13.860] counting the number of single-character changes between two words.
+[00:14:14.420 → 00:14:17.800] These changes include character additions, deletions, and substitutions.
+[00:14:18.340 → 00:14:25.020] So the Levinstein distance between P-I-Z-A and P-I-Z-Z-A is one because you only need to add a single
+[00:14:25.020 → 00:14:26.120] Z for the correction.
+[00:14:26.720 → 00:14:32.600] Separately, mozzarella, incorrectly spelled as such, has a Levenstein distance of two from its
+[00:14:32.600 → 00:14:35.320] correct spelling, since it's missing both a Z and an L.
+[00:14:36.060 → 00:14:41.840] Kirstie has a Levenstein distance of four from Krusty because the U and R need to be replaced,
+[00:14:42.340 → 00:14:44.360] a T needs to be removed, and the I.
+[00:14:44.420 → 00:14:45.780] needs to be replaced with a Y.
+[00:14:46.500 → 00:14:51.580] Using Levenstein distances, we can determine what words a user meant to write if they misspell it.
+[00:14:52.020 → 00:14:54.420] This is how fuzzy queries in Elastic Search work.
+[00:14:54.900 → 00:14:59.280] As the name implies, rather than only seeking out exact matches for tokens, you can get back
+[00:14:59.280 → 00:15:02.200] results that are within a Levinstein distance you specify.
+[00:15:02.900 → 00:15:03.720] Putting it all together.
+[00:15:04.480 → 00:15:07.960] When I search for the best wood-fired Neapolitan pie is what happens.
+[00:15:08.480 → 00:15:11.360] Well, my stopword filter will remove word number one, the.
+[00:15:11.760 → 00:15:13.700] Stemming will change fired to fire.
+[00:15:13.700 → 00:15:19.760] I know that pie is a synonym for pizza pie in this case, and spellcheck will correct the spelling to Neapolitan.
+[00:15:20.640 → 00:15:21.220] How it works.
+[00:15:21.580 → 00:15:26.480] I've already covered how spellcheck works under the hood, but stopwords, synonyms, and stemming are all handled
+[00:15:26.480 → 00:15:29.940] via a totally different mechanism in Elasticsearch analyzers.
+[00:15:30.160 → 00:15:36.360] These are pipelines that transform both the text in your search query and all of the data in your search database.
+[00:15:36.560 → 00:15:38.660] That last part might sound weird.
+[00:15:38.880 → 00:15:43.700] I know up until now I've only discussed transforming our search queries, but every document in
+[00:15:43.700 → 00:15:47.360] our search database also needs to go through the same analyzer.
+[00:15:47.680 → 00:15:52.060] So that means stopwords are removed, synonyms are identified, and words are broken down into
+[00:15:52.060 → 00:15:52.700] their stem form.
+[00:15:53.020 → 00:15:55.260] This should be fairly intuitive if you think about it.
+[00:15:55.580 → 00:16:00.800] In this example, I mentioned just a moment to go, we changed fired to its stem form fire.
+[00:16:01.280 → 00:16:05.420] That's all well and good, but it only makes sense if we change every recipe for Woodfired
+[00:16:05.420 → 00:16:07.420] pizza to Woodfire pizza as well.
+[00:16:07.820 → 00:16:09.400] Otherwise, we wouldn't get a match.
+[00:16:10.520 → 00:16:11.820] Level 8, re-rankers.
+[00:16:12.320 → 00:16:13.940] In an ideal world, our search system,
+[00:16:13.960 → 00:16:19.400] would work by having one person, let's say Reed Ranker, read every single recipe.
+[00:16:19.960 → 00:16:25.800] Then, when you search for a recipe, Reed would personally curate a list of recipes in response to your search query,
+[00:16:26.260 → 00:16:28.560] ranked from most relevant to least relevant.
+[00:16:29.730 → 00:16:33.470] Now, aside from how impractical it would be to ask Reed to read that many recipes,
+[00:16:33.910 → 00:16:39.070] it would also be incredibly slow for him to rank even a subset of recipes in response to your search query.
+[00:16:39.550 → 00:16:44.190] If we have thousands of pizza recipes on our site, it would take a very long time for him to rank
+[00:16:44.210 → 00:16:48.590] all of them. But you don't usually look at all the search results, do you?
+[00:16:49.450 → 00:16:52.870] Users tend to stick to the first couple of entries or pages return back to them.
+[00:16:53.110 → 00:16:58.870] So what if we kept all the infrastructure we've built so far, but gave some extra special attention
+[00:16:58.870 → 00:17:04.190] to the results we know our users will spend the most time with? We still have an inverted index
+[00:17:04.190 → 00:17:09.410] grabbing the subset of recipes that correspond to pizza, and we're still using BM25 to rank
+[00:17:09.410 → 00:17:14.190] all those recipes based on how well they match our search query. What we could do,
+[00:17:14.210 → 00:17:18.230] is just ask Reed to reorder the first page or two of our search results.
+[00:17:19.230 → 00:17:24.150] Now, unfortunately, Reed is only human. He wouldn't be able to rank even a fraction of the results
+[00:17:24.150 → 00:17:30.230] fast enough. But what if he trains a machine learning model to do the ranking for him? Machine learning.
+[00:17:30.930 → 00:17:36.110] For us to go any further, we need to explain machine learning, at least a little bit. I can't do a topic
+[00:17:36.110 → 00:17:41.470] this complex and broad real justice in a short video like this, but to the uninitiated, I will give you a
+[00:17:41.470 → 00:17:42.370] broad overview.
+[00:17:42.970 → 00:17:48.930] machine learning is exactly what it sounds like. It's how machines learn. The way this works is you
+[00:17:48.930 → 00:17:53.030] provide an obscene amount of data to what is known as a machine learning model. You can basically
+[00:17:53.030 → 00:17:58.110] think of it as a digital brain. If you provide this digital brain with millions, billions,
+[00:17:58.430 → 00:18:03.270] or trillions of data points, it can learn something very specific incredibly well. I can train a model
+[00:18:03.270 → 00:18:08.310] to tell apart images of pizza from images of pasta. And I can do this by providing as many
+[00:18:08.310 → 00:18:12.250] images as I can that I explicitly tell it are pizza and just as many that I tell it.
+[00:18:12.370 → 00:18:17.030] are pasta. I want to emphasize that I'm not telling it what makes these images different. I'm not
+[00:18:17.030 → 00:18:22.410] saying look for bread in one and spaghetti in the other or that pasta comes in these shapes and
+[00:18:22.410 → 00:18:28.350] pizza slices are either triangular or square. All I'm doing is giving it labeled data. Lots of labeled
+[00:18:28.350 → 00:18:34.590] data. The model figures out, on its own, what makes the two sets of images different. Hence machine learning.
+[00:18:35.360 → 00:18:40.720] The model will identify features in the individual images that it correlates with pizza and pasta
+[00:18:40.720 → 00:18:46.160] respectively. But we don't really understand what these features are. Rather than the intuitive
+[00:18:46.160 → 00:18:52.280] examples I gave earlier, like the shape of a dish, models don't see food. They see pixels. So the model
+[00:18:52.280 → 00:18:57.240] is identifying what arrangement of these little squares correlate with what dish. Models don't know
+[00:18:57.240 → 00:19:02.560] what shapes are or what anything is. All they have is the raw image data. Each time it sees a
+[00:19:02.560 → 00:19:06.940] picture of food, it tweaks the wiring in its brain a little bit. But we don't really understand this
+[00:19:06.940 → 00:19:10.660] wiring. If we did, we just program it ourselves and skip the training entirely.
+[00:19:10.720 → 00:19:14.680] This may sound weird, but it's not all that different compared to the way human brains work.
+[00:19:15.020 → 00:19:20.440] We understand the way individual neurons work and have a general understanding of the way the different regions in our brain work.
+[00:19:20.560 → 00:19:23.620] But as a whole, the human brain is a bit of a mystery to us.
+[00:19:24.120 → 00:19:29.360] With machine learning models, we may understand bits and pieces of the code inside, but the whole alludes us.
+[00:19:29.580 → 00:19:33.600] Okay, now that we have a basic understanding of machine learning, let's go back to our friend Reed.
+[00:19:34.140 → 00:19:39.060] Like I said before, he's only human and so can't rank recipes every time a user puts in a search query.
+[00:19:39.460 → 00:19:40.640] But he can train.
+[00:19:40.720 → 00:19:45.340] machine learning model on how to rank for him. If Reed is fed a steady stream of search queries
+[00:19:45.340 → 00:19:51.500] and an associated recipe, he can assign a relevant score to that pair. Let's say one equals this
+[00:19:51.500 → 00:19:56.080] recipe is a super bad match for this query and 10 means this is a super great match for this query.
+[00:19:56.440 → 00:20:00.900] If Reed does this for long enough, he will eventually have a great set of training data he can feed
+[00:20:00.900 → 00:20:05.140] into a machine learning model. But this isn't the only way Reed can generate training data.
+[00:20:05.480 → 00:20:10.480] Rather than giving a numerical score to each recipe, Reed could compare two random recipes and choose
+[00:20:10.480 → 00:20:15.200] which one is more relevant for a query. Reed could also just curate the top 10 most relevant
+[00:20:15.200 → 00:20:20.280] results in a ranked order for a query and feed that into the model. Or Reed could just use the
+[00:20:20.280 → 00:20:25.500] re-rankers that come out of the box with Elasticsearch. No training required. Regardless, once Reed
+[00:20:25.500 → 00:20:30.100] has a trained model, it will be able to very efficiently re-rank the top results before they are
+[00:20:30.100 → 00:20:34.980] displayed to the user. It pays for us to give these entries some extra attention since, like I said
+[00:20:34.980 → 00:20:40.060] before, most users will focus on these over whatever recipe is hanging out on page 24.
+[00:20:41.240 → 00:20:48.340] Level 9. Vectors. If we're going to efficiently use digital brains for search, we need a way to encode those digital thoughts.
+[00:20:48.960 → 00:20:54.360] For example, if a machine learning model needs to understand the concept of pizza, how does a computer wrap its head around that?
+[00:20:54.740 → 00:21:04.900] We talked earlier about teaching machine learning models how to differentiate between images of pizza and pasta, but the model still doesn't understand what pizza is, just what it looks like.
+[00:21:05.140 → 00:21:10.780] We also can't just feed it the dictionary definition of pizza. A model doesn't know what any of the words in the
+[00:21:10.800 → 00:21:15.500] definition mean. And if we fed it, the individual definition for those words, we'd need the definition
+[00:21:15.500 → 00:21:21.080] for those words and in those definitions and on and on and on and on and on. If we're trying to
+[00:21:21.080 → 00:21:26.520] represent an abstract concept, we need an equally abstract encoding mechanism. Enter
+[00:21:26.520 → 00:21:34.040] vectors, how AI understands concepts. Don't think of pizza in isolation, but instead as a broader part
+[00:21:34.040 → 00:21:39.940] of the typical menu options you'd find in say an Italian-American pizzeria or restaurant you'd find here in the
+[00:21:39.940 → 00:21:44.860] States. If you had to visually represent that variety to a computer, you would have something like
+[00:21:44.860 → 00:21:50.340] this. This is a gross over simplification of Italian-American cuisine, but it gets the point across.
+[00:21:50.500 → 00:21:55.160] To a computer, I can functionally break down all of these dishes into varying combinations of
+[00:21:55.160 → 00:22:00.260] cheese, dough, and tomato. Garlic knots are almost exclusively dough with a small sprinkle of
+[00:22:00.260 → 00:22:05.020] parmesan. Spaghetti and meatballs are almost equal parts dough and tomato. Again, with a small
+[00:22:05.020 → 00:22:09.580] sprinkle of parmesan. Pizza has all three of these elements, so it will sit close to the center.
+[00:22:10.080 → 00:22:15.960] Moncella sticks in isolation are essentially breaded cheese with no tomato whatsoever, so they'll hug the left side here.
+[00:22:16.460 → 00:22:21.480] You get the idea. We can make sense of abstract concepts if we can map them relative to one another.
+[00:22:21.960 → 00:22:24.540] But a computer is not going to have this visual to look through.
+[00:22:25.040 → 00:22:29.960] Instead, we will use a coordinate system to represent where these foods sit along the various axes.
+[00:22:30.460 → 00:22:33.400] There are some obvious catches to the way I've set this up, though.
+[00:22:33.660 → 00:22:36.100] For one, like I said, this is an oversimplification.
+[00:22:36.380 → 00:22:39.540] The dough axis conveniently ignores that pasta and bread are separate entities.
+[00:22:39.540 → 00:22:42.840] whether meat is a component of a dish isn't really factored in here.
+[00:22:43.180 → 00:22:46.440] Not to mention, I want my model to understand more than Italian-American dishes.
+[00:22:46.740 → 00:22:48.320] I want it to understand all food.
+[00:22:48.680 → 00:22:53.860] And I can't break down every cuisine in the known universe between three axes representing dough, cheese, and tomato.
+[00:22:54.380 → 00:22:57.420] And I also don't want to generate all these coordinates manually.
+[00:22:57.600 → 00:22:59.500] There's way too many different kinds of food out there.
+[00:22:59.620 → 00:23:01.260] This is a job for an embeddings model.
+[00:23:01.700 → 00:23:07.220] An embeddings model is a machine learning model whose sole job is to generate these coordinates for abstract concepts.
+[00:23:07.600 → 00:23:09.520] They're totally invented by the model.
+[00:23:09.540 → 00:23:18.660] Just like how we can train a model to differentiate pictures of food, we can train a model to approximate how related different concepts or things are, and it will graph them as it sees fit.
+[00:23:18.920 → 00:23:26.400] And the output is normally not along three axes, but hundreds or even thousands, depending on the breadth of data we're trying to encode in this vector space.
+[00:23:27.500 → 00:23:30.780] Nor do the axes come with nice human readable labels like dough and cheese.
+[00:23:30.940 → 00:23:36.460] Just like before, when differentiating images, we don't really know how the model is graphing or understanding things.
+[00:23:36.820 → 00:23:37.520] We just know it works.
+[00:23:37.780 → 00:23:39.520] Okay, so that was a lot of explaining vectoring.
+[00:23:39.540 → 00:23:44.280] and not a lot of how exactly that helps us with search. So let me fill in the gap.
+[00:23:44.900 → 00:23:50.040] Back in level seven, we talked about the importance of leveraging synonyms. For our purposes,
+[00:23:50.380 → 00:23:55.880] pizza is interchangeable with pie. Jargon like leopard spotting needs to be understood as charred crust.
+[00:23:56.360 → 00:23:59.980] It doesn't really matter whether we're going to use British English or American English,
+[00:24:00.520 → 00:24:06.820] making rocket and arugula or corgette and zucchini equivalent. In fact, it doesn't even really matter if we want to
+[00:24:06.820 → 00:24:11.780] throw in Italian words. Pomodoro and tomato are the same ingredient. Now, it's a lot of work to
+[00:24:11.780 → 00:24:16.000] manually define these synonyms, but we no longer have to do that. We can train an embeddings model
+[00:24:16.000 → 00:24:21.140] to generate embeddings for us, or just like with re-rankers, we can skip the training entirely and
+[00:24:21.140 → 00:24:26.820] use the out-of-the-box embeddings models elastic provides. We can then plot the coordinates in vector space
+[00:24:26.820 → 00:24:31.740] and intuit which terms are related or interchangeable. By measuring the distance between two concepts
+[00:24:31.740 → 00:24:36.540] in vector space, the model now understands what terms and concepts are and are not,
+[00:24:36.820 → 00:24:41.720] The closer two terms are in vector space, the more related they are. The farther they are, the
+[00:24:41.720 → 00:24:46.320] less related. Dogs and cats will be roughly in the same space in a vector database. Something
+[00:24:46.320 → 00:24:51.560] similar happens with how cars and trains are plotted, but a skunk won't be anywhere near the concept
+[00:24:51.560 → 00:24:57.200] of a skyscraper and a glove won't be close to a computer. Our search system can now understand
+[00:24:57.200 → 00:25:02.920] a broader spectrum of language. Level 10, hybrid search. As to be expected at this point,
+[00:25:03.240 → 00:25:06.280] using one strategy for our search systems usually isn't optimal.
+[00:25:06.820 → 00:25:10.720] inverted index helps us narrow things down, but it doesn't do any ranking on its own.
+[00:25:11.080 → 00:25:16.500] TF without IDF isn't very good. BM25 benefits from basic text analysis and doubly so for having
+[00:25:16.500 → 00:25:21.140] a re-ranker come in at the end and reorder the first couple of entries. We've strived to be additive so
+[00:25:21.140 → 00:25:25.100] far. We don't want to abandon the body of search strategies we've been accumulating in our toolbox
+[00:25:25.100 → 00:25:30.940] because no one method really does the job perfectly. So the national question is, how are we
+[00:25:30.940 → 00:25:36.080] going to incorporate vector search into what we have already discussed? Hybrid search is a combination of
+[00:25:36.080 → 00:25:41.060] BM25 keyword-based search and a vector-based search. Two different searches happen
+[00:25:41.060 → 00:25:46.480] simultaneously and then get merged together. There are many algorithms that can perform this smurge,
+[00:25:46.660 → 00:25:53.320] but the most popular would be reciprocal rank fusion, or RRF. How exactly it works is not the focus
+[00:25:53.320 → 00:25:58.340] of this video, so I'll spare you the math. What is more important for you to understand is why vector
+[00:25:58.340 → 00:26:04.920] search still often needs to be used in parallel with BM25. Vector search is great at finding recipes
+[00:26:04.920 → 00:26:09.080] similar to our search query, but BM25 still ranks supreme when it comes to finding
+[00:26:09.080 → 00:26:14.060] exact matches. Vector search will help me make the connection between cheesy flatbread and white
+[00:26:14.060 → 00:26:20.400] pizza, but BM25 is what will ultimately excel at finding recipes that are exactly cheesy flatbread.
+[00:26:20.840 → 00:26:25.660] And we haven't abandoned re-rankers either. Having one come in at the end and do a final pass-through of our
+[00:26:25.660 → 00:26:31.100] results is usually a good idea. Elasticsearch performs these types of hybrid searches exactly in the way
+[00:26:31.100 → 00:26:34.520] that I described. A standard keyword query is paired with a vector query,
+[00:26:34.920 → 00:26:36.760] and the results are subsequently merged.
+[00:26:37.480 → 00:26:41.880] You could make your life easier, though, and skip the need for both queries entirely by using a retriever,
+[00:26:42.360 → 00:26:48.440] a search option that runs multiple queries of different types for you, and merges their results into a single ranked list.
+[00:26:48.880 → 00:26:50.160] Level 11. Rag.
+[00:26:50.860 → 00:26:53.360] You are probably familiar with at least one LLM.
+[00:26:53.640 → 00:26:56.640] Whether it's Chatchip, T, Claude, or Gemini doesn't really matter.
+[00:26:56.780 → 00:26:58.460] They all work basically the same way.
+[00:26:58.680 → 00:27:04.860] A ton of data gets funneled into a machine learning model, and you now have a system that can talk intelligently to you about the data
+[00:27:04.920 → 00:27:06.860] that it ingested during its training phase.
+[00:27:07.680 → 00:27:12.700] LLMs are smart, no doubt about it, but in the same way that Isaac Newton couldn't have told you
+[00:27:12.700 → 00:27:19.020] who would win or take gold in the 1996 summer swimming Olympics, you can't ask an LLM for information
+[00:27:19.020 → 00:27:21.780] about knowledge it doesn't have, regardless of how smart it is.
+[00:27:22.100 → 00:27:29.460] So if an LLM ingested training data in 2023, but I wrote a pizza recipe in 2024, the LLM doesn't
+[00:27:29.460 → 00:27:31.640] have any way of giving anyone that recipe.
+[00:27:31.820 → 00:27:33.200] It wasn't in the training data.
+[00:27:33.660 → 00:27:34.900] And retraining is an exceptional.
+[00:27:34.920 → 00:27:38.960] expensive process. That's why new models don't come out every day. To fix this, we can augment
+[00:27:38.960 → 00:27:44.460] the generated output from an LLM with some sort of retrieval system to get more up-to-date data.
+[00:27:45.020 → 00:27:50.880] Hence the term, retrieval, augmented generation, or RAG. It essentially provides an open book to
+[00:27:50.880 → 00:27:56.520] LLMs so that they can look up information they don't have. To clarify, rag is not one specific
+[00:27:56.520 → 00:28:02.380] mechanism. It's just an umbrella term for any kind of tooling that lets your LLM perform some kind of look
+[00:28:02.380 → 00:28:07.920] or search. A good example of this is when you ask your favorite LLM about some current trends
+[00:28:07.920 → 00:28:12.820] like the newest recipes in the world of pizza making, so it starts crawling the internet. Elastic
+[00:28:12.820 → 00:28:18.060] Agent Builder is another example of Rag in action. It hooks up to whatever LLM you prefer, but
+[00:28:18.060 → 00:28:24.040] is also plugged into all the data we've loaded into the system. So if my Elastic instance is full of
+[00:28:24.040 → 00:28:29.200] pizza recipes, Agent Builder can crawl through those recipes and give me a specific one, rather
+[00:28:29.200 → 00:28:31.500] than just making one up based on its trading data.
+[00:28:32.450 → 00:28:38.150] Level 12. Agentic Memory. Not only are LLMs like ChatGBT using search to retrieve
+[00:28:38.150 → 00:28:43.990] up-to-date information for your queries, but search is also how it remembers you. LLMs don't
+[00:28:43.990 → 00:28:48.570] have infinite memory. They can only hold so much text in front of them at once. When a conversation
+[00:28:48.570 → 00:28:52.470] grows beyond that limit, or when a system is designed to remember you across multiple
+[00:28:52.470 → 00:28:57.370] conversations, the relevant parts of your history get stored and retrieved through search. If
+[00:28:57.370 → 00:29:02.430] Chatubt and I talk for a half hour about a recipe and I eventually say, never mind, let's
+[00:29:02.450 → 00:29:07.690] revisit that pickle pizza you recommended earlier. The system doesn't just remember that. It
+[00:29:07.690 → 00:29:15.720] searches for it. The LLM's memory, at its core, operates on search. Conclusion. Okay, that took us a while,
+[00:29:15.800 → 00:29:19.900] but hopefully you can see just how far we've come. We started this video with the most bare-bones,
+[00:29:20.040 → 00:29:25.220] brute force approach to search and ended with powering the memory systems behind AI. That's quite a leap.
+[00:29:25.560 → 00:29:29.700] The world of search engineering is broad and vast, and there's a lot of other algorithms I haven't
+[00:29:29.700 → 00:29:31.780] covered or have had to gloss over in this video.
+[00:29:32.360 → 00:29:37.220] PageRank is how Google Search operated for many years, but doesn't really have a place in the hierarchy of this video.
+[00:29:37.720 → 00:29:42.780] Nearest neighbor algorithms are super important for vector search, but are a little too involved for our broad scope today.
+[00:29:43.420 → 00:29:50.360] The same goes for string searching algorithms like Boyer Moore and Newth Morris Pratt, which are clever ways of scanning text for exact pattern matches.
+[00:29:50.760 → 00:29:55.440] More relevant to how search engines are built under the hood rather than how they rank results.
+[00:29:55.840 → 00:30:01.720] We'll continue covering different methods in search, but if there's something specific you'd like for us to go over, feel free to leave a comment on this
+[00:30:01.780 → 00:30:03.040] video. Until next time.

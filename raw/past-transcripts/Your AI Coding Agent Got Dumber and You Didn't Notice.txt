@@ -1,0 +1,133 @@
+[00:00:00.000 → 00:00:05.740] In March this year, many ClaudeCode users began to complain that their agent felt dumber than before.
+[00:00:06.500 → 00:00:13.840] Now, this has been a common, timeless, and unprovable complaint, the they don't make things like they used to of the AI world, if you will.
+[00:00:14.660 → 00:00:19.020] But in early April, a 4.5,000 word GitHub post, changed all of that.
+[00:00:19.880 → 00:00:24.320] Stella Lorenzo, a senior director of AI at AMD, came with receipts.
+[00:00:24.900 → 00:00:29.960] She used data from almost 7,000 ClaudeCode sessions to comprehensively demonstrate,
+[00:00:30.060 → 00:00:35.160] the agent's regression. In fact, her work was so compelling that it led to an anthropic
+[00:00:35.160 → 00:00:40.700] investigation and a public report detailing their findings and fixes. This story is really
+[00:00:40.700 → 00:00:45.860] instructive, so let's follow the data, her conclusions, and then how to build a similar early
+[00:00:45.860 → 00:00:50.880] warning system for your own agents, so that the next time something like this happens, you're not
+[00:00:50.880 → 00:00:56.020] flying blind. We all love a good detective story, whether it's Sherlock Holmes, Nancy Drew,
+[00:00:56.500 → 00:00:59.980] or Detective Pikachu. My favorite part of Lorenzo's analysis,
+[00:01:00.060 → 00:01:04.960] was that she figured all of this stuff out from the analysis of local session logs produced
+[00:01:04.960 → 00:01:12.120] by Claude Code. Across three months, the AMD team had logged 6,800 sessions, 17,000 thinking
+[00:01:12.120 → 00:01:18.080] blocks and over 230,000 tool calls. She broke the starter down into periods that she called
+[00:01:18.080 → 00:01:23.900] the good, transitional, and degraded. For simplicity, let's talk about the stats across two of those
+[00:01:23.900 → 00:01:29.980] periods, the good and the degraded. Between those two, the agents read activity to edit
+[00:01:29.980 → 00:01:35.980] activity ratio collapsed from 6.6 reads per edit during the good period to just two during
+[00:01:35.980 → 00:01:42.580] the degraded period, meaning that on average, the agent was fact-gathering 70% less often before making
+[00:01:42.580 → 00:01:48.420] changes. And shared plenty of other stats too. The post also demonstrates that edits without
+[00:01:48.420 → 00:01:53.760] any reading, circular loops, and premature stopping all occurred significantly more often than
+[00:01:53.760 → 00:02:00.060] before. And it wasn't just quantitative stats either. Qualitative metrics like manual user interrupts,
+[00:02:00.060 → 00:02:05.860] rose sharply, and Claude began describing its own in-chat work as lazy, rushed or sloppy.
+[00:02:06.800 → 00:02:12.560] And to top all of that, as the output quality went down, their token usage went up, way up,
+[00:02:12.720 → 00:02:18.540] in fact. Between February and March, she estimates that the daily usage in tokens increased by a factor
+[00:02:18.540 → 00:02:24.560] of over 100 for a similar number of prompts. Now, to be fair, there are mitigating circumstances.
+[00:02:24.820 → 00:02:30.020] It wasn't just the agent using more tokens by itself. She explains that some of the token increase
+[00:02:30.060 → 00:02:35.340] was due to very excited engineers spinning up further subagents. But the result was still pretty
+[00:02:35.340 → 00:02:41.240] bad since they were now trying to do more with degraded agents. She sums up the change from an
+[00:02:41.240 → 00:02:47.280] engineer's perspective going from, I can run 50 agents and they all produce excellent work, to every
+[00:02:47.280 → 00:02:54.560] single one of these agents is now an idiot. In fact, she found that thinking blocks were about 70% shorter
+[00:02:54.560 → 00:03:00.600] in the degraded period than the good period. This is really important because as she points out, the model
+[00:03:00.640 → 00:03:05.240] being able to spend tokens to think deeply is key to solving these complex problems.
+[00:03:06.580 → 00:03:11.360] Although they had no way of knowing why, this was amazing detective work to prove degradation
+[00:03:11.360 → 00:03:18.240] of Claude Code during this period. Reading her post made me very curious about my own agents. Would I even
+[00:03:18.240 → 00:03:22.760] know if their behavior ever changed? How will I achieve my dream of delegating my work to agents
+[00:03:22.760 → 00:03:27.580] and spending more time gaming if I can't even do that? So I decided to take a look.
+[00:03:28.600 → 00:03:31.840] One experiment I ran was to build a reverse proxy that sits between
+[00:03:31.860 → 00:03:36.800] my coding agents and the model so it can pause the traffic and ship everything to Elastic
+[00:03:36.800 → 00:03:41.640] search. I pointed it at a few different harnesses doing the same task and started poking
+[00:03:41.640 → 00:03:46.560] around. Within one day, the data turned up something really surprising. Two harnesses with
+[00:03:46.560 → 00:03:50.680] similar token usage on the same task had vastly different bills. One was costing
+[00:03:50.680 → 00:03:55.700] almost three times as much as the other. That seemed so odd that my first thought was that I
+[00:03:55.700 → 00:04:01.070] had met something up. But an online search led me to this GitHub pull request, flagging a prompt
+[00:04:01.070 → 00:04:06.810] caching bug in open code. And the behavior matched. Under certain conditions, open code could
+[00:04:06.810 → 00:04:11.410] miss the cache, which means slower inference and dramatically higher cost, exactly what I was seeing
+[00:04:11.410 → 00:04:16.570] in the data. Look, you're not always going to find little gems like this, and I was probably quite
+[00:04:16.570 → 00:04:21.950] lucky here to come across the bug in my tiny demo for a video. It's like buying a Lego dinosaur
+[00:04:21.950 → 00:04:25.910] and finding a real fossil inside. It shouldn't really happen, but I'll take it.
+[00:04:26.470 → 00:04:30.990] Now the point here isn't the bug. Bugs are a fact of life, and I still think open code's amazing.
+[00:04:31.230 → 00:04:34.910] But it does make me wonder, what else might you find if you looked?
+[00:04:35.870 → 00:04:39.870] Now, a bespoke proxy isn't great for production. You're running a separate process,
+[00:04:40.050 → 00:04:44.470] adding a network hop, managing certs and auth. And the proxy itself needs to be maintained,
+[00:04:44.730 → 00:04:50.130] which isn't trivial even when vibe coding. In some ways, especially vibe coding, but I digress.
+[00:04:51.450 → 00:04:56.850] The deeper problem is conceptual. A proxy sits between the harness and the model. It can see the traffic,
+[00:04:57.270 → 00:05:01.630] but it has zero visibility into the harness. Internal state, tool, tool execution detail,
+[00:05:01.650 → 00:05:06.110] errors handling, all of these things are invisible. You're still treating the harness as
+[00:05:06.110 → 00:05:11.610] a black box. What you actually want is instrumentation inside the harness, and that's where
+[00:05:11.610 → 00:05:17.800] open telemetry comes in. Open telemetry or OTEL is a standardized observability framework
+[00:05:17.800 → 00:05:23.240] for emitting traces, metrics and logs. The major coding agents like ClaudeCode, OpenAI Codex,
+[00:05:23.620 → 00:05:29.880] and Gemini CLI have first-party OTEL output built in. And others like OpenCode and Pi have plugins
+[00:05:29.880 → 00:05:31.260] or extensions for the same thing.
+[00:05:31.900 → 00:05:36.740] news is you don't have to be an expert to set this up. I was able to wire my coding agent's
+[00:05:36.740 → 00:05:41.740] hotel extension using the docs and elastic agent skills in less than an hour so that all usage
+[00:05:41.740 → 00:05:47.300] data is sent to this in the elastic instance. And this is my resulting dashboard. Let's view it through
+[00:05:47.300 → 00:05:51.800] the lens of which parts of this dashboard might have caught the degradations seen by Lorenzo.
+[00:05:52.410 → 00:05:58.430] At the top, I've got the global usage stats, sessions, turns, tool calls and failures. Useful
+[00:05:58.430 → 00:06:01.290] as a baseline, but I think the next parts are even more meaningful.
+[00:06:02.130 → 00:06:07.090] This panel shows stop reasons over time. So did the turn end on a tool call? Did the model
+[00:06:07.090 → 00:06:11.790] finished naturally or did I manually stop it? A spike in this last category of manual
+[00:06:11.790 → 00:06:16.230] stoppage is exactly what AMD would have seen as engineers saw the model doing the wrong
+[00:06:16.230 → 00:06:21.580] thing and yank the chain. Now the read to edit ratio reduction was a key stat as you remember,
+[00:06:22.060 → 00:06:26.760] and this chart shows exactly that. We also have a chart that breaks down tool calls by type
+[00:06:26.760 → 00:06:32.380] alongside the read to edit ratio over time. So if something changes, whether it's the model, the harness, the service
+[00:06:32.380 → 00:06:38.490] site update or so on, I'd expect this ratio to move. And here, I've got tool outcomes over
+[00:06:38.490 → 00:06:43.350] time. So if something starts breaking tool calls, a model regression, a flaky plug-in, new
+[00:06:43.350 → 00:06:48.890] permission setup, what have you, the failure rate should climb here. And I also track the tool
+[00:06:48.890 → 00:06:54.630] call patterns so that if a tool isn't being called when it should, or if it's data usage patterns change,
+[00:06:54.970 → 00:06:59.670] I'll see those here. And the nice thing is, the dashboard doesn't need to be perfect straight
+[00:06:59.670 → 00:07:04.930] away, that's the beauty of having the underlying logs and metrics inelastic. I can build whatever
+[00:07:04.930 → 00:07:10.370] dashboard I need later and run any in-depth analysis on the raw data when I notice something
+[00:07:10.370 → 00:07:17.090] is off. The point is that this gives you a real-time display. Look, streaming a dashboard isn't going
+[00:07:17.090 → 00:07:21.510] to win a lot of viewers on Twitch, but it's probably more useful than yet another gaming channel.
+[00:07:21.970 → 00:07:27.710] If a model update shifts behavior, if a server site cache bug degrades context, or if a harness update
+[00:07:27.710 → 00:07:33.130] changes defaults, I should see it in these trend lines. Before we move on, I'd love to know what you
+[00:07:33.130 → 00:07:36.850] thought about these dashboards, what's good, what's bad, or what's missing. I'm also considering
+[00:07:36.850 → 00:07:41.950] videos on setting up telemetry for major harnesses like Codex or Claude Code, so I'd love to hear from
+[00:07:41.950 → 00:07:46.830] you, which will help us plan these. And on the way to the comments, give us a like, it'll help to keep
+[00:07:46.830 → 00:07:52.840] me employed and help others to find these videos. But let's come back to where we started and close
+[00:07:52.840 → 00:07:58.140] the loop on Roezo's story. Just turned her month after her post, Anthropic published their report.
+[00:07:58.160 → 00:08:01.700] It turned out that multiple things had changed simultaneously.
+[00:08:02.500 → 00:08:04.080] One, the harness had changed.
+[00:08:04.600 → 00:08:08.920] The default reasoning effort parameter went from high to medium, which affected a lot of people.
+[00:08:09.700 → 00:08:14.820] Two, the new Opus model introduced something called adaptive thinking, which lets the model decide
+[00:08:14.820 → 00:08:15.940] its own thinking budget.
+[00:08:16.300 → 00:08:21.440] This is a great idea for efficiency, but it had a side effect of sometimes deciding not to think
+[00:08:21.440 → 00:08:21.960] at all.
+[00:08:22.930 → 00:08:26.570] Three, and probably the most significant, was a server-side bug.
+[00:08:27.130 → 00:08:28.390] Anthropic had introduced a calculation.
+[00:08:28.410 → 00:08:33.230] caching efficiency feature that would discard all thinking blocks on resumption after a month.
+[00:08:33.850 → 00:08:38.850] But this bug meant that once this feature was triggered, it silently dropped all thinking blocks
+[00:08:38.850 → 00:08:40.430] from subsequent message histories.
+[00:08:40.930 → 00:08:44.730] And without the thinking blocks, the model just didn't have enough context while missing the
+[00:08:44.730 → 00:08:48.250] cache, which both degraded performance and increased cost.
+[00:08:49.220 → 00:08:53.240] From the user perspective, these all happened at similar times with little visibility.
+[00:08:53.720 → 00:08:58.500] I can imagine it being a frustrating experience for everyone with little proof that something was even
+[00:08:58.500 → 00:09:03.080] wrong. Except, of course, for Stella Lorenzo. The difference between her and everybody
+[00:09:03.080 → 00:09:08.620] else was that she looked into logs, performed rigorous analysis and identified what was going on.
+[00:09:09.650 → 00:09:14.450] Now, up until this point, I've been telling you how wonderful logs are, but of course there are some
+[00:09:14.450 → 00:09:20.370] trade-offs, so let's talk about that. One, session logs generate real data and retention costs money.
+[00:09:21.090 → 00:09:24.930] As always, with observability, you should keep an eye on the volume your team is generating
+[00:09:24.930 → 00:09:28.290] and decide what to log and how long to keep it for.
+[00:09:29.040 → 00:09:34.200] If Timmy over there in your team is constantly spawning 50 sub-agents for a random side project
+[00:09:34.200 → 00:09:39.680] that runs all week or using open call to troll reditors, maybe that doesn't need as much retention
+[00:09:39.680 → 00:09:43.100] as the data from agents working on your company's main product.
+[00:09:43.630 → 00:09:49.210] Two, real risk of leakage. These logs can capture confidential information and credentials
+[00:09:49.210 → 00:09:54.690] and become on yet another potential tax surface and liability. So make sure that you don't create
+[00:09:54.690 → 00:09:59.050] any more risks than you have to. You could exclude message bodies, log metadata or mechral
+[00:09:59.050 → 00:10:04.130] tricks only, or have custom sanitization logic. None of these are perfect, but you should see
+[00:10:04.130 → 00:10:09.670] what makes sense for you. When building these demos, I saw my agent execute shell commands with
+[00:10:09.670 → 00:10:15.840] credentials right in them, which would not get redacted and end up in the logs. I should shamelessly plug, though,
+[00:10:16.120 → 00:10:20.760] that that's another reason for going with a proven product like Lastic with great granular security
+[00:10:20.760 → 00:10:27.280] and access control. Three, this gets set up, but never looked at again. Build a habit of looking at it
+[00:10:27.280 → 00:10:30.580] and set up alerts on the signals that matter to you, so you don't have to manually
+[00:10:30.580 → 00:10:35.880] look at them all the time. The lesson for me from all of this is that every session generates
+[00:10:35.880 → 00:10:40.830] signal. Right now, your agent is making decisions you can't see, using a harness that grows
+[00:10:40.830 → 00:10:45.690] more complex all the time, shaped by service-side parameters, thousands of kilometers away from
+[00:10:45.690 → 00:10:51.390] you. And unless you're capturing that signal, you're really flying blind. Oytel support is built
+[00:10:51.390 → 00:10:57.150] into major harnesses, or just one plug-in away. An elastic gives you somewhere secure and easy to use
+[00:10:57.150 → 00:11:03.160] to send it, monitor it, and investigate it. Your coding agent is a black box, but it doesn't
+[00:11:03.160 → 00:11:07.930] have to stay that way. Thanks for watching. I read every comment, so please let me know if you have
+[00:11:07.930 → 00:11:12.670] any questions. Like I said, give us a like if you can. It helps others to find our video. And if you didn't
+[00:11:12.670 → 00:11:16.940] like it, that's fine too. If you let us know why, that'll help us improve. Thanks for watching.
+[00:11:17.100 → 00:11:17.480] See you next time.

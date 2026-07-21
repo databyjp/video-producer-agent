@@ -1,0 +1,37 @@
+[00:00:00.020 → 00:00:01.040] Hey everyone.
+[00:00:01.660 → 00:00:08.280] Today I would like to show you our new model that's called Gina Embedings V5 Omni.
+[00:00:08.560 → 00:00:15.950] There is a small variant and we also have a nano version of this which is much smaller.
+[00:00:17.210 → 00:00:30.440] And so what it can do is it can get text as input but also images, video, it can get text as input,
+[00:00:30.760 → 00:00:40.020] and any combination of these at any number of these and it creates a single embedding and this embeddings can be used
+[00:00:40.020 → 00:00:49.120] for clustering or for retrieval so it means all the documents you embed consist of combinations of
+[00:00:49.120 → 00:01:00.320] text image audio and video for instance products that has a text description or title and multiple images and you can
+[00:01:00.320 → 00:01:06.840] embed the whole product into a single vector and your search query can also contain multiple
+[00:01:06.840 → 00:01:14.540] attributes here's a small demo for our model so i have five data sets here each for one modality
+[00:01:15.200 → 00:01:22.060] and i can build some queries also with all the different modalities to search of these data sets
+[00:01:22.840 → 00:01:30.340] and just for fun let's search on the photos using audio and what other that even means
+[00:01:30.360 → 00:01:32.080] we can give it a try.
+[00:01:34.400 → 00:01:35.140] Meow, meow, meow.
+[00:01:40.760 → 00:01:45.400] So as you can see, our model is truly an omnimodal.
+[00:01:46.040 → 00:01:56.300] So many other models can only search either on text or on image and text or text and audio, these combinations.
+[00:01:57.260 → 00:02:02.700] But in our case, all these modalities come into a shared embedding space.
+[00:02:03.420 → 00:02:06.260] And this allows to have such cross-modalities.
+[00:02:06.260 → 00:02:09.320] modality search requests, which is quite nice.
+[00:02:10.180 → 00:02:12.660] Let's search for some rock music, for instance.
+[00:02:20.400 → 00:02:22.580] So this is the results we get on the photos.
+[00:02:24.170 → 00:02:27.580] And then these are the results we get on the audio.
+[00:02:38.850 → 00:02:41.570] You can think about many possible use cases.
+[00:02:42.230 → 00:02:45.990] For instance, here I search on our documents data set
+[00:02:45.990 → 00:02:50.570] and I uploaded an invoice to retrieve similar invoices
+[00:02:50.690 → 00:02:58.020] as results. So now let's talk about a bit more complex queries we can construct.
+[00:02:58.840 → 00:03:04.280] So what we can also do is, for instance, giving a drawing here of a car,
+[00:03:05.290 → 00:03:14.470] then retrieving some cars as response, and then we can adjust the query even further by adding more modalities.
+[00:03:16.020 → 00:03:20.820] And for instance, we can specify now white.
+[00:03:20.820 → 00:03:27.540] So now the red car is a bit downranked and we get more white cars as response.
+[00:03:29.000 → 00:03:35.420] And the additional attribute we specified here is not an additional filter
+[00:03:35.420 → 00:03:41.200] because there is no filter attribute in the result images.
+[00:03:41.400 → 00:03:51.200] It's really another input modality we add to the embedding model together with the car to retrieve these results.
+[00:03:51.200 → 00:03:57.360] And it might not work in any case, so you can maybe not combine everything with each other.
+[00:03:58.340 → 00:04:02.760] And there are a bit of experiments you have to do what works with each other.
+[00:04:03.380 → 00:04:05.640] But this shows, in principle, this is possible.
+[00:04:06.620 → 00:04:11.200] You can find it on Heminghamming Face and just give it a try and let us know.
+[00:04:11.840 → 00:04:13.360] So, come in.

@@ -1,0 +1,142 @@
+[00:00:00.000 → 00:00:04.020] Most Gen.A.I. implementations today function like digital librarians.
+[00:00:04.660 → 00:00:11.460] They're fantastic at finding a document, but they leave the actual thinking in the complex math up to the model's intuition.
+[00:00:12.180 → 00:00:15.460] That is exactly where you get hallucinations and logic gaps.
+[00:00:16.160 → 00:00:19.540] Hi, I'm James Williams, Elastic Search Specialist.
+[00:00:20.120 → 00:00:23.380] I'm here to show you an architecture that doesn't just find information.
+[00:00:23.960 → 00:00:26.780] It acts like a highly skilled business analyst.
+[00:00:27.120 → 00:00:29.060] It starts with spreadsheet decomposition.
+[00:00:30.000 → 00:00:31.560] We aren't just uploading files.
+[00:00:32.040 → 00:00:36.680] We're breaking down your spreadsheets into searchable, executable business logic.
+[00:00:37.080 → 00:00:43.000] You'll notice we store these skills in a centralized database, specifically Elasticsearch serverless.
+[00:00:43.540 → 00:00:44.240] Why a database?
+[00:00:44.920 → 00:00:49.120] Because for ruthless execution, you need a centralized version playbook.
+[00:00:49.480 → 00:00:53.940] It ensures that every agent in your organization is pulling from the same source of truth.
+[00:00:53.980 → 00:00:59.940] It allows for instant retrieval and auditable logic, so you know exactly which formula was used
+[00:00:59.940 → 00:01:05.140] and why. This leads us to the agent. When we talk about a skill, we're talking about
+[00:01:05.140 → 00:01:10.500] forcing the large language model to learn a standardized process. We aren't asking the AI to
+[00:01:10.500 → 00:01:16.110] estimate a value or guess the reasoning. We're equipping it with our validated calculation
+[00:01:16.110 → 00:01:21.650] frameworks to ensure zero variation in execution. Whether the agent runs this task once
+[00:01:21.650 → 00:01:27.700] or a thousand times, it completes the same way every single time. Looking at this
+[00:01:27.700 → 00:01:29.960] end-to-end flow, you'll see the shift.
+[00:01:30.200 → 00:01:32.200] We've moved past basic rack.
+[00:01:32.860 → 00:01:34.980] We've moved past letting the AI reason.
+[00:01:35.360 → 00:01:37.800] We move past letting it make a mistake.
+[00:01:38.300 → 00:01:39.600] We're talking about execution.
+[00:01:40.200 → 00:01:43.580] We're talking about ruthless business logic execution.
+[00:01:43.940 → 00:01:51.320] Every organization has that one critical spreadsheet, the one that holds the actual brain of the business.
+[00:01:51.860 → 00:01:53.140] Usually that logic is trapped.
+[00:01:53.740 → 00:01:57.760] It's either buried in a messy file or stuck in a senior architect's head.
+[00:01:57.800 → 00:02:00.240] We call this a logic silo.
+[00:02:00.920 → 00:02:03.880] Traditionally, you'd have to wait for a developer to manually bridge that cap.
+[00:02:04.500 → 00:02:06.660] But here, we're using Claude as a strategic bridge.
+[00:02:07.400 → 00:02:12.840] Instead of a long dev cycle, a domain expert simply provides the business rules, like this TCO
+[00:02:12.840 → 00:02:17.860] calculator, and the system transforms them into production-ready logic automatically.
+[00:02:18.580 → 00:02:20.740] This is where we move past the librarian phase.
+[00:02:21.080 → 00:02:25.640] We aren't doing probabilistic rag where the AI guesses at a calculation.
+[00:02:26.400 → 00:02:30.530] We're moving to deterministic execution, where the AI runs the actual.
+[00:02:30.550 → 00:02:33.310] math, the guarantee and outcome, you can actually audit.
+[00:02:33.490 → 00:02:38.710] Let's see what this looks like in practice. Right now, I'm pointing Claude at our TCO spreadsheet.
+[00:02:39.330 → 00:02:44.170] This isn't just a document. It contains formulas for things like security risk and productivity.
+[00:02:45.010 → 00:02:48.650] I'm going to tell the system to take this raw spreadsheet and skillify it.
+[00:02:49.560 → 00:02:57.040] Now watch the output. Claude isn't just summarized in the text. It's decomposing the spreadsheet's DNA into a formal skill package.
+[00:02:57.600 → 00:02:59.500] Notice it's generating three distinct things.
+[00:02:59.500 → 00:03:01.200] First, the logic.
+[00:03:02.200 → 00:03:08.020] The exact functions needed to calculate that $250,845,000 benefit.
+[00:03:09.180 → 00:03:09.740] The context.
+[00:03:10.640 → 00:03:15.880] The baseline constants, like our $100,000 per year salary input.
+[00:03:17.080 → 00:03:17.620] The instructions.
+[00:03:18.740 → 00:03:22.560] The metadata that tells our agent exactly when to pull this tool off the shelf.
+[00:03:23.400 → 00:03:27.620] By the time, Claude finishes doing its thing, we've got something meaningful.
+[00:03:27.760 → 00:03:30.520] We've turned to static, single user spreadsheet.
+[00:03:30.720 → 00:03:32.540] into a hot-loadable agent skill.
+[00:03:33.100 → 00:03:34.580] We aren't talking about data anymore.
+[00:03:35.180 → 00:03:37.720] We're talking about ruthless business logic execution.
+[00:03:38.380 → 00:03:41.440] Now that we've generated that TCO logic, it needs a home.
+[00:03:42.100 → 00:03:48.100] We index it here in the Elastic Skill repository, basically just Elasticsearch serverless.
+[00:03:48.720 → 00:03:51.400] Think of this as the engine room of the entire operation.
+[00:03:51.920 → 00:03:54.640] It isn't just a static folder or code repo.
+[00:03:55.100 → 00:03:56.900] It's an intelligent retrieval system.
+[00:03:57.380 → 00:04:00.700] Because we're using Elastics Hybrid Search, we combine
+[00:04:00.720 → 00:04:03.080] keyword precision with semantic intent.
+[00:04:03.700 → 00:04:07.240] This allows an agent that actually understands the context of your request.
+[00:04:07.740 → 00:04:12.900] For example, in a massive global enterprise, a TCO calculator for software is very different
+[00:04:12.900 → 00:04:14.620] from a TCO calculator for real estate.
+[00:04:14.940 → 00:04:17.800] The system is smart enough to distinguish between the two instantly.
+[00:04:18.580 → 00:04:19.920] It doesn't just find a file.
+[00:04:20.560 → 00:04:26.140] It retrieves the exact mathematical rule set required for the specific business problem.
+[00:04:26.180 → 00:04:30.660] It's the difference between a general guess and a deterministic outcome.
+[00:04:30.720 → 00:04:32.220] Now let's go live.
+[00:04:32.910 → 00:04:35.870] We need to get this skill out of the lab into the hands of the users.
+[00:04:36.780 → 00:04:38.720] I'm triggering our workflow orchestrator.
+[00:04:39.550 → 00:04:43.890] Right now, an elastic workflow is pushing that new TCO skill directly to our cluster.
+[00:04:44.670 → 00:04:46.490] This is the hotloading and action.
+[00:04:47.150 → 00:04:51.650] There is zero downtime, zero retraining, and no waiting for a new software release.
+[00:04:52.230 → 00:04:54.390] Our agent hasn't just read a spreadsheet.
+[00:04:54.750 → 00:04:57.710] It's absorbed a new enterprise-grade financial skill.
+[00:04:58.110 → 00:05:00.790] It's now ready to take those complex formulas.
+[00:05:00.850 → 00:05:05.910] and apply them to any real-world query via the Elastic Agent Builder user interface
+[00:05:05.910 → 00:05:08.470] or any MCP-compatible client.
+[00:05:08.750 → 00:05:14.010] This is how you move from static data to ruthless business logic execution.
+[00:05:14.110 → 00:05:17.350] We've reached the final phase, dynamic execution.
+[00:05:18.150 → 00:05:19.850] This is the ultimate differentiator.
+[00:05:20.650 → 00:05:24.290] In a typical setup, when a user asks a complex financial question,
+[00:05:24.890 → 00:05:27.090] the AI guesses the math based on its training data.
+[00:05:27.310 → 00:05:28.410] It's a roll of dice.
+[00:05:29.170 → 00:05:30.650] Here we use a hot load approach.
+[00:05:30.850 → 00:05:36.750] The moment the question is asked, the agent retrieves the specific logic we just authored,
+[00:05:37.290 → 00:05:39.230] loads it into memory, and executes it.
+[00:05:39.780 → 00:05:41.280] This isn't just accurate.
+[00:05:41.780 → 00:05:42.660] It's deterministic.
+[00:05:43.320 → 00:05:50.040] We've eliminated the hallucination risk by replacing AI intuition with validated calculation frameworks.
+[00:05:50.560 → 00:05:52.380] Imagine you're an IT director.
+[00:05:52.840 → 00:06:00.320] You're evaluating a major AI subscription, and you need a TCO calculation that you can actually stand behind in a board meeting.
+[00:06:00.320 → 00:06:06.720] We'll start off by asking if there are any quick ROI calculators with the tag AI.
+[00:06:07.560 → 00:06:09.540] And if so, what inputs are needed?
+[00:06:10.810 → 00:06:15.250] First, I'm asking the agent to scan its playbook, the Elastic Skill Repository.
+[00:06:15.850 → 00:06:18.750] Notice it doesn't just find a document about calculators.
+[00:06:19.370 → 00:06:23.050] It identifies an executable skill that's ready to run.
+[00:06:23.750 → 00:06:26.650] It even told me what inputs were required.
+[00:06:27.310 → 00:06:28.170] So I'm going to run it.
+[00:06:28.900 → 00:06:29.880] Now watch the interaction.
+[00:06:30.180 → 00:06:31.300] The agent is a good.
+[00:06:31.320 → 00:06:33.700] It isn't guessing what data it needs.
+[00:06:34.080 → 00:06:36.560] It's reading the config of the skill we built earlier.
+[00:06:37.160 → 00:06:43.200] It knows that to give a compliant answer, it must have specific variables like user adoption and security ratings.
+[00:06:43.780 → 00:06:47.840] This is the agent acting as a transparent partner, not a black box.
+[00:06:48.750 → 00:06:49.730] Here's the main event.
+[00:06:50.550 → 00:06:54.870] When I hit enter, the agent triggered the MCP server.
+[00:06:55.550 → 00:06:59.230] It hotloaded the proprietary logic, and it ran the numbers.
+[00:06:59.450 → 00:07:00.670] It's calculating,
+[00:07:00.670 → 00:07:04.930] productivity value and security costs based on our specific ratios.
+[00:07:05.070 → 00:07:06.750] It isn't generating a response.
+[00:07:07.230 → 00:07:08.730] It's computing an outcome.
+[00:07:09.450 → 00:07:11.270] On the left is the AI output.
+[00:07:11.830 → 00:07:15.030] On the right is the actual Google spreadsheet the finance team uses.
+[00:07:15.590 → 00:07:17.070] I plug the same variables in.
+[00:07:17.830 → 00:07:18.730] Look at the bottom line.
+[00:07:19.470 → 00:07:20.070] It's identical.
+[00:07:20.750 → 00:07:23.970] We've achieved the holy grail of enterprise gen AI.
+[00:07:24.450 → 00:07:26.370] Auditable rule-based output.
+[00:07:26.770 → 00:07:30.310] If an auditor asks how the AI reach this number, you don't have to shrug.
+[00:07:30.670 → 00:07:32.910] You can show them the exact code it executed.
+[00:07:33.650 → 00:07:35.350] That is the anti-blackbox in action.
+[00:07:35.910 → 00:07:38.430] It's great that the numbers match, but that's not all.
+[00:07:39.160 → 00:07:41.620] I'm going to rerun the calculation with a different security rating.
+[00:07:41.980 → 00:07:46.020] Let's see if the AI output and the spreadsheet math still match.
+[00:07:46.840 → 00:07:50.700] Not only does the math match, but we're getting something the spreadsheet can't do.
+[00:07:51.410 → 00:07:55.250] Cross-reference the differences between the calculations on the fly.
+[00:07:55.570 → 00:07:56.590] Thanks for watching.
+[00:07:56.930 → 00:07:59.470] What you just saw wasn't a chat podcasting at a spreadsheet.
+[00:07:59.470 → 00:08:00.750] It was a skill-powered agent.
+[00:08:00.770 → 00:08:03.530] We decoupled the logic from the model.
+[00:08:04.190 → 00:08:06.570] We enabled real-time updates without retraining,
+[00:08:06.990 → 00:08:09.870] and we provided a secure, honorable foundation for the enterprise.
+[00:08:10.110 → 00:08:13.850] We dug deeper into what's possible when you pair ElasticsearchSeaverless,
+[00:08:14.130 → 00:08:17.010] agent builder, and workflows with Claude.
+[00:08:17.610 → 00:08:21.390] You can deploy this today on any Elastic Search Serverless project.
+[00:08:22.200 → 00:08:23.980] Our public GitHub repo is live.
+[00:08:24.100 → 00:08:24.760] You can clone it.
+[00:08:25.060 → 00:08:26.260] Add your own business logic.
+[00:08:26.600 → 00:08:28.140] Stop building bots that guess.
+[00:08:28.500 → 00:08:30.460] Start building agents that work.
+[00:08:30.860 → 00:08:30.960] I don't know.

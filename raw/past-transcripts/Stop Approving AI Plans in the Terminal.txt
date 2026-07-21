@@ -1,0 +1,115 @@
+[00:00:00.430 → 00:00:03.350] Plan mode transformed how I use AI agents.
+[00:00:03.810 → 00:00:06.030] But I used to approve AI plans that I'd barely read
+[00:00:06.030 → 00:00:08.170] and then spent hours untangling the mess
+[00:00:08.170 → 00:00:09.970] because reviewing things in the terminal
+[00:00:09.970 → 00:00:12.450] and passing on feedback is a huge pain.
+[00:00:12.810 → 00:00:14.610] So what if you could run a visual review
+[00:00:14.610 → 00:00:16.670] where you can actually read it, mark it up
+[00:00:16.670 → 00:00:19.430] and then iterate before single liner code gets written?
+[00:00:19.970 → 00:00:20.790] This is Planetator.
+[00:00:21.290 → 00:00:23.810] It's open source and it hooks into your existing agent
+[00:00:23.810 → 00:00:26.570] like Claude Code, Codex or Pi in my case.
+[00:00:27.250 → 00:00:28.210] Let me show you how it works
+[00:00:28.210 → 00:00:30.410] by building a rag application from scratch.
+[00:00:30.430 → 00:00:36.510] To start, I'm going to install Elastic Agent skills in this directory for Pi, which is my agent.
+[00:00:37.210 → 00:00:38.090] Let me start up with my agent.
+[00:00:38.930 → 00:00:44.640] First, I'm going to enable Planetator by activating the extension, and here's my prompt.
+[00:00:45.580 → 00:00:50.800] I'm saying I have a catalog of blog articles here, and I want to build the RAGTUI application for search.
+[00:00:51.380 → 00:00:55.400] I want to be able to perform hybrid searches on them and also use RAG to ask it questions.
+[00:00:55.900 → 00:00:57.960] Use Elasticsearch Serverless for convenience.
+[00:00:58.680 → 00:01:01.600] And to start with, please create the Elasticsearch instance in
+[00:01:01.620 → 00:01:05.200] just the data and verify that the hybrid search works.
+[00:01:05.540 → 00:01:10.280] Notice here how I didn't ask it to build the interface just yet, and I'm forcing it to stop
+[00:01:10.280 → 00:01:11.500] at the data layer.
+[00:01:12.180 → 00:01:12.760] Let's see how it does.
+[00:01:15.160 → 00:01:15.640] Okay, great.
+[00:01:16.080 → 00:01:18.580] Here's the agent's plan in this nice planetator window.
+[00:01:19.060 → 00:01:23.080] So instead of reading this plan and the terminal itself, it's intercepted onto this nice
+[00:01:23.080 → 00:01:23.500] UX.
+[00:01:24.000 → 00:01:27.920] It makes it so much easier to read it and understand what the agent intends to do.
+[00:01:28.100 → 00:01:30.380] So let's take a look and we can start to annotate it.
+[00:01:30.720 → 00:01:33.020] Now I notice here with this plan to use this ELSA model.
+[00:01:33.120 → 00:01:34.540] That's not quite what I want.
+[00:01:34.620 → 00:01:37.120] I want it to use the GINA V5 model instead.
+[00:01:37.460 → 00:01:41.500] So what I can do is just click on this comment button and annotate it.
+[00:01:42.870 → 00:01:46.470] Use the GINA V5 text.
+[00:01:46.790 → 00:01:49.970] Let's say nano model instead.
+[00:01:52.800 → 00:01:54.400] Verify hybrid search. That's good.
+[00:01:55.230 → 00:01:57.690] I'm going to give that a little thumbs up.
+[00:01:58.850 → 00:02:03.590] It says here that a text semantic field is going to map the semantic text, which is good.
+[00:02:03.690 → 00:02:06.750] But it doesn't quite tell me what the data there is going to.
+[00:02:06.770 → 00:02:13.250] to be from. So I'm going to make a comment. So I'm going to say, make sure this data is
+[00:02:13.250 → 00:02:26.660] a combination of the title, text, and description. And you can just go on like this,
+[00:02:27.020 → 00:02:43.040] review the spec, and leave comments in line as you go. I'll add a couple more comments. And now,
+[00:02:43.300 → 00:02:48.320] once I'm happy with my comments, what I can do is click the send feedback button and the agent
+[00:02:48.320 → 00:02:54.330] will iterate on my comments. And review the plan. And you can see Pye was paused before I did
+[00:02:54.330 → 00:03:00.670] that and is now continuing and revising the plan. By correcting the plan here, I'm saving myself
+[00:03:00.670 → 00:03:06.110] potentially hours of untangling messy code later on. I should have also mentioned that I can add a global
+[00:03:06.110 → 00:03:12.590] comment or even attach images to them. Okay, so here's my revised plan. So you can see I can iterate
+[00:03:12.590 → 00:03:18.850] on this as many times as I want, and if I'm ready, I can hit a proof, but if not I can just send it another
+[00:03:18.850 → 00:03:25.100] round of feedback. Okay, so I've given it one more round of comments and I'm pretty happy with it,
+[00:03:25.340 → 00:03:29.950] so I'm going to hit approve and let's see what it does. You see here in that the window says
+[00:03:29.950 → 00:03:34.710] Pi will proceed with the implementation, so let's just follow that and wait for it. What Planetator has
+[00:03:34.710 → 00:03:39.530] done here is to get out of Plan mode and now it's got these steps that's working through.
+[00:03:41.140 → 00:03:46.040] Another thing I'll mention here is that the thinking level here is set to low for the implementation.
+[00:03:46.620 → 00:03:50.780] You can set with Planetator different models and even thinking levels for Planned
+[00:03:50.800 → 00:03:55.280] mode and the implementation. I've pre-configured it, so it's doing that and you can as well.
+[00:03:58.830 → 00:04:03.470] Okay, it looks like Pi has finished working and it's telling me all these things that it's
+[00:04:03.470 → 00:04:08.110] finished doing. Now, I can just take its word for it, of course, or go into an idea and review
+[00:04:08.110 → 00:04:12.710] the code. But here's another nice trick with Planetator, which is this. I can just go
+[00:04:12.710 → 00:04:20.800] to Planetator, review, and it'll pop up a nice diff window that I can look at. And all these different
+[00:04:20.800 → 00:04:23.960] files that's changed, like the blog mapping, the plan itself.
+[00:04:24.040 → 00:04:29.260] and these different scripts are in my diffs, then I can just look at them here.
+[00:04:29.800 → 00:04:33.980] And as I review them, I can make comments as I did with the plan, just in line,
+[00:04:34.460 → 00:04:36.140] like it's a Google Doc or something like that.
+[00:04:36.880 → 00:04:38.720] I'll just review this and leave a couple of comments.
+[00:04:43.920 → 00:04:46.900] And when I leave a comment and send feedback, Pi will iterate again.
+[00:04:47.660 → 00:04:51.780] In this particular instance, for some reason, the agent decided to save the files under the lib
+[00:04:51.780 → 00:04:54.600] directory, and it was getting ignored because of the Git Ignor.
+[00:04:54.840 → 00:04:57.700] So I've asked it to refactor into source,
+[00:04:58.580 → 00:05:02.300] but you notice how easy it was for me to do that just using the commenting function.
+[00:05:03.520 → 00:05:08.040] Great. Now it's done all that and I can review the code again.
+[00:05:11.020 → 00:05:12.720] Great. And all the files are here this time.
+[00:05:14.120 → 00:05:18.240] So you can start to see what this workflow looks like, right? I can review this as thoroughly or
+[00:05:18.240 → 00:05:26.630] as little as I want to. And once I'm done, I can hit approve. Great. And that's my code right there.
+[00:05:27.870 → 00:05:30.170] And I'll just open a new terminal window and commit the code.
+[00:05:32.880 → 00:05:35.540] And for completeness, let's move on to the next step.
+[00:05:35.560 → 00:05:42.810] Okay, so now re-enabled Planetator, and I'll tell it to go ahead and build the rest of the app.
+[00:05:43.600 → 00:05:45.920] Now I'm sure you can imagine how the rest of this is going to go.
+[00:05:46.040 → 00:05:50.620] The agent's going to write more plans. I'm going to review it, and we'll iterate on that,
+[00:05:50.880 → 00:05:53.740] and then once that's done, the agent's going to write the rest of the code.
+[00:05:54.360 → 00:05:58.660] I'll go through the process here at my end, but I'll speed that up a little bit on the video for you.
+[00:05:58.860 → 00:06:01.860] Okay, so here's here's the plan, so I'm just going to leave a couple of comments here.
+[00:06:07.990 → 00:06:10.470] Now the plan looks good to me, so let's just go ahead with that.
+[00:06:13.200 → 00:06:15.240] So the agent tells me that's all done, which is great.
+[00:06:15.600 → 00:06:17.140] Let me review that and try it out.
+[00:06:21.740 → 00:06:24.000] Okay, so we have a TUI that looks pretty good.
+[00:06:24.140 → 00:06:24.800] Let me try a search.
+[00:06:26.720 → 00:06:29.060] Okay, when I search for vector search index options,
+[00:06:29.180 → 00:06:30.680] the result look pretty reasonable.
+[00:06:32.140 → 00:06:33.820] And let's try a rag question.
+[00:06:35.160 → 00:06:36.300] Okay, so that works pretty well.
+[00:06:36.700 → 00:06:39.180] I've asked it whether Elasticsearch can do column of data storage,
+[00:06:39.500 → 00:06:44.020] and it looks like it can, and it's giving me a reasonable answer.
+[00:06:44.990 → 00:06:48.050] Keep in mind that I'm using haiku for a generation here,
+[00:06:48.150 → 00:06:49.470] so I'm not expecting it to be perfect.
+[00:06:50.510 → 00:06:54.150] Once again, I can't review the code and comment and annotate and all that.
+[00:06:54.510 → 00:06:58.270] I won't bore you through with that, but it's the exact same process that you've seen so far.
+[00:06:58.910 → 00:07:02.570] I'll just hit a proof, but I could have just closed it and just committed the code myself.
+[00:07:04.460 → 00:07:05.700] Okay, great, we're all done.
+[00:07:06.160 → 00:07:09.700] You know, plan mode solves a lot of challenges related to AI development,
+[00:07:09.820 → 00:07:13.760] but the tooling around it hasn't been perfect, at least in my opinion.
+[00:07:14.500 → 00:07:17.820] Visual planning and feedback, like what's provided by planotator here,
+[00:07:18.120 → 00:07:20.680] makes it easy to plan, review and code in stages.
+[00:07:21.220 → 00:07:26.680] I think to me that makes the AI more of a pair programmer rather than this unwieldy outsourced resource.
+[00:07:27.290 → 00:07:32.750] For me, this approach puts the human judgment front-end center, right where it has the most leverage, right,
+[00:07:32.910 → 00:07:36.990] to determine architecture and intent and to leave the easy stuff to the AI.
+[00:07:37.890 → 00:07:43.170] Planetator is open source, so we've got the link in the description, and it works with ClaudeCodeCode,
+[00:07:43.170 → 00:07:44.990] open code, pie, all the major harnesses.
+[00:07:45.550 → 00:07:50.230] And if you want an amazing data store to work with your AI models, check out Elasticsearch, of course.
+[00:07:50.230 → 00:07:55.510] As you saw, it's so easy to get your agent to work with it using Lastic Agent's skills, as you saw me do.
+[00:07:55.910 → 00:07:58.190] So we'll leave the links to those resources below.
+[00:07:59.220 → 00:08:03.500] And I'd love to hear about your preferred work mode with AI agents and plan mode.
+[00:08:04.020 → 00:08:05.420] Let me know your preference in the comments.
+[00:08:05.620 → 00:08:06.800] I do read every single one.
+[00:08:07.340 → 00:08:08.920] Okay, thanks everyone, and see you next time.

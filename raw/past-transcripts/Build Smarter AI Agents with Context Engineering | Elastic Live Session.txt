@@ -1,0 +1,389 @@
+[00:00:00.000 → 00:00:05.300] Hello and welcome. I'm John Avis Bakke. The following is a recorded live session hosted by Kathleen
+[00:00:05.300 → 00:00:10.440] DeRuso, a principal software engineer at Elastic. You're going to get to see her go over agent builder,
+[00:00:10.820 → 00:00:15.800] a framework for building context-driven AI agents in Elasticsearch. She'll cover context engineering,
+[00:00:16.020 → 00:00:20.420] custom tools, workflows, and integrations. She'll also answer a couple of questions we had from
+[00:00:20.420 → 00:00:27.870] the audience at the very end. We hope you enjoy. Welcome, everyone. Thank you for joining this virtual
+[00:00:27.870 → 00:00:35.830] session. My name is Uli Sanpayo and I am a community manager here at Elastic. So besides the virtual group,
+[00:00:36.210 → 00:00:42.230] virtual user group, we have many user groups across the globe and I strongly encourage you to
+[00:00:42.230 → 00:00:48.410] join the closest one from you and attend one of the in-person meetups that we're always hosting.
+[00:00:49.030 → 00:00:55.710] If you'd like to present an Elastic related talk, either virtual or in-person, please let me know.
+[00:00:56.210 → 00:00:57.570] And we'll love to make that happen.
+[00:00:57.870 → 00:01:02.950] I'm going to post some links for you to get involved with our community.
+[00:01:03.370 → 00:01:07.850] So don't be a stranger. And I'm passing to my new teammate, John.
+[00:01:08.210 → 00:01:13.830] Thanks, Uli. Hi, everybody. My name is John Abbisbocki. I'm a developer advocate at Elastic.
+[00:01:14.550 → 00:01:21.130] I joined about a month ago. If you attend the in-person New York City meetups, you'll see me around there.
+[00:01:22.410 → 00:01:27.670] But based in New York, we're going to be doing a Q&A session after.
+[00:01:27.870 → 00:01:35.050] Kathleen is done speaking. Many presenters like Kathleen come to our New York meetup and other
+[00:01:35.050 → 00:01:40.450] meetups that we host. So if stuff like this interests you, we welcome you to come by in person and to our
+[00:01:40.450 → 00:01:45.810] other virtual meetups. But yeah, if you have questions in the interim while Kathleen is presenting,
+[00:01:46.740 → 00:01:52.800] feel free to also post them in the Zoom chat, or you can just wait until after she's done presenting.
+[00:01:53.420 → 00:01:56.080] But yeah, with that, I will hand it over to Kathleen.
+[00:02:00.580 → 00:02:01.400] Great. Thank you.
+[00:02:02.520 → 00:02:07.540] So here, let me just start sharing my screen here.
+[00:02:11.090 → 00:02:19.670] All right. So today we're going to be talking about agent builder and specifically how we can provide relevant context for these data-driven agents.
+[00:02:20.660 → 00:02:27.560] But before we begin, I'll introduce myself. So my name is Kathleen DeRuso, and I'm a principal software engineer here at Elastic.
+[00:02:28.260 → 00:02:34.680] For the last three years or so, I've worked on search relevance and semantic search. And more recently, I've started
+[00:02:34.780 → 00:02:40.340] working on the agent builder team where I'm directly working on context engineering and ensuring
+[00:02:40.340 → 00:02:48.190] that we have the best search results for our tools. So what we're going to be talking about today is
+[00:02:48.190 → 00:02:54.230] first we're going to be talking about what are agents and why do we need context engineering. But then I'm
+[00:02:54.230 → 00:02:59.070] going to be talking a little bit about Elastic Agent Builder, what it is, what it's good for, what it does.
+[00:02:59.270 → 00:03:04.030] We'll have a quick demo. And we're also going to talk about some of the newer work that we've been doing
+[00:03:04.030 → 00:03:12.460] future direction and then we can answer any questions that come up. So first off, what are agents?
+[00:03:13.340 → 00:03:22.360] And, you know, does everybody know here what an agent is? So I'm not seeing anything in the Zoom chat,
+[00:03:22.580 → 00:03:31.600] so I'm going to assume that answer is yes. But just to be clear, I'm not talking about 007, James Bond,
+[00:03:32.060 → 00:03:40.000] not that type of double agent. Instead, an AI agent is a software program that can autonomously perform
+[00:03:40.000 → 00:03:46.060] complex tasks by making decisions, learning from its environment, through data, from sources,
+[00:03:46.360 → 00:03:54.510] or sensors, and using tools to achieve goals. And there are many, many different types of agents,
+[00:03:54.970 → 00:04:01.070] and these agents can perform a lot of different tasks in everyday life. So what might an agent do?
+[00:04:01.670 → 00:04:07.390] An agent might be a utility agent that will evaluate actions and make recommendations.
+[00:04:08.050 → 00:04:12.110] Maybe it's going to suggest films and series to watch based on your prior
+[00:04:12.210 → 00:04:17.530] watching history. Or a model-based agent to make real-time decisions based on
+[00:04:17.530 → 00:04:23.730] input from sensors. Maybe a self-driving car would use these agents or even an automated vacuum
+[00:04:23.730 → 00:04:30.040] cleaner. Learning agents that combine data and machine learning to identify patterns and exceptions
+[00:04:30.040 → 00:04:37.060] in cases like fraud detection or AI-generated testing. And there's utility agents that
+[00:04:37.060 → 00:04:42.540] recommend investment decisions based on a person's risk market and existing portfolio to max
+[00:04:42.560 → 00:04:49.120] their return. Or a reactive agent, such as chatbots, smart thermostats that respond directly
+[00:04:49.120 → 00:04:55.200] to reacting to input from users, dialing up and down the temperature, or sensors when the temperature
+[00:04:55.200 → 00:05:03.720] reaches its limit. And we need context engineering because this is what's essential to make sure
+[00:05:03.720 → 00:05:08.320] that agents have the correct information to do the tasks that they need to do and get the
+[00:05:08.320 → 00:05:17.570] information to display to users that we need it to. Now, LLMs are going to take a prompt,
+[00:05:17.590 → 00:05:23.030] to maybe, let's say, a question that you ask in a chatbop, and any associated information
+[00:05:23.030 → 00:05:29.850] to complete that task through what's called a context window. And this is a finite list of tokens
+[00:05:29.850 → 00:05:36.170] that are defined as chunks of content. Not necessarily words, but a lot of times they are. And these
+[00:05:36.170 → 00:05:42.210] chunks and token lists are the size that is easy for them to remember. You know, much like
+[00:05:42.210 → 00:05:46.770] humans, they can only have fit so much in their brain at any given time.
+[00:05:47.720 → 00:05:52.780] And so because of that, it's really important to make sure that relevant information
+[00:05:52.780 → 00:06:00.220] only is in this window. And, you know, the only is really the important part here, because regardless
+[00:06:00.220 → 00:06:05.980] of the agent that you're building, you want to send the minimum amount of information that's
+[00:06:05.980 → 00:06:11.140] correct that the agent can use to perform its task. You don't want to clutter that context window
+[00:06:11.140 → 00:06:17.680] with a whole bunch of unrelated or irrelevant content, then that leads to what's called context rot and
+[00:06:17.680 → 00:06:28.710] worse performance. So a lot of us, probably all of us, have received answers from chat GPT or another
+[00:06:28.710 → 00:06:36.410] LLM that's just not right. And LLMs will hallucinate for a lot of different reasons. The first one being
+[00:06:36.410 → 00:06:43.110] lack of knowledge. Maybe that knowledge isn't passed into the context or, you know, for some information,
+[00:06:43.370 → 00:06:49.450] it might be so new that it's past the model's knowledge cutoff date. Knowledge cutoff dates aren't as big
+[00:06:49.450 → 00:06:54.510] of a deal now because agents can go to the web and search for newer information, but that
+[00:06:54.510 → 00:06:57.150] was definitely a problem about a year ago.
+[00:06:58.180 → 00:07:03.660] What about issues associated with the model? Perhaps the model was overfitted, where the
+[00:07:03.660 → 00:07:08.540] parameters are so tight that the agent can't solve the problem that it's been asked
+[00:07:08.540 → 00:07:14.700] to. There could be biases, either in the training dataset or even the data that's provided
+[00:07:14.700 → 00:07:20.160] as context. And there's also language ambiguity. So just like Lexington, so just like Lexington,
+[00:07:20.180 → 00:07:25.840] when you're searching for a keyword, ambiguous queries can be interpreted in very different
+[00:07:25.840 → 00:07:32.780] and unintended ways. All of these contribute to hallucinations, but they come down to one major
+[00:07:32.780 → 00:07:39.220] theme, and that is the lack of the correct context to perform the job at hand or answer the question
+[00:07:39.220 → 00:07:46.600] at hand. And there's another reason that LLMs hallucinate, and that's actually right down
+[00:07:46.600 → 00:07:52.240] due to their training. The incentives that are awarded to them when training and evaluating
+[00:07:52.260 → 00:07:58.220] LLMs, LLMs are rewarded for guessing rather than simply saying, I don't know.
+[00:07:58.760 → 00:08:03.200] So those hallucinations are often baked right into their training and training in that behavior.
+[00:08:06.820 → 00:08:13.180] So I've talked a lot about why context is important, but what is it? And context engineering
+[00:08:13.180 → 00:08:19.220] is a set of techniques that we can use to manage the information environment that we give to
+[00:08:19.220 → 00:08:24.860] those large language models, to ensure that it performs the right actions and generates the right
+[00:08:24.860 → 00:08:32.960] results using the correct data for the job. And most people by now have heard about
+[00:08:32.960 → 00:08:37.940] prompt engineering. That's been an established term for a lot longer than context engineering.
+[00:08:38.580 → 00:08:42.680] And prompt engineering is part of context engineering, but it's not the whole picture.
+[00:08:43.660 → 00:08:49.260] Prompt engineering focuses on tweaking the messages and the instructions that we send to LLMs
+[00:08:49.260 → 00:08:55.440] to give very precise, complete instructions for what we want. And prompt engineering is what
+[00:08:55.440 → 00:09:00.680] comes up when we say things like make no mistakes or don't make up data. You know,
+[00:09:00.960 → 00:09:09.070] that is all part of prompt engineering. Context engineering, on the other hand, includes optimizing
+[00:09:09.070 → 00:09:13.690] the prompt. That is a big part of it. But there's also other elements in the context window,
+[00:09:14.150 → 00:09:20.910] tools and skills and attachments of data that will help, you know, augment your query.
+[00:09:21.670 → 00:09:25.530] And we'll perform, we'll provide all of that access to all of those tools,
+[00:09:25.530 → 00:09:31.730] all of those skills, all of that memory, that LLMs can perform any actions that need to be done
+[00:09:31.730 → 00:09:40.610] using the tools that are provided. And that's where Elastic Agent Builder comes in. It's a relatively
+[00:09:40.610 → 00:09:47.270] new framework within the Elastic Stack. It just went GA with Version 9-3. And it allows you to easily
+[00:09:47.270 → 00:09:53.950] build reliable, context-driven AI agents in Elasticsearch with the data that you already have
+[00:09:53.950 → 00:09:59.350] within Elasticsearch. And Agent Builder provides a layer for
+[00:09:59.370 → 00:10:06.230] for building AI-agentic workflows, where we use hybrid search, blending that text search
+[00:10:06.230 → 00:10:11.990] and semantic search using our semantic text field. And we use that to provide agents with the
+[00:10:11.990 → 00:10:18.560] context that they need to reason and act on the data in your Elastic Search entities. We provide
+[00:10:18.560 → 00:10:24.720] a default agent, but you can perform your own custom agents to do key tasks for you or
+[00:10:24.720 → 00:10:29.420] to specialize the exact responses that you want. You can create a
+[00:10:29.440 → 00:10:35.280] ESQL-based tools that can be used by your agents to pull your data as context to the
+[00:10:35.280 → 00:10:42.800] LLM. And in addition to those pre-built tools, you, or in addition to the pre-built tools that we
+[00:10:42.800 → 00:10:48.600] have that will generate and run ESQL queries based on natural language, search index metadata,
+[00:10:48.840 → 00:10:52.800] pull documents, and anything that you really need to interact with your Elasticsearch
+[00:10:52.800 → 00:11:01.110] search indices. So, okay, what are you doing with Agent Builder then? What can Agent Builder do?
+[00:11:01.110 → 00:11:05.730] well, the obvious is chatting with your data, using a default agent or your own
+[00:11:05.730 → 00:11:11.750] built-in agent that you build. You can leverage our built-in tools where we do a lot of context engineering
+[00:11:11.750 → 00:11:16.130] to make sure that, for example, the search relevance tool is going to provide results that are
+[00:11:16.130 → 00:11:22.070] meaningful. You can find relevant indices, understand the data structure, generate, execute
+[00:11:22.070 → 00:11:30.570] queries, write your own custom ESQL queries that the tools can run, but it gets more sophisticated than that.
+[00:11:30.570 → 00:11:35.150] you can generate visualizations and dashboards off the back of tool results.
+[00:11:35.670 → 00:11:41.790] We can provide full tracing of the LLM steps, the tool calls, the responses that are happening
+[00:11:41.790 → 00:11:48.150] as you chat with your agent. And of course, it wouldn't be useful if it didn't integrate with
+[00:11:48.150 → 00:11:54.490] external agents and apps. So you can use MCP, which is a Model Context Protocol or A2A,
+[00:11:55.250 → 00:12:00.210] Agent to Agent Protocol. And this is all baked right into our APIs and they're accessible through
+[00:12:00.210 → 00:12:08.940] Kibana. And, you know, both the default agent and agents that you create are going to follow the same
+[00:12:08.940 → 00:12:14.840] standard flow that's going to generate and return the correct result to the user. So you're going to
+[00:12:14.840 → 00:12:21.880] take a user query as a text prompt and the LLM is going to interpret your input and figure out exactly
+[00:12:21.880 → 00:12:28.480] what you want. It's then going to select and run the right tool or often tools and pass the relevant
+[00:12:28.480 → 00:12:33.260] parameters from your query. So, for example, if you're searching your data, the LLM
+[00:12:33.280 → 00:12:38.320] is going to come up with a search string to use as it's searching the indices that it's
+[00:12:38.320 → 00:12:44.240] already figured out it wants to search. And then once it gets the results, it's going to parse those,
+[00:12:44.380 → 00:12:49.820] it's going to look at it, and it's going to decide, has the objective been achieved? Do I have enough
+[00:12:49.820 → 00:12:55.820] to generate a final answer? If not, it repeats that whole process of tool selection and
+[00:12:55.820 → 00:13:02.340] analysis and loops on that up until either it has that right answer and final answer, but that it
+[00:13:02.340 → 00:13:06.740] delivers to you, or it hits the break limit where I might say that it can't find it.
+[00:13:10.010 → 00:13:15.010] So here's a screenshot of a lot of the built-in tools that we already provide out of the box
+[00:13:15.010 → 00:13:19.830] for Agent Builder. And you can see there's a lot of, you know, standard things. You know,
+[00:13:20.030 → 00:13:26.530] we can execute and generate ESQL from natural language. We can get documents or get index
+[00:13:26.530 → 00:13:34.810] mappings or list out indices that we want. We can, you know, we cannot perform searches. And then there
+[00:13:34.830 → 00:13:39.590] a lot of newer tools, and I'll get to these on a little bit, but workflows and integration
+[00:13:39.590 → 00:13:45.690] knowledge. And these tools are always, you know, we're updating them all the time and we're starting
+[00:13:45.690 → 00:13:52.690] to incorporate them into skills. But, you know, the real flexibility here is that you can also
+[00:13:52.690 → 00:14:02.140] create tools for your own use cases and for your own complexity. And we also do provide default
+[00:14:02.140 → 00:14:07.820] LLMs. So right now in serverless and in 993, we're, we default.
+[00:14:07.840 → 00:14:13.700] the Claude Sonnet 45. And we expose this via the Elastic Inference Service by default.
+[00:14:13.940 → 00:14:19.550] We call this, we pronounce it ice. We have several built-in connectors that are powered by ICE,
+[00:14:19.970 → 00:14:27.210] including Opus 46, GPT-52, and we're constantly updating these. However, you don't have to use ice.
+[00:14:27.390 → 00:14:33.750] You can create your own LLM connector that uses an AI connector, you know, put your own credentials
+[00:14:33.750 → 00:14:37.950] in, you know, any way that you want to get to that LLLN.
+[00:14:37.970 → 00:14:47.270] you can, and it's very flexible. So, all right, this is the point where we want to do a little bit
+[00:14:47.270 → 00:14:55.160] of a demo and show you a little bit of what Agent Builder looks like. So here I have a,
+[00:14:55.400 → 00:15:01.520] just a standard run-of-the-mill serverless environment. I just spun this up today and it's completely
+[00:15:01.520 → 00:15:10.320] empty right now. So what I'm going to do is I am going to just create a new topics document,
+[00:15:10.320 → 00:15:13.620] and I'm going to index one document in this index.
+[00:15:14.540 → 00:15:17.140] And we're going to make this text super simple.
+[00:15:18.120 → 00:15:24.080] LLMs are autonomously using tools in a loops. So forgive the syntax here.
+[00:15:25.220 → 00:15:30.700] And now here on the left NAF bar, I'm going to go to agents, and this comes up with a pretty standard
+[00:15:30.700 → 00:15:38.280] chat box. So all right, let's start by interacting with our data. And the very first thing that I'm
+[00:15:38.280 → 00:15:41.000] going to do is say what indices are available.
+[00:15:42.100 → 00:15:48.600] And what the agent is going to do is it's going to consult its tools. And it's going to, you know,
+[00:15:48.740 → 00:15:54.340] you can see the reasoning that it's happening here. It's listing the indices. And then it's going to
+[00:15:54.340 → 00:15:59.790] tell me that I've got one index and that's the topics index that I just created. All right,
+[00:15:59.910 → 00:16:06.480] so let's interact with this index right now. And I am going to ask it to find documents that are
+[00:16:06.480 → 00:16:12.210] mentioning an LLM. Now, this one is going to be interesting because I expect this.
+[00:16:12.270 → 00:16:19.000] query to fail. And the reason that this is going to fail is remember that I indexed about
+[00:16:19.000 → 00:16:28.480] LLMs, plural. And I'm specifically asking this to mention an LLM in singular. And tech search is still
+[00:16:28.480 → 00:16:37.360] tech search, and we're going to run into that. So we're going to be searching these documents, and,
+[00:16:37.560 → 00:16:44.170] you know, we're going to see that the response returned no results, just as we thought. And, you know,
+[00:16:44.170 → 00:16:50.430] the agent's going to say no documents were returned. All right. So now I'm going to ask,
+[00:16:50.630 → 00:16:58.190] what is an agent? And if you recall, uh, when I index this, agent was the document ID. However,
+[00:16:58.690 → 00:17:03.170] again, I expect this to fail because the search tool is not going to be searching the,
+[00:17:03.170 → 00:17:08.410] in the unique document IDs. It's only going to be searching the text and the content in the
+[00:17:08.410 → 00:17:16.600] index. So because this is taking the, uh, it, uh, uh, uh, this into consideration,
+[00:17:18.060 → 00:17:22.360] you know, it's performing that core search tool and it does return zero results.
+[00:17:23.200 → 00:17:29.960] Now, some of the LLMs, including Sonnet 4-5 today, are going to come up and say,
+[00:17:30.260 → 00:17:36.100] well, they do know enough about what an agent is to give an answer, but, you know, you can see as we
+[00:17:36.100 → 00:17:43.210] show the receipts here that, unfortunately, that isn't backed on our data. So let's make this
+[00:17:43.210 → 00:17:48.490] demo a little bit more interesting, and we'll add some mappings. And, you know,
+[00:17:48.550 → 00:17:50.470] just like everything else with Elasticsearch,
+[00:17:50.910 → 00:17:53.970] mappings are still very highly relevant and important.
+[00:17:55.650 → 00:17:59.770] So here, I've got now a term field and a definition field,
+[00:18:00.910 → 00:18:03.210] and my term is either agent or MCP,
+[00:18:03.430 → 00:18:05.690] and then I've got some text around these.
+[00:18:06.860 → 00:18:09.220] So now, if I go back to the agent builder,
+[00:18:10.380 → 00:18:13.220] I'm going to ask it to find a document on AAL models,
+[00:18:13.800 → 00:18:17.260] and I would assume that it's going to find the MCP document.
+[00:18:21.020 → 00:18:22.880] So we're going to analyze the request.
+[00:18:22.880 → 00:18:24.360] and we're going to search.
+[00:18:25.040 → 00:18:30.820] And if you look at this, hey, that's the document that we returned, that MCP document.
+[00:18:32.030 → 00:18:39.070] And now the agent is going to respond right in the chat of exactly what, you know, what this document has.
+[00:18:40.600 → 00:18:43.160] Now, maybe that's not the right one.
+[00:18:43.440 → 00:18:49.080] Maybe I wanted that other document based on the term field and not the definition.
+[00:18:49.800 → 00:18:51.440] So how would I do this?
+[00:18:51.680 → 00:18:54.080] And I can go to the agent.
+[00:18:54.680 → 00:19:10.180] Now, before, I wasn't ever able to edit the elastic agent, but now that we're adding additional functionality here, you can add, update the tools that are in this agent as well and serverless, but you can also create your own new agent.
+[00:19:10.760 → 00:19:17.980] And in here, you know, you can, you know, you can call it a, oops, that was a hotkey that I did not mean to do.
+[00:19:18.560 → 00:19:23.460] You can call it a custom agent, and you can give it whatever instructions that you want.
+[00:19:24.820 → 00:19:28.780] Sometimes for demos, we say talk like a pirate, but I won't do that today.
+[00:19:29.930 → 00:19:35.170] But, you know, we've got some standard boilerplate of, you know, it's a knowledgeable and helpful agent.
+[00:19:35.470 → 00:19:39.690] You know, you can talk about the integrity and the boundaries and the tone that we want.
+[00:19:40.900 → 00:19:45.080] And then we can, you know, we can create this as a custom agent.
+[00:19:45.680 → 00:19:52.160] And you can also see that, you know, it has some predefined tools that are available to you.
+[00:19:53.520 → 00:19:55.640] And I'll just describe the, uh, a lot of that you can also see that we know, it has some predefined tools that are available to you.
+[00:19:55.640 → 00:20:01.670] save this. And, you know, by default, for the custom agent is going to have, you know,
+[00:20:02.030 → 00:20:07.570] search tools, document tools, mappings. And you can look at any other tools that you want to use
+[00:20:07.570 → 00:20:17.230] here, or the most powerful thing is you can create your own. So if I am going to, let's see,
+[00:20:20.220 → 00:20:33.880] where is, we just updated the UI here. And let me bring the tools UI. We've got agent pulled
+[00:20:33.960 → 00:20:36.480] and I'll go back here and look at the tools.
+[00:20:37.900 → 00:20:41.980] So if I want to create a new tool, let's create an ESQL tool.
+[00:20:43.630 → 00:20:47.650] And here I want just to get those matching topics.
+[00:20:48.820 → 00:20:50.680] And here, you know, I've got that topics table.
+[00:20:50.900 → 00:20:52.220] I want to do a match query.
+[00:20:52.500 → 00:20:54.520] I want to get the first best matching topic.
+[00:20:54.860 → 00:20:56.380] And I want to do this match on term.
+[00:20:57.560 → 00:21:05.020] And here term is a parameter, and I can infer these parameters right with, you know, right through
+[00:21:05.140 → 00:21:11.140] and then all I have to do is add a description of what this parameter is, whether it's optional,
+[00:21:11.500 → 00:21:16.420] if there's a default value. Right now I'm going to make it required with no default value. So we
+[00:21:16.420 → 00:21:34.700] always have to add that. So if I test this, I'll call it a custom term tool and see. We'll let it
+[00:21:34.700 → 00:21:45.920] save. And what I want to do is if I, if I now search for agent, then I get exactly the definition that had
+[00:21:46.540 → 00:21:48.940] LLM's autonomously using tools in a loops.
+[00:21:50.790 → 00:21:53.430] So that's great, but what about semantic search?
+[00:21:53.650 → 00:21:56.030] That's the bread and butter of Elasticsearch search search.
+[00:21:56.950 → 00:21:59.030] Well, that will work out of the box.
+[00:21:59.510 → 00:22:05.810] So I'm going to redo this Topics Index, but I am going to make a semantic index.
+[00:22:07.210 → 00:22:12.650] So here, I'm just going to use ELSA for our embeddings model through the Elastic Inference Service.
+[00:22:13.330 → 00:22:16.410] And, you know, I just re-indexed those two documents.
+[00:22:16.410 → 00:22:19.650] So everything is good to go with that semantic index right now.
+[00:22:21.020 → 00:22:28.860] So now, if I go back to those tools and add, I'll add yet another tool, but now I'll add
+[00:22:28.860 → 00:22:35.180] a semantic search here. So, you know, same exact type of query where I'm matching the actual,
+[00:22:35.720 → 00:22:44.210] you know, the actual term. We're still going to be looking for the term. The term to be looking for the
+[00:22:44.210 → 00:22:47.930] the term to search for, and then we're going to say, you know, this is a custom
+[00:22:47.930 → 00:23:01.300] semantic term. And then we can save it and we can test this one. And now, if I, if I want to do this,
+[00:23:01.380 → 00:23:10.290] let's say worker is a synonym for agent. And you can see here that agent does come up. And I can,
+[00:23:11.550 → 00:23:19.320] if I go back to that custom agent and let's see, you all agents, I can add that semantic search
+[00:23:19.320 → 00:23:23.700] tool to my custom agent very easily. It's just a point.
+[00:23:23.720 → 00:23:30.990] and click, I'll add the semantic term one. Okay. And now it's, it's quite easy to go back
+[00:23:30.990 → 00:23:37.070] to the chatbot, select the agent that I want, and then ask something like how many term
+[00:23:37.070 → 00:23:45.320] definitions are there. And this one probably won't use that new custom agent search. It'll probably
+[00:23:45.320 → 00:23:51.620] just do account, but you should definitely get the right answer by either way using all of these
+[00:23:51.620 → 00:24:02.310] tools. So here we're generating that ESQL definition. And, uh, you know,
+[00:24:02.330 → 00:24:08.530] it's a pretty boiler plate. Now, Agent Builder can generate some pretty sophisticated queries here,
+[00:24:08.750 → 00:24:17.590] so it's sometimes cool to see what it does with ESQL. And we're looking here and it's, it sees those
+[00:24:17.590 → 00:24:27.870] two term definitions. Similarly, what document has term that means worker? And again, that's where we
+[00:24:27.870 → 00:24:35.040] we should use this tool. Now, as we're looking at this and looking at the parameters that we're sending
+[00:24:35.040 → 00:24:41.980] into these tools. And well, this time the LLM decided to use, okay, it did use semantic
+[00:24:41.980 → 00:24:49.320] term, and it called that ESQL, it found the one result, and it did find that agent document. So this
+[00:24:49.320 → 00:24:55.910] should remind you a lot of stored procedures. But maybe since it's driven by LLMs, you know, think of it as
+[00:24:55.910 → 00:25:03.310] an agentic store procedure. And there's a lot more to come with, you know, some of the other things that we've been
+[00:25:03.310 → 00:25:12.830] doing lately. So I'll just go through this demo. Now, we've recently added workflows as
+[00:25:12.830 → 00:25:19.590] a technical preview feature in 9-3, but these are declarative, composable workflows that you
+[00:25:19.590 → 00:25:27.990] define in YAML. And there's triggers and inputs and steps that you can use as you're going through
+[00:25:27.990 → 00:25:34.710] and defining these workflows, including an AI agent step. And that AI agent set. And that AI agents that
+[00:25:34.810 → 00:25:41.170] will allow you to invoke agents right from within that workflow. And then if we go back
+[00:25:41.170 → 00:25:49.670] to Agent Builder and if we go back to the tools that we have here, we actually have a platform
+[00:25:49.670 → 00:25:56.930] workflows tools. And we can get the, you know, the workflow execution status. And we can get,
+[00:25:57.550 → 00:26:03.010] you know, information about all of these workflow agents that are we're using. So there's a lot of
+[00:26:03.010 → 00:26:08.690] interrupt our ability here with Agent Builder. And not only can you expose the tools
+[00:26:08.690 → 00:26:15.410] to Agent Builder from these workflows, but you're also going to, you know, this is where if you want
+[00:26:15.410 → 00:26:23.310] a very sophisticated query that maybe ESQL can't support, or if you have a very customizable query
+[00:26:23.310 → 00:26:28.130] template that you want to use, or custom business roles, workflows would allow you to get that
+[00:26:28.130 → 00:26:32.950] extra level of customizable tool to customize ability into your agent builder tools right out of the
+[00:26:35.460 → 00:27:04.200] And, we're adding new features, new skills, everything, you know, serverless has quite frequent deployments. And, you know, we have amazing resources that I highly recommend that you look at. Search Labs is a great place to start. There's Agentic AI and there's, you know, tutorials on how to use workflows, how to use Agent Builder, how to do really sophisticated things with Agent Builder. And we've also just
+[00:27:04.260 → 00:27:08.380] wrapped up a hackathon with Agent Builder where people have built amazing tools using this.
+[00:27:09.060 → 00:27:16.110] And it's, you know, it's been really exciting to see. So with that, I want to see if anybody has any
+[00:27:16.110 → 00:27:34.150] questions. Hi, I have a question. Yeah. So you mentioned at the beginning the memories, so
+[00:27:35.390 → 00:27:40.760] LLM need to keep all this context in the memory. If we work in the memory, if we work in
+[00:27:40.780 → 00:27:47.640] with very large volumes of data, huge indexes, maybe number of indexes and creating
+[00:27:47.640 → 00:27:58.830] this workflow agents or whatever to interrogate this data. How this agents work, working behind
+[00:27:58.830 → 00:28:04.910] the scenes with all this context. Is it in memory? How it's optimized? That's a really good
+[00:28:04.910 → 00:28:10.790] question. And I think there's two parts to it. So first of all, when we're using
+[00:28:10.790 → 00:28:15.050] things like the index search tool? We're not sending the entirety of the index. We're
+[00:28:15.050 → 00:28:20.470] only sending the search results that come back. And specifically, we're only, we're not
+[00:28:20.470 → 00:28:24.930] even sending the whole document. We're sending in the most relevant snippets that represent
+[00:28:24.930 → 00:28:31.010] the document. That's important because it limits the amount of context. We're only giving the
+[00:28:31.010 → 00:28:38.150] LLM enough context to know what the documents are about. Hopefully, you know, the ideal is that it'll be
+[00:28:38.150 → 00:28:43.930] enough information and the best snippet information for them to get the right answer. But
+[00:28:43.930 → 00:28:49.410] if it's not and it's just enough to provide that scent that this is the right document, then and only
+[00:28:49.410 → 00:28:54.550] then the agent can pull the document and get more information on it. So we try to really limit that
+[00:28:54.550 → 00:29:01.930] context, even if you have a very large, large index. But LLMs itself, a lot of this is going to be
+[00:29:01.930 → 00:29:08.130] passed through to the LLM that you choose to use. So when you're looking at, um, at, at, at, at, at,
+[00:29:08.150 → 00:29:10.390] you know, what model that you want to use.
+[00:29:11.050 → 00:29:16.950] If you're, if, if you need some of the really big, um, context windows, then you probably don't want
+[00:29:16.950 → 00:29:22.110] to use the default clouds on it. You know, they just released a one million context windows
+[00:29:22.110 → 00:29:27.790] with Opus or, you know, some of the newer, um, you know, kind of higher performing and higher
+[00:29:27.790 → 00:29:32.590] context models might be more performant for your specific needs. That's something that you'll
+[00:29:32.590 → 00:29:35.290] have to look at with benchmarking and things like that.
+[00:29:37.720 → 00:29:46.900] Are these models hosted within Elastic environment or they kind of use in actual Anthropic
+[00:29:46.900 → 00:29:56.690] or whatever other companies, LLMs, like how this context is using this LLMs?
+[00:29:56.850 → 00:30:03.300] Is it going directly to the actual companies or it's bounded by Elastic?
+[00:30:03.720 → 00:30:07.860] Yeah, that's a great question. And I think it depends on which model you're used.
+[00:30:07.880 → 00:30:14.100] using. But our inference service does use Amazon Bedrock and some other services under the
+[00:30:14.100 → 00:30:21.660] hood. That should be very transparent and, you know, depending on which model that we're doing.
+[00:30:22.280 → 00:30:28.000] But no, we're not actually hosting these, but we're letting you put your, yeah, and similarly when you
+[00:30:28.000 → 00:30:32.540] create a connector for an AI connector, if you don't want to use the inference service, you would be
+[00:30:32.540 → 00:30:37.860] putting your credentials for the LLM of choice in, and then it would be acting as a
+[00:30:37.880 → 00:30:47.220] pass through. So if we have an elastic SaaS environment on Azure, we can use Azure
+[00:30:47.220 → 00:31:00.220] open AI to connect, to use LLMs from there. Yeah, so we have, let's see, let's see,
+[00:31:00.360 → 00:31:12.080] we've got a bunch of AI connectors here. These are self-managed connectors. I think it's
+[00:31:12.080 → 00:31:21.640] AI settings here. So we have, there is a space on here where we can get or create AI
+[00:31:21.640 → 00:31:28.940] connectors. And you'll have to forgive me here because we change serverless so frequently that
+[00:31:28.940 → 00:31:32.900] sometimes I have to click around a little bit. But here in the connectors, yeah, you can use an
+[00:31:32.900 → 00:31:38.880] AI connector and then you can select a whole bunch of different services that you would want,
+[00:31:39.040 → 00:31:40.820] including Azure Open AI.
+[00:31:42.240 → 00:31:46.880] And then, you know, you'd just be putting in, you know, what your resource, your API, your API key.
+[00:31:47.520 → 00:31:52.680] We don't, obviously, we don't say, you know, persist your raw API key, so you just need to re-enter it each time.
+[00:31:52.920 → 00:32:02.460] And then, you know, you can select other settings as needed, including defining a specific context window that you want this connector to use.
+[00:32:03.020 → 00:32:12.220] Once you created this connector, it would, when you went to agent chat, it would show up in this list of, of, of connectors.
+[00:32:13.880 → 00:32:19.720] Is it only for serverless or is it working for self-managed SOS?
+[00:32:19.780 → 00:32:30.120] That is a great question. And yes, you, so what we have is it's Agent Builder went GI with 9-3.
+[00:32:30.960 → 00:32:41.820] So what I can do here is I'm going to throw a link in the Zoom chat. So forgive me as I'm looking it up on my other monitor here here.
+[00:32:43.180 → 00:32:47.260] But we've launched what's called a cloud-connected mode.
+[00:32:47.920 → 00:32:57.300] And that is, if you're not in cloud and you're on self-hosted, let's see, I can, here's the link.
+[00:32:57.320 → 00:32:58.260] We are on cloud.
+[00:32:58.460 → 00:32:59.340] We're on Elastic Cloud.
+[00:33:00.000 → 00:33:00.620] Okay, great.
+[00:33:01.840 → 00:33:03.700] But not serverless.
+[00:33:05.130 → 00:33:05.650] It's different.
+[00:33:06.230 → 00:33:06.370] Yep.
+[00:33:06.990 → 00:33:07.390] So, yep.
+[00:33:07.950 → 00:33:12.790] So for newer versions of Elastic Search, so let me just kind of.
+[00:33:14.430 → 00:33:18.890] I've got a 931 deployment all ready to go here.
+[00:33:19.820 → 00:33:25.530] And if I go into my 931 deployment, it's going to look very, very similar.
+[00:33:25.790 → 00:33:27.150] I still have my agent chat.
+[00:33:27.690 → 00:33:34.330] And we still have this by default is going to be connected to the Elastic Inference Service.
+[00:33:34.530 → 00:33:38.150] So these are all the models by default that go through that Elastic Inference Service.
+[00:33:38.270 → 00:33:41.490] But you do still have that ability to create an AI connector.
+[00:33:42.170 → 00:33:43.170] And the link that I.
+[00:33:43.190 → 00:33:48.670] I put in the Zoom chat is if anybody is on prem, you can actually add cloud connected mode
+[00:33:48.670 → 00:33:53.850] if you want to connect to that Elastic Inference service and have everything available out of the box.
+[00:33:54.490 → 00:34:00.470] And it requires you to have a cloud account and it just connects to an API key, but it should work pretty
+[00:34:00.470 → 00:34:05.490] transparently. And it's any time that I'm running Elasticsearch locally for testing, that's what I've
+[00:34:05.490 → 00:34:07.050] been using and it works really well.
+[00:34:08.970 → 00:34:11.690] Okay. I see. Thank you.
+[00:34:12.130 → 00:34:12.430] Yeah.
+[00:34:20.640 → 00:34:23.460] Maybe one, maybe two questions.
+[00:34:25.120 → 00:34:29.080] So I get it how it works with like query or whatever.
+[00:34:30.180 → 00:34:38.820] Just out of curiosity, can I ask agent or whatever to create a dashboard for me in Kibana?
+[00:34:39.320 → 00:34:40.360] You can.
+[00:34:40.940 → 00:34:47.620] Now, I don't know if I have some great, great indices here because this is a test index.
+[00:34:49.970 → 00:34:54.530] But yes, we do have dashboard creations in Agent Builder.
+[00:34:55.710 → 00:34:56.610] Let's see.
+[00:35:02.780 → 00:35:07.920] So I do have some, I've got some test data here.
+[00:35:08.160 → 00:35:09.820] So I'm going to just try this.
+[00:35:10.220 → 00:35:17.820] Now, this is going to be completely like off the cuff because I, this is all test data that I am not really sure.
+[00:35:18.020 → 00:35:21.860] This is just my kind of a little test cloud deployment here of network logic.
+[00:35:24.270 → 00:35:36.310] activity. But while that's spinning, let's see here, if I can find any good documentation
+[00:35:36.310 → 00:36:00.900] on this, because this is a pretty new, new feature. And let's see, I'll let's see. I'll let that
+[00:36:00.900 → 00:36:08.060] go. I don't know if there is a great resource that I can easily find and link yet. But yes,
+[00:36:08.060 → 00:36:24.010] creating visualizations is going to be something that, you know, it's newly developed right now. So it might not be a 9-3-1. But yeah, if it's not there, it is definitely coming very soon.
+[00:36:27.000 → 00:36:40.830] Okay. Oh, here we go. So here I've got, now this is, again, this is silly test data. So it kind of is what it is, but it can at least show you what the functionality here is. So we've got traffic over.
+[00:36:40.850 → 00:36:46.890] time and we've got, you know, a scatter plot here. We can edit that visualization. We can save it as a saved
+[00:36:46.890 → 00:37:09.650] object. And then it can explain to you what that dashboard is. And then if I, if I save it, then, you know, I can give it a title. I can, you know, I can give it a title. I can, you know, I'll say it's a new
+[00:37:09.650 → 00:37:14.620] dashboard. And there we have it. And, and, and.
+[00:37:16.320 → 00:37:17.900] Very cool. That's great.
+[00:37:19.100 → 00:37:34.340] Yeah. It's something that we're really excited about. And the other thing that is something that we're also excited about is something that we're also excited about is the ability to use attachments. And you can, there's a lot of built-in ways that you can add these attachments to your chat.
+[00:37:34.520 → 00:37:46.020] So, for example, from this dashboard, if I click AI agent here, this is the observability agent. I don't know if it should, yeah, this isn't in 9-degree 1, but in newer,
+[00:37:46.060 → 00:37:52.020] versions, you'll actually see these and they'll be sent into the agent as an attachment so it can
+[00:37:52.020 → 00:37:55.180] read the dashboard and then it can make conclusions based on that.
+[00:37:59.410 → 00:38:13.560] Okay. Thank you so much. Yeah, thank you for the question. Anybody have any other questions?
+[00:38:20.300 → 00:38:27.560] Hey, Kathleen. We received a question by email from someone that could not attend. So maybe you
+[00:38:27.560 → 00:38:33.160] can cover that question as well and he can watch the recording later. His question is,
+[00:38:33.180 → 00:38:38.060] what if I want to use a lot of tools more than the agent builder allows?
+[00:38:38.920 → 00:38:46.000] Yeah, that is a great question. And so one of the things that we are looking at is we are,
+[00:38:46.200 → 00:38:52.420] we are packaging up skills. And unfortunately, since this is a live serverless,
+[00:38:52.560 → 00:38:58.380] I don't have a demo of this, but we will be packaging up skills where we can give it a list of tools.
+[00:38:58.560 → 00:39:02.960] And then, you know, as we're moving to that way, it's just very similar to how you might use
+[00:39:02.960 → 00:39:08.320] you know, cloud code code or cursor where we're going to be packaging these up in skills and then
+[00:39:08.320 → 00:39:15.620] you can read the skill and utilize that. And then that skill will know what tools to use. So that's
+[00:39:15.620 → 00:39:23.680] going to be something that's going to be very helpful to, you know, to users who have, who want to use
+[00:39:23.680 → 00:39:30.620] more sophisticated workflows as well as just having the right tools in context and not loading up tools in
+[00:39:30.620 → 00:39:36.480] memory. Because the other kind of, you know, because we need to protect the context,
+[00:39:37.260 → 00:39:42.960] if we're looking at the tools today, you know, this one has six active tools, but we only allow
+[00:39:42.960 → 00:39:49.140] 24. So if you want, you know, that 25th tool, it does have to be packaged up as a skill
+[00:39:49.140 → 00:39:57.360] and sent in that way. The other thing that we are doing for tools is we're trying to make the existing
+[00:39:57.360 → 00:40:03.680] tools that we have for, for our built-in tools, you know, fully functional. For example,
+[00:40:04.260 → 00:40:08.560] you know, we have one search tool. And then that will decide whether, you know, we're using
+[00:40:08.560 → 00:40:19.220] ESQL or we're using relevant search under the hood with other methods. Well, the other question
+[00:40:19.220 → 00:40:24.840] was the tool creation UI doesn't have a lot of options. What can I do if I want to use
+[00:40:24.840 → 00:40:29.670] templates or more sophisticated queries? That is a great question.
+[00:40:29.690 → 00:40:37.110] So let's first look at the tool creation UI. And I know we went through this in the demo.
+[00:40:38.390 → 00:40:43.110] So actually, I'll go back to the serverless demo that actually has those tools defined.
+[00:40:44.290 → 00:40:51.770] And if I look at those tools, what we're talking about when we're talking about it not being that
+[00:40:53.650 → 00:40:59.930] expansive is, okay, I can send in parameters. I can send in, you know, describe
+[00:41:00.010 → 00:41:06.060] this, I've got the type, and then whether it's optional, with a default value. That's it.
+[00:41:06.910 → 00:41:12.230] But what if there's, you know, what if I'm a power user of Elastic Search and I have a search
+[00:41:12.230 → 00:41:18.530] template with a lot of optional parameters or default parameters, or what if I want to,
+[00:41:19.290 → 00:41:24.390] you know, not necessarily send in all of these parameters? Like, I just don't, I don't want to
+[00:41:24.390 → 00:41:29.790] send, you know, I don't want to send anything into that template if it's not going to be a default. I
+[00:41:29.790 → 00:41:34.850] want to minimize the chance of an LLM sending in the wrong parameter, for example.
+[00:41:36.200 → 00:41:43.750] This is kind of hard to do right now. And this is where workflows comes in, where you're going to
+[00:41:43.750 → 00:41:51.290] set up a workflow using that custom YAML syntax. And, you know, maybe ESQL doesn't have all of the
+[00:41:51.290 → 00:41:59.750] functionality that we need yet. One great example is the idea of business roles. So if you want to do
+[00:41:59.750 → 00:42:06.290] query rules or use a rule query to, you know, filter out and exclude certain documents from your
+[00:42:06.290 → 00:42:14.830] LLM. You can do that by generating a query using the rule retriever and, and setting that all up. But that is
+[00:42:14.830 → 00:42:21.170] impossible to do here through the built-in ESQL tool. So the short answer is workflows, and they're
+[00:42:21.170 → 00:42:26.250] constantly getting better as well and more capable. So while they are tech preview right now,
+[00:42:26.790 → 00:42:34.550] they're going to be a really exciting area, and that's what you're going to want to do for any sort of templated query.
+[00:42:36.770 → 00:42:41.730] Thank you for watching. If you enjoyed that, we encourage you to attend one of our meetups either digitally or live.
+[00:42:42.150 → 00:42:46.130] Feel free to post any questions below, and remember to like and subscribe. We'll see you again soon.

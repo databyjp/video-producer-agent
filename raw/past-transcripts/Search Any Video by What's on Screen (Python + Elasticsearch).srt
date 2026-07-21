@@ -1,0 +1,607 @@
+1
+00:00:00,270 --> 00:00:02,770
+I watch a lot of videos these days.
+
+2
+00:00:03,330 --> 00:00:06,510
+For me, it's a good way to learn about new developments or look for inspiration.
+
+3
+00:00:07,430 --> 00:00:09,990
+But I've found video search a little bit inadequate.
+
+4
+00:00:11,140 --> 00:00:14,140
+Don't get me wrong, they work really well for searching things by content,
+
+5
+00:00:14,600 --> 00:00:20,260
+but maybe not so much if I want to find clips with, say, code examples or clips that look a certain way.
+
+6
+00:00:21,380 --> 00:00:25,240
+And that's because video search typically ignores the actual visual part of the video.
+
+7
+00:00:25,940 --> 00:00:30,540
+Instead, searches use text better data like the title and the description, or the video.
+
+8
+00:00:30,560 --> 00:00:37,500
+transcript. So I built this application. When I run a search here, the app finds clips by matching
+
+9
+00:00:37,500 --> 00:00:43,180
+my query to each clip's visual and audio components. Think about how much easier it would be
+
+10
+00:00:43,180 --> 00:00:47,740
+to search clips like this, if you had videos containing a particular product or maybe a
+
+11
+00:00:47,740 --> 00:00:52,860
+background object. Today, I'll show you how I built this app and what's going on under
+
+12
+00:00:52,860 --> 00:00:57,160
+the hood. I'll provide the code base which you can run for free so you can adapt it
+
+13
+00:00:57,160 --> 00:00:59,480
+for your own video search application as well.
+
+14
+00:01:00,980 --> 00:01:04,420
+into it starting with why this problem exists in the first place.
+
+15
+00:01:05,000 --> 00:01:09,440
+The main reason that video searches don't actually use visuals is simple. We just
+
+16
+00:01:09,440 --> 00:01:14,660
+haven't had good ways to search videos while we're really good at text search. But if you think
+
+17
+00:01:14,660 --> 00:01:19,840
+about it, it's not ideal that a video search isn't actually based on what's on the screen. It's
+
+18
+00:01:19,840 --> 00:01:25,360
+a bit like Minecraft without mining or crafting. It might work, but it ignores a critical piece
+
+19
+00:01:25,360 --> 00:01:30,880
+and it's also just deeply unsatisfying, in my opinion. And I think we can do better than that by
+
+20
+00:01:31,260 --> 00:01:37,240
+in video-enabled multimodal embedding models. You probably know what embedding models are. They
+
+21
+00:01:37,240 --> 00:01:42,240
+power vector search by capturing the meaning of text into a series of numbers. The more similar
+
+22
+00:01:42,240 --> 00:01:48,820
+the meanings, the closer the embeddings. Multimodal embeddings can convert not just text, but other media
+
+23
+00:01:48,820 --> 00:01:55,050
+like images. One famous example of this being the clip family of models. Some models like
+
+24
+00:01:55,050 --> 00:02:01,310
+GNA's V5 Omni family can do this for even more modalities like audio or video, meaning that you can
+
+25
+00:02:01,330 --> 00:02:06,730
+can even embed sounds like a cat meowing into a microphone, and the results would be close to the
+
+26
+00:02:06,730 --> 00:02:13,100
+embedding of the text cat. That's what powers the app you saw at the start, and while embedding
+
+27
+00:02:13,100 --> 00:02:19,710
+a video sounds complex, it's actually relatively straightforward. As a user, the code can be as simple
+
+28
+00:02:19,710 --> 00:02:24,850
+as this if you're using an API to embed your media. You simply send a video, for example,
+
+29
+00:02:25,350 --> 00:02:31,320
+and get back on embedding. And the architecture to build an app like mine isn't too complicated either.
+
+30
+00:02:32,130 --> 00:02:35,990
+If you've used vector search before, this should seem familiar to you.
+
+31
+00:02:36,790 --> 00:02:41,630
+But there are few key decisions that you should be aware of, so let's take a look, starting with chunking.
+
+32
+00:02:42,290 --> 00:02:47,610
+Chunking just means splitting up the input. For text, that means cutting up a long document into shorter
+
+33
+00:02:47,610 --> 00:02:52,810
+texts. This means a search can match and return a specific part of your document,
+
+34
+00:02:53,490 --> 00:02:57,950
+so a search with good chunking will return the right passage rather than saying the answer is
+
+35
+00:02:57,950 --> 00:03:02,360
+somewhere in a document. That same need exists in video retrieval.
+
+36
+00:03:02,380 --> 00:03:09,500
+You can imagine it's not so useful for a video search to return the entire meeting recording or even a 15 minute YouTube video.
+
+37
+00:03:09,940 --> 00:03:13,580
+It would be so much better for the search to return a specific clip.
+
+38
+00:03:14,440 --> 00:03:20,160
+But how should you chunk a video? Well, in my opinion, there are three main strategies that you should consider.
+
+39
+00:03:20,600 --> 00:03:26,280
+These are chunking by fixed length, by semantics using the transcript, and by visual changes.
+
+40
+00:03:27,540 --> 00:03:32,160
+And the good news is you can apply any of these using commonly available open source libraries.
+
+41
+00:03:32,760 --> 00:03:38,140
+Just like text, fixed length chunking is basic but robust. It allows you to be as granular
+
+42
+00:03:38,140 --> 00:03:44,400
+as you want by setting the length of each clip. Or you could generate a transcript and apply a text-based
+
+43
+00:03:44,400 --> 00:03:50,280
+chunking method. This is especially good where the spoken word dominates, like meetings or instructional videos.
+
+44
+00:03:51,180 --> 00:03:57,090
+So once you chunk the text, you can use the generated timestamps to cut the videos. But this next
+
+45
+00:03:57,090 --> 00:04:02,170
+chunking method might be the most interesting of mold. I think of it as the semantic chunking, but
+
+46
+00:04:02,170 --> 00:04:07,350
+applies to visuals, not words. Let's call this scene-based or visual chunking.
+
+47
+00:04:07,900 --> 00:04:12,040
+And you don't have to reinvent the wheel to do this either. There are existing tools like Pi
+
+48
+00:04:12,040 --> 00:04:16,720
+Scene Detect, which will look at the movie, detect any changes in the visual characteristics
+
+49
+00:04:16,720 --> 00:04:22,480
+and output a list of scene boundaries. All you have to do then is to get those scene markers
+
+50
+00:04:22,480 --> 00:04:27,820
+and split the video using another tool. The result being a set of scenes that reflect
+
+51
+00:04:27,820 --> 00:04:32,280
+the creator's visual choices like these. Or change in the visual like a change in the
+
+52
+00:04:32,300 --> 00:04:36,280
+shot in a film or changing graphics typically leads to separate scenes.
+
+53
+00:04:37,160 --> 00:04:40,680
+And once you've set up chunking, there's just one more decision to make before creating
+
+54
+00:04:40,680 --> 00:04:45,240
+embeddings. That is deciding what to embed. And let me explain what I mean by that.
+
+55
+00:04:45,920 --> 00:04:50,740
+Our video is composed of really three layers of information. The visual layer, the speech
+
+56
+00:04:50,740 --> 00:04:55,820
+layer, and the audio layer. Now I'm counting audio and speech separately here, which you
+
+57
+00:04:55,820 --> 00:05:00,500
+might find surprising. Well, that's because there's plenty of information in sound that's
+
+58
+00:05:00,500 --> 00:05:02,040
+not speech like this.
+
+59
+00:05:11,740 --> 00:05:14,520
+This clip has a lot of audio, but no speech.
+
+60
+00:05:15,490 --> 00:05:20,210
+You can think of other examples like music, animal noises and so on, which isn't speech,
+
+61
+00:05:20,610 --> 00:05:22,270
+but carries plenty of information.
+
+62
+00:05:23,350 --> 00:05:27,450
+Embedding models like Gina's OmniModel give you the options to capture as much of these as you
+
+63
+00:05:27,450 --> 00:05:32,070
+want, meaning that embeddings can be based on any one, or even any combination of these
+
+64
+00:05:32,070 --> 00:05:32,750
+three layers.
+
+65
+00:05:33,700 --> 00:05:37,260
+And you should make this choice based on your goals and the nature of your videos.
+
+66
+00:05:37,780 --> 00:05:41,140
+If you're primarily needing visual inspiration or assets, maybe you should be able to be.
+
+67
+00:05:41,160 --> 00:05:43,120
+You just want the visual embedding by itself.
+
+68
+00:05:43,680 --> 00:05:47,880
+But if you're often looking through, say, meetings, you might want to concentrate on the speech,
+
+69
+00:05:48,320 --> 00:05:49,620
+maybe just via the transcript.
+
+70
+00:05:50,440 --> 00:05:55,140
+You can actually save multiple embeddings per clip too with Elasticsearch, and it's not a problem
+
+71
+00:05:55,140 --> 00:05:57,940
+since the model puts them all into the same embedding space.
+
+72
+00:05:58,740 --> 00:06:01,380
+Let me show you what I did for this demo app and why.
+
+73
+00:06:02,290 --> 00:06:06,650
+My goal was to build a library of clips from talks and so on to find technical information,
+
+74
+00:06:07,290 --> 00:06:10,050
+but also I wanted to see how information was presented.
+
+75
+00:06:10,770 --> 00:06:11,170
+So I chose to show you.
+
+76
+00:06:11,190 --> 00:06:15,190
+I chose to create two embeddings per video, one embedding based on the speech from the
+
+77
+00:06:15,190 --> 00:06:18,210
+transcript, and another one combining the audio and the visual.
+
+78
+00:06:19,160 --> 00:06:22,360
+Here, I extract the audio from the video clip with FFMPEG.
+
+79
+00:06:22,840 --> 00:06:26,460
+Both the video and the audio files are provided to the model together like this,
+
+80
+00:06:26,940 --> 00:06:28,300
+which produces one embedding.
+
+81
+00:06:29,380 --> 00:06:34,260
+And second, I produced an embedding of the transcript by passing the transcript file into the model.
+
+82
+00:06:35,250 --> 00:06:37,830
+Let's go back to that Kindle search you saw at the start of the video.
+
+83
+00:06:38,630 --> 00:06:41,650
+That result, as you can see from the little badge here, comes from a little badge here,
+
+84
+00:06:41,670 --> 00:06:43,750
+from the combined audio-visual embedding.
+
+85
+00:06:44,370 --> 00:06:47,270
+For this search, the clip's transcript is irrelevant
+
+86
+00:06:47,660 --> 00:06:49,690
+and wouldn't have been useful at all.
+
+87
+00:06:50,520 --> 00:06:52,240
+And you know, I was trying different queries,
+
+88
+00:06:52,620 --> 00:06:54,440
+and I came across an interesting result.
+
+89
+00:06:55,260 --> 00:06:57,400
+I found that when I searched for the word Batman,
+
+90
+00:06:57,980 --> 00:07:00,320
+it finds this clip of me as the best hit.
+
+91
+00:07:00,920 --> 00:07:04,140
+Now, it's not that the models uncovered my tortured past
+
+92
+00:07:04,140 --> 00:07:07,800
+and secret identity, I think instead what's happening is this.
+
+93
+00:07:08,280 --> 00:07:11,620
+The video embedding is taking this background Batman figure
+
+94
+00:07:11,860 --> 00:07:17,120
+into account and identifying these clips as the closest hits to Batman, even though
+
+95
+00:07:17,120 --> 00:07:19,300
+it's just a small background item in the video.
+
+96
+00:07:20,060 --> 00:07:23,800
+And that's a nice segue into what it all means and some of the trade-offs.
+
+97
+00:07:24,280 --> 00:07:28,500
+Because there are a few things you should be aware of and some things that I do differently,
+
+98
+00:07:29,040 --> 00:07:30,180
+even for this demo app.
+
+99
+00:07:31,010 --> 00:07:35,230
+One thing for you to keep in mind is that vector embeddings are deep learning models and aren't
+
+100
+00:07:35,230 --> 00:07:36,770
+necessarily very explainable.
+
+101
+00:07:37,390 --> 00:07:40,550
+This is a big difference to keyword or 25 searches.
+
+102
+00:07:41,230 --> 00:07:41,910
+Keyword searches.
+
+103
+00:07:41,990 --> 00:07:46,610
+are based on exact matches and a formula, so you can easily verify and explain them.
+
+104
+00:07:47,350 --> 00:07:51,630
+But embedding models are deep learning models, which are notorious black boxes.
+
+105
+00:07:52,230 --> 00:07:53,930
+Let's take that Batman search, for example.
+
+106
+00:07:54,650 --> 00:07:59,170
+There I can take a pretty good educated guess as to why that clip of me with a Batman figure
+
+107
+00:07:59,170 --> 00:08:01,430
+is the closest one in the library.
+
+108
+00:08:02,190 --> 00:08:07,230
+But it's basically impossible for you to know for sure, and I wouldn't be able to break down how
+
+109
+00:08:07,230 --> 00:08:11,970
+much of the embedding's meaning comes from the figure as opposed to everything else in that embedding.
+
+110
+00:08:11,990 --> 00:08:17,000
+In some fields, that lack of explainability may be an issue.
+
+111
+00:08:17,540 --> 00:08:21,980
+Now, just to be clear, all vector searches have this limitation of low explainability.
+
+112
+00:08:22,240 --> 00:08:27,280
+So this isn't unique to video searches, but you should be aware of it as a general issue.
+
+113
+00:08:28,160 --> 00:08:31,560
+My second note is that video embeddings are based on sampling.
+
+114
+00:08:32,400 --> 00:08:39,000
+The Gina model that I used here creates each embedding based on up to 32 sampled frames of a video.
+
+115
+00:08:39,890 --> 00:08:42,270
+That means as the source video gets longer,
+
+116
+00:08:42,630 --> 00:08:45,430
+and the more scene changes, the more information will be missed.
+
+117
+00:08:46,070 --> 00:08:49,330
+This is another very important reason to get chunking right.
+
+118
+00:08:50,460 --> 00:08:57,040
+Speaking of which, I used scene-based chunking, but on reflection, maybe I think that might not have been the best choice.
+
+119
+00:08:58,190 --> 00:09:01,170
+Most of these videos that I've collected here are technical videos.
+
+120
+00:09:01,950 --> 00:09:06,950
+Though they're not like Hollywood movies, these videos don't involve much camera movements or set changes.
+
+121
+00:09:07,710 --> 00:09:12,390
+Instead, technical videos are largely script-driven, with the visuals being somewhat secondary.
+
+122
+00:09:13,080 --> 00:09:19,140
+So thinking about it again, I actually think semantic chunking based on the script may have been better.
+
+123
+00:09:19,600 --> 00:09:23,400
+Lastly, you should be aware of the time taken to process and embed these videos.
+
+124
+00:09:24,000 --> 00:09:31,060
+I'm running everything for this demo locally on my MacBook Pro using open source elastic search and open weight versions of Gina models.
+
+125
+00:09:31,780 --> 00:09:37,820
+But between the video processing and using the V5 Omni small model, my little Mac is doing a fair bit of work.
+
+126
+00:09:38,300 --> 00:09:42,900
+So if you need real-time embeddings of videos, or have a lot of videos to process,
+
+127
+00:09:43,460 --> 00:09:48,140
+I'd recommend that you try it out and make sure that the processing time is acceptable to you
+
+128
+00:09:48,140 --> 00:09:51,640
+because video processing and embedding takes a fair bit of compute.
+
+129
+00:09:52,420 --> 00:09:56,160
+And you know, that's to be expected, and if you have access to GPUs,
+
+130
+00:09:56,380 --> 00:09:59,560
+you'll probably be able to do this much faster than me on my laptop.
+
+131
+00:10:00,200 --> 00:10:04,880
+You can also use the Gina API to generate embeddings and just pay for what you use,
+
+132
+00:10:05,360 --> 00:10:07,240
+which might be a great solution for many of you.
+
+133
+00:10:08,120 --> 00:10:12,640
+With all that said, I hope I was able to convince you that video search can and should be better.
+
+134
+00:10:12,640 --> 00:10:18,340
+that you can find the right clips by what's on the screen, by what was said, or some combination
+
+135
+00:10:18,340 --> 00:10:18,920
+of those.
+
+136
+00:10:19,600 --> 00:10:22,960
+As I said, the repo for this application is available on GitHub.
+
+137
+00:10:23,680 --> 00:10:26,440
+And to use it, just clone the repo and follow the ReadMe.
+
+138
+00:10:26,880 --> 00:10:29,280
+It's just a few commands set up and get going.
+
+139
+00:10:30,470 --> 00:10:35,550
+And as I said, I've built this with the open source version of Elasticsearch and the Openweight Gina model.
+
+140
+00:10:36,290 --> 00:10:41,830
+Note that for commercial use, you should use the Gina API or talk to Elastic Sales Team if you
+
+141
+00:10:41,830 --> 00:10:42,970
+want to self-host the model.
+
+142
+00:10:43,600 --> 00:10:48,640
+Now, I built this app to search my technical content library, but I'd also love to hear
+
+143
+00:10:48,640 --> 00:10:50,620
+what you might use these tools for.
+
+144
+00:10:50,820 --> 00:10:56,380
+Is it internal meetings, a library of personal videos, or maybe you're a cat videos and memes mogul?
+
+145
+00:10:57,160 --> 00:11:00,940
+Let me know in the comments because I do read all of them, and I'm super interested to hear what
+
+146
+00:11:00,940 --> 00:11:02,060
+you do with these models.
+
+147
+00:11:02,900 --> 00:11:07,380
+In fact, I'd love it if you just want to say hi on the comments, because I do sometimes one
+
+148
+00:11:07,380 --> 00:11:08,780
+day if anyone watches this far.
+
+149
+00:11:09,180 --> 00:11:13,000
+I'll tell you what, if you ever write high in the comments, I promise I'll write
+
+150
+00:11:13,020 --> 00:11:17,480
+back. If this video was useful, please give us a like and subscribe to the channel
+
+151
+00:11:17,480 --> 00:11:21,040
+because it does help others like you discover the content and make use of it.
+
+152
+00:11:22,230 --> 00:11:24,190
+Okay, thanks everyone and I'll see you shortly.

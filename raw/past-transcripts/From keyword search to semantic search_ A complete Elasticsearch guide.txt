@@ -1,0 +1,133 @@
+[00:00:00.050 → 00:00:01.770] Hello and welcome back.
+[00:00:02.530 → 00:00:07.550] What if I told you that Elasticsearch now makes semantic search as simple as writing a regular text query?
+[00:00:08.150 → 00:00:14.650] Today we're going to journey through the evolution of search, from traditional keyword matching to modern AI-powered semantic understanding.
+[00:00:15.410 → 00:00:21.370] I'll touch upon some important milestones on the way and recommend best practices to feature specific search use cases.
+[00:00:21.730 → 00:00:25.430] We'll use a sample e-commerce data set to compare different search methods,
+[00:00:26.050 → 00:00:30.030] and I'll show you why ultimately the semantic text field type is about the change.
+[00:00:30.050 → 00:00:32.210] how you think about search implementation.
+[00:00:32.970 → 00:00:37.010] Spoiler alert, it's ridiculously simple compared to what we used to do.
+[00:00:37.770 → 00:00:39.850] By the end of this video, you'll understand why.
+[00:00:40.570 → 00:00:41.170] Let's dive in.
+[00:00:41.770 → 00:00:45.510] Let's start with the baseline, traditional lexical search using BM25.
+[00:00:46.450 → 00:00:48.430] This is what most of us have been using for years.
+[00:00:49.090 → 00:00:52.690] I've got an e-commerce data set with over 2,500 products loaded in.
+[00:00:53.310 → 00:00:57.910] Let's search for comfortable furniture for a large balcony using a simple match query.
+[00:00:58.590 → 00:00:59.830] And here are results.
+[00:00:59.830 → 00:01:03.540] The top hit is a Barbie dream house.
+[00:01:04.480 → 00:01:07.440] So that's not exactly what I had in mind for my balcony.
+[00:01:08.510 → 00:01:11.630] This happened because lexical search matches exact keywords.
+[00:01:12.190 → 00:01:15.650] The Barbie dream house has furniture in its description, so it matched.
+[00:01:16.230 → 00:01:18.510] But sadly, I won't fit in a Barbie lounger.
+[00:01:19.520 → 00:01:24.540] Lexical search is fast and simple, but it suffers from vocabulary mismatch.
+[00:01:25.220 → 00:01:29.680] It finds exact word matches, but misses the meaning behind what we're actually looking for.
+[00:01:29.680 → 00:01:33.640] What if we want semantic understanding, not just keyword matching?
+[00:01:34.500 → 00:01:37.180] Enter semantic search with dense and sparse vectors.
+[00:01:37.500 → 00:01:42.420] Released in Elasticse Search 8.4, this approach uses embedding models to understand meaning.
+[00:01:42.940 → 00:01:45.380] But wow, look at all this setup complexity.
+[00:01:46.330 → 00:01:48.430] Find the right embedding model for your use case.
+[00:01:48.910 → 00:01:53.830] Then make sure you create an index mapping of the vector with the correct dimensions and similarity algorithm.
+[00:01:54.230 → 00:01:58.510] This method also required us to configure inference pipelines, if not done locally.
+[00:01:59.170 → 00:01:59.690] Create a configuration.
+[00:01:59.710 → 00:02:01.590] to receive incoming data,
+[00:02:01.970 → 00:02:04.710] and assign an embedding model to convert the data into a vector.
+[00:02:05.410 → 00:02:08.850] Make sure you have no compute power to do this, otherwise you'll suffer from latency.
+[00:02:09.590 → 00:02:10.850] And look at this query structure.
+[00:02:11.390 → 00:02:12.210] Just look at it.
+[00:02:12.690 → 00:02:18.410] You need to understand vector fields, embedding models, and then configure candidates and similarity algorithms.
+[00:02:19.050 → 00:02:19.830] But here's the thing.
+[00:02:20.330 → 00:02:21.930] The results are actually much better.
+[00:02:22.530 → 00:02:27.310] We're now finding outdoor patio furniture without the word outdoor even being in our query.
+[00:02:27.810 → 00:02:29.690] The model understands that BALPATO furniture,
+[00:02:29.690 → 00:02:32.310] Furniture typically means outdoor furniture.
+[00:02:33.010 → 00:02:33.350] The catch?
+[00:02:34.010 → 00:02:36.330] This was way too complex for most use cases.
+[00:02:36.850 → 00:02:41.530] You're doing all the heavy lifting, managing models, handling vectors, writing complex queries.
+[00:02:41.970 → 00:02:42.990] There has to be a better way.
+[00:02:43.750 → 00:02:44.330] But fear not.
+[00:02:45.050 → 00:02:51.050] Our recent developments have addressed all of this, and inference pipelines and complex mappings are virtually a thing of the past.
+[00:02:51.850 → 00:02:52.590] And here it is.
+[00:02:53.170 → 00:02:53.870] The Game Changer.
+[00:02:54.470 → 00:02:55.990] Meet Semantic Text.
+[00:02:56.990 → 00:02:59.670] Elasticsearch 8.15's newest field type that
+[00:02:59.690 → 00:03:02.630] that makes semantic search as simple as regular text search.
+[00:03:03.450 → 00:03:04.370] Let me show you the difference.
+[00:03:05.390 → 00:03:07.930] Just change your field type in query like normal text.
+[00:03:08.490 → 00:03:09.410] That's it for the mapping.
+[00:03:10.210 → 00:03:12.690] Just specify the field type in which model to use.
+[00:03:13.610 → 00:03:16.370] Elasticsearch handles all the vector magic behind the scenes.
+[00:03:16.990 → 00:03:19.950] It automatically embeds text data you store in the field.
+[00:03:20.710 → 00:03:25.430] No more inference pipelines to configure and manage and no more machine learning nodes to monitor.
+[00:03:25.950 → 00:03:29.450] The most recent addition to the Elasticsearch text embedding model list,
+[00:03:29.690 → 00:03:33.370] is Gina Embedding's V5 running on the Elastic Inferred Service,
+[00:03:33.910 → 00:03:38.810] which makes it easy for developers to add fast, high quality, and reliable semantic retrieval
+[00:03:38.810 → 00:03:41.550] for search, rag, and agentic applications.
+[00:03:42.550 → 00:03:47.190] EIS offers fully managed GPU-powered inference with ready-to-use models,
+[00:03:47.710 → 00:03:50.170] no additional setup or hosting complexity required.
+[00:03:51.050 → 00:03:52.530] Oh, and here's the query.
+[00:03:53.230 → 00:03:55.550] Clean, readable, and intuitive.
+[00:03:56.210 → 00:03:59.670] No more vector dimensions, no more complex K&N structure,
+[00:03:59.690 → 00:04:01.790] But here's the beautiful part.
+[00:04:02.190 → 00:04:04.910] We get the exact same high quality semantic results.
+[00:04:05.570 → 00:04:10.070] Same model understanding, same relevance, but with zero complexity on your end.
+[00:04:10.790 → 00:04:11.730] The benefits are huge.
+[00:04:12.270 → 00:04:13.490] Automatic model management.
+[00:04:14.070 → 00:04:15.450] No pipeline setup required.
+[00:04:15.930 → 00:04:18.930] Clean queries and the same great semantic results.
+[00:04:19.390 → 00:04:22.730] It's like having a semantic search expert built into your field type.
+[00:04:23.260 → 00:04:26.920] But there's another approach that might just be the perfect solution.
+[00:04:27.360 → 00:04:28.560] Hybrid search.
+[00:04:29.000 → 00:04:29.700] The best of both.
+[00:04:29.720 → 00:04:32.980] worlds was released in Elasticsearch 8.16.
+[00:04:33.540 → 00:04:39.020] What if you could get lexical precision and semantic understanding in a single search?
+[00:04:39.840 → 00:04:46.060] This uses something called reciprocal rank fusion, or RRF, released in Elasticsearch 8.16.
+[00:04:46.520 → 00:04:51.540] Think of it as a smart referee that takes results from both lexical and semantic search,
+[00:04:51.920 → 00:04:55.760] then combines them into one ranked list based on what performs best.
+[00:04:56.340 → 00:04:59.800] Once those two results sets are merged, you can use a semantic
+[00:04:59.820 → 00:05:01.280] re-ranker.
+[00:05:01.380 → 00:05:03.860] Semantic re-rankers use machine learning models,
+[00:05:04.160 → 00:05:07.280] such as our cross-encoder models like Gina Rer V3,
+[00:05:07.780 → 00:05:11.640] to reorder search results based on their semantic similarity to a query.
+[00:05:12.300 → 00:05:16.100] Released with full endpoint support in Elasticsearchase 8.18,
+[00:05:16.620 → 00:05:20.340] this technique operates in real-time on a small top-k results set
+[00:05:20.340 → 00:05:25.300] and can be integrated into search retrieval methods like hybrid search using RRF.
+[00:05:25.580 → 00:05:28.900] An example query structure shows a text similarity re-ranker
+[00:05:28.900 → 00:05:29.960] can wrap an RRRF.
+[00:05:29.980 → 00:05:37.120] RRF Retriever, incorporating semantic search and keyword search before AI re-ranking the top results in a single API call.
+[00:05:37.420 → 00:05:41.440] Here's what's amazing. The query structure is still simple.
+[00:05:41.960 → 00:05:47.260] You're just defining two retrievers, one for exact keyword matching and one for semantic understanding,
+[00:05:47.840 → 00:05:50.420] and wrapping them up in two ranking modifiers.
+[00:05:50.940 → 00:05:55.480] The results are incredible. You get the precision of exact matches when they matter,
+[00:05:56.060 → 00:05:58.980] plus the intelligence of semantic search for broader understanding.
+[00:05:58.980 → 00:06:03.670] No complex vector management, no cluttered response to clean up.
+[00:06:04.480 → 00:06:09.400] When would you use hybrid search? There's a lot of examples we can think of with our e-commerce item list.
+[00:06:09.700 → 00:06:16.320] Product catalogs where users might search for exact model numbers or descriptive needs like waterproof hiking boots.
+[00:06:17.130 → 00:06:28.050] Parts look up where brake pad Mazda CX5 2016 needs exact matching, but replacement parts for sensible U.S. crossover needs semantic understanding.
+[00:06:28.370 → 00:06:36.770] Fashion retail, where red dress size 8, requires precision, but elegant evening wear, needs contextual understanding.
+[00:06:37.370 → 00:06:42.670] This is perfect for production environments where you want comprehensive search coverage without the complexity.
+[00:06:43.090 → 00:06:46.130] Lastly, what if you prefer SQL-style queries?
+[00:06:46.710 → 00:06:49.990] Meet ESQL, released in Elasticsearch 8.14.
+[00:06:50.350 → 00:06:54.630] This is a SQL-like query language, and it works beautifully with semantic text.
+[00:06:54.890 → 00:06:56.470] Look how natural this is.
+[00:06:56.470 → 00:07:02.350] ESQL automatically detects the semantic text field type and run semantic search.
+[00:07:03.150 → 00:07:07.350] You see text, but underneath, it's leveraging vectors for semantic understanding.
+[00:07:08.240 → 00:07:12.000] Same great semantic results, but now in a familiar SQL syntax.
+[00:07:12.180 → 00:07:16.620] This is perfect when you need complex data manipulation alongside search,
+[00:07:17.060 → 00:07:19.020] or when your team is more comfortable with SQL.
+[00:07:19.700 → 00:07:25.020] Think analytics, reporting, or complex data transformations combined with semantic search,
+[00:07:25.280 → 00:07:26.480] all in one query.
+[00:07:26.500 → 00:07:32.470] language. So here's my recommendation based on your needs. Start with semantic search.
+[00:07:33.390 → 00:07:39.050] It gives you 80% of the benefits with 10% of the complexity. Clean, simple, and powerful.
+[00:07:39.930 → 00:07:46.730] Level up with hybrid search using RRF. Combines semantic text with lexical search for comprehensive coverage.
+[00:07:47.470 → 00:07:51.190] You get exact matches when they matter and semantic understanding when you need it.
+[00:07:52.050 → 00:07:56.550] Maximize relevance with a Ranking. Add a text similarity Reranker on
+[00:07:56.570 → 00:08:01.070] top of your hybrid search to intelligently reorder results based on semantic similarity.
+[00:08:01.910 → 00:08:07.010] This gives you the most sophisticated search experience in a single, straightforward API call.
+[00:08:07.730 → 00:08:13.970] Remember, the combination of hybrid search with RRF and semantic re-ranking is the future of search.
+[00:08:14.290 → 00:08:17.610] It's simple, effective, and it just works.
+[00:08:17.850 → 00:08:21.810] I've linked a complete notebook and rundown of search scenarios in a description,
+[00:08:22.230 → 00:08:26.250] along with the originating article that started the journey through our search method history.
+[00:08:26.250 → 00:08:29.150] Great search is now just a field type of way.
+[00:08:29.670 → 00:08:32.150] How will you implement these best practices in your application?
+[00:08:33.070 → 00:08:37.350] Let us know in the comments below or start the conversation in our Discuss and Slack forums.
+[00:08:38.070 → 00:08:44.050] Also check out our Elasticsearch Labs blog for content on a leading edge of gaining the most insight out of your data.
+[00:08:44.710 → 00:08:46.470] Thanks for watching and happy searching.

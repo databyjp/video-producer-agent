@@ -1,0 +1,3351 @@
+{
+  "source": "/Users/jphwang/code/agent-sandboxes/video-producer/raw/past-videos/I Changed the Company Policy Mid-Demo… and the AI Obeyed Instantly.mp4",
+  "language": "en",
+  "language_probability": 1,
+  "segments": [
+    {
+      "id": 1,
+      "start": 0.0,
+      "end": 8.28,
+      "text": "Most Gen A.I. Tools act like a librarian. You find a document, summarize the text, and leave it up to the model to guess if you're compliant.",
+      "avg_logprob": -0.10586466901004314,
+      "no_speech_prob": 0.0013580183731392026,
+      "words": [
+        {
+          "word": " Most",
+          "start": 0.0,
+          "end": 0.58,
+          "probability": 0.9606218338012695
+        },
+        {
+          "word": " Gen",
+          "start": 0.58,
+          "end": 0.82,
+          "probability": 0.7687970399856567
+        },
+        {
+          "word": " A",
+          "start": 0.82,
+          "end": 1.04,
+          "probability": 0.12876124680042267
+        },
+        {
+          "word": ".I.",
+          "start": 1.04,
+          "end": 1.08,
+          "probability": 0.989416092634201
+        },
+        {
+          "word": " Tools",
+          "start": 1.46,
+          "end": 1.46,
+          "probability": 0.834460437297821
+        },
+        {
+          "word": " act",
+          "start": 1.46,
+          "end": 1.74,
+          "probability": 0.9982782602310181
+        },
+        {
+          "word": " like",
+          "start": 1.74,
+          "end": 1.9,
+          "probability": 0.9996520280838013
+        },
+        {
+          "word": " a",
+          "start": 1.9,
+          "end": 2.04,
+          "probability": 0.9997093081474304
+        },
+        {
+          "word": " librarian.",
+          "start": 2.04,
+          "end": 2.56,
+          "probability": 0.9923993945121765
+        },
+        {
+          "word": " You",
+          "start": 3.32,
+          "end": 3.34,
+          "probability": 0.9906702041625977
+        },
+        {
+          "word": " find",
+          "start": 3.34,
+          "end": 3.56,
+          "probability": 0.9997460246086121
+        },
+        {
+          "word": " a",
+          "start": 3.56,
+          "end": 3.66,
+          "probability": 0.9993795156478882
+        },
+        {
+          "word": " document,",
+          "start": 3.66,
+          "end": 4.08,
+          "probability": 0.9997764229774475
+        },
+        {
+          "word": " summarize",
+          "start": 4.7,
+          "end": 4.92,
+          "probability": 0.9859668612480164
+        },
+        {
+          "word": " the",
+          "start": 4.92,
+          "end": 5.2,
+          "probability": 0.9995206594467163
+        },
+        {
+          "word": " text,",
+          "start": 5.2,
+          "end": 5.54,
+          "probability": 0.999772846698761
+        },
+        {
+          "word": " and",
+          "start": 6.14,
+          "end": 6.14,
+          "probability": 0.999666690826416
+        },
+        {
+          "word": " leave",
+          "start": 6.14,
+          "end": 6.3,
+          "probability": 0.9996813535690308
+        },
+        {
+          "word": " it",
+          "start": 6.3,
+          "end": 6.42,
+          "probability": 0.9996463060379028
+        },
+        {
+          "word": " up",
+          "start": 6.42,
+          "end": 6.58,
+          "probability": 0.9998927116394043
+        },
+        {
+          "word": " to",
+          "start": 6.58,
+          "end": 6.68,
+          "probability": 0.9988928437232971
+        },
+        {
+          "word": " the",
+          "start": 6.68,
+          "end": 6.82,
+          "probability": 0.9996639490127563
+        },
+        {
+          "word": " model",
+          "start": 6.82,
+          "end": 7.16,
+          "probability": 0.9992344379425049
+        },
+        {
+          "word": " to",
+          "start": 7.16,
+          "end": 7.42,
+          "probability": 0.9960648417472839
+        },
+        {
+          "word": " guess",
+          "start": 7.42,
+          "end": 7.58,
+          "probability": 0.9995964169502258
+        },
+        {
+          "word": " if",
+          "start": 7.58,
+          "end": 7.72,
+          "probability": 0.9989184141159058
+        },
+        {
+          "word": " you're",
+          "start": 7.72,
+          "end": 7.84,
+          "probability": 0.9942314624786377
+        },
+        {
+          "word": " compliant.",
+          "start": 7.84,
+          "end": 8.28,
+          "probability": 0.9992700219154358
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "start": 8.8,
+      "end": 14.38,
+      "text": "Hi, I'm James Williams, Elasticsearchist. Today, I'm showing you an architecture that acts like a lawyer.",
+      "avg_logprob": -0.10586466901004314,
+      "no_speech_prob": 0.0013580183731392026,
+      "words": [
+        {
+          "word": " Hi,",
+          "start": 8.8,
+          "end": 9.02,
+          "probability": 0.9901559352874756
+        },
+        {
+          "word": " I'm",
+          "start": 9.34,
+          "end": 9.42,
+          "probability": 0.9997884035110474
+        },
+        {
+          "word": " James",
+          "start": 9.42,
+          "end": 9.72,
+          "probability": 0.999728262424469
+        },
+        {
+          "word": " Williams,",
+          "start": 9.72,
+          "end": 10.26,
+          "probability": 0.9825872778892517
+        },
+        {
+          "word": " Elasticsearchist.",
+          "start": 10.4,
+          "end": 11.46,
+          "probability": 0.9794200301170349
+        },
+        {
+          "word": " Today,",
+          "start": 12.06,
+          "end": 12.26,
+          "probability": 0.9996570348739624
+        },
+        {
+          "word": " I'm",
+          "start": 12.42,
+          "end": 12.44,
+          "probability": 0.9995670914649963
+        },
+        {
+          "word": " showing",
+          "start": 12.44,
+          "end": 12.7,
+          "probability": 0.9998689889907837
+        },
+        {
+          "word": " you",
+          "start": 12.7,
+          "end": 12.84,
+          "probability": 0.9844726920127869
+        },
+        {
+          "word": " an",
+          "start": 12.84,
+          "end": 12.94,
+          "probability": 0.9976596832275391
+        },
+        {
+          "word": " architecture",
+          "start": 12.94,
+          "end": 13.34,
+          "probability": 0.9994195699691772
+        },
+        {
+          "word": " that",
+          "start": 13.34,
+          "end": 13.52,
+          "probability": 0.9998577833175659
+        },
+        {
+          "word": " acts",
+          "start": 13.52,
+          "end": 13.78,
+          "probability": 0.9997960925102234
+        },
+        {
+          "word": " like",
+          "start": 13.78,
+          "end": 13.92,
+          "probability": 0.9998064637184143
+        },
+        {
+          "word": " a",
+          "start": 13.92,
+          "end": 14.08,
+          "probability": 0.9999728202819824
+        },
+        {
+          "word": " lawyer.",
+          "start": 14.08,
+          "end": 14.38,
+          "probability": 0.9997345805168152
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "start": 15.04,
+      "end": 23.62,
+      "text": "Instead of just retrieving text, our agent uses Elasticsearch to find and hot load executable business logic in real time.",
+      "avg_logprob": -0.10586466901004314,
+      "no_speech_prob": 0.0013580183731392026,
+      "words": [
+        {
+          "word": " Instead",
+          "start": 15.04,
+          "end": 15.18,
+          "probability": 0.9997523427009583
+        },
+        {
+          "word": " of",
+          "start": 15.18,
+          "end": 15.32,
+          "probability": 0.9999676942825317
+        },
+        {
+          "word": " just",
+          "start": 15.32,
+          "end": 15.5,
+          "probability": 0.9998884201049805
+        },
+        {
+          "word": " retrieving",
+          "start": 15.5,
+          "end": 16.06,
+          "probability": 0.9997675716876984
+        },
+        {
+          "word": " text,",
+          "start": 16.06,
+          "end": 16.48,
+          "probability": 0.9993365406990051
+        },
+        {
+          "word": " our",
+          "start": 16.86,
+          "end": 16.94,
+          "probability": 0.9995391368865967
+        },
+        {
+          "word": " agent",
+          "start": 16.94,
+          "end": 17.22,
+          "probability": 0.9997990727424622
+        },
+        {
+          "word": " uses",
+          "start": 17.22,
+          "end": 17.56,
+          "probability": 0.9998657703399658
+        },
+        {
+          "word": " Elasticsearch",
+          "start": 17.56,
+          "end": 18.3,
+          "probability": 0.9920701831579208
+        },
+        {
+          "word": " to",
+          "start": 18.3,
+          "end": 18.48,
+          "probability": 0.9989385008811951
+        },
+        {
+          "word": " find",
+          "start": 18.48,
+          "end": 18.96,
+          "probability": 0.9994080066680908
+        },
+        {
+          "word": " and",
+          "start": 18.96,
+          "end": 19.36,
+          "probability": 0.991104245185852
+        },
+        {
+          "word": " hot",
+          "start": 19.36,
+          "end": 19.68,
+          "probability": 0.9988835453987122
+        },
+        {
+          "word": " load",
+          "start": 19.68,
+          "end": 19.98,
+          "probability": 0.5290473699569702
+        },
+        {
+          "word": " executable",
+          "start": 19.98,
+          "end": 20.9,
+          "probability": 0.9989849328994751
+        },
+        {
+          "word": " business",
+          "start": 20.9,
+          "end": 21.38,
+          "probability": 0.9998713731765747
+        },
+        {
+          "word": " logic",
+          "start": 21.38,
+          "end": 21.8,
+          "probability": 0.9998737573623657
+        },
+        {
+          "word": " in",
+          "start": 21.8,
+          "end": 22.42,
+          "probability": 0.999147891998291
+        },
+        {
+          "word": " real",
+          "start": 22.42,
+          "end": 23.02,
+          "probability": 0.9998488426208496
+        },
+        {
+          "word": " time.",
+          "start": 23.02,
+          "end": 23.62,
+          "probability": 0.9929181933403015
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "start": 23.86,
+      "end": 29.84,
+      "text": "This means the AI doesn't hallucinate your rules. It executes them. I call this deterministic",
+      "avg_logprob": -0.10586466901004314,
+      "no_speech_prob": 0.0013580183731392026,
+      "words": [
+        {
+          "word": " This",
+          "start": 23.86,
+          "end": 24.16,
+          "probability": 0.9997454285621643
+        },
+        {
+          "word": " means",
+          "start": 24.16,
+          "end": 24.36,
+          "probability": 0.9999591112136841
+        },
+        {
+          "word": " the",
+          "start": 24.36,
+          "end": 24.52,
+          "probability": 0.9929056167602539
+        },
+        {
+          "word": " AI",
+          "start": 24.52,
+          "end": 24.74,
+          "probability": 0.9867044687271118
+        },
+        {
+          "word": " doesn't",
+          "start": 24.74,
+          "end": 25.04,
+          "probability": 0.9998199343681335
+        },
+        {
+          "word": " hallucinate",
+          "start": 25.04,
+          "end": 25.54,
+          "probability": 0.9988261461257935
+        },
+        {
+          "word": " your",
+          "start": 25.54,
+          "end": 25.72,
+          "probability": 0.9999188184738159
+        },
+        {
+          "word": " rules.",
+          "start": 25.72,
+          "end": 26.08,
+          "probability": 0.9998156428337097
+        },
+        {
+          "word": " It",
+          "start": 26.6,
+          "end": 26.7,
+          "probability": 0.999925971031189
+        },
+        {
+          "word": " executes",
+          "start": 26.7,
+          "end": 27.24,
+          "probability": 0.9992057383060455
+        },
+        {
+          "word": " them.",
+          "start": 27.24,
+          "end": 27.46,
+          "probability": 0.9999512434005737
+        },
+        {
+          "word": " I",
+          "start": 27.68,
+          "end": 28.22,
+          "probability": 0.9997654557228088
+        },
+        {
+          "word": " call",
+          "start": 28.22,
+          "end": 28.54,
+          "probability": 0.9997665286064148
+        },
+        {
+          "word": " this",
+          "start": 28.54,
+          "end": 28.86,
+          "probability": 0.9998843669891357
+        },
+        {
+          "word": " deterministic",
+          "start": 28.86,
+          "end": 29.84,
+          "probability": 0.983190655708313
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "start": 29.84,
+      "end": 36.26,
+      "text": "compliance. Let's see it in action. I'm acting as an employee that's considering submitting an $850",
+      "avg_logprob": -0.07817908690163963,
+      "no_speech_prob": 3.28283422277309e-05,
+      "words": [
+        {
+          "word": " compliance.",
+          "start": 29.84,
+          "end": 30.66,
+          "probability": 0.9552616477012634
+        },
+        {
+          "word": " Let's",
+          "start": 31.44,
+          "end": 31.52,
+          "probability": 0.9991704523563385
+        },
+        {
+          "word": " see",
+          "start": 31.52,
+          "end": 31.64,
+          "probability": 0.9998725652694702
+        },
+        {
+          "word": " it",
+          "start": 31.64,
+          "end": 31.78,
+          "probability": 0.999803364276886
+        },
+        {
+          "word": " in",
+          "start": 31.78,
+          "end": 31.88,
+          "probability": 0.9993815422058105
+        },
+        {
+          "word": " action.",
+          "start": 31.88,
+          "end": 32.22,
+          "probability": 0.9974476099014282
+        },
+        {
+          "word": " I'm",
+          "start": 32.64,
+          "end": 32.82,
+          "probability": 0.9996686279773712
+        },
+        {
+          "word": " acting",
+          "start": 32.82,
+          "end": 33.02,
+          "probability": 0.9997552037239075
+        },
+        {
+          "word": " as",
+          "start": 33.02,
+          "end": 33.26,
+          "probability": 0.999953031539917
+        },
+        {
+          "word": " an",
+          "start": 33.26,
+          "end": 33.36,
+          "probability": 0.9999381303787231
+        },
+        {
+          "word": " employee",
+          "start": 33.36,
+          "end": 33.82,
+          "probability": 0.999822199344635
+        },
+        {
+          "word": " that's",
+          "start": 33.82,
+          "end": 34.18,
+          "probability": 0.9997887015342712
+        },
+        {
+          "word": " considering",
+          "start": 34.18,
+          "end": 34.6,
+          "probability": 0.9997391104698181
+        },
+        {
+          "word": " submitting",
+          "start": 34.6,
+          "end": 35.1,
+          "probability": 0.999592125415802
+        },
+        {
+          "word": " an",
+          "start": 35.1,
+          "end": 35.46,
+          "probability": 0.998654842376709
+        },
+        {
+          "word": " $850",
+          "start": 35.46,
+          "end": 36.26,
+          "probability": 0.9990902741750082
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "start": 36.26,
+      "end": 43.06,
+      "text": "team dinner expense. As you can see, the system has 99 different skills loaded, but only one",
+      "avg_logprob": -0.07817908690163963,
+      "no_speech_prob": 3.28283422277309e-05,
+      "words": [
+        {
+          "word": " team",
+          "start": 36.26,
+          "end": 37.06,
+          "probability": 0.9546979069709778
+        },
+        {
+          "word": " dinner",
+          "start": 37.06,
+          "end": 37.34,
+          "probability": 0.9962968230247498
+        },
+        {
+          "word": " expense.",
+          "start": 37.34,
+          "end": 37.86,
+          "probability": 0.9998990297317505
+        },
+        {
+          "word": " As",
+          "start": 38.04,
+          "end": 38.62,
+          "probability": 0.9998670816421509
+        },
+        {
+          "word": " you",
+          "start": 38.62,
+          "end": 38.7,
+          "probability": 0.9999850988388062
+        },
+        {
+          "word": " can",
+          "start": 38.7,
+          "end": 38.82,
+          "probability": 0.9999232292175293
+        },
+        {
+          "word": " see,",
+          "start": 38.82,
+          "end": 39.06,
+          "probability": 0.9999889135360718
+        },
+        {
+          "word": " the",
+          "start": 39.24,
+          "end": 39.24,
+          "probability": 0.9702997207641602
+        },
+        {
+          "word": " system",
+          "start": 39.24,
+          "end": 39.48,
+          "probability": 0.9998569488525391
+        },
+        {
+          "word": " has",
+          "start": 39.48,
+          "end": 39.8,
+          "probability": 0.9999717473983765
+        },
+        {
+          "word": " 99",
+          "start": 39.8,
+          "end": 40.7,
+          "probability": 0.9979277849197388
+        },
+        {
+          "word": " different",
+          "start": 40.7,
+          "end": 41.04,
+          "probability": 0.9999368190765381
+        },
+        {
+          "word": " skills",
+          "start": 41.04,
+          "end": 41.4,
+          "probability": 0.9995662569999695
+        },
+        {
+          "word": " loaded,",
+          "start": 41.4,
+          "end": 41.78,
+          "probability": 0.9998113512992859
+        },
+        {
+          "word": " but",
+          "start": 42.38,
+          "end": 42.42,
+          "probability": 0.9999289512634277
+        },
+        {
+          "word": " only",
+          "start": 42.42,
+          "end": 42.62,
+          "probability": 0.9999622106552124
+        },
+        {
+          "word": " one",
+          "start": 42.62,
+          "end": 43.06,
+          "probability": 0.9993372559547424
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "start": 43.06,
+      "end": 48.36,
+      "text": "skill should be used to answer this question. If all goes well, Elastic Agent Builder will hot",
+      "avg_logprob": -0.07817908690163963,
+      "no_speech_prob": 3.28283422277309e-05,
+      "words": [
+        {
+          "word": " skill",
+          "start": 43.06,
+          "end": 43.32,
+          "probability": 0.997614860534668
+        },
+        {
+          "word": " should",
+          "start": 43.32,
+          "end": 43.52,
+          "probability": 0.9998741149902344
+        },
+        {
+          "word": " be",
+          "start": 43.52,
+          "end": 43.64,
+          "probability": 0.9999895095825195
+        },
+        {
+          "word": " used",
+          "start": 43.64,
+          "end": 43.86,
+          "probability": 0.9999550580978394
+        },
+        {
+          "word": " to",
+          "start": 43.86,
+          "end": 43.98,
+          "probability": 0.9999693632125854
+        },
+        {
+          "word": " answer",
+          "start": 43.98,
+          "end": 44.2,
+          "probability": 0.9999088048934937
+        },
+        {
+          "word": " this",
+          "start": 44.2,
+          "end": 44.38,
+          "probability": 0.9998689889907837
+        },
+        {
+          "word": " question.",
+          "start": 44.38,
+          "end": 44.78,
+          "probability": 0.9999716281890869
+        },
+        {
+          "word": " If",
+          "start": 45.28,
+          "end": 45.58,
+          "probability": 0.9998441934585571
+        },
+        {
+          "word": " all",
+          "start": 45.58,
+          "end": 45.78,
+          "probability": 0.9998202919960022
+        },
+        {
+          "word": " goes",
+          "start": 45.78,
+          "end": 46.06,
+          "probability": 0.9999271631240845
+        },
+        {
+          "word": " well,",
+          "start": 46.06,
+          "end": 46.44,
+          "probability": 0.9999637603759766
+        },
+        {
+          "word": " Elastic",
+          "start": 46.72,
+          "end": 47.02,
+          "probability": 0.9971737563610077
+        },
+        {
+          "word": " Agent",
+          "start": 47.02,
+          "end": 47.4,
+          "probability": 0.9735471606254578
+        },
+        {
+          "word": " Builder",
+          "start": 47.4,
+          "end": 47.76,
+          "probability": 0.992936760187149
+        },
+        {
+          "word": " will",
+          "start": 47.76,
+          "end": 48.08,
+          "probability": 0.9997926354408264
+        },
+        {
+          "word": " hot",
+          "start": 48.08,
+          "end": 48.36,
+          "probability": 0.9991125464439392
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "start": 48.36,
+      "end": 54.86,
+      "text": "load a Claude Agent skill with embedded business logic to answer my question. Now watch closely.",
+      "avg_logprob": -0.07817908690163963,
+      "no_speech_prob": 3.28283422277309e-05,
+      "words": [
+        {
+          "word": " load",
+          "start": 48.36,
+          "end": 48.76,
+          "probability": 0.5636934041976929
+        },
+        {
+          "word": " a",
+          "start": 48.76,
+          "end": 49.26,
+          "probability": 0.9998090863227844
+        },
+        {
+          "word": " Claude",
+          "start": 49.26,
+          "end": 49.58,
+          "probability": 0.8543133735656738
+        },
+        {
+          "word": " Agent",
+          "start": 49.58,
+          "end": 49.88,
+          "probability": 0.9515838027000427
+        },
+        {
+          "word": " skill",
+          "start": 49.88,
+          "end": 50.26,
+          "probability": 0.9494307637214661
+        },
+        {
+          "word": " with",
+          "start": 50.26,
+          "end": 50.64,
+          "probability": 0.9997190833091736
+        },
+        {
+          "word": " embedded",
+          "start": 50.64,
+          "end": 50.98,
+          "probability": 0.9772926568984985
+        },
+        {
+          "word": " business",
+          "start": 50.98,
+          "end": 51.36,
+          "probability": 0.999043881893158
+        },
+        {
+          "word": " logic",
+          "start": 51.36,
+          "end": 51.72,
+          "probability": 0.9999239444732666
+        },
+        {
+          "word": " to",
+          "start": 51.72,
+          "end": 52.04,
+          "probability": 0.999398946762085
+        },
+        {
+          "word": " answer",
+          "start": 52.04,
+          "end": 52.32,
+          "probability": 0.9999301433563232
+        },
+        {
+          "word": " my",
+          "start": 52.32,
+          "end": 52.6,
+          "probability": 0.999916672706604
+        },
+        {
+          "word": " question.",
+          "start": 52.6,
+          "end": 53.02,
+          "probability": 0.9999567270278931
+        },
+        {
+          "word": " Now",
+          "start": 53.36,
+          "end": 53.82,
+          "probability": 0.9995604157447815
+        },
+        {
+          "word": " watch",
+          "start": 53.82,
+          "end": 54.26,
+          "probability": 0.7336731553077698
+        },
+        {
+          "word": " closely.",
+          "start": 54.26,
+          "end": 54.86,
+          "probability": 0.9999345541000366
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "start": 55.44,
+      "end": 59.82,
+      "text": "The agent doesn't just guess which tool to use. It queries Elastic Survelder.",
+      "avg_logprob": -0.07817908690163963,
+      "no_speech_prob": 3.28283422277309e-05,
+      "words": [
+        {
+          "word": " The",
+          "start": 55.44,
+          "end": 55.5,
+          "probability": 0.999935507774353
+        },
+        {
+          "word": " agent",
+          "start": 55.5,
+          "end": 55.8,
+          "probability": 0.9991080164909363
+        },
+        {
+          "word": " doesn't",
+          "start": 55.8,
+          "end": 56.28,
+          "probability": 0.9999467730522156
+        },
+        {
+          "word": " just",
+          "start": 56.28,
+          "end": 56.58,
+          "probability": 0.9999136924743652
+        },
+        {
+          "word": " guess",
+          "start": 56.58,
+          "end": 57.06,
+          "probability": 0.9999785423278809
+        },
+        {
+          "word": " which",
+          "start": 57.06,
+          "end": 57.46,
+          "probability": 0.999942421913147
+        },
+        {
+          "word": " tool",
+          "start": 57.46,
+          "end": 57.72,
+          "probability": 0.9999662637710571
+        },
+        {
+          "word": " to",
+          "start": 57.72,
+          "end": 57.84,
+          "probability": 0.9999624490737915
+        },
+        {
+          "word": " use.",
+          "start": 57.84,
+          "end": 58.24,
+          "probability": 0.9999579191207886
+        },
+        {
+          "word": " It",
+          "start": 58.44,
+          "end": 58.86,
+          "probability": 0.9995243549346924
+        },
+        {
+          "word": " queries",
+          "start": 58.86,
+          "end": 59.2,
+          "probability": 0.9951666593551636
+        },
+        {
+          "word": " Elastic",
+          "start": 59.2,
+          "end": 59.6,
+          "probability": 0.9940003156661987
+        },
+        {
+          "word": " Survelder.",
+          "start": 59.6,
+          "end": 59.82,
+          "probability": 0.6270233131945133
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "start": 59.84,
+      "end": 65.56,
+      "text": "using hybrid search. It uses semantic search to understand my intent, checking",
+      "avg_logprob": -0.11104005390835792,
+      "no_speech_prob": 2.023851811827626e-05,
+      "words": [
+        {
+          "word": " using",
+          "start": 59.84,
+          "end": 60.46,
+          "probability": 0.7189273834228516
+        },
+        {
+          "word": " hybrid",
+          "start": 60.46,
+          "end": 60.92,
+          "probability": 0.9731038808822632
+        },
+        {
+          "word": " search.",
+          "start": 60.92,
+          "end": 61.34,
+          "probability": 0.9959633350372314
+        },
+        {
+          "word": " It",
+          "start": 61.92,
+          "end": 62.02,
+          "probability": 0.9976581335067749
+        },
+        {
+          "word": " uses",
+          "start": 62.02,
+          "end": 62.4,
+          "probability": 0.9996477365493774
+        },
+        {
+          "word": " semantic",
+          "start": 62.4,
+          "end": 63.08,
+          "probability": 0.95472651720047
+        },
+        {
+          "word": " search",
+          "start": 63.08,
+          "end": 63.56,
+          "probability": 0.9971190690994263
+        },
+        {
+          "word": " to",
+          "start": 63.56,
+          "end": 63.72,
+          "probability": 0.9988371729850769
+        },
+        {
+          "word": " understand",
+          "start": 63.72,
+          "end": 64.18,
+          "probability": 0.9984686970710754
+        },
+        {
+          "word": " my",
+          "start": 64.18,
+          "end": 64.4,
+          "probability": 0.9981020092964172
+        },
+        {
+          "word": " intent,",
+          "start": 64.4,
+          "end": 64.88,
+          "probability": 0.998744010925293
+        },
+        {
+          "word": " checking",
+          "start": 65.34,
+          "end": 65.56,
+          "probability": 0.9976963400840759
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "start": 65.56,
+      "end": 72.52,
+      "text": "a policy, and lexical search to match specific keywords, like expense or dinner. This ensures it",
+      "avg_logprob": -0.11104005390835792,
+      "no_speech_prob": 2.023851811827626e-05,
+      "words": [
+        {
+          "word": " a",
+          "start": 65.56,
+          "end": 65.72,
+          "probability": 0.9986768364906311
+        },
+        {
+          "word": " policy,",
+          "start": 65.72,
+          "end": 66.12,
+          "probability": 0.9997147917747498
+        },
+        {
+          "word": " and",
+          "start": 67.04,
+          "end": 67.04,
+          "probability": 0.9993237257003784
+        },
+        {
+          "word": " lexical",
+          "start": 67.04,
+          "end": 67.66,
+          "probability": 0.9880210359891256
+        },
+        {
+          "word": " search",
+          "start": 67.66,
+          "end": 68.04,
+          "probability": 0.999244213104248
+        },
+        {
+          "word": " to",
+          "start": 68.04,
+          "end": 68.26,
+          "probability": 0.9990584254264832
+        },
+        {
+          "word": " match",
+          "start": 68.26,
+          "end": 68.5,
+          "probability": 0.9993521571159363
+        },
+        {
+          "word": " specific",
+          "start": 68.5,
+          "end": 68.9,
+          "probability": 0.999700665473938
+        },
+        {
+          "word": " keywords,",
+          "start": 68.9,
+          "end": 69.34,
+          "probability": 0.9666051268577576
+        },
+        {
+          "word": " like",
+          "start": 69.78,
+          "end": 69.88,
+          "probability": 0.9996243715286255
+        },
+        {
+          "word": " expense",
+          "start": 69.88,
+          "end": 70.34,
+          "probability": 0.9963347911834717
+        },
+        {
+          "word": " or",
+          "start": 70.34,
+          "end": 70.68,
+          "probability": 0.9417237639427185
+        },
+        {
+          "word": " dinner.",
+          "start": 70.68,
+          "end": 71.04,
+          "probability": 0.9972456693649292
+        },
+        {
+          "word": " This",
+          "start": 71.6,
+          "end": 71.96,
+          "probability": 0.9988937973976135
+        },
+        {
+          "word": " ensures",
+          "start": 71.96,
+          "end": 72.32,
+          "probability": 0.9961511492729187
+        },
+        {
+          "word": " it",
+          "start": 72.32,
+          "end": 72.52,
+          "probability": 0.9979599714279175
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "start": 72.52,
+      "end": 77.94,
+      "text": "finds and hot loads the specific verify expense Python skill auditing my math with actual",
+      "avg_logprob": -0.11104005390835792,
+      "no_speech_prob": 2.023851811827626e-05,
+      "words": [
+        {
+          "word": " finds",
+          "start": 72.52,
+          "end": 72.84,
+          "probability": 0.8963363766670227
+        },
+        {
+          "word": " and",
+          "start": 72.84,
+          "end": 73.08,
+          "probability": 0.9990118741989136
+        },
+        {
+          "word": " hot",
+          "start": 73.08,
+          "end": 73.36,
+          "probability": 0.9960435628890991
+        },
+        {
+          "word": " loads",
+          "start": 73.36,
+          "end": 73.6,
+          "probability": 0.5227769613265991
+        },
+        {
+          "word": " the",
+          "start": 73.6,
+          "end": 73.8,
+          "probability": 0.9986978769302368
+        },
+        {
+          "word": " specific",
+          "start": 73.8,
+          "end": 74.32,
+          "probability": 0.9995993971824646
+        },
+        {
+          "word": " verify",
+          "start": 74.32,
+          "end": 74.88,
+          "probability": 0.7482534646987915
+        },
+        {
+          "word": " expense",
+          "start": 74.88,
+          "end": 75.46,
+          "probability": 0.9956050515174866
+        },
+        {
+          "word": " Python",
+          "start": 75.46,
+          "end": 75.88,
+          "probability": 0.8438733816146851
+        },
+        {
+          "word": " skill",
+          "start": 75.88,
+          "end": 76.26,
+          "probability": 0.9984921216964722
+        },
+        {
+          "word": " auditing",
+          "start": 76.26,
+          "end": 76.72,
+          "probability": 0.6897781640291214
+        },
+        {
+          "word": " my",
+          "start": 76.72,
+          "end": 76.9,
+          "probability": 0.9995892643928528
+        },
+        {
+          "word": " math",
+          "start": 76.9,
+          "end": 77.26,
+          "probability": 0.9987977743148804
+        },
+        {
+          "word": " with",
+          "start": 77.26,
+          "end": 77.48,
+          "probability": 0.5935577750205994
+        },
+        {
+          "word": " actual",
+          "start": 77.48,
+          "end": 77.94,
+          "probability": 0.9991999268531799
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "start": 77.94,
+      "end": 85.36,
+      "text": "code, not LLM vibes. As you can see, this specific request does not meet our expense policy.",
+      "avg_logprob": -0.11104005390835792,
+      "no_speech_prob": 2.023851811827626e-05,
+      "words": [
+        {
+          "word": " code,",
+          "start": 77.94,
+          "end": 78.48,
+          "probability": 0.9995957016944885
+        },
+        {
+          "word": " not",
+          "start": 79.12,
+          "end": 79.32,
+          "probability": 0.9992511868476868
+        },
+        {
+          "word": " LLM",
+          "start": 79.32,
+          "end": 79.88,
+          "probability": 0.9703540404637655
+        },
+        {
+          "word": " vibes.",
+          "start": 79.88,
+          "end": 80.34,
+          "probability": 0.9527219533920288
+        },
+        {
+          "word": " As",
+          "start": 80.88,
+          "end": 81.12,
+          "probability": 0.9994179010391235
+        },
+        {
+          "word": " you",
+          "start": 81.12,
+          "end": 81.24,
+          "probability": 0.9999641180038452
+        },
+        {
+          "word": " can",
+          "start": 81.24,
+          "end": 81.4,
+          "probability": 0.9997360110282898
+        },
+        {
+          "word": " see,",
+          "start": 81.4,
+          "end": 81.74,
+          "probability": 0.9999679327011108
+        },
+        {
+          "word": " this",
+          "start": 82.28,
+          "end": 82.4,
+          "probability": 0.999697208404541
+        },
+        {
+          "word": " specific",
+          "start": 82.4,
+          "end": 82.76,
+          "probability": 0.9998784065246582
+        },
+        {
+          "word": " request",
+          "start": 82.76,
+          "end": 83.32,
+          "probability": 0.9997630715370178
+        },
+        {
+          "word": " does",
+          "start": 83.32,
+          "end": 83.74,
+          "probability": 0.9995543360710144
+        },
+        {
+          "word": " not",
+          "start": 83.74,
+          "end": 84.0,
+          "probability": 0.9999468326568604
+        },
+        {
+          "word": " meet",
+          "start": 84.0,
+          "end": 84.28,
+          "probability": 0.9994364380836487
+        },
+        {
+          "word": " our",
+          "start": 84.28,
+          "end": 84.54,
+          "probability": 0.9998831748962402
+        },
+        {
+          "word": " expense",
+          "start": 84.54,
+          "end": 84.84,
+          "probability": 0.9998242259025574
+        },
+        {
+          "word": " policy.",
+          "start": 84.84,
+          "end": 85.36,
+          "probability": 0.999962329864502
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "start": 85.9,
+      "end": 89.66,
+      "text": "Now here's the reality of enterprise business. Rules change.",
+      "avg_logprob": -0.11104005390835792,
+      "no_speech_prob": 2.023851811827626e-05,
+      "words": [
+        {
+          "word": " Now",
+          "start": 85.9,
+          "end": 86.1,
+          "probability": 0.9915918111801147
+        },
+        {
+          "word": " here's",
+          "start": 86.1,
+          "end": 86.42,
+          "probability": 0.8781574368476868
+        },
+        {
+          "word": " the",
+          "start": 86.42,
+          "end": 86.54,
+          "probability": 0.9999293088912964
+        },
+        {
+          "word": " reality",
+          "start": 86.54,
+          "end": 86.98,
+          "probability": 0.9998527765274048
+        },
+        {
+          "word": " of",
+          "start": 86.98,
+          "end": 87.18,
+          "probability": 0.9999631643295288
+        },
+        {
+          "word": " enterprise",
+          "start": 87.18,
+          "end": 87.58,
+          "probability": 0.9954217076301575
+        },
+        {
+          "word": " business.",
+          "start": 87.58,
+          "end": 88.16,
+          "probability": 0.9999262094497681
+        },
+        {
+          "word": " Rules",
+          "start": 88.5,
+          "end": 89.14,
+          "probability": 0.9974169731140137
+        },
+        {
+          "word": " change.",
+          "start": 89.14,
+          "end": 89.66,
+          "probability": 0.9997716546058655
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "start": 89.84,
+      "end": 94.64,
+      "text": "Usually, if a policy changes, you have to retrain a model or update a hard-coded",
+      "avg_logprob": -0.10338595858565322,
+      "no_speech_prob": 3.36826233251486e-05,
+      "words": [
+        {
+          "word": " Usually,",
+          "start": 89.84,
+          "end": 90.68,
+          "probability": 0.9823577404022217
+        },
+        {
+          "word": " if",
+          "start": 91.12,
+          "end": 91.12,
+          "probability": 0.998396098613739
+        },
+        {
+          "word": " a",
+          "start": 91.12,
+          "end": 91.24,
+          "probability": 0.9980535507202148
+        },
+        {
+          "word": " policy",
+          "start": 91.24,
+          "end": 91.5,
+          "probability": 0.9995812773704529
+        },
+        {
+          "word": " changes,",
+          "start": 91.5,
+          "end": 92.04,
+          "probability": 0.9996613264083862
+        },
+        {
+          "word": " you",
+          "start": 92.28,
+          "end": 92.28,
+          "probability": 0.9995967745780945
+        },
+        {
+          "word": " have",
+          "start": 92.28,
+          "end": 92.44,
+          "probability": 0.99908447265625
+        },
+        {
+          "word": " to",
+          "start": 92.44,
+          "end": 92.56,
+          "probability": 0.9998328685760498
+        },
+        {
+          "word": " retrain",
+          "start": 92.56,
+          "end": 93.0,
+          "probability": 0.9952069520950317
+        },
+        {
+          "word": " a",
+          "start": 93.0,
+          "end": 93.12,
+          "probability": 0.9992232322692871
+        },
+        {
+          "word": " model",
+          "start": 93.12,
+          "end": 93.38,
+          "probability": 0.9995691180229187
+        },
+        {
+          "word": " or",
+          "start": 93.38,
+          "end": 93.64,
+          "probability": 0.9933892488479614
+        },
+        {
+          "word": " update",
+          "start": 93.64,
+          "end": 93.98,
+          "probability": 0.9978182315826416
+        },
+        {
+          "word": " a",
+          "start": 93.98,
+          "end": 94.14,
+          "probability": 0.9993508458137512
+        },
+        {
+          "word": " hard",
+          "start": 94.14,
+          "end": 94.36,
+          "probability": 0.9989925026893616
+        },
+        {
+          "word": "-coded",
+          "start": 94.36,
+          "end": 94.64,
+          "probability": 0.9850591421127319
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "start": 94.64,
+      "end": 101.82,
+      "text": "application. That takes weeks. Watch this. I'm telling the agent to update its skills. Behind",
+      "avg_logprob": -0.10338595858565322,
+      "no_speech_prob": 3.36826233251486e-05,
+      "words": [
+        {
+          "word": " application.",
+          "start": 94.64,
+          "end": 95.2,
+          "probability": 0.9990672469139099
+        },
+        {
+          "word": " That",
+          "start": 95.86,
+          "end": 95.98,
+          "probability": 0.9979466795921326
+        },
+        {
+          "word": " takes",
+          "start": 95.98,
+          "end": 96.2,
+          "probability": 0.9995958209037781
+        },
+        {
+          "word": " weeks.",
+          "start": 96.2,
+          "end": 96.58,
+          "probability": 0.999584972858429
+        },
+        {
+          "word": " Watch",
+          "start": 97.28,
+          "end": 97.54,
+          "probability": 0.9975964426994324
+        },
+        {
+          "word": " this.",
+          "start": 97.54,
+          "end": 98.16,
+          "probability": 0.9956133365631104
+        },
+        {
+          "word": " I'm",
+          "start": 99.0,
+          "end": 99.12,
+          "probability": 0.9963298738002777
+        },
+        {
+          "word": " telling",
+          "start": 99.12,
+          "end": 99.3,
+          "probability": 0.9997920393943787
+        },
+        {
+          "word": " the",
+          "start": 99.3,
+          "end": 99.5,
+          "probability": 0.9996750354766846
+        },
+        {
+          "word": " agent",
+          "start": 99.5,
+          "end": 99.78,
+          "probability": 0.997365415096283
+        },
+        {
+          "word": " to",
+          "start": 99.78,
+          "end": 99.98,
+          "probability": 0.9998328685760498
+        },
+        {
+          "word": " update",
+          "start": 99.98,
+          "end": 100.38,
+          "probability": 0.9994294047355652
+        },
+        {
+          "word": " its",
+          "start": 100.38,
+          "end": 100.64,
+          "probability": 0.996222972869873
+        },
+        {
+          "word": " skills.",
+          "start": 100.64,
+          "end": 101.06,
+          "probability": 0.9986816048622131
+        },
+        {
+          "word": " Behind",
+          "start": 101.7,
+          "end": 101.82,
+          "probability": 0.9988092184066772
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "start": 101.82,
+      "end": 107.97,
+      "text": "the scenes, this triggers an elastic workflow. Workflow the latest business rules from our skill",
+      "avg_logprob": -0.10338595858565322,
+      "no_speech_prob": 3.36826233251486e-05,
+      "words": [
+        {
+          "word": " the",
+          "start": 101.82,
+          "end": 102.06,
+          "probability": 0.9958657026290894
+        },
+        {
+          "word": " scenes,",
+          "start": 102.06,
+          "end": 102.32,
+          "probability": 0.9994564652442932
+        },
+        {
+          "word": " this",
+          "start": 102.9,
+          "end": 102.96,
+          "probability": 0.99935382604599
+        },
+        {
+          "word": " triggers",
+          "start": 102.96,
+          "end": 103.24,
+          "probability": 0.9996558427810669
+        },
+        {
+          "word": " an",
+          "start": 103.24,
+          "end": 103.4,
+          "probability": 0.9996896982192993
+        },
+        {
+          "word": " elastic",
+          "start": 103.4,
+          "end": 103.76,
+          "probability": 0.9062502980232239
+        },
+        {
+          "word": " workflow.",
+          "start": 103.76,
+          "end": 104.26,
+          "probability": 0.9961369633674622
+        },
+        {
+          "word": " Workflow",
+          "start": 105.13,
+          "end": 105.61,
+          "probability": 0.7372433692216873
+        },
+        {
+          "word": " the",
+          "start": 105.61,
+          "end": 106.09,
+          "probability": 0.0007218723185360432
+        },
+        {
+          "word": " latest",
+          "start": 106.09,
+          "end": 106.39,
+          "probability": 0.9998169541358948
+        },
+        {
+          "word": " business",
+          "start": 106.39,
+          "end": 106.89,
+          "probability": 0.9998646974563599
+        },
+        {
+          "word": " rules",
+          "start": 106.89,
+          "end": 107.25,
+          "probability": 0.9998676776885986
+        },
+        {
+          "word": " from",
+          "start": 107.25,
+          "end": 107.49,
+          "probability": 0.999693751335144
+        },
+        {
+          "word": " our",
+          "start": 107.49,
+          "end": 107.65,
+          "probability": 0.9997473359107971
+        },
+        {
+          "word": " skill",
+          "start": 107.65,
+          "end": 107.97,
+          "probability": 0.9909652471542358
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "start": 107.97,
+      "end": 113.99,
+      "text": "staging system and loads them into Elasticsearch in real time. We are not retraining the AI. We are",
+      "avg_logprob": -0.10338595858565322,
+      "no_speech_prob": 3.36826233251486e-05,
+      "words": [
+        {
+          "word": " staging",
+          "start": 107.97,
+          "end": 108.35,
+          "probability": 0.9843816161155701
+        },
+        {
+          "word": " system",
+          "start": 108.35,
+          "end": 108.77,
+          "probability": 0.9998432397842407
+        },
+        {
+          "word": " and",
+          "start": 108.77,
+          "end": 109.15,
+          "probability": 0.9699258208274841
+        },
+        {
+          "word": " loads",
+          "start": 109.15,
+          "end": 109.35,
+          "probability": 0.9992977380752563
+        },
+        {
+          "word": " them",
+          "start": 109.35,
+          "end": 109.49,
+          "probability": 0.9998742341995239
+        },
+        {
+          "word": " into",
+          "start": 109.49,
+          "end": 109.67,
+          "probability": 0.9996236562728882
+        },
+        {
+          "word": " Elasticsearch",
+          "start": 109.67,
+          "end": 110.37,
+          "probability": 0.8598279058933258
+        },
+        {
+          "word": " in",
+          "start": 110.37,
+          "end": 110.51,
+          "probability": 0.9977943897247314
+        },
+        {
+          "word": " real",
+          "start": 110.51,
+          "end": 110.73,
+          "probability": 0.9992716908454895
+        },
+        {
+          "word": " time.",
+          "start": 110.73,
+          "end": 111.07,
+          "probability": 0.5446772575378418
+        },
+        {
+          "word": " We",
+          "start": 111.57,
+          "end": 112.05,
+          "probability": 0.9998112320899963
+        },
+        {
+          "word": " are",
+          "start": 112.05,
+          "end": 112.15,
+          "probability": 0.8519526124000549
+        },
+        {
+          "word": " not",
+          "start": 112.15,
+          "end": 112.29,
+          "probability": 0.9998658895492554
+        },
+        {
+          "word": " retraining",
+          "start": 112.29,
+          "end": 112.75,
+          "probability": 0.9846647381782532
+        },
+        {
+          "word": " the",
+          "start": 112.75,
+          "end": 112.91,
+          "probability": 0.9998713731765747
+        },
+        {
+          "word": " AI.",
+          "start": 112.91,
+          "end": 113.31,
+          "probability": 0.9938594698905945
+        },
+        {
+          "word": " We",
+          "start": 113.81,
+          "end": 113.89,
+          "probability": 0.9998339414596558
+        },
+        {
+          "word": " are",
+          "start": 113.89,
+          "end": 113.99,
+          "probability": 0.7822438478469849
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "start": 113.99,
+      "end": 119.95,
+      "text": "simply updating the skill repository. Because the agent uses that hybrid search to look up skills",
+      "avg_logprob": -0.10338595858565322,
+      "no_speech_prob": 3.36826233251486e-05,
+      "words": [
+        {
+          "word": " simply",
+          "start": 113.99,
+          "end": 114.49,
+          "probability": 0.9996542930603027
+        },
+        {
+          "word": " updating",
+          "start": 114.49,
+          "end": 115.27,
+          "probability": 0.9995643496513367
+        },
+        {
+          "word": " the",
+          "start": 115.27,
+          "end": 115.59,
+          "probability": 0.999845027923584
+        },
+        {
+          "word": " skill",
+          "start": 115.59,
+          "end": 115.81,
+          "probability": 0.990731418132782
+        },
+        {
+          "word": " repository.",
+          "start": 115.81,
+          "end": 116.47,
+          "probability": 0.999688982963562
+        },
+        {
+          "word": " Because",
+          "start": 116.87,
+          "end": 117.43,
+          "probability": 0.9995012283325195
+        },
+        {
+          "word": " the",
+          "start": 117.43,
+          "end": 117.57,
+          "probability": 0.9999097585678101
+        },
+        {
+          "word": " agent",
+          "start": 117.57,
+          "end": 117.89,
+          "probability": 0.9995972514152527
+        },
+        {
+          "word": " uses",
+          "start": 117.89,
+          "end": 118.29,
+          "probability": 0.9997971653938293
+        },
+        {
+          "word": " that",
+          "start": 118.29,
+          "end": 118.49,
+          "probability": 0.9996453523635864
+        },
+        {
+          "word": " hybrid",
+          "start": 118.49,
+          "end": 118.89,
+          "probability": 0.996346652507782
+        },
+        {
+          "word": " search",
+          "start": 118.89,
+          "end": 119.27,
+          "probability": 0.9996923208236694
+        },
+        {
+          "word": " to",
+          "start": 119.27,
+          "end": 119.45,
+          "probability": 0.9996135830879211
+        },
+        {
+          "word": " look",
+          "start": 119.45,
+          "end": 119.57,
+          "probability": 0.9997268319129944
+        },
+        {
+          "word": " up",
+          "start": 119.57,
+          "end": 119.71,
+          "probability": 0.9985455274581909
+        },
+        {
+          "word": " skills",
+          "start": 119.71,
+          "end": 119.95,
+          "probability": 0.9605419635772705
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "start": 119.97,
+      "end": 125.67,
+      "text": "dynamically every single time it runs. The very next question I ask will apply the new rules",
+      "avg_logprob": -0.06632548344857765,
+      "no_speech_prob": 1.6991289157886058e-05,
+      "words": [
+        {
+          "word": " dynamically",
+          "start": 119.97,
+          "end": 120.49,
+          "probability": 0.994380533695221
+        },
+        {
+          "word": " every",
+          "start": 120.49,
+          "end": 121.13,
+          "probability": 0.9927675724029541
+        },
+        {
+          "word": " single",
+          "start": 121.13,
+          "end": 121.41,
+          "probability": 0.9998261332511902
+        },
+        {
+          "word": " time",
+          "start": 121.41,
+          "end": 121.63,
+          "probability": 0.9999061822891235
+        },
+        {
+          "word": " it",
+          "start": 121.63,
+          "end": 121.73,
+          "probability": 0.999631404876709
+        },
+        {
+          "word": " runs.",
+          "start": 121.73,
+          "end": 122.07,
+          "probability": 0.9998475313186646
+        },
+        {
+          "word": " The",
+          "start": 122.77,
+          "end": 122.79,
+          "probability": 0.9991687536239624
+        },
+        {
+          "word": " very",
+          "start": 122.79,
+          "end": 123.05,
+          "probability": 0.9987245202064514
+        },
+        {
+          "word": " next",
+          "start": 123.05,
+          "end": 123.27,
+          "probability": 0.9999523162841797
+        },
+        {
+          "word": " question",
+          "start": 123.27,
+          "end": 123.63,
+          "probability": 0.999716579914093
+        },
+        {
+          "word": " I",
+          "start": 123.63,
+          "end": 123.79,
+          "probability": 0.9984655380249023
+        },
+        {
+          "word": " ask",
+          "start": 123.79,
+          "end": 124.19,
+          "probability": 0.9825381636619568
+        },
+        {
+          "word": " will",
+          "start": 124.19,
+          "end": 124.49,
+          "probability": 0.9965640902519226
+        },
+        {
+          "word": " apply",
+          "start": 124.49,
+          "end": 124.83,
+          "probability": 0.999758780002594
+        },
+        {
+          "word": " the",
+          "start": 124.83,
+          "end": 125.19,
+          "probability": 0.9991075396537781
+        },
+        {
+          "word": " new",
+          "start": 125.19,
+          "end": 125.41,
+          "probability": 0.9987753033638
+        },
+        {
+          "word": " rules",
+          "start": 125.41,
+          "end": 125.67,
+          "probability": 0.999376118183136
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "start": 125.67,
+      "end": 133.69,
+      "text": "instantly. Okay, the workload finished. The new policy is live. I'm going to run the exact same",
+      "avg_logprob": -0.06632548344857765,
+      "no_speech_prob": 1.6991289157886058e-05,
+      "words": [
+        {
+          "word": " instantly.",
+          "start": 125.67,
+          "end": 126.39,
+          "probability": 0.9990248680114746
+        },
+        {
+          "word": " Okay,",
+          "start": 126.85,
+          "end": 127.15,
+          "probability": 0.9180467128753662
+        },
+        {
+          "word": " the",
+          "start": 127.71,
+          "end": 127.75,
+          "probability": 0.9994223117828369
+        },
+        {
+          "word": " workload",
+          "start": 127.75,
+          "end": 128.21,
+          "probability": 0.9956804513931274
+        },
+        {
+          "word": " finished.",
+          "start": 128.21,
+          "end": 128.75,
+          "probability": 0.9993858337402344
+        },
+        {
+          "word": " The",
+          "start": 129.59,
+          "end": 129.65,
+          "probability": 0.9998058676719666
+        },
+        {
+          "word": " new",
+          "start": 129.65,
+          "end": 129.95,
+          "probability": 0.9972857236862183
+        },
+        {
+          "word": " policy",
+          "start": 129.95,
+          "end": 130.59,
+          "probability": 0.9985815286636353
+        },
+        {
+          "word": " is",
+          "start": 130.59,
+          "end": 130.93,
+          "probability": 0.99989914894104
+        },
+        {
+          "word": " live.",
+          "start": 130.93,
+          "end": 131.35,
+          "probability": 0.9965794682502747
+        },
+        {
+          "word": " I'm",
+          "start": 132.07,
+          "end": 132.35,
+          "probability": 0.999671459197998
+        },
+        {
+          "word": " going",
+          "start": 132.35,
+          "end": 132.43,
+          "probability": 0.9843125939369202
+        },
+        {
+          "word": " to",
+          "start": 132.43,
+          "end": 132.49,
+          "probability": 0.9999387264251709
+        },
+        {
+          "word": " run",
+          "start": 132.49,
+          "end": 132.61,
+          "probability": 0.9998550415039062
+        },
+        {
+          "word": " the",
+          "start": 132.61,
+          "end": 132.77,
+          "probability": 0.9998822212219238
+        },
+        {
+          "word": " exact",
+          "start": 132.77,
+          "end": 133.27,
+          "probability": 0.9992831349372864
+        },
+        {
+          "word": " same",
+          "start": 133.27,
+          "end": 133.69,
+          "probability": 0.9998904466629028
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "start": 133.69,
+      "end": 140.15,
+      "text": "prompt I ran a minute ago. I didn't restart the server. I didn't redeploy the agent. But because the agent",
+      "avg_logprob": -0.06632548344857765,
+      "no_speech_prob": 1.6991289157886058e-05,
+      "words": [
+        {
+          "word": " prompt",
+          "start": 133.69,
+          "end": 134.09,
+          "probability": 0.9992021918296814
+        },
+        {
+          "word": " I",
+          "start": 134.09,
+          "end": 134.27,
+          "probability": 0.9989392161369324
+        },
+        {
+          "word": " ran",
+          "start": 134.27,
+          "end": 134.41,
+          "probability": 0.9998713731765747
+        },
+        {
+          "word": " a",
+          "start": 134.41,
+          "end": 134.59,
+          "probability": 0.9996899366378784
+        },
+        {
+          "word": " minute",
+          "start": 134.59,
+          "end": 134.69,
+          "probability": 0.9994818568229675
+        },
+        {
+          "word": " ago.",
+          "start": 134.69,
+          "end": 134.99,
+          "probability": 0.9999662637710571
+        },
+        {
+          "word": " I",
+          "start": 135.47,
+          "end": 135.51,
+          "probability": 0.999916672706604
+        },
+        {
+          "word": " didn't",
+          "start": 135.51,
+          "end": 135.73,
+          "probability": 0.9998882114887238
+        },
+        {
+          "word": " restart",
+          "start": 135.73,
+          "end": 135.99,
+          "probability": 0.9988490343093872
+        },
+        {
+          "word": " the",
+          "start": 135.99,
+          "end": 136.17,
+          "probability": 0.9999369382858276
+        },
+        {
+          "word": " server.",
+          "start": 136.17,
+          "end": 136.55,
+          "probability": 0.9997066855430603
+        },
+        {
+          "word": " I",
+          "start": 137.39,
+          "end": 137.43,
+          "probability": 0.9999107122421265
+        },
+        {
+          "word": " didn't",
+          "start": 137.43,
+          "end": 137.67,
+          "probability": 0.9999169707298279
+        },
+        {
+          "word": " redeploy",
+          "start": 137.67,
+          "end": 137.99,
+          "probability": 0.9882999658584595
+        },
+        {
+          "word": " the",
+          "start": 137.99,
+          "end": 138.19,
+          "probability": 0.9999414682388306
+        },
+        {
+          "word": " agent.",
+          "start": 138.19,
+          "end": 138.55,
+          "probability": 0.9995446801185608
+        },
+        {
+          "word": " But",
+          "start": 139.27,
+          "end": 139.43,
+          "probability": 0.9978589415550232
+        },
+        {
+          "word": " because",
+          "start": 139.43,
+          "end": 139.69,
+          "probability": 0.9996142387390137
+        },
+        {
+          "word": " the",
+          "start": 139.69,
+          "end": 139.87,
+          "probability": 0.9999297857284546
+        },
+        {
+          "word": " agent",
+          "start": 139.87,
+          "end": 140.15,
+          "probability": 0.9997492432594299
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "start": 140.15,
+      "end": 146.57,
+      "text": "hotloads the skill from Elasticsearch at runtime, it's now executing the new Python logic we just",
+      "avg_logprob": -0.06632548344857765,
+      "no_speech_prob": 1.6991289157886058e-05,
+      "words": [
+        {
+          "word": " hotloads",
+          "start": 140.15,
+          "end": 140.81,
+          "probability": 0.89183642466863
+        },
+        {
+          "word": " the",
+          "start": 140.81,
+          "end": 140.93,
+          "probability": 0.999869704246521
+        },
+        {
+          "word": " skill",
+          "start": 140.93,
+          "end": 141.19,
+          "probability": 0.9990536570549011
+        },
+        {
+          "word": " from",
+          "start": 141.19,
+          "end": 141.37,
+          "probability": 0.9998427629470825
+        },
+        {
+          "word": " Elasticsearch",
+          "start": 141.37,
+          "end": 142.07,
+          "probability": 0.9525138586759567
+        },
+        {
+          "word": " at",
+          "start": 142.07,
+          "end": 142.21,
+          "probability": 0.999631404876709
+        },
+        {
+          "word": " runtime,",
+          "start": 142.21,
+          "end": 142.71,
+          "probability": 0.996407687664032
+        },
+        {
+          "word": " it's",
+          "start": 143.43,
+          "end": 143.61,
+          "probability": 0.9998541474342346
+        },
+        {
+          "word": " now",
+          "start": 143.61,
+          "end": 144.03,
+          "probability": 0.9998249411582947
+        },
+        {
+          "word": " executing",
+          "start": 144.03,
+          "end": 144.65,
+          "probability": 0.9998853206634521
+        },
+        {
+          "word": " the",
+          "start": 144.65,
+          "end": 145.05,
+          "probability": 0.9999092817306519
+        },
+        {
+          "word": " new",
+          "start": 145.05,
+          "end": 145.27,
+          "probability": 0.9998326301574707
+        },
+        {
+          "word": " Python",
+          "start": 145.27,
+          "end": 145.63,
+          "probability": 0.9917933344841003
+        },
+        {
+          "word": " logic",
+          "start": 145.63,
+          "end": 146.03,
+          "probability": 0.9983991980552673
+        },
+        {
+          "word": " we",
+          "start": 146.03,
+          "end": 146.29,
+          "probability": 0.9994897842407227
+        },
+        {
+          "word": " just",
+          "start": 146.29,
+          "end": 146.57,
+          "probability": 0.999902606010437
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "start": 146.57,
+      "end": 154.99,
+      "text": "ingested. And there it is. The outcome is different. Same AI, same prompt, new business logic.",
+      "avg_logprob": -0.08666257218768199,
+      "no_speech_prob": 6.941514584468678e-05,
+      "words": [
+        {
+          "word": " ingested.",
+          "start": 146.57,
+          "end": 147.19,
+          "probability": 0.9892382621765137
+        },
+        {
+          "word": " And",
+          "start": 147.95,
+          "end": 147.99,
+          "probability": 0.9981531500816345
+        },
+        {
+          "word": " there",
+          "start": 147.99,
+          "end": 148.17,
+          "probability": 0.9992753863334656
+        },
+        {
+          "word": " it",
+          "start": 148.17,
+          "end": 148.29,
+          "probability": 0.9995847344398499
+        },
+        {
+          "word": " is.",
+          "start": 148.29,
+          "end": 148.55,
+          "probability": 0.9999344348907471
+        },
+        {
+          "word": " The",
+          "start": 149.15,
+          "end": 149.21,
+          "probability": 0.9996980428695679
+        },
+        {
+          "word": " outcome",
+          "start": 149.21,
+          "end": 149.65,
+          "probability": 0.999568521976471
+        },
+        {
+          "word": " is",
+          "start": 149.65,
+          "end": 150.01,
+          "probability": 0.9999040365219116
+        },
+        {
+          "word": " different.",
+          "start": 150.01,
+          "end": 150.51,
+          "probability": 0.9999082088470459
+        },
+        {
+          "word": " Same",
+          "start": 151.25,
+          "end": 151.39,
+          "probability": 0.9990587830543518
+        },
+        {
+          "word": " AI,",
+          "start": 151.39,
+          "end": 151.83,
+          "probability": 0.9919494390487671
+        },
+        {
+          "word": " same",
+          "start": 152.65,
+          "end": 152.81,
+          "probability": 0.9997332692146301
+        },
+        {
+          "word": " prompt,",
+          "start": 152.81,
+          "end": 153.31,
+          "probability": 0.9965839385986328
+        },
+        {
+          "word": " new",
+          "start": 154.01,
+          "end": 154.17,
+          "probability": 0.9980036616325378
+        },
+        {
+          "word": " business",
+          "start": 154.17,
+          "end": 154.55,
+          "probability": 0.9996395111083984
+        },
+        {
+          "word": " logic.",
+          "start": 154.55,
+          "end": 154.99,
+          "probability": 0.9997221827507019
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "start": 155.53,
+      "end": 161.91,
+      "text": "That's the power of a dynamic skill repository. Thanks for watching. I hope this walkthrough helps",
+      "avg_logprob": -0.08666257218768199,
+      "no_speech_prob": 6.941514584468678e-05,
+      "words": [
+        {
+          "word": " That's",
+          "start": 155.53,
+          "end": 155.71,
+          "probability": 0.9996725916862488
+        },
+        {
+          "word": " the",
+          "start": 155.71,
+          "end": 155.79,
+          "probability": 0.9999302625656128
+        },
+        {
+          "word": " power",
+          "start": 155.79,
+          "end": 156.17,
+          "probability": 0.9999202489852905
+        },
+        {
+          "word": " of",
+          "start": 156.17,
+          "end": 156.69,
+          "probability": 0.9999415874481201
+        },
+        {
+          "word": " a",
+          "start": 156.69,
+          "end": 156.83,
+          "probability": 0.999632716178894
+        },
+        {
+          "word": " dynamic",
+          "start": 156.83,
+          "end": 157.29,
+          "probability": 0.9951515197753906
+        },
+        {
+          "word": " skill",
+          "start": 157.29,
+          "end": 157.95,
+          "probability": 0.9975243210792542
+        },
+        {
+          "word": " repository.",
+          "start": 157.95,
+          "end": 158.81,
+          "probability": 0.9997377991676331
+        },
+        {
+          "word": " Thanks",
+          "start": 159.43,
+          "end": 160.01,
+          "probability": 0.9989109039306641
+        },
+        {
+          "word": " for",
+          "start": 160.01,
+          "end": 160.15,
+          "probability": 0.9999676942825317
+        },
+        {
+          "word": " watching.",
+          "start": 160.15,
+          "end": 160.49,
+          "probability": 0.9999290704727173
+        },
+        {
+          "word": " I",
+          "start": 160.89,
+          "end": 160.93,
+          "probability": 0.9998219609260559
+        },
+        {
+          "word": " hope",
+          "start": 160.93,
+          "end": 161.07,
+          "probability": 0.9997962117195129
+        },
+        {
+          "word": " this",
+          "start": 161.07,
+          "end": 161.23,
+          "probability": 0.9997970461845398
+        },
+        {
+          "word": " walkthrough",
+          "start": 161.23,
+          "end": 161.65,
+          "probability": 0.891216516494751
+        },
+        {
+          "word": " helps",
+          "start": 161.65,
+          "end": 161.91,
+          "probability": 0.9997561573982239
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "start": 161.91,
+      "end": 167.33,
+      "text": "you deliver compelling Gen AI solutions. We just scratched the surface of what's possible when you pair",
+      "avg_logprob": -0.08666257218768199,
+      "no_speech_prob": 6.941514584468678e-05,
+      "words": [
+        {
+          "word": " you",
+          "start": 161.91,
+          "end": 162.03,
+          "probability": 0.9999730587005615
+        },
+        {
+          "word": " deliver",
+          "start": 162.03,
+          "end": 162.37,
+          "probability": 0.9997177720069885
+        },
+        {
+          "word": " compelling",
+          "start": 162.37,
+          "end": 163.03,
+          "probability": 0.9998422861099243
+        },
+        {
+          "word": " Gen",
+          "start": 163.03,
+          "end": 163.39,
+          "probability": 0.7849377989768982
+        },
+        {
+          "word": " AI",
+          "start": 163.39,
+          "end": 163.63,
+          "probability": 0.43113693594932556
+        },
+        {
+          "word": " solutions.",
+          "start": 163.63,
+          "end": 164.15,
+          "probability": 0.9989562034606934
+        },
+        {
+          "word": " We",
+          "start": 164.69,
+          "end": 164.79,
+          "probability": 0.9998490810394287
+        },
+        {
+          "word": " just",
+          "start": 164.79,
+          "end": 164.95,
+          "probability": 0.9997918009757996
+        },
+        {
+          "word": " scratched",
+          "start": 164.95,
+          "end": 165.23,
+          "probability": 0.9345606565475464
+        },
+        {
+          "word": " the",
+          "start": 165.23,
+          "end": 165.39,
+          "probability": 0.9999631643295288
+        },
+        {
+          "word": " surface",
+          "start": 165.39,
+          "end": 165.81,
+          "probability": 0.9998407363891602
+        },
+        {
+          "word": " of",
+          "start": 165.81,
+          "end": 165.99,
+          "probability": 0.9999475479125977
+        },
+        {
+          "word": " what's",
+          "start": 165.99,
+          "end": 166.19,
+          "probability": 0.9998559653759003
+        },
+        {
+          "word": " possible",
+          "start": 166.19,
+          "end": 166.61,
+          "probability": 0.999901533126831
+        },
+        {
+          "word": " when",
+          "start": 166.61,
+          "end": 166.87,
+          "probability": 0.9998400211334229
+        },
+        {
+          "word": " you",
+          "start": 166.87,
+          "end": 167.03,
+          "probability": 0.9999626874923706
+        },
+        {
+          "word": " pair",
+          "start": 167.03,
+          "end": 167.33,
+          "probability": 0.9995330572128296
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "start": 167.33,
+      "end": 174.01,
+      "text": "Elastic Search Serverless with Elastic Agent Builder and Clod. By using Elastic Workflows to manage those",
+      "avg_logprob": -0.08666257218768199,
+      "no_speech_prob": 6.941514584468678e-05,
+      "words": [
+        {
+          "word": " Elastic",
+          "start": 167.33,
+          "end": 167.71,
+          "probability": 0.9921600222587585
+        },
+        {
+          "word": " Search",
+          "start": 167.71,
+          "end": 168.03,
+          "probability": 0.6573814749717712
+        },
+        {
+          "word": " Serverless",
+          "start": 168.03,
+          "end": 168.63,
+          "probability": 0.966123640537262
+        },
+        {
+          "word": " with",
+          "start": 168.63,
+          "end": 169.27,
+          "probability": 0.9996153116226196
+        },
+        {
+          "word": " Elastic",
+          "start": 169.27,
+          "end": 169.63,
+          "probability": 0.9983024597167969
+        },
+        {
+          "word": " Agent",
+          "start": 169.63,
+          "end": 170.03,
+          "probability": 0.979379415512085
+        },
+        {
+          "word": " Builder",
+          "start": 170.03,
+          "end": 170.37,
+          "probability": 0.993672251701355
+        },
+        {
+          "word": " and",
+          "start": 170.37,
+          "end": 170.93,
+          "probability": 0.9983856678009033
+        },
+        {
+          "word": " Clod.",
+          "start": 170.93,
+          "end": 171.29,
+          "probability": 0.6592173129320145
+        },
+        {
+          "word": " By",
+          "start": 171.69,
+          "end": 171.87,
+          "probability": 0.9997106194496155
+        },
+        {
+          "word": " using",
+          "start": 171.87,
+          "end": 172.21,
+          "probability": 0.9999589920043945
+        },
+        {
+          "word": " Elastic",
+          "start": 172.21,
+          "end": 172.53,
+          "probability": 0.9796724021434784
+        },
+        {
+          "word": " Workflows",
+          "start": 172.53,
+          "end": 173.07,
+          "probability": 0.8827187418937683
+        },
+        {
+          "word": " to",
+          "start": 173.07,
+          "end": 173.31,
+          "probability": 0.9999538660049438
+        },
+        {
+          "word": " manage",
+          "start": 173.31,
+          "end": 173.65,
+          "probability": 0.9998493194580078
+        },
+        {
+          "word": " those",
+          "start": 173.65,
+          "end": 174.01,
+          "probability": 0.9999102354049683
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "start": 174.01,
+      "end": 178.35,
+      "text": "Claude agent skills. You can maintain that strict, deterministic compliance without",
+      "avg_logprob": -0.11429054705902587,
+      "no_speech_prob": 0.0002733012370299548,
+      "words": [
+        {
+          "word": " Claude",
+          "start": 174.01,
+          "end": 174.29,
+          "probability": 0.8959492444992065
+        },
+        {
+          "word": " agent",
+          "start": 174.29,
+          "end": 174.49,
+          "probability": 0.6642054319381714
+        },
+        {
+          "word": " skills.",
+          "start": 174.49,
+          "end": 174.95,
+          "probability": 0.6453483700752258
+        },
+        {
+          "word": " You",
+          "start": 175.55,
+          "end": 175.57,
+          "probability": 0.9975106716156006
+        },
+        {
+          "word": " can",
+          "start": 175.57,
+          "end": 175.71,
+          "probability": 0.9797354936599731
+        },
+        {
+          "word": " maintain",
+          "start": 175.71,
+          "end": 176.09,
+          "probability": 0.9989829659461975
+        },
+        {
+          "word": " that",
+          "start": 176.09,
+          "end": 176.31,
+          "probability": 0.9930418729782104
+        },
+        {
+          "word": " strict,",
+          "start": 176.31,
+          "end": 176.77,
+          "probability": 0.9958437085151672
+        },
+        {
+          "word": " deterministic",
+          "start": 177.01,
+          "end": 177.55,
+          "probability": 0.9985440075397491
+        },
+        {
+          "word": " compliance",
+          "start": 177.55,
+          "end": 178.03,
+          "probability": 0.998840868473053
+        },
+        {
+          "word": " without",
+          "start": 178.03,
+          "end": 178.35,
+          "probability": 0.995048463344574
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "start": 178.35,
+      "end": 182.41,
+      "text": "without manually updating your application code every time of policy changes. I've linked the",
+      "avg_logprob": -0.11429054705902587,
+      "no_speech_prob": 0.0002733012370299548,
+      "words": [
+        {
+          "word": " without",
+          "start": 178.35,
+          "end": 178.65,
+          "probability": 3.3909012131516647e-07
+        },
+        {
+          "word": " manually",
+          "start": 178.65,
+          "end": 178.77,
+          "probability": 0.9776396751403809
+        },
+        {
+          "word": " updating",
+          "start": 178.77,
+          "end": 179.25,
+          "probability": 0.9960852861404419
+        },
+        {
+          "word": " your",
+          "start": 179.25,
+          "end": 179.41,
+          "probability": 0.9988266825675964
+        },
+        {
+          "word": " application",
+          "start": 179.41,
+          "end": 179.79,
+          "probability": 0.9986880421638489
+        },
+        {
+          "word": " code",
+          "start": 179.79,
+          "end": 180.17,
+          "probability": 0.999268114566803
+        },
+        {
+          "word": " every",
+          "start": 180.17,
+          "end": 180.49,
+          "probability": 0.9976811408996582
+        },
+        {
+          "word": " time",
+          "start": 180.49,
+          "end": 180.77,
+          "probability": 0.9996203184127808
+        },
+        {
+          "word": " of",
+          "start": 180.77,
+          "end": 180.89,
+          "probability": 0.9018567800521851
+        },
+        {
+          "word": " policy",
+          "start": 180.89,
+          "end": 181.15,
+          "probability": 0.9989627599716187
+        },
+        {
+          "word": " changes.",
+          "start": 181.15,
+          "end": 181.57,
+          "probability": 0.9993630051612854
+        },
+        {
+          "word": " I've",
+          "start": 182.05,
+          "end": 182.19,
+          "probability": 0.9873313307762146
+        },
+        {
+          "word": " linked",
+          "start": 182.19,
+          "end": 182.27,
+          "probability": 0.992801308631897
+        },
+        {
+          "word": " the",
+          "start": 182.27,
+          "end": 182.41,
+          "probability": 0.9689224362373352
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "start": 182.41,
+      "end": 186.63,
+      "text": "documentation and sample code for this architecture in the description below. Don't forget to",
+      "avg_logprob": -0.11429054705902587,
+      "no_speech_prob": 0.0002733012370299548,
+      "words": [
+        {
+          "word": " documentation",
+          "start": 182.41,
+          "end": 182.89,
+          "probability": 0.9971953630447388
+        },
+        {
+          "word": " and",
+          "start": 182.89,
+          "end": 183.25,
+          "probability": 0.9985964894294739
+        },
+        {
+          "word": " sample",
+          "start": 183.25,
+          "end": 183.55,
+          "probability": 0.9985929131507874
+        },
+        {
+          "word": " code",
+          "start": 183.55,
+          "end": 183.79,
+          "probability": 0.998331606388092
+        },
+        {
+          "word": " for",
+          "start": 183.79,
+          "end": 183.93,
+          "probability": 0.9975566864013672
+        },
+        {
+          "word": " this",
+          "start": 183.93,
+          "end": 184.07,
+          "probability": 0.9958887696266174
+        },
+        {
+          "word": " architecture",
+          "start": 184.07,
+          "end": 184.61,
+          "probability": 0.9973374009132385
+        },
+        {
+          "word": " in",
+          "start": 184.61,
+          "end": 184.79,
+          "probability": 0.9928378462791443
+        },
+        {
+          "word": " the",
+          "start": 184.79,
+          "end": 184.89,
+          "probability": 0.9994366765022278
+        },
+        {
+          "word": " description",
+          "start": 184.89,
+          "end": 185.23,
+          "probability": 0.9992745518684387
+        },
+        {
+          "word": " below.",
+          "start": 185.23,
+          "end": 185.59,
+          "probability": 0.9988370537757874
+        },
+        {
+          "word": " Don't",
+          "start": 186.09,
+          "end": 186.29,
+          "probability": 0.999323159456253
+        },
+        {
+          "word": " forget",
+          "start": 186.29,
+          "end": 186.47,
+          "probability": 0.9996893405914307
+        },
+        {
+          "word": " to",
+          "start": 186.47,
+          "end": 186.63,
+          "probability": 0.999750554561615
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "start": 186.63,
+      "end": 190.95,
+      "text": "subscribe to the community channel for more practical demos. Good luck with your GenAI",
+      "avg_logprob": -0.11429054705902587,
+      "no_speech_prob": 0.0002733012370299548,
+      "words": [
+        {
+          "word": " subscribe",
+          "start": 186.63,
+          "end": 187.01,
+          "probability": 0.9981145858764648
+        },
+        {
+          "word": " to",
+          "start": 187.01,
+          "end": 187.31,
+          "probability": 0.998783528804779
+        },
+        {
+          "word": " the",
+          "start": 187.31,
+          "end": 187.39,
+          "probability": 0.9989842772483826
+        },
+        {
+          "word": " community",
+          "start": 187.39,
+          "end": 187.69,
+          "probability": 0.8504668474197388
+        },
+        {
+          "word": " channel",
+          "start": 187.69,
+          "end": 188.05,
+          "probability": 0.9997254014015198
+        },
+        {
+          "word": " for",
+          "start": 188.05,
+          "end": 188.23,
+          "probability": 0.9986811280250549
+        },
+        {
+          "word": " more",
+          "start": 188.23,
+          "end": 188.41,
+          "probability": 0.9995827078819275
+        },
+        {
+          "word": " practical",
+          "start": 188.41,
+          "end": 188.81,
+          "probability": 0.998482882976532
+        },
+        {
+          "word": " demos.",
+          "start": 188.81,
+          "end": 189.21,
+          "probability": 0.9971657395362854
+        },
+        {
+          "word": " Good",
+          "start": 189.69,
+          "end": 189.77,
+          "probability": 0.9986300468444824
+        },
+        {
+          "word": " luck",
+          "start": 189.77,
+          "end": 190.03,
+          "probability": 0.9996455907821655
+        },
+        {
+          "word": " with",
+          "start": 190.03,
+          "end": 190.39,
+          "probability": 0.9990297555923462
+        },
+        {
+          "word": " your",
+          "start": 190.39,
+          "end": 190.53,
+          "probability": 0.9989286065101624
+        },
+        {
+          "word": " GenAI",
+          "start": 190.53,
+          "end": 190.95,
+          "probability": 0.6025073379278183
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "start": 190.95,
+      "end": 193.11,
+      "text": "journey and I'll see you in the next video.",
+      "avg_logprob": -0.11429054705902587,
+      "no_speech_prob": 0.0002733012370299548,
+      "words": [
+        {
+          "word": " journey",
+          "start": 190.95,
+          "end": 191.21,
+          "probability": 0.6579455733299255
+        },
+        {
+          "word": " and",
+          "start": 191.21,
+          "end": 191.81,
+          "probability": 0.3038839101791382
+        },
+        {
+          "word": " I'll",
+          "start": 191.81,
+          "end": 191.95,
+          "probability": 0.9980162978172302
+        },
+        {
+          "word": " see",
+          "start": 191.95,
+          "end": 192.11,
+          "probability": 0.9998396635055542
+        },
+        {
+          "word": " you",
+          "start": 192.11,
+          "end": 192.25,
+          "probability": 0.9996905326843262
+        },
+        {
+          "word": " in",
+          "start": 192.25,
+          "end": 192.45,
+          "probability": 0.9994251728057861
+        },
+        {
+          "word": " the",
+          "start": 192.45,
+          "end": 192.55,
+          "probability": 0.99937903881073
+        },
+        {
+          "word": " next",
+          "start": 192.55,
+          "end": 192.73,
+          "probability": 0.9998968839645386
+        },
+        {
+          "word": " video.",
+          "start": 192.73,
+          "end": 193.11,
+          "probability": 0.9996258020401001
+        }
+      ]
+    }
+  ]
+}

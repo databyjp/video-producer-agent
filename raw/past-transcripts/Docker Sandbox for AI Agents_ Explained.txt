@@ -1,0 +1,162 @@
+[00:00:00.370 → 00:00:04.070] Should you let an AI agent run loose on your machine?
+[00:00:04.810 → 00:00:07.610] Well, that's the question developers everywhere are grappling with.
+[00:00:08.230 → 00:00:12.010] The thing is, AI agents are powerful in all senses of that word.
+[00:00:12.550 → 00:00:16.990] They can get a lot done for you, but they've also been known to get things very, very wrong.
+[00:00:17.790 → 00:00:21.050] There have been instances of coding agents, mistakenly deleting users' files
+[00:00:21.050 → 00:00:24.170] or exposing user credentials to a malicious actor.
+[00:00:24.850 → 00:00:27.470] And if you have to babysit it like an over-eager intern,
+[00:00:27.970 → 00:00:30.350] you're losing half the point of having an agent in the phone.
+[00:00:30.370 → 00:00:35.270] first place. Docker is tackling this problem with a new product called Docker Sandbox.
+[00:00:35.890 → 00:00:40.110] So let's take a look at what it is, how it aims to solve these problems and the trade-offs
+[00:00:40.110 → 00:00:44.930] involved in using it. If you've used coding agents, you've probably seen this particular
+[00:00:44.930 → 00:00:50.270] problem. The constant need for attention and permissions. Agents were supposed to offload
+[00:00:50.270 → 00:00:56.010] work from us, but instead it's asking us for permissions to do anything and everything. So why
+[00:00:56.010 → 00:01:00.350] is it set up to be so tedious? Well, the answer is that you are the circuit-brain.
+[00:01:00.370 → 00:01:02.830] from the risks of your agents going rogue.
+[00:01:03.330 → 00:01:06.770] We've seen cases where an agent decides to start from scratch,
+[00:01:07.190 → 00:01:11.830] so it runs RM-RF on your project, or even worse, your whole route directory.
+[00:01:12.730 → 00:01:16.490] One small stumble for the agent, one giant heap of pain for the user.
+[00:01:17.650 → 00:01:19.930] Second, your agent needs credentials.
+[00:01:20.490 → 00:01:24.870] That means API keys, GitHub tokens, environment variables, and so on.
+[00:01:25.530 → 00:01:29.130] A malicious dependency or a prompt injection, and those keys are gone.
+[00:01:30.210 → 00:01:31.050] And this isn't hypothetical.
+[00:01:31.070 → 00:01:36.050] In February 2026, researchers found vulnerabilities in Claude Code that could
+[00:01:36.050 → 00:01:38.630] exfilterate API keys and execute arbitrary code.
+[00:01:39.210 → 00:01:42.630] An open-course marketplace has hundreds of malicious packages.
+[00:01:43.840 → 00:01:48.460] All these risks are why permission prompts exist, and also why running AI agents with
+[00:01:48.460 → 00:01:50.560] auto-accept is called YOLO mode.
+[00:01:51.560 → 00:01:56.060] And all this is why Docker is building sandboxes specifically for AI agents.
+[00:01:56.680 → 00:02:01.620] The main job of a sandbox is to be a protective layer between your agents and the host machine.
+[00:02:01.740 → 00:02:07.160] What Docker sandbox does is by wrapping your AI agent in a virtual machine that is isolated
+[00:02:07.160 → 00:02:12.380] from your host device and putting together additional quality of life improvements for using
+[00:02:12.380 → 00:02:13.340] those coding agents.
+[00:02:13.940 → 00:02:19.840] Now, you might be thinking, wait, Docker already has containers, why not just run the agent in a container?
+[00:02:20.690 → 00:02:24.210] It's a fair question, and it's actually where Docker Sandbox initially started.
+[00:02:24.770 → 00:02:30.410] But there are a few reasons why they moved away from this in Docker Desktop 4058 onwards.
+[00:02:31.100 → 00:02:35.960] The first is the kernel. Containers share the host kernel with the OS. They
+[00:02:35.960 → 00:02:41.160] just isolate the file system and processors on top of it. That means any kernel level exploit
+[00:02:41.160 → 00:02:46.480] inside the container hits your host OS directly. For a web server, maybe that's an acceptable
+[00:02:46.480 → 00:02:53.050] trade-off, but for an AI agent running arbitrary code on your device, less so. The second problem
+[00:02:53.050 → 00:02:58.350] is Docker itself. Coding agents need to do things like Docker build, run testing containers,
+[00:02:58.770 → 00:03:00.710] spin-up services with Docker Compose and so on.
+[00:03:00.730 → 00:03:05.810] But if your agent is already inside a container, how does it run Docker commands?
+[00:03:06.430 → 00:03:08.790] Well, as it turns out, you've got two not great options.
+[00:03:09.690 → 00:03:13.210] The first is Docker and Docker, which runs the container in privileged mode.
+[00:03:13.890 → 00:03:17.930] This unfortunately tears down the isolation that you're trying to create in the first place.
+[00:03:18.570 → 00:03:21.390] The second option is to mount the Docker socket from the host.
+[00:03:21.990 → 00:03:25.730] This gives the agent direct access to every container and volume on your machine.
+[00:03:26.250 → 00:03:27.750] That's arguably worse.
+[00:03:28.490 → 00:03:30.710] As a result, Docker went with virtual machines.
+[00:03:30.730 → 00:03:36.920] or VMs. A VM gives you deeper levels of isolation than containers by owning its own
+[00:03:36.920 → 00:03:43.000] entire operating system on virtualized hardware. Think parallels or VMware running Windows on your Mac.
+[00:03:43.700 → 00:03:49.180] A piece of software called a hypervisor act as the middleman between the guest OS and the real hardware.
+[00:03:50.000 → 00:03:54.960] Your host OS and everything on it is fully insulated from anything that happens inside the guest.
+[00:03:55.500 → 00:04:00.560] That's why Docker chose VMs for the sandbox. Of course, that isolation isn't free.
+[00:04:00.560 → 00:04:06.340] our VM requires a full operating system with hardware resources, networking, package managers, all of it.
+[00:04:07.060 → 00:04:11.540] So even Docker's micro VM requires gigabytes of memory, which is ironic.
+[00:04:12.220 → 00:04:17.260] VMs being resource hungry is exactly why Docker containers became so popular in the first place.
+[00:04:18.000 → 00:04:20.340] I guess in the age of AI, everything old is new again.
+[00:04:21.580 → 00:04:23.520] That's the core architecture of the Docker sandbox.
+[00:04:24.120 → 00:04:25.760] Now, what's it like to actually use it?
+[00:04:26.120 → 00:04:29.980] Let's take a look at the practical side through the developer experience and the tooling.
+[00:04:30.200 → 00:04:34.020] Let's start with what the VM architecture means for your coding agents.
+[00:04:34.920 → 00:04:38.280] Inside each Docker sandbox is a completely private Docker Damon.
+[00:04:38.980 → 00:04:45.020] Your agent can build, run, and delete Docker containers completely separate from your host Docker environment.
+[00:04:45.880 → 00:04:48.860] That means your agent can run code validation, debugging or testing,
+[00:04:49.560 → 00:04:53.520] or even spin up its own tooling as needed without any risk to your host device.
+[00:04:54.600 → 00:04:57.840] Now, the agentic tooling. Two things really stand out here.
+[00:04:58.750 → 00:05:00.010] First, FileSync.
+[00:05:00.010 → 00:05:05.950] Docker uses bi-directional file sync for files in your working directory, preserving your absolute parts.
+[00:05:06.510 → 00:05:12.850] That means everything matches your host, whether it comes to relationship these files, or outputs like stack traces or error messages.
+[00:05:13.430 → 00:05:14.990] No mental translation needed.
+[00:05:16.090 → 00:05:20.870] Second, credential injection. Remember we talked about API keys and credentials being a risk?
+[00:05:21.430 → 00:05:27.450] Well, Docker sandbox uses a proxy to inject your credentials into the outbound API requests on the fly.
+[00:05:28.170 → 00:05:30.250] The agent never sees the actual token.
+[00:05:30.270 → 00:05:36.790] So even if the sandbox is compromised, your credentials can't be stolen because they were never in the sandbox.
+[00:05:37.630 → 00:05:41.230] Another cool thing about the architecture is that the VM is built from a Docker file.
+[00:05:42.080 → 00:05:45.080] You can customize the agent's tooling by creating your own Docker file.
+[00:05:45.840 → 00:05:50.960] And if the agent doesn't know how to use these tools, you can extend their knowledge through frameworks like agent's skills.
+[00:05:52.160 → 00:05:56.140] For example, you could add Playwright CLI to the Docker file as a headless browser,
+[00:05:56.960 → 00:06:00.600] and then add Microsoft's own official Playwright CLI skill,
+[00:06:00.620 → 00:06:04.820] in the project directory to teach the agent how to actually drive the CLI.
+[00:06:05.690 → 00:06:10.790] You can also set network policies to let you control exactly which domains the agent can reach.
+[00:06:11.230 → 00:06:16.230] I could, for example, only include my serverless elastic project domain to the allow list
+[00:06:16.230 → 00:06:19.370] and not let my agent touch any other part of the internet.
+[00:06:20.010 → 00:06:22.870] Now let me show you what the user experience looks like in practice.
+[00:06:23.410 → 00:06:24.690] Hey, Future JP here.
+[00:06:25.050 → 00:06:30.910] So since we recorded this video last week in late March, Docker's release Docker Sandbox as a standalone CLI tool,
+[00:06:30.970 → 00:06:36.730] called SBX. What you'll see past JP use here is the Sandbox tool that comes with Docker desktop.
+[00:06:37.210 → 00:06:41.230] Slightly different syntax, but basically the same tool, so all the key concepts still apply.
+[00:06:42.030 → 00:06:46.750] Both tools are available, so any way where you see me type Docker Sandbox, you could potentially
+[00:06:46.750 → 00:06:50.490] use SBX as an alternative, but either is fine.
+[00:06:51.250 → 00:06:52.270] Okay then, back to your JP.
+[00:06:52.950 → 00:06:55.510] Running Docker Sandbox is just one command like this.
+[00:06:57.270 → 00:07:01.730] And you'll see that we've booted directly into agent's interface, in this case Claude code.
+[00:07:02.310 → 00:07:05.610] This is now running in the VM, not on your host machine.
+[00:07:06.990 → 00:07:08.030] Let's get it to run a task.
+[00:07:09.980 → 00:07:13.440] And you can see that the agent's working here, so let's leave it to do its own thing.
+[00:07:14.580 → 00:07:19.900] And meanwhile, if I open a new terminal tab and run DockerPS on my host, you get nothing.
+[00:07:20.400 → 00:07:21.560] The sandbox doesn't show up.
+[00:07:22.180 → 00:07:25.060] But if I run Docker Sandbox LS, there it is.
+[00:07:25.640 → 00:07:27.740] So it's a completely separate management plane.
+[00:07:29.080 → 00:07:33.280] And if I want to see what the agent's been doing on the network, I can run Docker Sandbox Network,
+[00:07:33.720 → 00:07:36.460] this will give me a full breakdown of every request.
+[00:07:36.720 → 00:07:38.920] What was allowed, what was blocked, and so on.
+[00:07:39.440 → 00:07:42.900] And when we go back, we'll see it's done a bunch of things like install dependencies,
+[00:07:43.460 → 00:07:45.480] built the project, and even run some tests.
+[00:07:46.410 → 00:07:50.250] I've been using DockerStandbox quite a bit in my personal workflow for a few weeks now.
+[00:07:51.050 → 00:07:53.570] And I've really enjoyed the fact that I can trust it to work away,
+[00:07:53.930 → 00:07:56.290] without it running around and smashing up parts of my computer.
+[00:07:56.870 → 00:08:02.010] The lack of unnecessary context switching really has helped me focus a lot more on my other work.
+[00:08:03.410 → 00:08:04.150] So far, I've done.
+[00:08:04.170 → 00:08:07.890] I've talked about how great Docker sandbox is, but look, it's not without its drawbacks.
+[00:08:09.340 → 00:08:11.340] The biggest one is just a resource overhead.
+[00:08:11.980 → 00:08:16.140] While a lightweight container would use maybe tens of megabytes on disk, I found that even
+[00:08:16.140 → 00:08:18.680] a fresh sandbox would use 5 to 6 gigabytes.
+[00:08:19.650 → 00:08:25.590] Also, each sandbox is assigned 4 gigas of memory, with about 1 gig of that being used by the sandbox
+[00:08:25.590 → 00:08:26.050] itself.
+[00:08:26.870 → 00:08:31.730] So if you're on those people, and you know who I mean, running a gaggle of agents in parallel,
+[00:08:31.730 → 00:08:35.450] well, it's going through E3 or system resources pretty quickly.
+[00:08:36.650 → 00:08:41.410] So you should really consider which agents need the extra guardrails and maybe only run those
+[00:08:41.410 → 00:08:43.710] in the sandbox if you're going to be running multiple agents.
+[00:08:44.850 → 00:08:47.150] Platform support is another potential sticking point.
+[00:08:47.950 → 00:08:53.310] Me personally, I'm pretty happy because macOS on Apple Silicon gets the full microvm experience.
+[00:08:54.170 → 00:08:58.950] But if you're in Windows, well, support is labeled experimental, in other words, use at your own risk.
+[00:08:59.690 → 00:09:02.190] And Linux users do we get container-based sandboxes
+[00:09:02.270 → 00:09:04.990] which, as we talked about, means weaker isolation.
+[00:09:06.590 → 00:09:09.110] There are also some side effects of being a separate VM.
+[00:09:09.770 → 00:09:13.150] Adding a persistent environment variable requires you to stop the sandbox,
+[00:09:13.550 → 00:09:15.530] deleted, and recreate it from scratch.
+[00:09:16.290 → 00:09:18.310] That means losing your entire agent conversation,
+[00:09:18.910 → 00:09:21.010] unless you somehow manually back it up and restore it.
+[00:09:22.180 → 00:09:26.560] One team called this a steep penalty for a small configuration mistake in their blogging.
+[00:09:27.120 → 00:09:28.140] They probably have a point.
+[00:09:29.530 → 00:09:34.270] Also, I've talked a lot of here about isolation and protection, but you need to
+[00:09:34.290 → 00:09:37.850] know that Docker Sandbox doesn't protect your project files.
+[00:09:38.650 → 00:09:42.610] Your workspace is still fully rightable inside the sandbox, but it has to be otherwise the agent
+[00:09:42.610 → 00:09:43.650] couldn't do its job.
+[00:09:44.610 → 00:09:47.870] It also means, though, that the agent can delete your code base and eat your work.
+[00:09:48.490 → 00:09:52.430] The sandbox protects your system, but your project itself is still vulnerable to the agent.
+[00:09:53.110 → 00:09:56.010] So keep committing your work and keep pushing it to a safe place.
+[00:09:56.920 → 00:09:59.080] Docker Sandbox isn't the only game in town.
+[00:09:59.660 → 00:10:04.320] A cursory search will show other providers building sandboxes on the cloud, or building them as
+[00:10:04.320 → 00:10:09.200] part of agents and frameworks. As with all things AI, the space is moving really, really
+[00:10:09.200 → 00:10:15.740] fast. But Docker Sandbox does have a few key advantages. It's local, and it gives you a full
+[00:10:15.740 → 00:10:20.640] Docker Damon inside the sandbox. Plus, it comes with the Docker desktop. So if you have access
+[00:10:20.640 → 00:10:26.200] to that, like millions of developers, you already have access to Docker Sandbox. And they seem to be
+[00:10:26.200 → 00:10:31.060] investing in the agent ecosystem pretty seriously. So they're building out an MCP catalog and
+[00:10:31.060 → 00:10:35.040] toolkit and partnering with others for Cloud Sandboxes. It really seems like they've been
+[00:10:35.060 → 00:10:41.340] building a platform, not just a feature. I think sandbox infrastructure for AI agents is becoming
+[00:10:41.340 → 00:10:46.760] as essential as contained orchestration was maybe a decade ago. The question isn't, should we
+[00:10:46.760 → 00:10:51.720] sandbox our agents? It's how quickly can we sandbox everything and what's maybe the right
+[00:10:51.720 → 00:10:58.360] sandbox architecture for this particular agent? Docker sandbox is a very accessible on-ramp with serious
+[00:10:58.360 → 00:11:03.440] isolation. It's free for Docker desktop, so it's easy to get set up and use, and it's quite
+[00:11:03.440 → 00:11:04.760] customizable too as well.
+[00:11:06.560 → 00:11:11.330] using Docker Sandbox for a short while, and I'm quite excited. I'm actually going to be playing
+[00:11:11.330 → 00:11:16.630] in the sandbox a lot more in the future. One thing that I'm really excited to do personally is to use
+[00:11:16.630 → 00:11:31.160] it with a language. I'd also love to hear about your preferred isolation strategy for your
+[00:11:31.160 → 00:11:36.620] coding agent. Are you like me and find Docker Sandbox a good solution for your use case? If not,
+[00:11:36.740 → 00:11:40.400] I'd love to hear why and what else you use. Please let me know in the comments.
+[00:11:41.100 → 00:11:45.460] That's it for me. Thanks for watching. Remember to like, subscribe and tell your friends and pets.
+[00:11:46.020 → 00:11:47.120] Okay, see you next time.
+[00:11:47.220 → 00:11:47.600] Thank you.

@@ -615,3 +615,43 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Structure:** Reworked the hook around the selective “what matters” promise, added explicit audience decisions to each major section, and moved Alerting v2's weak-signal example ahead of its abstract model.
 - **Delivery:** Split dense technical sentences, strengthened spoken navigation, restored an opening visual payoff, and made the closing question consistent with all four major features.
 - **Evidence boundary:** Factual claims were assumed correct at the user's request; existing pre-record verification markers remain unresolved.
+
+## 2026-07-20 — Elastic 9.5 release script review (draft v3)
+
+- **Review:** Reviewed `projects/202607-elastic-9-5-release-highlights/script.md` (draft v3) against the outline, packaging promise, and baseline writing guidance. Fact checking was excluded at the user's request; no files were edited.
+- **Must-fix findings:** The hook promises a "ready to use vs ready to test" split that the body never delivers (all four major features are previews); the on-screen Alerting v2 ES|QL example has an unreachable "low" severity branch because the `WHERE` filter removes those rows; "preconditioning" appears once in the vector section with no definition.
+- **Polish findings:** Impersonal register with no reaction beats in the columnar and alerting sections; identical "worth testing, but…" closing cadence on all four sections; the spoken "that covers X, next is Y" bridge is used only once; the REDset/CloudTrail dataset ambiguity in the federation verify note; "give us a like" person mismatch; "Enterprise feature" lacks a paid-tier gloss for viewers.
+- **Confirmed sound:** Scope boundaries with the columnar deep dive, exclusion of unsupported benchmark multipliers, `LOOKUP JOIN` as the federation demo, weak-signals-first alerting structure, spelled-out numbers, and visual-direction notation.
+
+## 2026-07-21 — YouTube analytics and transcript review
+
+- **Analysis:** Reviewed 22 YouTube exports, including 18 nominally complete first-28-day windows, and compared reach, CTR, watch hours, average view duration, percentage viewed, and subscriber conversion against available transcripts.
+- **Output:** Added `analytics/results/yt-analytics-20260720/insights.md` and expanded `wiki/channel-findings-july-2026.md`.
+- **Main finding:** Docker Sandbox was the only clear all-stage winner, producing 22,957 impressions, 5.63% CTR, 2,481 views, and 164.7 watch hours in 28 days—47.9% of produced-video watch hours.
+- **Segment findings:** Broad long-form education generated watch time despite low percentage viewed; focused model content converted qualified viewers despite limited reach; short release coverage delivered efficient depth; event recordings accumulated depth but had a median of zero subscribers per 1,000 views.
+- **Review candidates:** The AI-agent regression video has the clearest packaging/audience-fit issue; the agent-skills video delays its promised practical application; closely clustered embedding coverage may divide a finite audience.
+- **Data quality:** Flagged an inconsistent launch window for `What if you could log everything?`; traffic sources, retention curves, exact publication metadata, and packaging history are still required for causal diagnosis.
+
+## 2026-07-21 — Docker traffic-source finding
+
+- **Channel data supplied:** Docker Sandbox received 42.7% of traffic from YouTube Search. External sources supplied about 15%, with Google contributing approximately 60% of external traffic, or an estimated 9% of the total.
+- **Interpretation:** Roughly 51.7% of traffic was search-led, supporting durable search demand as the main explanation for the video's long tail.
+- **Evidence boundary:** The traffic-source period was not specified. Google traffic is external to YouTube impressions and cannot explain the video's YouTube impression CTR increase.
+- **Updates:** Added the finding and revised Docker hypothesis to `analytics/results/yt-analytics-20260720/insights.md` and `wiki/channel-findings-july-2026.md`.
+
+## 2026-07-21 — Elastic 9.5 script direction review
+
+- **Review:** Assessed `projects/202607-elastic-9-5-release-highlights/script.md` against its outline, script guidance, current 9.5 primary sources, and July channel findings. No script changes were made.
+- **Direction:** The “store less, move less, tune less, page less” structure gives six release items one coherent argument and works as a curated existing-user briefing.
+- **Analytics implication:** At roughly 1,558 spoken words, the estimated eleven-minute script gives up the short, dense profile that helped the 9.4 update achieve 4.44% CTR and 42.18% average viewed. Its strongest search-led concepts—Columnar Mode and querying S3 through ES|QL—may have more reach and long-tail potential as standalone problem-plus-tool videos.
+- **Must-fix before recording:** Align the opening's “ready to use or ready to test” promise with a preview-heavy body; fix or clarify the Alerting v2 severity example's unreachable low branch; define “preconditioning.”
+- **Editorial opportunity:** “What Actually Matters” promises judgment, but the current script gives four mostly equal sections. An explicit ranking—biggest strategic change, clearest feature to test, niche specialist change, and longer-term direction—would better fulfill the title.
+
+## 2026-07-21 — Elastic 9.5 highlights script shortened
+
+- **Revision:** Condensed `projects/202607-elastic-9-5-release-highlights/script.md` from draft v3 to draft v4.
+- **Pacing basis:** The published 9.4 script contained approximately 711 spoken words and produced a 4:15 video, or roughly 167 words per minute.
+- **New length:** Approximately 1,083 spoken words, projecting to about 6.5 minutes at the same delivery pace.
+- **Editorial changes:** Retained the four-part “store less, move less, tune less, page less” structure; added explicit judgments for each feature; removed the two minor release-note items; compressed mechanics and repeated caveats.
+- **Corrections:** Aligned the hook with the preview-heavy body, removed unexplained “preconditioning,” and made the Alerting v2 severity query consistent with its post-filter results.
+- **Validation:** Preserved pre-record checks for maturity, availability, licensing, API behavior, and demo support. `git diff --check` passed.

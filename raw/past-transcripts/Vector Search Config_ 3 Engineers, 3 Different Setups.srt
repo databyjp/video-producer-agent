@@ -1,0 +1,851 @@
+1
+00:00:00,340 --> 00:00:04,240
+Imagine three engineers, each building a vector search feature.
+
+2
+00:00:05,080 --> 00:00:11,120
+One setup costs the most to run, one runs incredibly fast but misses hits sometimes, and the third
+
+3
+00:00:11,120 --> 00:00:14,400
+runs on very low budget but hits the disc constantly.
+
+4
+00:00:15,600 --> 00:00:18,840
+So who's done the best job and did the other two screw up?
+
+5
+00:00:19,480 --> 00:00:22,400
+Hold that thought and let's take a look at the actual architecture.
+
+6
+00:00:23,790 --> 00:00:25,250
+Khoras built the expensive one.
+
+7
+00:00:25,730 --> 00:00:30,910
+She's using a high dimensional embedding model, full precision vectors, deep re-ranking on every
+
+8
+00:00:30,910 --> 00:00:37,900
+query. She checks the search quality through recall and goes on happy. Samantha's done too. She
+
+9
+00:00:37,900 --> 00:00:42,360
+picks the same embedding model family as Kora, but she's using a slightly smaller model,
+
+10
+00:00:42,700 --> 00:00:47,460
+truncated the vector to a third with Matrioshka, configured her index with BBQ quantization,
+
+11
+00:00:48,180 --> 00:00:54,910
+and skipped re-ranking entirely. Her results come back lightning fast. And Ben's push to production.
+
+12
+00:00:55,570 --> 00:01:01,750
+He's using a self-hosted open source model, with vectors living almost entirely on disk, aggressive quantization
+
+13
+00:01:01,750 --> 00:01:05,470
+everywhere, and then a tiny reranker at the end to clean things up.
+
+14
+00:01:06,320 --> 00:01:09,600
+His cloud dashboard shows a tiny bill which makes him very happy.
+
+15
+00:01:10,760 --> 00:01:14,760
+Should they all be happy with these vastly different outcomes? What do you think?
+
+16
+00:01:15,480 --> 00:01:20,260
+Let's learn more about these decisions. To configure vector search, you're really
+
+17
+00:01:20,260 --> 00:01:26,820
+setting up three big subsystems, each playing a big part. The first decision relates to the embedding
+
+18
+00:01:26,820 --> 00:01:32,680
+model. That's decisions like which model generates your vectors, how many dimensions, and where it's
+
+19
+00:01:32,680 --> 00:01:38,380
+hosted. The second is the vector indexing and storage. That defines how these vectors
+
+20
+00:01:38,380 --> 00:01:43,320
+are stored, compressed, and searched. You need to decide on the index type, the quantization,
+
+21
+00:01:43,980 --> 00:01:50,480
+and the recovery mechanism. The third is re-ranking. Here, you're deciding whether to run a second model
+
+22
+00:01:50,480 --> 00:01:56,360
+to rescore the top results. And if so, which model, how many results do you feed it, and is it worth
+
+23
+00:01:56,360 --> 00:02:02,180
+the latency? Each one of these subsystems, of course, has parameters that you can tune. So,
+
+24
+00:02:02,180 --> 00:02:06,660
+So while the defaults are sensible, you can tune these parameters to get your system better
+
+25
+00:02:06,660 --> 00:02:09,120
+optimised for accuracy, speed or cost.
+
+26
+00:02:09,900 --> 00:02:13,420
+The hard part is knowing where to set each one for your situation.
+
+27
+00:02:14,530 --> 00:02:16,130
+Here's what our engineers are working on.
+
+28
+00:02:16,770 --> 00:02:21,850
+Cora is building a legal and medical research tool. She's working with about a million documents,
+
+29
+00:02:22,150 --> 00:02:27,970
+each containing long, dense filings and studies. So after chunking, that becomes tens of millions
+
+30
+00:02:27,970 --> 00:02:32,140
+of vectors. What matters the most to Cora is search quality.
+
+31
+00:02:32,400 --> 00:02:36,720
+If her tool returns the wrong case or study, someone makes a bad decision.
+
+32
+00:02:37,120 --> 00:02:40,680
+Maybe that leads to a lawsuit or a medical research goes down the wrong path.
+
+33
+00:02:41,240 --> 00:02:42,440
+Quality above everything.
+
+34
+00:02:43,590 --> 00:02:49,410
+Samantha runs product search for an e-commerce platform with millions of SKUs and one day, potentially billions.
+
+35
+00:02:50,290 --> 00:02:55,470
+Her customers are impatient shoppers, meaning every millisecond of latency, risks a lost conversion.
+
+36
+00:02:56,360 --> 00:03:00,680
+For Samantha, search results need to be good, but speed matters more than perfection.
+
+37
+00:03:02,190 --> 00:03:04,310
+Ben is building a document archive.
+
+38
+00:03:04,970 --> 00:03:08,150
+Tens of millions of documents now, hundreds of millions eventually.
+
+39
+00:03:09,000 --> 00:03:12,200
+Potentially, Ben's looking at billions of vectors after chunking.
+
+40
+00:03:12,920 --> 00:03:14,540
+But this is a dusty archive.
+
+41
+00:03:15,100 --> 00:03:20,300
+Most documents are rarely accessed, and his users demand competitive pricing above all else.
+
+42
+00:03:21,230 --> 00:03:23,830
+Ben's job is to keep cost as low as possible.
+
+43
+00:03:25,140 --> 00:03:27,280
+You can see that these are all very different tasks.
+
+44
+00:03:27,600 --> 00:03:31,940
+Sure, they all need vector search, but that doesn't mean the same system can serve their needs anymore.
+
+45
+00:03:32,120 --> 00:03:36,940
+than the same computer chip can be used for an iPhone, a supercomputer, and tickle me Elmo.
+
+46
+00:03:37,820 --> 00:03:42,460
+Let's take a look at how the specific decisions change as a result, starting with the embedding model.
+
+47
+00:03:43,420 --> 00:03:48,480
+The embedding model has the biggest impact on your search quality, and a big chunk of your costs.
+
+48
+00:03:49,060 --> 00:03:53,000
+But choosing a model is a bit more nuanced than picking a name from a list.
+
+49
+00:03:54,070 --> 00:03:58,470
+We can talk in detail about model choice in another video, but let's keep it short here.
+
+50
+00:03:59,340 --> 00:04:02,800
+When choosing a model, make sure it supports the form of your input,
+
+51
+00:04:02,820 --> 00:04:08,380
+like modalities. So, the unity embed images, audio or video, for example, as well as text,
+
+52
+00:04:09,040 --> 00:04:14,480
+and then whether it supports the languages that you need. Once you know that, the MTAB is a great
+
+53
+00:04:14,480 --> 00:04:19,720
+starting point for choosing a model. You get a great deal of information about the model and benchmarks
+
+54
+00:04:19,720 --> 00:04:24,960
+on standard tasks. Just keep in mind that scores are self-reported across generic benchmarks.
+
+55
+00:04:26,310 --> 00:04:31,010
+And since your actual task is unlikely to involve the benchmark data set, it's a good idea
+
+56
+00:04:31,010 --> 00:04:37,180
+to test on your actual data. Beyond the model itself, there's a powerful trick called
+
+57
+00:04:37,180 --> 00:04:42,620
+Matryoshka representation learning. It trains the model so that the first end dimensions carry the
+
+58
+00:04:42,620 --> 00:04:47,420
+most important information, so you can just chop off the rest at the end. Starting from a
+
+59
+00:04:47,420 --> 00:04:53,880
+1,024 dimensional vector like that from the GNA V5 text model, you can only retain the first 512
+
+60
+00:04:53,880 --> 00:05:00,560
+with minimal quality loss while halving your storage needs. Choosing a Matrioshka trained model means
+
+61
+00:05:00,560 --> 00:05:05,620
+dimensional choice is a separate decision from model choice. Pick the best model you can afford
+
+62
+00:05:05,620 --> 00:05:12,220
+and then truncates the smallest dimension your recall tolerates. And then there's hosting. Managed inference
+
+63
+00:05:12,220 --> 00:05:17,540
+through, say, Elastic or another API like Gina versus self-hosting open weight models on your
+
+64
+00:05:17,540 --> 00:05:24,240
+own GPUs. Self-hosting eliminates per token cost, which starts mattering a lot above 100 million
+
+65
+00:05:24,240 --> 00:05:29,950
+tokens a month. But you have to manage a lot of infrastructure, which we all know isn't easy or cheap,
+
+66
+00:05:29,950 --> 00:05:34,150
+especially when you factor in the potential downtime or the resources required.
+
+67
+00:05:35,500 --> 00:05:38,660
+Given all that, let's talk about what choices make sense for our friends.
+
+68
+00:05:39,380 --> 00:05:41,740
+Remember that Cora prioritizes search quality.
+
+69
+00:05:42,220 --> 00:05:46,660
+She wants to use a high performance model with full length and full precision vectors
+
+70
+00:05:46,660 --> 00:05:48,580
+to help her get maximum recall.
+
+71
+00:05:49,280 --> 00:05:55,740
+So she uses a GNA V5 text small through Elastic Inference Service at full 1024 dimensions.
+
+72
+00:05:56,440 --> 00:05:58,160
+Samantha is after speed.
+
+73
+00:05:58,580 --> 00:06:00,320
+She uses the even smaller version of her.
+
+74
+00:06:00,340 --> 00:06:04,540
+of the GINA model, the V5 text nano through Elastic Inference Service.
+
+75
+00:06:05,220 --> 00:06:10,620
+It's not as performant as the V5 text small, but it's faster, and she speeds up her system further
+
+76
+00:06:10,620 --> 00:06:13,680
+by truncating the resulting vectors with Matrioshka embeddings.
+
+77
+00:06:14,910 --> 00:06:20,110
+Ben does his research and finds that self-hosting is the way to go, with the lowest long-term costs.
+
+78
+00:06:20,610 --> 00:06:26,230
+He evaluates the GNA V5 small model through the GNA API and then decides between an on-prem deployment
+
+79
+00:06:26,230 --> 00:06:30,670
+with a license from Elastic or chooses an open weight model like a Quinn model, which
+
+80
+00:06:30,690 --> 00:06:33,690
+might not perform as well, but it would lead to lower costs.
+
+81
+00:06:34,610 --> 00:06:37,270
+They've now got some sort of an embedding model putting vectors.
+
+82
+00:06:37,770 --> 00:06:41,930
+What they need is a vector index and storage configuration, which will determine how they're
+
+83
+00:06:41,930 --> 00:06:43,870
+stored, compressed, and searched.
+
+84
+00:06:44,950 --> 00:06:49,530
+The key configuration targets here are the vector index type, parameters within that vector
+
+85
+00:06:49,530 --> 00:06:51,470
+index type, and quantization.
+
+86
+00:06:52,600 --> 00:06:56,120
+Broadly, there are two families of common vector index types these days.
+
+87
+00:06:56,520 --> 00:07:00,780
+One is H&SW, which is memory-based, and the other is a disk-based index.
+
+88
+00:07:01,360 --> 00:07:07,520
+The HNSW family builds a multi-layer graph, where each vector is connected to its nearest neighbors.
+
+89
+00:07:08,240 --> 00:07:14,400
+This is the fast, high recall type of vector index with the requirement that the graph and the vectors need to fit in memory.
+
+90
+00:07:15,500 --> 00:07:18,340
+Then there are disk-based indexes like this BBQ.
+
+91
+00:07:18,760 --> 00:07:23,100
+They take a fundamentally different approach to avoid this memory limitation of HNSW.
+
+92
+00:07:23,860 --> 00:07:31,740
+This BBQ, for example, partitions vectors into clusters, and only puts the centroid into memory, leaving the actual vectors on disk.
+
+93
+00:07:31,900 --> 00:07:34,280
+This hugely reduces the required memory.
+
+94
+00:07:34,700 --> 00:07:39,480
+And while the search latency isn't as good with disk bbq with HNS in general, the difference
+
+95
+00:07:39,480 --> 00:07:40,460
+isn't that big.
+
+96
+00:07:40,980 --> 00:07:46,940
+And other operations like indexing or ingestion is actually faster with disk bbq than with HNSW.
+
+97
+00:07:47,910 --> 00:07:53,310
+Both HNSW and disk bbq also have further detailed parameters for tuning the indexes.
+
+98
+00:07:53,790 --> 00:07:58,250
+When it comes to HNSW, the key parameters are M, which defines how many connections
+
+99
+00:07:58,250 --> 00:08:02,490
+each node can have in the graph, and EF construction, which is the size of
+
+100
+00:08:02,510 --> 00:08:05,230
+candidates to keep in memory while building the graph.
+
+101
+00:08:06,330 --> 00:08:12,050
+Moving to disk bbq, the key parameter is default visit percentage, which sets the default
+
+102
+00:08:12,050 --> 00:08:15,110
+fraction of vectors to be visited per shard during search.
+
+103
+00:08:16,520 --> 00:08:22,200
+And let's talk a little bit more about quantization. By default, vectors might be made of 32 bits each,
+
+104
+00:08:22,720 --> 00:08:27,120
+but it turns out that a lot of that information can be just thrown away with fairly limited
+
+105
+00:08:27,120 --> 00:08:33,480
+accuracy penalty. So we can actually only use 8 or 4 bits, or even a single bit with bbq or
+
+106
+00:08:33,600 --> 00:08:36,560
+better binary quantization to represent each number.
+
+107
+00:08:37,460 --> 00:08:40,260
+Quantization saves RAM and speeds up retrieval.
+
+108
+00:08:40,780 --> 00:08:45,560
+Note that it doesn't necessarily save disk space as Elasticsearch always keeps the raw
+
+109
+00:08:45,560 --> 00:08:48,540
+vectors on disk for rescoring. Speaking of which,
+
+110
+00:08:49,120 --> 00:08:53,480
+rescoring in combination with oversampling is what vector search engines use these
+
+111
+00:08:53,480 --> 00:08:58,330
+days to recover most of the lost information. At query time, let's say you ask for the
+
+112
+00:08:58,330 --> 00:09:03,670
+top 10 results. Then, what a system like Elasticsearch does is to apply oversampling,
+
+113
+00:09:03,790 --> 00:09:06,650
+grabbing additional like three times the required number.
+
+114
+00:09:07,010 --> 00:09:10,270
+So that would be the top 30 candidates using the quantized vectors.
+
+115
+00:09:10,770 --> 00:09:16,590
+It then rescores all 30 against the original unquantized vectors on disk and returns the best 10.
+
+116
+00:09:17,100 --> 00:09:21,000
+For most data sets, this recovers nearly all of the recall loss.
+
+117
+00:09:21,970 --> 00:09:24,670
+Knowing all days, what do you think our engineers would choose?
+
+118
+00:09:24,910 --> 00:09:25,930
+Because here's what I think.
+
+119
+00:09:26,510 --> 00:09:29,250
+Kora picks H&SW unquantized with full precision,
+
+120
+00:09:29,870 --> 00:09:33,650
+M of 32, and EF construction of 400 for a denser graph.
+
+121
+00:09:33,890 --> 00:09:40,790
+Roughly, she might require 5 gigabytes of RAM per 1 million vectors, or 100 gigabytes of RAM per 20 million vectors.
+
+122
+00:09:41,670 --> 00:09:46,050
+You can see how this starts to get very expensive for Quora as the data set grows in size,
+
+123
+00:09:46,490 --> 00:09:48,630
+but she'll get the best search quality possible.
+
+124
+00:09:50,040 --> 00:09:52,060
+Samantha picks BBQ HSW.
+
+125
+00:09:52,600 --> 00:09:56,960
+This is the same graph algorithm as Quora's, but with 32 times less memory for the vectors
+
+126
+00:09:56,960 --> 00:10:01,800
+thanks to BBQ quantization, with default parameters and 3 times oversampling.
+
+127
+00:10:02,500 --> 00:10:04,440
+As a result, Samantha would need less
+
+128
+00:10:04,460 --> 00:10:09,740
+than a gigabyte of RAM per a million vectors. The oversampling fits inside a latency budget
+
+129
+00:10:09,740 --> 00:10:17,970
+and recovers a big part of her recall loss. Now Ben picks BBQ disk. At his scale, H&SW would need
+
+130
+00:10:17,970 --> 00:10:22,470
+hundreds of gigabytes of RAM, which he can't afford. And if the graph falls out of memory,
+
+131
+00:10:22,990 --> 00:10:29,630
+latency spikes significantly. So instead, he uses disk BBQ, which needs much less RAM to start
+
+132
+00:10:29,630 --> 00:10:34,730
+with, and when it does run out, it degrades linearly and gracefully. He might also
+
+133
+00:10:34,750 --> 00:10:39,470
+only need 100 megabytes of RAM per million vectors and enjoys fast ingestion.
+
+134
+00:10:40,150 --> 00:10:46,090
+He can even set on-disc rescore to true, so even the rescoring step happens on disk and doesn't
+
+135
+00:10:46,090 --> 00:10:47,150
+blow his RAM budget.
+
+136
+00:10:47,710 --> 00:10:50,690
+Now, all of them have chosen their models and configured the indices.
+
+137
+00:10:51,490 --> 00:10:55,170
+They could stop here, but they would be missing out on a nice improvement from something
+
+138
+00:10:55,170 --> 00:10:56,230
+called the re-ranker.
+
+139
+00:10:56,690 --> 00:11:01,210
+Embedding models need to pre-process every document and turn them into embeddings before knowing
+
+140
+00:11:01,210 --> 00:11:02,270
+what the query is.
+
+141
+00:11:02,710 --> 00:11:04,710
+So the query and the document are
+
+142
+00:11:04,750 --> 00:11:07,590
+process separately, meaning that they never see each other.
+
+143
+00:11:08,190 --> 00:11:12,830
+This is a shame because knowing the query, as you can imagine, would let a model make a more
+
+144
+00:11:12,830 --> 00:11:16,490
+informed decision about what part of the document to pay attention to.
+
+145
+00:11:16,990 --> 00:11:21,790
+But this just isn't possible with embedding models, which have to process millions of documents.
+
+146
+00:11:22,350 --> 00:11:25,510
+It would simply take too long to do this once you have the query.
+
+147
+00:11:25,910 --> 00:11:27,850
+This is where re-ranking models come in.
+
+148
+00:11:28,310 --> 00:11:33,250
+These models read the query and the document together, and produce a much more accurate relevant
+
+149
+00:11:33,250 --> 00:11:34,590
+score with better context.
+
+150
+00:11:34,750 --> 00:11:37,970
+These types of models are also called a cross-encoder model.
+
+151
+00:11:38,930 --> 00:11:43,570
+So a really good way to use cross-encoder model is to use it on the set of results that
+
+152
+00:11:43,570 --> 00:11:45,210
+you've retrieved with the embedding model.
+
+153
+00:11:45,790 --> 00:11:50,330
+And then because of this, cross-encoder or other similar models used as a second stage
+
+154
+00:11:50,330 --> 00:11:53,150
+of a pipeline are also called reranker models.
+
+155
+00:11:54,000 --> 00:11:58,660
+Of course, this is another model to run, which means you have to make another set of decisions,
+
+156
+00:11:59,180 --> 00:12:03,180
+like we did with the embedding models, so what model to use, how to run them, and so on.
+
+157
+00:12:03,560 --> 00:12:05,080
+But they do provide yet.
+
+158
+00:12:05,100 --> 00:12:10,800
+another uplift in retrieval performance, so they are big parts of people's toolkits in retrieval.
+
+159
+00:12:11,050 --> 00:12:14,850
+Having settled this, you might think that the choices for our heroes are obvious.
+
+160
+00:12:15,450 --> 00:12:16,510
+But I'm not so sure about that.
+
+161
+00:12:16,950 --> 00:12:20,170
+Cora uses deep re-ranking with the Gina reranker V2 model.
+
+162
+00:12:20,750 --> 00:12:25,470
+She actually over-retrieves a larger result set than she needs with the initial embedding model, let's
+
+163
+00:12:25,470 --> 00:12:30,730
+say 100 or even more, and then puts them into the re-ranker to get the best possible result.
+
+164
+00:12:31,730 --> 00:12:34,710
+On the other hand, Samantha skips re-ranking entirely.
+
+165
+00:12:35,390 --> 00:12:39,330
+Again, she prioritizes speed here and doesn't want to pay for the extra latency.
+
+166
+00:12:39,950 --> 00:12:45,250
+The three times oversampling on BBQ H&SW is effectively her quality recovery, just using the
+
+167
+00:12:45,250 --> 00:12:47,410
+original vectors rather than a separate model.
+
+168
+00:12:48,120 --> 00:12:49,500
+Now, what about Ben?
+
+169
+00:12:50,120 --> 00:12:54,160
+He actually incorporates re-ranking here with the Gina reranker V3 model.
+
+170
+00:12:54,640 --> 00:12:58,000
+That might be surprising because it's another step that'll link her cost.
+
+171
+00:12:58,790 --> 00:13:05,430
+But the V3 reranker is a list-wise model, which can re-rank up to 64 results in just one inference
+
+172
+00:13:05,430 --> 00:13:10,770
+call. Whereas for a point-wise reranker like the V2 reranker that Cora used, 100 documents
+
+173
+00:13:10,770 --> 00:13:17,510
+means 100 inferences. So for Ben, this is a really cheap way to recover a lot of accuracy that he's
+
+174
+00:13:17,510 --> 00:13:23,570
+lost earlier. Let's recap. This is what our heroes have chosen. Ben stacked savings at every layer,
+
+175
+00:13:24,070 --> 00:13:29,550
+and then used a cheap reranker to recover quality at the end. He's not cheap and worse, he's running
+
+176
+00:13:29,550 --> 00:13:35,370
+a cost-optimized pipeline with a quality recovery strategy built in. Cora and Samantha, both
+
+177
+00:13:35,430 --> 00:13:41,150
+picked H&SW, but configured it for opposite ends. Same core algorithm, but each with some key
+
+178
+00:13:41,150 --> 00:13:46,680
+trade-offs. And you'll see that these choices cascade through others. The RAM difference between these
+
+179
+00:13:46,680 --> 00:13:52,760
+3, 5GB versus less than a gigabyte versus about 100 megabytes per million vectors come from the
+
+180
+00:13:52,760 --> 00:13:59,130
+combination of dimension choice, quantization, and whether the graph lives in memory. All three are correct,
+
+181
+00:13:59,490 --> 00:14:05,230
+but none of them would work well for the other two. Additionally, there are a couple more things worth knowing.
+
+182
+00:14:06,230 --> 00:14:10,430
+focused on vector search here, but most production systems actually combine vector
+
+183
+00:14:10,430 --> 00:14:14,530
+search with BM25 or keyword search into what's called hybrid search.
+
+184
+00:14:15,290 --> 00:14:20,710
+The reason is that they're exceptionally good partners. BM25 catches the exact keyword matches
+
+185
+00:14:20,710 --> 00:14:24,730
+that embeddings miss, and embeddings catch the semantic stuff that keywords miss.
+
+186
+00:14:25,370 --> 00:14:30,790
+For our heroes, it's yet another configuration choice, but it's one that also acts as a safety net.
+
+187
+00:14:31,230 --> 00:14:35,550
+It makes your whole system less sensitive to any single vector config decision.
+
+188
+00:14:36,520 --> 00:14:40,640
+All these might seem like a lot of impactful decisions, but don't be scared.
+
+189
+00:14:41,200 --> 00:14:42,920
+These choices don't lock you in forever.
+
+190
+00:14:44,030 --> 00:14:50,310
+Elasticsearch, for example, lets you upgrade between HNS-30 types, say from unquantized to quantized HNSW,
+
+191
+00:14:50,750 --> 00:14:54,530
+like Intate HNSW or BBQ HNSW without indexing.
+
+192
+00:14:55,170 --> 00:14:59,710
+New data picks up the new settings, all data keeps the old ones until you merge it.
+
+193
+00:15:00,170 --> 00:15:02,910
+In a pinch, you can, of course, re-index your data too.
+
+194
+00:15:03,430 --> 00:15:06,290
+So you can start somewhere reasonable and just tune from there.
+
+195
+00:15:07,120 --> 00:15:10,400
+The one thing that is expensive to change is your embedding model.
+
+196
+00:15:10,880 --> 00:15:16,120
+Switching models means re-embedding your entire data set, and typically re-indexing everything downstream.
+
+197
+00:15:17,250 --> 00:15:21,030
+At Ben's scale, that's potentially billions of vectors to re-compute.
+
+198
+00:15:21,510 --> 00:15:27,330
+So spend time getting your model choice right or close during prototyping, not after you've indexed everything.
+
+199
+00:15:28,450 --> 00:15:33,690
+Another tip is that if all of this feels like a lot, you can just use semantic text with elastic search.
+
+200
+00:15:34,070 --> 00:15:37,550
+It picks a solid model, sets good defaults for the index, and handle it.
+
+201
+00:15:37,570 --> 00:15:43,880
+inference. You can start there, figure out whether you're a Cora or Samantha or a Ben, and then
+
+202
+00:15:43,880 --> 00:15:49,600
+come back and start tuning the knobs before going to production. Note that BBQ disk requires
+
+203
+00:15:49,600 --> 00:15:56,020
+an enterprise license of elastic search. For the tiers, BBQ HNSW is the most aggressive quantization available.
+
+204
+00:15:57,110 --> 00:16:02,310
+So here we are, with our three personas optimizing the three key aspects of vector search, and getting
+
+205
+00:16:02,310 --> 00:16:08,020
+different answers that are somehow still correct. The key takeaways to repeat are these. The embedding
+
+206
+00:16:08,020 --> 00:16:12,380
+model is still the most important aspect. The index type drives your resource requirements,
+
+207
+00:16:12,860 --> 00:16:17,750
+and re-ranking is the optional precision layer that can rescue and uplift quality. None of these
+
+208
+00:16:17,750 --> 00:16:22,070
+setups would work well for the other two. The right config depends on what you're optimizing
+
+209
+00:16:22,070 --> 00:16:27,510
+for. If this was helpful, please hit like and subscribe. Docs for everything we talked about are
+
+210
+00:16:27,510 --> 00:16:32,750
+in the description. And tell me in the comments, which persona are you closest to? Are you a Cora,
+
+211
+00:16:33,090 --> 00:16:38,050
+or Samantha or a Ben? And what other vector search areas you'd like me to cover next?
+
+212
+00:16:38,470 --> 00:16:40,990
+I read every comment, so I'd love to hear from you.
+
+213
+00:16:41,720 --> 00:16:43,220
+Thanks for watching and see you next time.

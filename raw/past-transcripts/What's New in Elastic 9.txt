@@ -1,0 +1,56 @@
+[00:00:00.050 → 00:00:05.830] Elastic 9.4 just dropped, with ESQL support for time series data in GA, a tech preview
+[00:00:05.830 → 00:00:10.210] of ESQ sub queries, and the disk BBQ vector index now becoming the default.
+[00:00:10.970 → 00:00:14.890] These changes will improve how you work with logs and metrics, how you perform complex
+[00:00:14.890 → 00:00:18.610] analyses, and how efficiently your vector databases use resources.
+[00:00:19.150 → 00:00:19.950] So let's get into it.
+[00:00:20.450 → 00:00:22.730] Here's the situation a lot of teams end up in.
+[00:00:23.150 → 00:00:27.330] Your logs are in Elasticsearch, your metrics are in a separate time series system, and
+[00:00:27.330 → 00:00:30.030] when something goes wrong at 2am, you're jumping between the 2.
+[00:00:30.050 → 00:00:35.330] tools, to query languages, and to time context, trying to correlate signals that don't naturally
+[00:00:35.330 → 00:00:35.970] line up.
+[00:00:36.530 → 00:00:41.210] This is the gap that time series support in ESQL closes, so we're really excited to announce
+[00:00:41.210 → 00:00:43.670] it's going GA in Elasticsearch 9.4.
+[00:00:44.100 → 00:00:48.900] This means that you can now analyze filter and aggregate metrics directly with ESQL.
+[00:00:49.280 → 00:00:53.940] You can perform run rate calculations, rolling window aggregations, and cumulative sums
+[00:00:53.940 → 00:00:55.560] without any context switching.
+[00:00:56.160 → 00:01:00.060] The TS command gives you native time series querying, with functions like
+[00:01:00.060 → 00:01:05.200] rate, cumulative sum, changes and tier range, all available and production supported.
+[00:01:06.050 → 00:01:11.450] More concretely, it means your logs and metrics can now live together in Elasticsearch, where a single query
+[00:01:11.450 → 00:01:12.530] can analyze both.
+[00:01:12.930 → 00:01:17.150] One language, one time context, one place to look when something goes wrong.
+[00:01:17.650 → 00:01:23.530] The TS command was available as a tech preview in 9.2 and 9.3, so some of you might be familiar
+[00:01:23.530 → 00:01:24.290] with it already.
+[00:01:24.670 → 00:01:29.910] It is now generally available as of 9.4, so you can use it for monitoring, alerting and reporting
+[00:01:29.910 → 00:01:33.010] with the confidence of a fully supported, stable capability.
+[00:01:34.240 → 00:01:40.960] 9.4 also introduces a tech preview of sub queries to ESQL, adding the ability to express multi-stage logic
+[00:01:40.960 → 00:01:47.930] as one query. Say, if you want to find the set of users who did X, then analyze their behavior across Y.
+[00:01:48.550 → 00:01:53.570] That used to be two queries with a manual handoff. You run the first, extract the results set,
+[00:01:53.890 → 00:01:59.530] paste those values as a filter into the second. It's a friction point that slows down every investigation,
+[00:01:59.530 → 00:02:01.450] and introduces room for error.
+[00:02:02.270 → 00:02:06.210] Subquiries let you express that entire chain as a single ESQL statement.
+[00:02:06.870 → 00:02:11.830] The inner query runs first to produce a result set, and the outer query filters against it,
+[00:02:12.370 → 00:02:17.390] all in a single execution. That moves the manual handoff between steps, and with it the manual
+[00:02:17.390 → 00:02:22.850] source of errors in this kind of investigation. Subquiries land in 9.4 as a tech preview.
+[00:02:23.270 → 00:02:26.950] Try them out and give us your feedback. We'd love to know what you think about it.
+[00:02:27.620 → 00:02:29.820] 9.4 also makes a small change with
+[00:02:29.880 → 00:02:35.020] big impact to Lastic's vector index. This BBQ is now the default vector indexing and
+[00:02:35.020 → 00:02:39.740] search algorithm. This is a big deal if you're using Lasticsearch's vector capabilities for
+[00:02:39.740 → 00:02:45.990] semantic search, RAG, or AI-powered applications. This BBQ gives you a highly memory-efficient
+[00:02:45.990 → 00:02:51.830] vector index that significantly reduces the memory footprint and indexing time compared to HNSW.
+[00:02:52.210 → 00:02:57.250] Meaning your vector index will cost a lot less and reduce the time between data ingestion and
+[00:02:57.250 → 00:02:59.890] search availability. All at a very comparative
+[00:02:59.910 → 00:03:04.830] recorded recall and search latency. We think that this is a sensible default that'll
+[00:03:04.830 → 00:03:09.780] serve the majority of users really well. HNSW remains a great option if you want that
+[00:03:09.780 → 00:03:14.460] extra bit of recall and search latency, just remember to specify it in your indexing options.
+[00:03:15.110 → 00:03:19.450] If working with logs and metrics for monitoring and diagnoses or multi-stage query
+[00:03:19.450 → 00:03:24.530] logic is important to you, these new features in Elasticsearch 6.4 will change how you work with
+[00:03:24.530 → 00:03:30.160] your data. The time series capabilities going GA and sub queries will make your analyses faster,
+[00:03:30.260 → 00:03:35.140] more reliable and easier than ever. And for everybody building semantic search,
+[00:03:35.260 → 00:03:40.500] rag or AI powered applications, the small nudge towards the disk bbq index will have huge cost
+[00:03:40.500 → 00:03:45.820] and indexing speed implications. If you've yet to try out disk bbq, you might be missing out
+[00:03:45.820 → 00:03:50.880] on a potential order of magnitude reduction in memory use and indexing time. This is a great time
+[00:03:50.880 → 00:03:53.060] to try out these features with 9.4.
+[00:03:54.120 → 00:03:59.600] ESQL documentation and the 9.4 release notes are in the description. We'll leave links to the
+[00:03:59.600 → 00:04:05.440] S command and sub queries in ESQ as well as links to disk bbq references. I'd love to
+[00:04:05.440 → 00:04:10.800] hear about your experiences with these features or 9.4 in general. So drop your experience in the
+[00:04:10.800 → 00:04:15.500] comments and we'd love to know what questions you run into. Thanks for watching. See you next time.

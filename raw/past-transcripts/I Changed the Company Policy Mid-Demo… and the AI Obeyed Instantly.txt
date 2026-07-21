@@ -1,0 +1,32 @@
+[00:00:00.000 → 00:00:08.280] Most Gen A.I. Tools act like a librarian. You find a document, summarize the text, and leave it up to the model to guess if you're compliant.
+[00:00:08.800 → 00:00:14.380] Hi, I'm James Williams, Elasticsearchist. Today, I'm showing you an architecture that acts like a lawyer.
+[00:00:15.040 → 00:00:23.620] Instead of just retrieving text, our agent uses Elasticsearch to find and hot load executable business logic in real time.
+[00:00:23.860 → 00:00:29.840] This means the AI doesn't hallucinate your rules. It executes them. I call this deterministic
+[00:00:29.840 → 00:00:36.260] compliance. Let's see it in action. I'm acting as an employee that's considering submitting an $850
+[00:00:36.260 → 00:00:43.060] team dinner expense. As you can see, the system has 99 different skills loaded, but only one
+[00:00:43.060 → 00:00:48.360] skill should be used to answer this question. If all goes well, Elastic Agent Builder will hot
+[00:00:48.360 → 00:00:54.860] load a Claude Agent skill with embedded business logic to answer my question. Now watch closely.
+[00:00:55.440 → 00:00:59.820] The agent doesn't just guess which tool to use. It queries Elastic Survelder.
+[00:00:59.840 → 00:01:05.560] using hybrid search. It uses semantic search to understand my intent, checking
+[00:01:05.560 → 00:01:12.520] a policy, and lexical search to match specific keywords, like expense or dinner. This ensures it
+[00:01:12.520 → 00:01:17.940] finds and hot loads the specific verify expense Python skill auditing my math with actual
+[00:01:17.940 → 00:01:25.360] code, not LLM vibes. As you can see, this specific request does not meet our expense policy.
+[00:01:25.900 → 00:01:29.660] Now here's the reality of enterprise business. Rules change.
+[00:01:29.840 → 00:01:34.640] Usually, if a policy changes, you have to retrain a model or update a hard-coded
+[00:01:34.640 → 00:01:41.820] application. That takes weeks. Watch this. I'm telling the agent to update its skills. Behind
+[00:01:41.820 → 00:01:47.970] the scenes, this triggers an elastic workflow. Workflow the latest business rules from our skill
+[00:01:47.970 → 00:01:53.990] staging system and loads them into Elasticsearch in real time. We are not retraining the AI. We are
+[00:01:53.990 → 00:01:59.950] simply updating the skill repository. Because the agent uses that hybrid search to look up skills
+[00:01:59.970 → 00:02:05.670] dynamically every single time it runs. The very next question I ask will apply the new rules
+[00:02:05.670 → 00:02:13.690] instantly. Okay, the workload finished. The new policy is live. I'm going to run the exact same
+[00:02:13.690 → 00:02:20.150] prompt I ran a minute ago. I didn't restart the server. I didn't redeploy the agent. But because the agent
+[00:02:20.150 → 00:02:26.570] hotloads the skill from Elasticsearch at runtime, it's now executing the new Python logic we just
+[00:02:26.570 → 00:02:34.990] ingested. And there it is. The outcome is different. Same AI, same prompt, new business logic.
+[00:02:35.530 → 00:02:41.910] That's the power of a dynamic skill repository. Thanks for watching. I hope this walkthrough helps
+[00:02:41.910 → 00:02:47.330] you deliver compelling Gen AI solutions. We just scratched the surface of what's possible when you pair
+[00:02:47.330 → 00:02:54.010] Elastic Search Serverless with Elastic Agent Builder and Clod. By using Elastic Workflows to manage those
+[00:02:54.010 → 00:02:58.350] Claude agent skills. You can maintain that strict, deterministic compliance without
+[00:02:58.350 → 00:03:02.410] without manually updating your application code every time of policy changes. I've linked the
+[00:03:02.410 → 00:03:06.630] documentation and sample code for this architecture in the description below. Don't forget to
+[00:03:06.630 → 00:03:10.950] subscribe to the community channel for more practical demos. Good luck with your GenAI
+[00:03:10.950 → 00:03:13.110] journey and I'll see you in the next video.
