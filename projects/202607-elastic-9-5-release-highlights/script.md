@@ -11,7 +11,7 @@ timestamp: 2026-07-27T10:58:00+01:00
 
 -----
 
-Elastic nine point five is available. Now - it’s a big release - too much to cover in one video, in fact, so let me tell you about a few of the highlights.
+Elastic nine point five is available. Now - it’s a *big* release. In fact, probably too much to cover in one video - so let me tell you about a few of the highlights .
 
 - Columnar Mode changes how Elasticsearch stores analytical data
 - VectorDB mode and DiskBBQ auto-calibration reduce manual tuning
@@ -20,7 +20,7 @@ Elastic nine point five is available. Now - it’s a big release - too much to c
 
 Plus new capabilities across Search, Observability and Security.
 
-Let me tell you who should care about them, and why they matter.
+Let’s talk about who should care about them, and why they matter.
 
 -----
 
@@ -30,7 +30,7 @@ Columnar Mode is a huge architectural change.
 
 Elasticsearch normally keeps the original document, builds search and filter indexes, and stores field values in columns for sorting and aggregation.
 
-This gives you flexibility for searches. But analytics workloads are different. Many log and metrics fields are only filtered or aggregated, so these additional stores add an overhead without much benefit.
+This gives you flexibility for searches. But analytics workloads are different. Log and metrics fields are often only filtered or aggregated, but not searched - which means these additional stores add an overhead without much benefit.
 
 Columnar Mode flips the default, so that the column store is the primary representation, and skips the additional indexes unless told otherwise. And Elasticsearch reconstructs the document from those columns.
 
