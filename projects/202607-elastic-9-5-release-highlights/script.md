@@ -131,8 +131,6 @@ There are plenty of other improvements too that we didn't have time to cover.
 
 Cloud onboarding is simpler, with Kubernetes and AWS CloudWatch routing directly into OpenTelemetry.
 
-Private-preview capabilities for the AI SRE that automatically extract useful context from telemetry and surface significant events.
-
 APM adds contextual service maps, clearer machine-learning signals, and Anthropic support for LLM observability.
 
 Elastic Defend adds proactive vulnerable-driver protection, Windows on ARM coverage, and an endpoint troubleshooting skill.
