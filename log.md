@@ -676,3 +676,9 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Revision:** Shortened the Metrics GA and AlertZero sections in `projects/202607-elastic-9-5-release-highlights/script.md` to keep them proportional to the existing release highlights.
 - **Retained:** GA and migration value, attributed ES95 claim, AlertZero definition, 9.5 Attack Discovery behavior, Alert Analysis, analyst approval, visuals, and pre-record validation notes.
 - **Cut:** Detailed ES|QL pipeline mechanics, repeated migration framing, Attack Discovery trigger modes, and redundant explanations of the human role.
+
+## 2026-07-27 — Elastic 9.5 minimal review fixes applied
+
+- **Trust and tone:** Replaced promotional superlatives with concrete outcomes and clarified that Attack Discovery works toward AlertZero.
+- **Accuracy:** Narrowed Columnar claims, described DiskBBQ auto-calibration against a technical recall target, restored a relevance-testing caveat, and attributed the metrics codec result.
+- **Delivery:** Defined Application Performance Monitoring, tightened Data Federation wording, corrected the wrap-up, and added a specific closing question.

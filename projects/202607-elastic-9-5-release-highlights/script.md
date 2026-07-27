@@ -11,13 +11,13 @@ timestamp: 2026-07-27T10:58:00+01:00
 
 -----
 
-Elastic nine point five is available. Now - it’s a big release - too much to cover in one video, in fact, so let me tell you about a few of the highlights .
+Elastic nine point five is available. Now - it’s a big release - too much to cover in one video, in fact, so let me tell you about a few of the highlights.
 
-- Columnar mode transforms analytics workloads
-- Data Federation enables direct S3 queries without ingestion.
-- Vector database is easier to optimise than ever with its own index mode and auto calibration
-- Our best-in-class metrics features are now GA
-- And AlertZero surfaces attacks without the noise
+- Columnar Mode changes how Elasticsearch stores analytical data
+- Data Federation enables direct S3 queries without ingestion
+- VectorDB mode and DiskBBQ auto-calibration reduce manual tuning
+- Native Prometheus and PromQL support are now GA
+- And Attack Discovery works toward AlertZero by finding potential attacks among noisy alerts
 
 Plus new capabilities across Search, Observability and Security.
 
@@ -31,17 +31,17 @@ Columnar Mode is a huge architectural change.
 
 Elasticsearch normally keeps the original document, builds search and filter indexes, and stores field values in columns for sorting and aggregation.
 
-This gives you flexibility for searches. But analytics workloads are different. Logs and metrics are only filtered or aggregated, so storing the same information in these forms adds an overhead that most don't need.
+This gives you flexibility for searches. But analytics workloads are different. Many log and metrics fields are only filtered or aggregated, so these additional stores add an overhead without much benefit.
 
 Columnar Mode flips the default, so that the column store is the primary representation, and skips the additional indexes unless told otherwise. And Elasticsearch reconstructs the document from those columns.
 
 Columnar Logs is the first specialized profile using Columnar Mode. It keeps full-text search for the log message while making the remaining fields columnar by default. Analytical data no longer has to pay for every search capability by default.
 
-For those of you with filtering and aggregation-dominant logs workloads, Columnar Logs might be a game changer.
+For those of you with filtering and aggregation-dominant logs workloads, Columnar Logs is a big, easy win.
 
 Columnar Mode is opt-in. If updates, nested documents, point retrieval, or full-text relevance are the main jobs - you can keep the existing mode.
 
-Columnar Mode arrives as a Technical Preview. So this is a great time to evaluate, and consider whether this is something you might want to move to when it goes GA.
+Columnar Mode arrives as a Technical Preview. So this is a good time to evaluate whether it fits your workload as the feature matures.
 
 -----
 
@@ -57,7 +57,7 @@ That works, until an investigation needs six months of history. Then you restore
 
 ES|QL Data Federation removes that handoff, by querying files in Amazon S3 directly.
 
-All you need to do is to register the S3 connection and define a dataset. That dataset then appears in the same `FROM` command you'd use for an Elasticsearch index.
+After you register the S3 connection and define a dataset, that dataset appears in the same `FROM` command you'd use for an Elasticsearch index.
 
 The preview supports common file formats, schema inference, and partitioned datasets. More importantly, external data can meet context that's already indexed.
 
@@ -65,7 +65,7 @@ Imagine security investigations or compliance queries over older archived data, 
 
 The archive stays in S3. The asset context stays indexed. And the analyst stays in Kibana.
 
-For occasional exploration and investigation of external or archived data, this is an amazing solution that bypasses the need to push all that data through the ingest pipeline.
+For occasional exploration and investigation of external or archived data, this is a useful option that avoids pushing all that data through an ingest pipeline.
 
 Elasticsearch pushes filters and column selection toward the file reader to reduce the amount scanned.
 
@@ -85,11 +85,11 @@ VectorDB index mode lets you declare an index to be for vector search. Elasticse
 
 You can still override defaults, as with other index modes, but the starting point now reflects the workload.
 
-On top of that, we're introducing auto-calibration to `bbq_disk` indexes. This lets Elasticsearch find the right configuration for *you* to balance cost and recall, based on your real data.
+On top of that, we're introducing auto-calibration for `bbq_disk` indexes. For eligible merged segments, Elasticsearch selects compression and reranking settings against a technical recall target.
 
-If your vectors are spaced relatively far from each other, auto-calibrarion will apply more compression and less reranking to gain latency and reduce cost without hurting ranking quality. But for very densely populated vectors, Elasticsearch protects ranking quality by applying techiniques like preconditioning.
+For easier datasets, it can use more compression and less reranking. For harder datasets, it can preserve more fidelity.
 
-Configuring and using vector search is now easier than ever with Elasticsearch - try these out.
+This reduces manual tuning, but you still need to test relevance on your own data.
 
 -----
 
@@ -103,7 +103,7 @@ Prometheus can remote-write metrics directly into Elasticsearch, and Grafana can
 
 There's also a new GA migration tool for bringing Grafana and Datadog dashboards and alerts into Elastic.
 
-We've talked a lot about how much more efficient our metrics store and workload has become. Well, in nine five, the metric footprint is smaller by roughly another twenty percent thanks to codec improvements.
+Just one more thing on metrics - we've talked a lot about how much more efficient Elasticsearch has become for metrics. Well, codec improvements in nine point five reduce the metrics footprint by roughly another twenty percent.
 
 -----
 
@@ -127,7 +127,7 @@ AI does the repetitive first pass. The analyst decides whether the attack is rea
 
 ## EVEN MORE THINGS
 
-There are plenty of other improvements too that we didn't have time to cover.
+A few more improvements are worth a quick mention.
 
 Cloud onboarding is simpler, with Kubernetes and AWS CloudWatch routing directly into OpenTelemetry.
 
@@ -141,7 +141,7 @@ And Workflows now has GA natural-language authoring, version history with rollba
 
 ## WRAP-UP
 
-Elastic nine point introduces a bunch of significant changes
+Elastic nine point five introduces a bunch of significant changes.
 
 Columnar Mode is a huge architectural change.
 Data Federation allows you to query without ingestion.
@@ -149,7 +149,9 @@ The vector changes mean optimisation happens for you.
 Native Prometheus and PromQL support let metrics teams migrate without starting over.
 And Attack Discovery moves security teams closer to AlertZero.
 
-Some of these are previews, which allow you to test Elastic's direction and plan future migrations. Others, including the native Prometheus and PromQL support, are generally available now.
+Some are previews, so test them to understand where Elastic is heading. Others, including native Prometheus and PromQL support, are generally available now.
+
+Which of these would remove the most work from your stack? Let me know in the comments.
 
 Documentation and release notes are linked below.
 
