@@ -662,3 +662,17 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Concrete example:** Centered the explanation on calculating P95 latency, assigning severity with `CASE`, testing in the query sandbox, requiring persistent breaches, and recovering automatically.
 - **Supporting model:** Kept searchable rule events and action policies as consequences of the rule workflow rather than the section's main subject.
 - **Callback:** Changed the fourth structural label from “page less” to “write smarter” in the section, recap graphic, and closing question.
+
+## 2026-07-27 — Elastic 9.5 metrics and AlertZero script sections
+
+- **Script revision:** Added draft sections for generally available Prometheus and PromQL support and for the AlertZero security direction to `projects/202607-elastic-9-5-release-highlights/script.md`.
+- **Metrics framing:** Led with migration compatibility and retained workflows, attributed the ES95 storage claim, noted PromQL and remote-write limitations, and avoided repeating disputed competitive benchmark multipliers.
+- **Security framing:** Defined AlertZero as a SOC goal rather than a product, distinguished Alert Analysis from Attack Discovery, and retained analyst validation and approval.
+- **Knowledge captured:** Added `sources/elastic-9-5-release-blog-draft.md`, `wiki/elastic-9-5-metrics-ga.md`, and `wiki/alertzero.md`, then indexed the new pages.
+- **Validation:** Marked unreleased 9.5 availability, licensing, workflow behavior, migration coverage, and quantitative claims for pre-record confirmation.
+
+## 2026-07-27 — Elastic 9.5 new sections condensed
+
+- **Revision:** Shortened the Metrics GA and AlertZero sections in `projects/202607-elastic-9-5-release-highlights/script.md` to keep them proportional to the existing release highlights.
+- **Retained:** GA and migration value, attributed ES95 claim, AlertZero definition, 9.5 Attack Discovery behavior, Alert Analysis, analyst approval, visuals, and pre-record validation notes.
+- **Cut:** Detailed ES|QL pipeline mechanics, repeated migration framing, Attack Discovery trigger modes, and redundant explanations of the human role.
