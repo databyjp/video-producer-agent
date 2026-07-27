@@ -7,53 +7,49 @@ status: draft-v4
 timestamp: 2026-07-21T08:35:00+01:00
 ---
 
-# Elastic 9.5: What Actually Matters
+# Elastic 9.5: Selected Highlights
 
 -----
 
-## HOOK — ON CAMERA
+Elastic nine point five is available. Now - it’s a big release - too much to cover in one video, in fact, so let me tell you about a few of the highlights .
 
-Elastic nine point five includes four changes that indicate where the platform is heading.
+- Columnar mode transforms analytics workloads
+- Data Federation enables direct S3 queries without ingestion.
+- Vector database is easier to optimise than ever with its own index mode and auto calibration
+- Our best-in-class metrics features are now GA
+- And AlertZero surfaces attacks without the noise
 
-It allows you to:
-- Store fewer copies of analytical data.
-- Query files in S3 without ingesting them first.
-- Let a vector index adapt to the data it receives.
-- Write smarter, rule-based alerts.
+Plus new capabilities across Search, Observability and Security.
 
-I think these changes are huge. Let me tell you who should care about them, and why they matter.
+Let me tell you who should care about them, and why they matter.
 
 -----
 
-## STORE LESS — COLUMNAR MODE
+## STORE LESS: COLUMNAR MODE
 
-The biggest architectural change is Columnar Mode.
+Columnar Mode is a huge architectural change.
 
 Elasticsearch normally keeps the original document, builds search and filter indexes, and stores field values in columns for sorting and aggregation.
 
-This gives you flexibility for searches. But analytics workloads are different. Logs and metrics are only filtered or aggregated, so storing the same information in these forms add an overhead that most don't need.
+This gives you flexibility for searches. But analytics workloads are different. Logs and metrics are only filtered or aggregated, so storing the same information in these forms adds an overhead that most don't need.
 
-Columnar Mode flips the default.
+Columnar Mode flips the default, so that the column store is the primary representation, and skips the additional indexes unless told otherwise. And Elasticsearch reconstructs the document from those columns.
 
-With it, the column store is the primary representation. Elasticsearch reconstructs the document from those columns and skips the additional indexes unless told otherwise.
+Columnar Logs is the first specialized profile using Columnar Mode. It keeps full-text search for the log message while making the remaining fields columnar by default. Analytical data no longer has to pay for every search capability by default.
 
-Columnar Logs is the first specialized profile. It keeps full-text search for the log message while making the remaining fields columnar by default.
+For those of you with filtering and aggregation-dominant logs workloads, Columnar Logs might be a game changer.
 
-For those of you with high-volume, append-heavy logs and filtering or aggregation-dominant workloads, Columnar Logs might be a game changer.
+Columnar Mode is opt-in. If updates, nested documents, point retrieval, or full-text relevance are the main jobs - you can keep the existing mode.
 
-Or keep the existing modes when updates, nested documents, point retrieval, or full-text relevance are the main jobs.
-
-The takeaway is simple: analytical data no longer has to pay for every search capability by default.
-
-Columnar Mode is opt-in and arrives as a Technical Preview. So this is a great time to evaluate, and consider whether this is something you might want to move to when it goes GA.
+Columnar Mode arrives as a Technical Preview. So this is a great time to evaluate, and consider whether this is something you might want to move to when it goes GA.
 
 -----
 
-## MOVE LESS — ES|QL DATA FEDERATION
+## MOVE LESS: ES|QL DATA FEDERATION
 
 Next is ES|QL Data Federation.
 
-Here's how a lot of you probably organise data. You keep recent data indexed because you need it to be fast. Older data moves to object storage because you need it to be cheap.
+Here's how a lot of you probably organise data. You keep recent data indexed in Elasticsearch because you need it to be fast. Older data moves to object storage because you need it to be cheap.
 
 That works, until an investigation needs six months of history. Then you restore the archive, build a pipeline, or switch query engines.
 [like & subscribe badge]
@@ -78,7 +74,7 @@ It won't replace indexed hot data when query performance matters. But if investi
 
 -----
 
-## TUNE LESS — VECTOR SEARCH
+## TUNE LESS: VECTOR SEARCH
 
 There are two big vector search features I want to talk about.
 
@@ -96,33 +92,7 @@ Configuring and using vector search is now easier than ever - try these out.
 
 -----
 
-## WRITE SMARTER — RULE-BASED ALERTS
-
-The final feature is a new experimental alerting system built around ES|QL rules.
-
-Instead of choosing a specialized rule type and spreading the logic across configuration forms, you write the condition as an ES|QL query.
-
-That means a rule can do more than check whether one field crossed a threshold. It can calculate, group, and classify the result before deciding there's a problem.
-
-For example, this rule calculates p-ninety-five latency for each service. It labels anything above two seconds as high severity, anything above four seconds as critical, and filters out everything that isn't a breach.
-
-[show ES|QL rule: `STATS` P95 by service → `EVAL severity = CASE(...)` → `WHERE` P95 exceeds threshold]
-
-You can test that logic in the query sandbox before the rule ever runs.
-
-Then you decide how persistent the problem must be. One breach can create a pending episode. Requiring a second consecutive breach before it becomes active prevents a brief spike from immediately turning into a page.
-
-When the query stops finding a breach, the episode recovers automatically.
-
-Every evaluation also writes a searchable rule event. So you retain the evidence even when it doesn't justify interrupting someone. And a separate action policy can send high-severity alerts to Slack while reserving PagerDuty for critical incidents.
-
-This is smarter alerting because the query defines the problem, the episode tracks it over time, and the notification policy decides who needs to hear about it.
-
-The new alerting system is experimental and opt-in. So try it out - we'd love to know what you think.
-
------
-
-## WRAP-UP — ON CAMERA
+## WRAP-UP
 
 So what does Elastic nine point five add up to?
 
