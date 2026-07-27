@@ -1,7 +1,7 @@
 ---
 type: Script
 title: "Elastic 9.5: What Actually Matters"
-description: "Selected Elastic 9.5 highlights across columnar storage, data federation, vector search, metrics, and security."
+description: "Selected Elastic 9.5 highlights across columnar storage, vector search, metrics, and security."
 tags: [elastic, elasticsearch, release, columnar, esql, vector-search, metrics, prometheus, security, attack-discovery]
 status: draft-v5
 timestamp: 2026-07-27T10:58:00+01:00
@@ -14,7 +14,6 @@ timestamp: 2026-07-27T10:58:00+01:00
 Elastic nine point five is available. Now - it’s a big release - too much to cover in one video, in fact, so let me tell you about a few of the highlights.
 
 - Columnar Mode changes how Elasticsearch stores analytical data
-- Data Federation enables direct S3 queries without ingestion
 - VectorDB mode and DiskBBQ auto-calibration reduce manual tuning
 - Native Prometheus and PromQL support are now GA
 - And Attack Discovery works toward AlertZero by finding potential attacks among noisy alerts
@@ -42,36 +41,6 @@ For those of you with filtering and aggregation-dominant logs workloads, Columna
 Columnar Mode is opt-in. If updates, nested documents, point retrieval, or full-text relevance are the main jobs - you can keep the existing mode.
 
 Columnar Mode arrives as a Technical Preview. So this is a good time to evaluate whether it fits your workload as the feature matures.
-
------
-
-## MOVE LESS: ES|QL DATA FEDERATION
-**NOTE - may need to remove from the video**
-
-Next is ES|QL Data Federation.
-
-Here's how a lot of you probably organise data. You keep recent data indexed in Elasticsearch because you need it to be fast. Older data moves to object storage because you need it to be cheap.
-
-That works, until an investigation needs six months of history. Then you restore the archive, build a pipeline, or switch query engines.
-[like & subscribe badge]
-
-ES|QL Data Federation removes that handoff, by querying files in Amazon S3 directly.
-
-After you register the S3 connection and define a dataset, that dataset appears in the same `FROM` command you'd use for an Elasticsearch index.
-
-The preview supports common file formats, schema inference, and partitioned datasets. More importantly, external data can meet context that's already indexed.
-
-Imagine security investigations or compliance queries over older archived data, accessing historical data during migrations, or giving AI agents access to indexed and archived context. All this is now possible directly from the archived S3 data.
-
-The archive stays in S3. The asset context stays indexed. And the analyst stays in Kibana.
-
-For occasional exploration and investigation of external or archived data, this is a useful option that avoids pushing all that data through an ingest pipeline.
-
-Elasticsearch pushes filters and column selection toward the file reader to reduce the amount scanned.
-
-Data Federation is a Technical Preview, starting with S3.
-
-It won't replace indexed hot data when query performance matters. But if investigations regularly stall while archived data is restored or copied, you should test this out in nine point five.
 
 -----
 
@@ -144,7 +113,6 @@ And Workflows now has GA natural-language authoring, version history with rollba
 Elastic nine point five introduces a bunch of significant changes.
 
 Columnar Mode is a huge architectural change.
-Data Federation allows you to query without ingestion.
 The vector changes mean optimisation happens for you.
 Native Prometheus and PromQL support let metrics teams migrate without starting over.
 And Attack Discovery moves security teams closer to AlertZero.
