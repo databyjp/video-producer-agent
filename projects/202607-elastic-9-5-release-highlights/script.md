@@ -32,13 +32,13 @@ Elasticsearch normally keeps the original document, builds search and filter ind
 
 This gives you flexibility for searches. But analytics workloads are different. Log and metrics fields are often only filtered or aggregated, but not searched - which means these additional stores add an overhead without much benefit.
 
-Columnar Mode flips the default, so that the column store is the primary representation, and skips the additional indexes unless told otherwise. And Elasticsearch reconstructs the document from those columns.
+Columnar Mode flips the default. Here, the column store is the primary representation, and skips the additional indexes unless told otherwise. And Elasticsearch reconstructs the document from those columns.
 
 Columnar Logs is the first specialized profile using Columnar Mode. It keeps full-text search for the log message while making the remaining fields columnar by default. Analytical data no longer has to pay for every search capability by default.
 
-For those of you with filtering and aggregation-dominant logs workloads, Columnar Logs is a big, easy win.
+For those of you with filtering and aggregation-dominant logs workloads, Columnar Logs is a big win.
 
-Columnar Mode is opt-in. If updates, nested documents, point retrieval, or full-text relevance are the main jobs - you can keep the existing mode.
+Now - Columnar Mode is opt-in. If updates, nested documents, point retrieval, or full-text relevance are the main jobs - you can keep the existing mode.
 
 Columnar Mode arrives as a Technical Preview. So this is a good time to evaluate whether it fits your workload as the feature matures.
 
@@ -54,7 +54,7 @@ VectorDB index mode lets you declare an index to be for vector search. Elasticse
 
 You can still override defaults, as with other index modes, but the starting point now reflects the workload.
 
-On top of that, we're introducing auto-calibration for `bbq_disk` indexes. For eligible merged segments, Elasticsearch selects compression and reranking settings against a technical recall target.
+On top of that, we're introducing auto-calibration for DiskBBQ indexes. For eligible merged segments, Elasticsearch selects compression and reranking settings against a technical recall target.
 
 For easier datasets, it can use more compression and less reranking. For harder datasets, it can preserve more fidelity.
 
@@ -64,7 +64,7 @@ This reduces manual tuning, but you still need to test relevance on your own dat
 
 ## MIGRATE WITHOUT STARTING OVER: METRICS GA
 
-In nine-point-five, Elastic's native Prometheus remote-write endpoint and PromQL support are now generally available.
+Elastic's native Prometheus remote-write endpoint and PromQL support are now generally available.
 
 If you already use Prometheus and Grafana, this matters because moving your metrics doesn't have to start with rewriting every query and dashboard.
 
@@ -72,7 +72,7 @@ Prometheus can remote-write metrics directly into Elasticsearch, and Grafana can
 
 There's also a new GA migration tool for bringing Grafana and Datadog dashboards and alerts into Elastic.
 
-Just one more thing on metrics - we've talked a lot about how much more efficient Elasticsearch has become for metrics. Well, codec improvements in nine point five reduce the metrics footprint by roughly another twenty percent.
+Also, codec improvements in nine point five reduce the metrics footprint by roughly another twenty percent. This is on top of the numerous improvements to storage efficiency and query speed we’ve made in the last year or so.
 
 -----
 
