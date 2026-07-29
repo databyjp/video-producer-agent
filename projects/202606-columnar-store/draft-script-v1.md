@@ -2,9 +2,9 @@
 
 If you use Elasticsearch for logs, there’s a good chance you use another system for metrics - something like Prometheus.
 
-Historically, that split made sense. Elasticsearch *could* store metrics, but it maintained several copies and indexes of the same data. That made many metrics workloads slower and more expensive.
+Historically, that split made sense. Elasticsearch *could* store metrics, but it maintained several representations and indexes of the same data. That made many metrics workloads slower and more expensive.
 
-But Elasticsearch now gives you the option to remove those extra copies: inverted indexes, BKD trees, even stored identifiers and sequence numbers in specific cases.
+But Elasticsearch now gives you the option to remove those extra representations: inverted indexes, BKD trees, even stored identifiers and sequence numbers in specific cases.
 
 What’s left looks less like a traditional search index and more like a columnar metrics engine. Let’s look at the engineering underneath—and whether it makes consolidating your stack technically credible.
 
@@ -12,35 +12,35 @@ What’s left looks less like a traditional search index and more like a columna
 
 # Why the extra structures exist
 
-So, given that intro, why do these "extra" copies of the data exist? The fact is that for a lot of data, including logs, each one solves a different problem.
+So, given that intro, why do these "extra" representations of the data exist? The fact is that for a lot of data, including logs, each one solves a different problem.
 
 Here's what happens as you investigate a connection problem through logs. You run a query to search for “connection refused”, filter to the last hour, group the results by service, then open one complete event to inspect it.
 
-You can do all of that, because each log entry has been processed, and each component saved separately to speed up these operations.
+You can do all of that, because the same log event is represented in several structures, each optimized for a different operation.
 
 [show one log event, then split its fields into the structures below]
 
-The message is saved into an inverted index, so you can search for words like “connection” or “refused.”
+Terms from the message are written to an inverted index, so you can search for words like "connection" or "refused".
 
-Numeric fields like the timestamp and request duration are copied into a BKD tree, to quickly find and filter values inside a range.
+Numeric and date fields, such as the timestamp and request duration, are indexed in a BKD tree for fast range filtering.
 
-Each field is saved as doc values. They store each field as its own on-disk column, making operations like sorting and aggregation much more efficient.
+Most keyword, numeric, and date fields are also written as doc values—on-disk columns designed for sorting and aggregation.
 
 And of course, the original event is kept for retrieval and inspection.
 
 [end animation]
 
-In other words, these "copies" of the data are the engines that drive several fast ways to search, filter, aggregate, and retrieve the data - at the cost of a little more ingest time and disk space.
+In other words, these structures enable faster search, filter, aggregation, and retrieve data - but they add ingest work and consume disk space.
 
-But Metrics have a narrower shape, and pattern.
+Metrics have a narrower access pattern.
 
 A metric might contain only a timestamp, a few dimensions such as service and host, and a numeric value like CPU usage.
 
-And Metrics are usually append-only. Queries filter by dimensions and time, then aggregate a small number of numeric fields. You rarely search a message or retrieve one complete metric document.
+These indexes *can* still help. But metrics are usually append-only, and their queries follow a predictable pattern: filter by dimensions and time, then aggregate a small number of numeric fields. You rarely search a message or retrieve one complete metric document.
 
-So for this workload, the machinery built for texts and logs had limited benefits. So did Elasticsearch's internal storage have be completely re-built? Not quite - because it already had a columnar layer in doc values.
+That makes the cost of maintaining several parallel structures harder to justify.
 
-The problem was that this columnar representation lived alongside other structures that a metrics workload often didn’t need.
+So did Elasticsearch’s storage engine need to be rebuilt completely? Not quite. The columnar layer already existed in doc values. The challenge was removing the other structures without making common metrics queries slower.
 
 -----
 
