@@ -16,7 +16,7 @@ So, given that intro, why do these "extra" representations of the data exist? Th
 
 Here's what happens as you investigate a connection problem through logs. You run a query to search for “connection refused”, filter to the last hour, group the results by service, then open one complete event to inspect it.
 
-You can do all of that, because the same log event is represented in several structures, each optimized for a different operation.
+You can do all of that because the same log event is represented in several structures, each optimized for a different operation.
 
 [show one log event, then split its fields into the structures below]
 
@@ -30,7 +30,7 @@ And of course, the original event is kept for retrieval and inspection.
 
 [end animation]
 
-In other words, these structures enable faster search, filter, aggregation, and retrieve data - but they add ingest work and consume disk space.
+In other words, these structures enable faster search, filter, aggregation, and retrieval - but they add work at ingestion time and consume disk space.
 
 Metrics have a narrower access pattern.
 
