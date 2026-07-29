@@ -714,3 +714,14 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 **Verified accurate (no change):** doc value skipper mechanics, ES|QL `TS` two-level aggregation, zero-copy decoding, run-length encoding, counter rate thread assignment, 160x claim, 25 → 3.75 bytes/point trajectory, skippers only effective on sorted/insert-ordered data, no measurable regression on typical metrics queries.
 
 **Sources consulted:** elastic.co/search-labs/blog/elasticsearch-columnar-storage, elastic.co/search-labs/blog/elasticsearch-metrics-columnar-engine, elastic.co/search-labs/blog/elasticsearch-time-series-storage-sequence-numbers, elastic.co/docs/reference/elasticsearch/index-settings/sorting, 9.5 release blog draft.
+
+## 2026-07-29 — Columnar metrics full script draft
+
+- **Project:** Drafted `projects/202606-columnar-store/draft-script-v1-sol.md`, preserving the supplied introduction and expanding the approved outline into a complete spoken script with inline visual directions.
+- **Coverage:** Historical data duplication, row versus columnar storage, TSDS ordering, doc value skippers, synthetic `_id`, sequence-number trimming, ES|QL columnar execution, benchmark scrutiny, Prometheus migration, Columnar Mode, tradeoffs, and decision guidance.
+- **Evidence:** Verified the mechanics against the prioritized Elastic primary sources and documented the unverified recording gates around 9.5 GA availability and the ES95 codec result.
+- **Accuracy correction:** General Elasticsearch index sorting may use multiple fields, although it remains fixed at index creation; the draft does not repeat the outline's inaccurate “one static sort key” wording.
+
+## 2026-07-29 — Columnar script log-example revision
+
+- **Revision:** Reworked the duplicated-structures explanation around one log investigation, showing why `_source`, inverted indexes, BKD trees, and doc values each earn their cost before contrasting that flexibility with the narrower metrics access pattern.

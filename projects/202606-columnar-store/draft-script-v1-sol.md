@@ -12,33 +12,46 @@ What’s left looks less like a traditional search index and more like a columna
 
 # Why the extra structures exist
 
-So, given that intro, why do these "extra" copies of the data exist? The fact is that for a lot of data, including logs, each one solves a different problem.
+Given the intro, you're probably wondering why these "extra" copies of the data exist. After all, I said we've removed them for metrics.
 
-Here's what happens as you investigate a connection problem through logs. You run a query to search for “connection refused”, filter to the last hour, group the results by service, then open one complete event to inspect it.
+Because for a lot of data, including logs, each one solves a different problem.
 
-You can do all of that, because each log entry has been processed, and each component saved separately to speed up these operations.
+Imagine we send Elasticsearch a log event. It might have a timestamp, a service name, a host name, a request duration, and a message.
+
+Each these components might be saved differently, due to
 
 [show one log event, then split its fields into the structures below]
 
-The message is saved into an inverted index, so you can search for words like “connection” or “refused.”
 
-Numeric fields like the timestamp and request duration are copied into a BKD tree, to quickly find and filter values inside a range.
+Elasticsearch can keep the original event in `_source`, so you can retrieve and inspect it later.
 
-Each field is saved as doc values. They store each field as its own on-disk column, making operations like sorting and aggregation much more efficient.
+It can put the message into an inverted index, so you can search for words like “connection” or “refused.”
 
-And of course, the original event is kept for retrieval and inspection.
+It can put numeric fields like the timestamp and request duration into a BKD tree, so it can quickly find values inside a range.
 
-[end animation]
+And it can write fields to doc values. Doc values store each field as its own on-disk column, making operations like sorting and aggregation much more efficient.
 
-In other words, these "copies" of the data are the engines that drive several fast ways to search, filter, aggregate, and retrieve the data - at the cost of a little more ingest time and disk space.
+[diagram: one log event branching into `_source`, an inverted index or BKD tree, and doc values]
 
-But Metrics have a narrower shape, and pattern.
+Not every field uses every structure. Text, keywords, and numbers behave differently.
+
+But consider a typical log investigation.
+
+You search for “connection refused,” filter to the last hour, group the results by service, then open one complete event to inspect it.
+
+That single workflow benefits from every structure we just described.
+
+So for logs and search workloads, this duplication can be a useful trade. You spend more at ingest time and on disk, then gain several fast ways to search, filter, aggregate, and retrieve the data.
+
+Metrics have a narrower shape.
 
 A metric might contain only a timestamp, a few dimensions such as service and host, and a numeric value like CPU usage.
 
-And Metrics are usually append-only. Queries filter by dimensions and time, then aggregate a small number of numeric fields. You rarely search a message or retrieve one complete metric document.
+Metrics are usually append-only. Queries filter by dimensions and time, then aggregate a small number of numeric fields. You rarely search a message or retrieve one complete metric document.
 
-So for this workload, the machinery built for texts and logs had limited benefits. So did Elasticsearch's internal storage have be completely re-built? Not quite - because it already had a columnar layer in doc values.
+But historically, Elasticsearch still maintained much of the machinery built for more flexible workloads.
+
+And that reveals an important nuance: Elasticsearch wasn’t purely row-based. It already had a columnar layer in doc values.
 
 The problem was that this columnar representation lived alongside other structures that a metrics workload often didn’t need.
 
