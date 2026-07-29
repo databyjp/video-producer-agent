@@ -682,3 +682,35 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Trust and tone:** Replaced promotional superlatives with concrete outcomes and clarified that Attack Discovery works toward AlertZero.
 - **Accuracy:** Narrowed Columnar claims, described DiskBBQ auto-calibration against a technical recall target, restored a relevance-testing caveat, and attributed the metrics codec result.
 - **Delivery:** Defined Application Performance Monitoring, tightened Data Federation wording, corrected the wrap-up, and added a specific closing question.
+
+## 2026-07-28 — Elastic 9.5 YouTube metadata draft
+
+- **Metadata:** Drafted a concise description and placeholder chapters for the completed Elastic 9.5 highlights video. Recommended linking the all-up release post and the primary documentation for Columnar Mode, vector index modes and DiskBBQ auto-calibration, Prometheus/PromQL, and Attack Discovery; exact related-video and campaign links remain to be supplied before publishing.
+
+## 2026-07-29 — Columnar-store outline updated for 9.5 release
+
+**Project:** 202606-columnar-store
+**Action:** Reviewed the Phase 1 outline against the 9.5 release blog (Jul 28) and the columnar-storage search-labs blog (Jul 9). Verified technical claims against the metrics-columnar-engine and sequence-numbers primary sources. Applied accuracy fixes and a forward-looking framing update.
+
+**Stale facts fixed:**
+- PromQL / Prometheus remote write: 9.4 tech preview → GA in 9.5 (with migration tool for Grafana/Datadog dashboards and alerts). Added PromQL-compatibility-not-complete caveat.
+- Storage trajectory table: added 9.5 ES95 codec row (~–20% further reduction, ~3 bytes/sample); summary line now lands on 9.5.
+
+**Accuracy fixes:**
+- Hook: removed "and even the stored document itself got stripped away" — not supported by the TSDB metrics sources (the four documented changes are skippers, codec blocks, synthetic `_id`, seq number trimming). Stored-document regeneration is a Columnar Mode (9.5) claim; held back for the forward-looking beat.
+- Hook: "stripped away" → "trimmed away" for sequence numbers.
+- Sequence numbers: "No sequence numbers by default on TSDB in 9.4" → "trimmed after replication by default... still assigned and written at index time because replication depends on them, but dropped from merged segments once the global checkpoint has advanced past them."
+- 9.1 trajectory row: softened "–50% recovery-source disk I/O" → "Cuts recovery-source disk I/O; foundational for later ingest throughput gains" (the 50% throughput figure is a combined result, not a discrete 9.1 saving).
+- TSDB section: named the sort key `[_tsid ascending, @timestamp descending]` (load-bearing for the skipper explanation that follows).
+- Fixed `TDSB` typo → `TSDB`.
+
+**Framing update:**
+- Impact section: strengthened the Prometheus+Elastic audience bullet to reflect 9.5 GA migration tooling; added a forward-looking beat introducing Columnar Mode (technical preview 9.5, GA 9.6), Columnar Logs, and the stored-document regeneration point held back from the hook. Careful to frame the metrics work as foundation, not identical to Columnar Mode.
+- Tradeoffs section: added the sort-key limitation bullet — TSDB gets its sort for free; Columnar Mode's general profile inherits `index.sort.field` (one static sort key, defined at index creation); pruning is effective on sort-key fields and correlated fields, ad-hoc filters on uncorrelated fields fall back to scanning. This is the structural reason the initial profiles are time-ordered workloads.
+
+**Nomenclature:**
+- Removed the blunt "Prefer TSDB over TSDS" internal note. Added a refined note: TSDS = the time series data stream itself (configuration, the stream object); TSDB = the broader time series database/engine (storage, querying, indexing). Use TSDS only when referring to the data stream; use TSDB for everything else. Outline body already consistent with this rule.
+
+**Verified accurate (no change):** doc value skipper mechanics, ES|QL `TS` two-level aggregation, zero-copy decoding, run-length encoding, counter rate thread assignment, 160x claim, 25 → 3.75 bytes/point trajectory, skippers only effective on sorted/insert-ordered data, no measurable regression on typical metrics queries.
+
+**Sources consulted:** elastic.co/search-labs/blog/elasticsearch-columnar-storage, elastic.co/search-labs/blog/elasticsearch-metrics-columnar-engine, elastic.co/search-labs/blog/elasticsearch-time-series-storage-sequence-numbers, elastic.co/docs/reference/elasticsearch/index-settings/sorting, 9.5 release blog draft.
