@@ -1,13 +1,11 @@
-If you're running Elasticsearch for observability, there's a good chance that it's storing logs.
+# Intro
 
-Now, what about metrics? If we're honest, they've probably been on another platform like Prometheus.
+If you use Elasticsearch for logs, there’s a good chance you use another system for metrics - something like Prometheus.
 
-It's not because Elastic couldn't do metrics, but because Elastic was too slow, or too expensive for metrics workloads.
+Historically, that split made sense. Elasticsearch *could* store metrics, but it maintained several copies and indexes of the same data. That made many metrics workloads slower and more expensive.
 
-But that's all changed. And I know that sounds like typical marketing nonsense, so let's talk you through the facts - the engineering changes.
+But Elasticsearch now gives you the option to remove that duplication: inverted indexes, BKD trees, even stored identifiers and sequence numbers in specific cases.
 
-Then, you can make an informed decision for yourself on where to store your metrics going forward.
+What’s left looks less like a traditional search index and more like a columnar metrics engine. Let’s look at the engineering underneath—and whether it makes consolidating your stack technically credible.
 
-To understand what changed, we need to understand what was there before. So let's start with the key components that make Elasticsearch work so well for search, and what that means for metrics.
-
-....
+-----
