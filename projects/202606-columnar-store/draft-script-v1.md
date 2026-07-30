@@ -78,194 +78,150 @@ That gives us three advantages: read fewer bytes, compress them more efficiently
 
 [on-screen text: Less I/O. Better compression. Vectorized execution.]
 
+-----
 
+# Enabling columnar metrics
+
+That existing columnar layer had one important weakness: filtering.
+
+Suppose a query asks for metrics from the last hour.
+
+Doc values can efficiently read timestamps for documents the engine already knows about. But on their own, they don’t provide an efficient way to find every document inside that time range.
+
+The engine would have to scan the timestamp column and check each value.
+
+That is why Elasticsearch also built a BKD tree. The tree makes range filtering fast—but now every timestamp exists in two structures: doc values for aggregation, and a BKD tree for filtering.
+
+[diagram: timestamp stored in doc values and a BKD tree]
+
+So making metrics columnar created a specific engineering challenge:
+
+How do you remove the dedicated index without turning every filter into a full scan?
+
+The answer starts with the order of the data.
 
 -----
 
 # Time-series data gives you order
 
-The first major piece is Elasticsearch’s time-series data stream, or TSDS.
+Elasticsearch’s time-series data stream, or TSDS, is an opt-in index mode built specifically for metrics.
 
-TSDS is an opt-in index mode built specifically for metrics. It’s not a change to every Elasticsearch index.
+You tell it which fields are metrics and which are dimensions, such as service, host, region, or Kubernetes pod.
 
-You identify which fields are metrics, such as counters and gauges. You also identify the dimensions that define a series, such as the service, host, region, or Kubernetes pod.
+Those dimensions identify a unique time series. Elasticsearch derives an internal identifier for it called `_tsid`.
 
-Elasticsearch derives an internal time-series identifier called `_tsid` from those dimensions.
+Every point in that series is routed to the same shard. Inside each segment, Elasticsearch then sorts the points by `_tsid`, followed by timestamp with the newest points first.
 
-It then routes every point in the same series to the same shard and sorts each segment by `_tsid` ascending, then timestamp descending.
+[diagram: mixed incoming metrics regroup into contiguous series, each ordered by timestamp]
 
-[diagram: mixed incoming metrics regroup into contiguous series, each ordered newest to oldest]
+The result is predictable.
 
-That sort order is load-bearing.
+All the points for one series sit together. Their timestamps are ordered. And because the dimensions define `_tsid`, repeated dimension values cluster together too.
 
-All the points for one series now sit together. Because the series identifier comes from the dimensions, repeated dimension values cluster together as well.
-
-And within each series, the timestamps are ordered.
-
-This makes the columns more compressible—but it also makes them searchable in a much cheaper way.
-
-To see why, we need to look at the structure that replaced the BKD tree.
+That order is what makes a much smaller filtering structure possible.
 
 -----
 
 # Replacing a tree with a skipper
 
-Doc values are good at reading a field for a known set of documents. But traditionally, they weren’t good at finding those documents in the first place.
+The replacement is called a doc value skipper.
 
-If timestamps are stored only as doc values and you ask for the last hour, the naive approach checks every timestamp in the column.
+A skipper divides a doc-values column into blocks. For each block, it records the minimum and maximum value.
 
-That’s a table scan.
+[diagram: ordered timestamp column divided into blocks, each labelled with its minimum and maximum]
 
-A BKD tree avoids that scan. It organizes numeric values into a search structure that can find a range efficiently.
+Now return to our query for the last hour.
 
-But now the timestamp exists twice: once in doc values for aggregation, and again in the BKD tree for filtering.
+If a block only contains timestamps from yesterday, its maximum value is too old. Elasticsearch can skip the whole block without checking every timestamp inside it.
 
-[diagram: timestamp column duplicated into doc values and BKD tree]
+Larger summaries let it rule out groups of blocks in the same way.
 
-Lucene ten introduced another option: the doc value skipper.
+This only works when nearby documents have similar values.
 
-A skipper divides the doc-values column into blocks of roughly four thousand documents. For each block, it records small pieces of metadata: the lowest value, the highest value, and how many documents have a value.
+If timestamps were randomly scattered, almost every block might contain both old and new values. Its minimum and maximum would overlap the query, so very little could be skipped.
 
-Those blocks are then summarized into larger blocks, across several levels.
+[compare ordered values with tight block ranges against random values with overlapping ranges]
 
-[diagram: timestamp column divided into blocks, with min/max labels, then grouped hierarchically]
+TSDS provides the order that skippers need. Timestamps are sorted, while dimensions cluster because points from the same series sit together.
 
-Now imagine our query asks for the last hour.
+That allows timestamp and dimension fields to keep their columnar doc values while dropping their separate BKD trees or inverted indexes.
 
-If an entire block contains timestamps from yesterday, Lucene can skip it without reading the individual values.
+The result is not “no index.” It is a much smaller index over the existing column.
 
-If a larger group of blocks is too old, it can skip that whole region at once.
-
-This is much smaller than building a complete BKD tree. Elastic reports that skipper metadata is typically less than one tenth of one percent of the underlying doc-values field.
-
-But there’s a catch.
-
-Skippers only work well when nearby documents have nearby values.
-
-If values are randomly scattered, every block might contain both very low and very high values. The minimum and maximum tell you almost nothing, so the query can’t skip anything.
-
-[show two columns: ordered values with tight min/max blocks; random values with overlapping min/max blocks]
-
-TSDS creates exactly the shape skippers need.
-
-Timestamps are explicitly sorted. Dimensions cluster because documents are grouped by `_tsid`.
-
-That means Elasticsearch can remove the separate BKD trees and inverted indexes from timestamp and dimension fields, then use doc values plus tiny skipper metadata for the common filters metrics queries run.
-
-In Elastic’s OpenTelemetry benchmark, this change removed about ten bytes from an initial twenty-five-byte data point. Elastic also reported no measurable regression for its typical time-range and dimension filters.
-
-Those are first-party benchmark results, and we’ll come back to that distinction.
-
-And "typical" matters there. Ad-hoc filters on dimensions that don’t correlate with the sort order are a weaker fit for skippers than time ranges and clustered dimensions.
-
-The underlying mechanism, though, is clear: the data is ordered, the blocks have useful boundaries, and entire regions can be ruled out without maintaining a second full index.
+There is a trade-off. Filters that follow the time-series layout work well. Ad-hoc filters on values that don’t correlate with that order may need to scan more data than before.
 
 -----
 
-# Removing the rest
+# Removing the ID index
 
-The skipper was the largest individual storage change, but it wasn’t the only one.
+The next structure was the index on `_id`.
 
-This was a sequence of changes across several Elasticsearch releases.
+Elasticsearch normally indexes every document ID. That supports lookups and lets the engine reject duplicates.
 
-[show timeline from Elasticsearch 9.1 to 9.5]
+But a metric already has a natural identity: the time series it belongs to, plus its timestamp.
 
-In version nine point one, Elasticsearch added synthetic recovery source for metrics.
+TSDS can derive `_id` from `_tsid` and `@timestamp` instead of storing and indexing it separately.
 
-Elasticsearch normally needs a representation of the source document during replication and recovery. For TSDS, it can reconstruct that source from the indexed fields instead of temporarily storing another copy for this purpose.
+It still needs to detect duplicates quickly. A small Bloom filter provides the fast path: it can rule out IDs that definitely aren’t present. Only possible matches need to be checked against the columnar values.
 
-Elastic says this cut recovery-related disk I/O in half in its metrics tests.
+[diagram: series plus timestamp → synthetic `_id` → Bloom filter → occasional doc-values check]
 
-In nine point three, the doc value skippers arrived. Elasticsearch also increased some numeric codec blocks from one hundred and twenty-eight to five hundred and twelve values.
+The document APIs still work, but the dedicated inverted index for `_id` is gone.
 
-That sounds like a small implementation detail. But larger blocks helped the codec recognize repeated sequences in dimensions such as IP and MAC addresses.
+-----
 
-In Elastic’s OpenTelemetry dataset, that saved another two bytes per point.
+# Trimming sequence numbers after replication
 
-Then, in nine point four, Elasticsearch made the document identifier synthetic.
+Sequence numbers solve a different problem.
 
-Every Elasticsearch document has an `_id`. Normally, Elasticsearch indexes that identifier so it can detect duplicates and support document lookups.
+Every write receives one so the primary shard and its replicas can agree on which operations they have processed.
 
-But a metric already has a natural identity: its time-series identifier plus its timestamp.
+That means Elasticsearch cannot remove sequence numbers at ingestion. Replication still needs them.
 
-So TSDS can derive `_id` from `_tsid` and `@timestamp` rather than storing and indexing it separately.
+But metrics are usually append-only. Once every in-sync replica has confirmed an operation, its sequence number has little long-term value for this workload.
 
-There’s still a problem. Elasticsearch needs to reject a duplicate point efficiently.
+So TSDS keeps sequence numbers through replication, then drops them when old Lucene segments are merged.
 
-Checking the doc-values columns for every new metric would be expensive, so each Lucene segment gets a Bloom filter.
+[diagram: assign sequence number → replicas catch up → later segment merge removes it]
 
-[diagram: incoming synthetic ID → Bloom filter → usually "definitely absent"; occasional hit → verify using doc values]
+The trade-off is weaker update behavior. Optimistic concurrency control and single-document updates are disabled. If a metrics workload needs those semantics, new TSDS indices can retain sequence numbers through an index setting.
 
-A Bloom filter can quickly say, "This ID is definitely not here."
+-----
 
-It can sometimes return a false positive, but never a false negative. On a possible match, Elasticsearch falls back to checking `_tsid` and timestamp through doc values.
+# The storage result
 
-Most new points take the fast path. And the separate inverted index for `_id` disappears.
+Skippers, synthetic IDs, and trimmed sequence numbers were the main removals.
 
-Elastic attributes another five bytes per OpenTelemetry point to that change.
+Two supporting changes helped as well: Elasticsearch stopped retaining a separate recovery copy of the source for metrics, and it tuned its numeric codec to compress repeated values more effectively.
 
-The next target was sequence numbers.
+[show the release timeline and byte savings as an overlay; do not read every row]
 
-Elasticsearch assigns every write a sequence number. Replicas use it to stay synchronized, and clients can use it for optimistic concurrency control—essentially, "only update this document if nobody changed it since I last read it."
-
-Metrics rarely need that second behavior. You normally append a sample, query it, then delete it when it ages out. You don’t repeatedly compare and swap the CPU reading from last Tuesday.
-
-But sequence numbers are still essential during replication, so Elasticsearch cannot simply stop creating them.
-
-Instead, TSDS trims them later.
-
-Once the global checkpoint confirms that every in-sync replica has an operation, the sequence number has finished its replication job. During a later segment merge, Elasticsearch can omit sequence numbers below that checkpoint from the newly merged segment.
-
-[diagram: write gets sequence number → replicas confirm → global checkpoint passes → segment merge drops column]
-
-That distinction matters: sequence numbers are assigned and written at ingest time. They disappear only after replication no longer needs them.
-
-The trade-off is weaker document-update behavior. Optimistic concurrency control and single-document updates are disabled. Update-by-query and delete-by-query still work, but without sequence-number conflict detection.
-
-That’s usually a reasonable trade for append-only metrics. If it isn’t, new TSDS backing indices can retain sequence numbers through a setting in the index template.
-
-Elastic attributes roughly four more bytes per point to sequence-number trimming.
-
-Put those changes together and Elastic’s OpenTelemetry test moved from twenty-five bytes per point to three point seven five bytes in version nine point four.
-
-[show table as overlay; do not read every number aloud]
-
-| Change | Version | Reported saving |
+| Change | Version | Reported effect |
 |---|---:|---:|
 | Synthetic recovery source | 9.1 | Lower recovery I/O |
-| Doc value skippers | 9.3 | ~10 bytes per point |
-| Larger codec blocks | 9.3 | ~2 bytes per point |
-| Synthetic `_id` | 9.4 | ~5 bytes per point |
-| Sequence-number trimming | 9.4 | ~4 bytes per point |
+| Doc value skippers | 9.3 | ~10 bytes saved per point |
+| Larger codec blocks | 9.3 | ~2 bytes saved per point |
+| Synthetic `_id` | 9.4 | ~5 bytes saved per point |
+| Sequence-number trimming | 9.4 | ~4 bytes saved per point |
 | ES95 codec | 9.5 | ~20% further reduction |
 
-And in version nine point five, Elastic says its new ES95 codec reduces that result by roughly another twenty percent, to around three bytes per sample.
+In Elastic’s OpenTelemetry test, the complete set of changes reduced storage from twenty-five bytes per data point to three point seven five in version nine point four.
 
-Again, those byte counts describe Elastic’s specific OpenTelemetry workload. They are not a promise that every dataset will land at exactly three bytes.
+Elastic says the ES95 codec in version nine point five brings that to roughly three bytes per sample.
 
-But the direction is more important than any one number.
-
-By version nine point four, timestamp and dimension fields no longer needed parallel BKD trees or inverted indexes. Metric values were already stored as doc values. That leaves the TSDS fields in per-field columns, supported by lightweight skippers where they help.
-
-Elasticsearch did not get there by adding a magical compression layer around the old architecture.
-
-It looked at each structure, asked whether metrics actually needed it, and removed or delayed the ones that didn’t earn their cost.
+Those are results from Elastic’s workload, not a guaranteed footprint for every dataset. But they show the cumulative effect of removing structures that metrics didn’t need to retain.
 
 -----
 
-# Storage was only half the problem
+# Querying columns as columns
 
-A columnar layout doesn’t automatically produce a fast columnar query engine.
+Columnar storage only helps if the query engine preserves that layout.
 
-You can store every field in neat columns, then throw away the advantage by decoding those columns back into individual documents before processing them.
+If Elasticsearch reconstructed every metric document before processing it, much of the I/O and CPU advantage would disappear.
 
-So Elastic also changed the execution path in ES|QL.
+So the `TS` source command in ES|QL follows the same shape as the stored data.
 
-The `TS` source command models a metrics query in two levels.
-
-First, it runs a function within each time series. That might be the rate of a counter, or the average value over a time window.
-
-Then it combines those per-series results across a dimension such as host, service, or region.
+It first calculates a result inside each time series, such as the rate of a counter. It then combines those per-series results across a dimension such as host or service.
 
 [show query]
 
@@ -278,69 +234,45 @@ TS metrics
 
 This query calculates a rate inside each series, then sums those rates by host and hour.
 
-Because the data is already sorted by `_tsid`, the engine can read a column of metric values until the series changes. It only needs to fetch the repeated dimensions when `_tsid` changes.
+First, its time and dimension filters are pushed down to the skippers, which remove blocks the query doesn’t need.
 
-The codec can decode data directly into the primitive arrays used by the compute engine. That removes intermediate copies and per-document objects.
+The remaining metric values are already ordered by `_tsid`. ES|QL can process one series until the identifier changes, then move to the next.
 
-Repeated `_tsid` and dimension values can be represented as constant blocks—effectively, "this one value occurs this many times"—rather than expanded into a full array.
+The values are decoded directly into arrays for aggregation. Repeated dimensions only need to be fetched when the series changes.
 
-Null metric values are filtered before decoding. Timestamp and dimension filters are pushed down to Lucene, where the skippers remove irrelevant blocks.
+[animation: skippers remove blocks → metric column decoded into an array → per-series result → grouped result]
 
-[animation: disk column → primitive array → vectorized aggregation, with no reconstructed documents in between]
+That order also lets counter calculations detect resets correctly while different ranges of series are processed in parallel.
 
-Counter rates need special handling because samples must stay in order. A server restart may reset a counter, and the engine needs to see that reset rather than treating it as a huge negative rate.
-
-ES|QL assigns ordered ranges of time-series identifiers to different threads. That lets it evaluate many series in parallel while preserving the order inside each one.
-
-This is the second half of the columnar claim.
-
-The storage engine reads only the required columns. The compute engine processes those columns as batches. And the query plan understands the physical order of time-series data.
-
-For TSDS metrics, "columnar" is not just a label attached to doc values. It describes both storage and execution.
+The important point is simple: Elasticsearch no longer stores metrics in columns and then rebuilds rows to query them. The columnar shape survives from disk through execution.
 
 -----
 
 # What the benchmarks do—and don’t—prove
 
-Elastic reports substantial results from this work.
+Elastic reports large improvements from this work.
 
-Compared with its own earlier TSDS implementation, it reports up to six point six times better storage efficiency, up to fifty percent more indexing throughput, and time-series queries up to one hundred and sixty times faster.
+Compared with its own TSDS implementation from a year earlier, it reports up to fifty percent higher indexing throughput and queries up to one hundred and sixty times faster.
 
-The ingestion gain came from several changes working together: less index and merge work, synthetic recovery source, and native protobuf ingestion paths. It wasn’t produced by the storage layout alone.
-
-Against Prometheus and Mimir, Elastic reports some gauge-average and counter-rate queries running up to thirty times faster.
-
-Those tests used generated OpenTelemetry host metrics in two configurations: one with fourteen thousand time series, and another with one point four million.
-
-They ran on single-node Amazon EC2 deployments and queried four hours of data across all series for each metric.
+Against Prometheus and Mimir, some of Elastic’s gauge and counter queries ran up to thirty times faster.
 
 [show Elastic benchmark charts with clear label: "Elastic benchmark"]
 
-The architecture gives us reasons to believe major improvement is plausible.
-
-There is less data to write and merge. Filters can prune ordered blocks. The query engine avoids rebuilding documents and copying arrays. Those are real, inspectable changes.
+The mechanisms give us good reasons to expect a substantial improvement. Elasticsearch writes and merges less data, skips irrelevant blocks, and avoids reconstructing documents during aggregation.
 
 But the exact competitive multipliers are still vendor benchmarks.
 
-Elastic did not initially publish a complete benchmark harness or enough resource-utilization data for a clean independent reproduction.
+One attempted reproduction reached a very different result. Prometheus ingested its high-cardinality dataset in roughly two hours, while Elasticsearch repeatedly timed out and was projected to take more than forty.
 
-One Prometheus ecosystem engineer attempted to reproduce the high-cardinality ingest workload with an open-source harness.
-
-In that attempt, Prometheus ingested a day of data in roughly two hours. Elasticsearch repeatedly timed out and was projected to take more than forty hours, with heavy disk activity.
-
-The same critique questioned whether Elastic measured Prometheus storage before its write-ahead log had compacted, which could make Prometheus appear larger than its steady-state footprint.
+The author also questioned whether Elastic measured Prometheus storage before its write-ahead log had compacted.
 
 [on-screen text: One attempted reproduction—not a universal verdict]
 
-That reproduction is not the final word either. Benchmark configuration, product versions, ingestion paths, and tuning choices can change the result in both directions.
+That reproduction isn’t the final word either. Different versions, ingestion paths, hardware, and tuning can change the result substantially.
 
-What it does show is that "up to thirty times faster" is not a portable fact you can paste into an architecture decision.
+So I’d separate two conclusions.
 
-The honest conclusion has two layers.
-
-The structural improvements are credible and verifiable.
-
-The size of the advantage over Prometheus, Mimir, or ClickHouse depends on the workload and still needs independent reproduction.
+The engineering changes are real. The exact advantage over Prometheus, Mimir, or ClickHouse is workload-dependent and hasn’t been independently established.
 
 If this decision matters to your infrastructure bill, benchmark your own cardinality, retention period, ingestion pattern, queries, and hardware.
 
@@ -348,113 +280,75 @@ If this decision matters to your infrastructure bill, benchmark your own cardina
 
 # Does this make Prometheus replaceable?
 
-Version nine point five makes that question easier to test without rewriting your entire metrics workflow.
+Version nine point five makes that question easier to test without immediately rewriting your metrics workflow.
 
 Prometheus can remote-write directly into Elasticsearch. Labels map to TSDS dimensions, metric types are inferred from naming conventions, and the samples land in time-series data streams.
 
-Elasticsearch also accepts PromQL through a Prometheus-compatible HTTP API.
-
-Or you can use PromQL as the source of an ES|QL pipeline. Elasticsearch translates it into the same logical plans used by the `TS` command, then runs it through the same compute engine.
+Elasticsearch also accepts PromQL through a Prometheus-compatible API. Those queries run through the same ES|QL time-series engine.
 
 [diagram: Prometheus remote write → Elasticsearch TSDS → PromQL/Grafana and ES|QL]
 
 According to Elastic’s nine point five release announcement, Prometheus remote write and PromQL support are now generally available. The release also introduces a migration tool for Grafana and Datadog dashboards and alerts.
 
-That lowers migration friction. It does not make compatibility perfect.
+That reduces migration work, but compatibility isn’t complete. Remote write version two and staleness markers aren’t supported, and PromQL still has documented gaps.
 
-The remote-write endpoint currently supports version one of the protocol, not version two. Staleness markers are not supported.
-
-PromQL support also has documented gaps and semantic differences. You need to test the functions and alert behavior your dashboards actually use.
-
-And moving the query language is not the same as moving the operational model.
-
-You still need to evaluate cluster sizing, failure behavior, retention, upgrades, and the cost of reindexing existing data. Existing indexes do not become TSDS retroactively.
-
-So, who should seriously consider consolidation?
+You also need to evaluate the operational migration: cluster sizing, failure behavior, retention, and reindexing. Existing indexes do not become TSDS automatically.
 
 The strongest case is a team already operating Elastic for logs or traces.
 
-You already have the cluster, security model, dashboards, and operational knowledge. If metrics can share that platform without an unacceptable efficiency penalty, removing a separate storage and query system has real value.
+You already have its security model, dashboards, and operational knowledge. If metrics fit the assumptions we’ve covered, removing a separate storage and query system has real value.
 
 The case is weaker if you have a mature Prometheus-based platform that already works well, or if metrics are your only major workload.
 
-A purpose-built system may still be simpler, cheaper, or better understood by your team. This engineering work makes Elasticsearch a credible candidate. It doesn’t make consolidation automatically correct.
+A purpose-built system may still be simpler, cheaper, or better understood by your team.
 
-And if you’re starting greenfield, choose the system that best fits your primary workload.
-
-"Elasticsearch can now do metrics efficiently" is not the same statement as "everyone should choose Elasticsearch for metrics."
+This work makes consolidation technically credible. It doesn’t make it automatically correct.
 
 -----
 
 # The broader Columnar Mode
 
-There’s one final distinction, because Elastic is now using the word "columnar" for two related things.
+Everything we’ve discussed so far applies to the metrics path: TSDS storage plus the ES|QL time-series engine.
 
-Everything we’ve discussed so far is the metrics path: TSDS storage plus the ES|QL time-series engine.
+Elasticsearch nine point five also introduces a separate feature called Columnar Mode as a technical preview.
 
-Elasticsearch nine point five also introduces a broader feature called Columnar Mode as a technical preview.
+It applies the same broad principle to other analytical data: store fields once in doc values, then add secondary indexes only where they justify their cost.
 
-Columnar Mode flips the default for append-mostly analytical indexes.
-
-Each field is stored once in doc values. Secondary indexes are added only where they justify their cost. And the original record can be reconstructed from the column store instead of being retained as a parallel copy.
-
-The first specialized profile is Columnar Logs. It keeps an inverted index for the log message, where full-text search matters, while treating the other fields as analytical columns.
+Columnar Logs is the first specialized profile. It keeps an inverted index for the log message, while treating the remaining fields as columns.
 
 [diagram: Columnar Logs — message field gets inverted index; remaining fields use column store]
 
-This is separate from LogsDB, Elasticsearch’s existing log-optimized index mode. Columnar Logs is part of the new opt-in preview.
+But general analytical data does not have the same natural order as metrics. Its ability to skip data will depend on the sort chosen for the index and how closely query fields correlate with it.
 
-This is an extension of the same principle we saw in metrics: pay for each structure only where the workload needs it.
+Columnar Mode is therefore related to the metrics work, but it is not the same implementation or the same set of guarantees.
 
-But it’s not identical to TSDS.
-
-Metrics have an unusually strong natural order: series identifier, then timestamp. That order is why skippers can replace heavier indexes so effectively.
-
-General analytical data does not automatically have the same shape.
-
-Elasticsearch index sorting can use more than one field, but the sort must be chosen when the index is created. It can’t make every possible filter correlate with document order.
-
-Filters on the sort fields—or fields strongly correlated with them—can prune effectively. Filters on randomly distributed fields may still need to scan many blocks.
-
-That is the fundamental trade-off behind removing general-purpose indexes.
-
-Columnar Mode is also a technical preview in nine point five. Existing indexes are untouched, and the feature is opt-in.
-
-That makes it something to evaluate, not a reason to migrate production workloads blindly.
+It is also opt-in and still a technical preview. Existing indexes are untouched.
 
 -----
 
 # So, did Elasticsearch become a columnar database?
 
-For standard search indexes, Elasticsearch is still a document-oriented search engine with a columnar component.
+For standard search indexes, Elasticsearch remains a document-oriented search engine with a columnar component.
 
-For TSDS metrics, the answer is much closer to yes.
+For TSDS metrics, it now has a genuine columnar storage and execution path.
 
-Metric, timestamp, and dimension values live in per-field doc values. Heavy duplicate indexes have been removed. Skippers provide lightweight pruning. And ES|QL processes the resulting columns directly.
+But that path works because metrics have useful constraints. They are mostly append-only, and their dimensions define stable series. TSDS can then impose a fixed order by series and time.
 
-That is a genuine columnar storage and execution path.
+It is designed for near-real-time, timestamp-ordered ingestion. Heavily out-of-order data is a weaker fit.
 
-The trade-offs are genuine too.
+Those constraints are the reason Elasticsearch can replace general-purpose structures with lighter ones.
 
-It works because metrics are append-only, their dimensions define stable series, and their data can be placed in a useful order.
+So the useful question isn’t whether Elasticsearch has become “better than Prometheus.”
 
-TSDS is also designed for metrics arriving near real time and roughly in timestamp order. Heavy out-of-order ingestion weakens the structure that compression and skipping depend on.
-
-You give up some update and concurrency behavior. Uncorrelated filters benefit less from skippers. PromQL compatibility still has boundaries. And the headline competitive benchmarks remain first-party claims.
-
-So the useful question isn’t, "Is Elasticsearch finally better than Prometheus?"
-
-It’s this:
-
-Does your metrics workload fit the assumptions that allowed Elasticsearch to remove all that machinery?
+It is whether your workload fits those constraints.
 
 If it does—and you already operate Elastic—the case for one observability stack is much more credible than it was a year ago.
 
 If it doesn’t, a specialized metrics system may still be exactly the right choice.
 
-The clever part isn’t that Elasticsearch added columns. It had those for years.
+Elasticsearch didn’t become columnar by adding columns. It had those for years.
 
-The clever part is that, for metrics, it finally learned what it could stop storing.
+For metrics, it became columnar by learning what it could stop storing.
 
 [beat]
 

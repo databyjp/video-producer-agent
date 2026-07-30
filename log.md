@@ -725,3 +725,19 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 ## 2026-07-29 — Columnar script log-example revision
 
 - **Revision:** Reworked the duplicated-structures explanation around one log investigation, showing why `_source`, inverted indexes, BKD trees, and doc values each earn their cost before contrasting that flexibility with the narrower metrics access pattern.
+
+## 2026-07-30 — Enabling columnar metrics outline section
+
+- **Outline:** Added an “Enabling columnar metrics” roadmap between the columnar-storage explanation and the TSDS mechanics, covering skippers, synthetic `_id`, sequence-number trimming, and ES|QL execution at a high level.
+- **Accuracy:** Replaced the pure row-oriented description of standard Elasticsearch with the more accurate hybrid model of retained documents, columnar doc values, and dedicated search structures.
+
+## 2026-07-30 — Enabling columnar metrics script section
+
+- **Script:** Added a brief before-and-after roadmap to `draft-script-v1.md` before the TSDS deep dive, establishing doc values as the existing columnar foundation and previewing skippers, synthetic `_id`, sequence-number trimming, and direct ES|QL execution.
+- **Transition:** Reframed the following TSDS section as the first mechanism that explains why the lighter structures remain performant.
+
+## 2026-07-30 — Columnar metrics script structural rewrite
+
+- **Structure:** Rewrote `draft-script-v1.md` after the columnar primer around one causal chain: doc-values filtering problem → TSDS ordering → skippers → synthetic `_id` → sequence-number trimming → columnar ES|QL execution.
+- **Comprehension:** Removed the up-front mechanism inventory, separated one concept per section, and moved release chronology and byte accounting into a single evidence overlay.
+- **Pacing:** Condensed the ES|QL implementation list, benchmark discussion, consolidation guidance, Columnar Mode forward look, and conclusion while preserving the principal tradeoffs and evidence boundaries.

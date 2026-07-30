@@ -77,10 +77,15 @@ If you run Elasticsearch for logs, you probably also run another platform like P
     - Why Elasticsearch historically paid a storage and query tax for metrics workloads
     - Discuss the resulting technical stack bifurcation (e.g. Elasticsearch + Prometheus)
 - Engineering deep dive
-    - Row-oriented vs columnar: Elasticsearch traditionally stores documents row-by-row (all fields of a doc together). For metrics, we want columnar: each field in its own file, read independently. This is the layout TSDB moves toward.
-    - Elasticsearch speeds up retrieval by building indexes, doc values, and BKD trees
-        - Why did they do this
-        - Costs of doing this
+    - Document-oriented vs columnar: standard Elasticsearch indexes are hybrid—the original document is retained while many fields also have per-field doc values and dedicated search structures. For metrics, the goal is to make the per-field columnar representation primary so queries can read only the required columns.
+    - Enabling columnar metrics
+        - Establish the overall transformation before explaining each mechanism: Elasticsearch already had a columnar layer in doc values; the work made that layer primary for metrics and removed or trimmed parallel structures.
+        - Explain at a high level what changed and what capability each structure previously supplied:
+            - Separate inverted indexes and BKD trees on timestamp and dimension fields were replaced by doc value skippers for common filtering.
+            - `_id` became synthetic, removing its dedicated inverted index while preserving lookup and deduplication.
+            - Sequence numbers are retained for replication, then trimmed once the global checkpoint makes them unnecessary.
+            - ES|QL was adapted to process the resulting columns directly rather than reconstructing documents.
+        - Keep this as a roadmap; versions, byte savings, tradeoffs, and implementation details belong in the following sections.
     - Introduce TSDB
         - What is it, why does it exist, what does this change about the data shape
         - Talk about sorting guarantees - data is sorted by `[_tsid ascending, @timestamp descending]`, so each time series sits contiguously on disk and timestamp ranges prune cleanly. Time series data is unique (like metrics), this makes sorting inherent at ingestion.
