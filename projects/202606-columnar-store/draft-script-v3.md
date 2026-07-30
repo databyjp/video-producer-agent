@@ -34,39 +34,36 @@ By the end, we’ll know what disappeared, what still works, and whether this ma
 
 # Why the extra structures existed
 
-Before we remove anything from our metric engine, let's compare it with a log event.
+Before diving into what was removed, let's switch perspectives by looking at a log event. This will tell us why these pieces exist.
 
 [keep the metric point on screen; introduce a log event beside it]
 
-If you are investigating a connection problem, you might search logs for “connection refused,” filter to the last hour, group the results by service, then open one complete event.
+Imagine an engineer investigating a connection problem. Their query might look for “connection refused,” filtered to the last hour, grouped by service - then they would open one complete event from those hits.
 
-Each step benefits from a different structure.
+Now, each part of this query benefits from a different structure.
 
-An inverted index speeds up text search.
+The text search is sped up by an inverted index.
 
-A BKD tree speeds up numeric and date filtering.
+The numerical and date filtering is done by a BKD tree.
 
-Doc values store fields as columns for sorting and aggregation.
+Sorting and aggregations are done by doc values.
 
-And `_source` preserves the complete event for retrieval.
+And the complete event is retrieved from the `_source` field.
 
 [show the log event branching into each structure]
 
 The key is that these are different data structures, each supporting speedup of different operations.
 
-Now let's come back to our metric point .
+The question is - do they all apply to our metric point?
 
 [remove the log event; centre the metric point again]
 
-It has a much narrower job.
+Because a metric store has a much narrower job.
 
-It is normally written once rather than repeatedly updated.
-
-Its service and host tell us which time series it belongs to.
-
-Within that series, its timestamp identifies this individual point.
-
-And most queries follow the same pattern: choose some series, choose a time range, then aggregate a few numeric fields.
+[read fast]
+- It is normally written once rather than repeatedly updated.
+- Its service and host tell us which time series it belongs to, where within that series, its timestamp identifies this individual point.
+- And most queries follow the same pattern: choose some series, choose a time range, then aggregate a few numeric fields.
 
 Nobody is running full-text relevance ranking over the number forty-two thousand, one hundred and eight.
 
@@ -87,29 +84,21 @@ Each optimisation gives up some general-purpose flexibility in exchange for some
 
 # The column was already there
 
-Start with doc values.
+To understand what Elasticsearch changed, we need to start with something it already had: doc values.
 
 [place the metric point into a small table with neighbouring points]
 
 Doc values keep each field in its own on-disk column.
 
-All timestamps sit together.
-
-All hosts sit together.
-
-And all request-counter values sit together.
+All timestamps sit together. All hosts sit together. And all request-counter values sit together. Although each of these sets might be in different places.
 
 [animate the table into three columns]
 
 Suppose we ask for the request rate by host over the last day.
 
-The query needs these columns, but it does not need every other field attached to every point.
+Doc values allow efficient reading of just the columns we need. Reading only the required columns means less I/O.
 
-Reading only the required columns means less I/O.
-
-Similar values also compress well together.
-
-And the engine can process them in batches.
+Similar values also compress well together, and the engine can process faster, in batches.
 
 [on-screen text: Less I/O. Better compression. Batch execution.]
 
@@ -133,13 +122,13 @@ So the first engineering problem was specific:
 
 How do you remove those filtering indexes without turning common metrics queries into full column scans?
 
-The answer begins with where our point is placed.
+The solution starts by changing where our point sits in relation to all the others.
 
 -----
 
 # Giving the point a useful place
 
-The optimised metrics path uses a time-series data stream, or TSDS.
+Metrics are optimised in time series databases, or TSDBs - the path works like ths.
 
 Our point’s service and host are dimensions. Together, they identify the series it belongs to.
 
@@ -151,69 +140,59 @@ Every point with the same `_tsid` is routed to the same shard.
 
 Inside each segment, Elasticsearch sorts those points by `_tsid` and timestamp.
 
-[our point travels to a shard, then settles beside earlier and later points from the same series]
+Now our point has predictable neighbours, as points in the same series sit together.
 
-Now our point has predictable neighbours.
+Their timestamps are ordered, and their repeated dimensions cluster, which makes the columns compress better.
 
-Points from its series sit together.
-
-Their timestamps are ordered.
-
-And their repeated dimensions cluster.
-
-This makes the columns compress better.
-
-More importantly, it makes a much lighter filtering index possible.
+And importantly, it makes a much lighter filtering index possible.
 
 -----
 
 # Replacing the tree
 
-The lighter index is called a doc value skipper.
+This grouping of points in an useful order allows Elasticsearch to replace the first redundant structure: the BKD tree.
 
-Instead of building a separate tree over every timestamp, a skipper records the lowest and highest values found across blocks of the existing column.
+Its lighter replacement is called a doc value skipper.
+
+Instead of building a separate tree over every timestamp, a "skipper" records the lowest and highest values found across blocks of the existing column.
 
 [divide the timestamp column containing our point into blocks; label each with a minimum and maximum]
 
-Now run the query for the last day.
+Now here's what happens when you run the query for the last day.
 
 Our point’s block overlaps that range, so Lucene checks it.
 
-But a block containing only timestamps from last month has a maximum value that is too old.
-
-Lucene skips the whole block without inspecting every point inside it.
+But it can skip irrelevant blocks from - say two months ago, because that block has a maximum value that is too old.
 
 [keep the recent block; fade the old blocks]
 
-This works because the timestamps are ordered.
+And this works *because* the timestamps are *ordered*.
 
-If points were scattered randomly, almost every block could contain both old and new timestamps.
-
-The minimum and maximum would tell us very little, and almost nothing could be skipped.
+If points were scattered randomly, any block could contain any timestamps - the minimum and maximum would tell us very little, and almost nothing could be skipped.
 
 [briefly scramble the column; show the block ranges overlap; restore the ordered version]
 
-The TSDS layout creates the correlation the skipper needs.
+The data layout in TSDB creates the correlation the skipper needs.
 
 That lets our point keep its timestamp and dimensions in doc values while Elasticsearch removes their separate BKD trees and inverted indexes.
 
 [return to the original fan-out and remove the filtering indexes]
 
-Our point is now lighter, but common time and dimension filters still work efficiently.
+Our point now leaves a lighter footprint, but common time and dimension filters still work efficiently.
 
 The trade-off is that filters unrelated to the physical order may benefit less.
 
 The result is not “no index.”
 
-It is a small index over the column we already had.
+Instead, we get a small, efficient index using the column we already had.
 
 -----
 
 # The point already has an identity
 
-One redundant structure has gone.
+That removes one redundant structure from our point.
 
-Now look at `_id`.
+But it still has a dedicated index for `_id`.
 
 [highlight the `_id` index still attached to the point]
 
@@ -245,7 +224,9 @@ For metrics, that is usually a better trade than indexing every identifier forev
 
 # The point’s sequence number can expire
 
-Our point still has a sequence number.
+The ID index is gone.
+
+But our point still has one more piece of long-lived metadata: its sequence number.
 
 [highlight `_seq_no`]
 
@@ -279,7 +260,9 @@ For a request-counter sample that will be queried and eventually aged out, trimm
 
 # What remains
 
-Return to the point we started with.
+We have now followed our point through three removals.
+
+Before we follow it into a query, let’s look at their combined effect.
 
 [show before and after side by side]
 
@@ -311,9 +294,11 @@ But they show the cumulative effect of asking whether each structure still earns
 
 # Following the point through a query
 
-Storage is only half of a columnar engine.
+So far, we have made our point much leaner on disk.
 
-Our point is leaner on disk, but Elasticsearch would lose much of that advantage if it rebuilt complete documents before processing them.
+But storage is only half of a columnar engine.
+
+Elasticsearch would lose much of that advantage if it rebuilt complete documents before processing them.
 
 So let’s follow it through a query.
 
@@ -348,7 +333,9 @@ The columnar shape survives from storage through execution.
 
 # What this proves—and what it does not
 
-Our point has shown us that the engineering is real.
+Following our point explains how the architecture changed.
+
+Now we need to separate that engineering from the performance claims made about it.
 
 The duplicate indexes disappeared.
 
@@ -380,7 +367,11 @@ If this decision affects your infrastructure bill, test your own data, queries, 
 
 # Does this make consolidation credible?
 
-Now return to the team that kept logs in Elasticsearch and metrics in Prometheus.
+So far, we have answered the engineering question.
+
+Now for the operational one: does any of this make it sensible to move metrics from Prometheus into Elasticsearch?
+
+Return to the team that kept logs in Elasticsearch and metrics in Prometheus.
 
 Elasticsearch nine point five makes consolidation easier to evaluate without immediately discarding their existing workflow.
 
@@ -408,6 +399,8 @@ It does not make it automatically correct.
 
 # The broader direction
 
+Before we finish, there is one broader implication.
+
 Elasticsearch nine point five also introduces a separate Columnar Mode as a technical preview.
 
 It extends the same principle beyond metrics: store fields once in columns, then add other indexes only where the workload needs them.
@@ -425,6 +418,8 @@ Make it earn its place.
 -----
 
 # Conclusion
+
+So, where does all of this leave us?
 
 One metric point took us through the whole change.
 

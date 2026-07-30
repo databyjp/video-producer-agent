@@ -762,3 +762,8 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Narrative:** Rebuilt the script around one concrete request-counter point that remains the protagonist from ingestion through ordering, structure removal, query execution, and the consolidation decision.
 - **Scope:** Removed implementation detail that did not advance the point’s journey, while preserving the load-bearing mechanics and evidence boundaries.
 - **Pacing:** Shortened the script and converted several technical explanations into visual actions on the recurring point.
+
+## 2026-07-30 — Columnar v3 spoken transitions
+
+- **Delivery:** Added spoken navigation at section boundaries so the narrative remains clear when markdown headings are not read aloud.
+- **Flow:** Explicitly signposted shifts from storage to execution, mechanism to evidence, and engineering to the operational consolidation decision.
