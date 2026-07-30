@@ -81,43 +81,39 @@ Each optimisation exchanges general-purpose flexibility for something specific t
 
 # Elasticsearch already had columns
 
-The columnar part starts with doc values.
-
-Doc values store the values for each field together.
+Elasticsearch has actually had columnar data storage for a while - through doc values that store field values together.
 
 [show a small metrics table: timestamp, host, service, request count]
 
-Instead of keeping each complete record together, Elasticsearch can keep all timestamps in one column, all services in another, and all metric values in another.
+Doc values keep all timestamps in one column, all services in another, and all metric values in another.
 
 Now imagine a query that calculates a request rate by host over the last day.
 
-It needs the timestamp, host, and counter columns.
-
-It does not need every other field attached to every point.
+It needs the timestamp, host, and counter columns, but no others.
 
 Reading only the required columns means less I/O.
 
 Similar values also compress well together.
 
-And once decoded, the query engine can process them as arrays instead of rebuilding one Java object per document.
+And once decoded, the query engine can process them as arrays, speeding up operations.
 
 [on-screen text: Less I/O. Better compression. Batch execution.]
 
 So why was Elasticsearch not already a columnar metrics engine?
 
-Because doc values were only one part of the layout.
+Because doc values were only *one* part of the layout.
 
 For numeric and date fields, Elasticsearch still needed another structure to answer a basic question:
 
 Which documents fall inside this range?
 
-Doc values are efficient when Elasticsearch already knows which documents to read.
+The thing is, doc values are efficient when Elasticsearch already knows which documents to read.
 
 But if our timestamp exists only in a column, a naive “last hour” query has to inspect every timestamp.
 
-That is a full scan.
+That is a full scan of the dataset.
 
-A BKD tree avoids the scan, but now the timestamp exists in two structures: doc values for aggregation and the tree for filtering.
+A BKD tree avoids this, but now we're back to where we started. The timestamp exists in two structures: doc values for aggregation and the tree for filtering.
 
 [diagram: timestamp → doc values for aggregation + BKD tree for filtering]
 
@@ -131,11 +127,13 @@ The answer depends on putting the data in a useful order.
 
 # The metrics bargain begins with order
 
-Elasticsearch’s time-series data stream, or TSDS, is an index mode built for metrics.
+Elasticsearch stores metrics in time-series data streams, or TSDS.
 
-You mark fields as metrics, such as counters or gauges.
+You configure the stream by marking fields as metrics, such as counters or gauges.
 
 You also mark dimensions, such as service, host, region, or Kubernetes pod.
+
+Underneath that data stream is Elasticsearch's time-series database, or TSDB: the storage, indexing, and query path we'll examine here.
 
 Those dimensions produce an internal time-series identifier called `_tsid`.
 
@@ -195,19 +193,19 @@ Its minimum and maximum would overlap the query, and Lucene could skip almost no
 
 [compare ordered blocks with tight ranges against random blocks with overlapping ranges]
 
-TSDS creates the correlation the skipper needs.
+TSDB creates the correlation the skipper needs.
 
 Timestamps are explicitly ordered inside each series.
 
 Dimensions cluster because documents from the same series sit together.
 
-That lets Elasticsearch remove separate BKD trees or inverted indexes from timestamp and dimension fields, while preserving efficient filtering for the access patterns TSDS was designed around.
+That lets Elasticsearch remove separate BKD trees or inverted indexes from timestamp and dimension fields, while preserving efficient filtering for the access patterns TSDB was designed around.
 
 [update ledger]
 
 | Constraint | Removed | Preserved | Trade-off |
 |---|---|---|---|
-| Series-and-time ordering | BKD trees and inverted indexes on TSDS fields | Common time and dimension filters | Randomly distributed filters benefit less |
+| Series-and-time ordering | BKD trees and inverted indexes on time-series fields | Common time and dimension filters | Randomly distributed filters benefit less |
 
 The result is not “no index.”
 
@@ -227,7 +225,7 @@ But a metric point already has a natural identity.
 
 It belongs to one time series, at one timestamp.
 
-So TSDS can derive `_id` from `_tsid` and `@timestamp` instead of storing and indexing another value.
+So TSDB can derive `_id` from `_tsid` and `@timestamp` instead of storing and indexing another value.
 
 The awkward part is deduplication.
 
@@ -275,7 +273,7 @@ Replication still needs sequence numbers, even for metrics.
 
 So Elasticsearch cannot simply stop creating them.
 
-Instead, TSDS changes how long they survive.
+Instead, TSDB changes how long they survive.
 
 The primary tracks a global checkpoint: the highest sequence number every in-sync replica is known to have processed.
 
@@ -301,7 +299,7 @@ Update-by-query and delete-by-query run without sequence-number conflict detecti
 
 For append-only metrics, that can be a sensible exchange.
 
-If your application really does update individual samples, you can opt back into retaining sequence numbers on new TSDS indices.
+If your application really does update individual samples, you can opt back into retaining sequence numbers on new time-series backing indices.
 
 [update ledger]
 
@@ -391,7 +389,7 @@ And all of these byte counts describe Elastic’s particular OpenTelemetry workl
 
 Your result will depend on dimensions, cardinality, field types, shard layout, and retention.
 
-Elastic also reports time-series queries up to one hundred and sixty times faster than its earlier TSDS implementation, and some queries up to thirty times faster than Prometheus and Mimir.
+Elastic also reports time-series queries up to one hundred and sixty times faster than its earlier TSDB implementation, and some queries up to thirty times faster than Prometheus and Mimir.
 
 The engineering gives us good reasons to expect a substantial improvement.
 
@@ -479,7 +477,7 @@ It does not make it automatically correct.
 
 There is one final distinction.
 
-Everything so far has been about the metrics path: TSDS storage plus the ES|QL time-series engine.
+Everything so far has been about the metrics path: TSDB storage plus the ES|QL time-series engine.
 
 Elasticsearch nine point five also introduces a separate Columnar Mode as a technical preview.
 
@@ -513,7 +511,7 @@ So, did Elasticsearch become a columnar database?
 
 For a standard search index, Elasticsearch remains a document-oriented search engine with a columnar component.
 
-For TSDS metrics, it now has a genuine columnar storage and execution path.
+For metrics in TSDB, it now has a genuine columnar storage and execution path.
 
 But that path works because metrics make a very specific bargain.
 

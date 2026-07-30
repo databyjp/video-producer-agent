@@ -21,7 +21,7 @@ Shows the dual-structure problem directly: numeric fields maintain both a BKD tr
 
 **4. Time series data streams — official documentation**
 https://www.elastic.co/docs/manage-data/data-store/data-streams/time-series-data-stream-tsds
-The TSDS data model: `_tsid`, sort order, dimension routing. Ground truth for version attribution. Read for the sort guarantee — it is load-bearing for the mechanism.
+TSDS configuration and the underlying TSDB data model: `_tsid`, sort order, and dimension routing. Ground truth for version attribution. Read for the sort guarantee — it is load-bearing for the mechanism.
 
 **5. How DocValuesSkippers in Lucene 10 make range queries faster**
 https://www.elastic.co/search-labs/blog/docvaluesskippers-lucene-range-queries
@@ -76,7 +76,7 @@ New: https://www.elastic.co/search-labs/blog/elasticsearch-columnar-storage
 
 - **The filtering problem:** Doc values already stored fields as columns, but columns alone were inefficient for finding a time range. The challenge was removing the BKD tree without replacing it with a full scan.
 
-- **Order unlocks subtraction:** TSDS groups points by series and orders them by time. Doc value skippers exploit that order to prune blocks, replacing heavier indexes on timestamps and dimensions.  
+- **Order unlocks subtraction:** TSDB groups points by series and orders them by time. Doc value skippers exploit that order to prune blocks, replacing heavier indexes on timestamps and dimensions.  
   [Begin recurring ledger: workload constraint → structure removed → capability preserved → trade-off]
 
 - **The other removals:** A synthetic `_id` replaces the dedicated ID index because series plus timestamp already identifies a point. Sequence numbers remain through replication, then can be trimmed during merges after the global checkpoint passes them. Each saving follows from a metrics-specific constraint.
@@ -87,6 +87,6 @@ New: https://www.elastic.co/search-labs/blog/elasticsearch-columnar-storage
 
 - **Does consolidation fit?:** Elastic 9.5 lowers migration friction with Prometheus remote write, PromQL, and migration tooling. The strongest case is an existing Elastic user with append-mostly, suitably ordered metrics; a mature metrics-only platform may still be simpler on a purpose-built system.
 
-- **The broader direction:** Columnar Mode applies the same “store once, index selectively” principle beyond metrics, but it is a separate Technical Preview without all of TSDS’s workload guarantees.
+- **The broader direction:** Columnar Mode applies the same “store once, index selectively” principle beyond metrics, but it is a separate Technical Preview without all of TSDB’s workload guarantees.
 
 - **Conclusion:** Elasticsearch did not make metrics columnar by adding columns. It became columnar by learning what it could stop storing.
