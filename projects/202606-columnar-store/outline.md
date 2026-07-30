@@ -2,7 +2,7 @@
 type: outline
 title: "How Elasticsearch Stopped Storing Everything Three Times"
 status: phase-1-structure
-timestamp: 2026-07-06
+timestamp: 2026-07-30
 ---
 
 # Pre-Script Reading List
@@ -67,13 +67,26 @@ New: https://www.elastic.co/search-labs/blog/elasticsearch-columnar-storage
 
 (*Argument or narrative only. What does the viewer need to understand, and in what order?*)
 
-- **Hook:** Elasticsearch was historically expensive for metrics, but recent gains came from removing storage structures rather than adding a new engine. Does that make stack consolidation credible?
-- **Why the overhead existed:** General search workloads benefit from separate structures for searching, filtering, aggregating, and retrieving data. Metrics follow a narrower access pattern, so paying for all of them is harder to justify.
-- **The columnar foundation:** Doc values already gave Elasticsearch per-field columnar storage, reducing I/O and improving compression and batch processing. The unresolved problem was filtering those columns efficiently.
-- **The key mechanism:** TSDS orders data by series and time. Doc value skippers exploit that order to prune blocks, allowing timestamp and dimension fields to drop heavier parallel indexes.
-- **The remaining removals:** Synthetic IDs eliminate the `_id` index, while sequence numbers are discarded after replication. Supporting codec and recovery changes further reduce storage.
-- **Columnar execution:** ES|QL processes the stored columns directly instead of reconstructing documents, applying per-series calculations before combining results across groups.
-- **Evidence and limits:** Elastic reports major storage, ingest, and query improvements, but the competitive multipliers remain first-party claims and a third-party reproduction reached different results.
-- **Broader direction:** The separate Columnar Mode preview applies the same “store once, index selectively” principle beyond metrics, but without all of TSDS’s ordering guarantees.
-- **Stack decision:** Consolidation is most credible for existing Elastic users whose metrics are append-mostly and time ordered. Mature Prometheus or metrics-only environments may still benefit from a purpose-built system.
-- **Conclusion:** Elasticsearch did not make metrics columnar by adding columns; it did so by learning which other structures it could stop storing.
+- **Hook — the answer upfront:** Follow one metric point as Elasticsearch writes the same information into several structures. Elasticsearch already had columns; the breakthrough was learning what it could remove around them.  
+  [Visual: one metric point fans out into `_source`, doc values, search indexes, `_id`, and sequence-number data]
+
+- **Why the overhead existed:** General search needs different structures for searching, filtering, aggregating, and retrieving documents. Metrics have a narrower access pattern, so that flexibility becomes expensive.
+
+- **The metrics bargain:** Metrics are mostly append-only, have a natural identity in series plus timestamp, and are usually filtered by series and time before aggregation. Those constraints let Elasticsearch remove structures—but only by accepting narrower update and query behavior.
+
+- **The filtering problem:** Doc values already stored fields as columns, but columns alone were inefficient for finding a time range. The challenge was removing the BKD tree without replacing it with a full scan.
+
+- **Order unlocks subtraction:** TSDS groups points by series and orders them by time. Doc value skippers exploit that order to prune blocks, replacing heavier indexes on timestamps and dimensions.  
+  [Begin recurring ledger: workload constraint → structure removed → capability preserved → trade-off]
+
+- **The other removals:** A synthetic `_id` replaces the dedicated ID index because series plus timestamp already identifies a point. Sequence numbers remain through replication, then can be trimmed during merges after the global checkpoint passes them. Each saving follows from a metrics-specific constraint.
+
+- **Columns all the way through:** Return to one representative query. ES|QL filters through skippers, processes each series directly from columns, then combines the per-series results—without rebuilding rows first.
+
+- **What the evidence proves:** Separate inspectable engineering changes from Elastic’s workload results and competitive benchmarks. The architecture is real; the exact advantage over Prometheus, Mimir, or ClickHouse remains workload-dependent and should be tested independently.
+
+- **Does consolidation fit?:** Elastic 9.5 lowers migration friction with Prometheus remote write, PromQL, and migration tooling. The strongest case is an existing Elastic user with append-mostly, suitably ordered metrics; a mature metrics-only platform may still be simpler on a purpose-built system.
+
+- **The broader direction:** Columnar Mode applies the same “store once, index selectively” principle beyond metrics, but it is a separate Technical Preview without all of TSDS’s workload guarantees.
+
+- **Conclusion:** Elasticsearch did not make metrics columnar by adding columns. It became columnar by learning what it could stop storing.

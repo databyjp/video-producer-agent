@@ -750,3 +750,9 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 ## 2026-07-30 — Columnar outline condensed
 
 - **Outline:** Reduced the detailed section-by-section inventory to ten essential argument beats, preserving the causal flow, evidence boundary, broader direction, stack decision, and conclusion while removing implementation-level review noise.
+
+## 2026-07-30 — Columnar metrics script v2
+
+- **Script:** Created `projects/202606-columnar-store/draft-script-v2.md` around the recurring sequence of workload constraint, removed structure, preserved capability, and trade-off.
+- **Narrative:** Followed one metric point and one query through TSDS ordering, doc value skippers, synthetic `_id`, sequence-number trimming, and ES|QL columnar execution.
+- **Evidence:** Kept the ES95 result and 9.5 availability claims attributed to the supplied release draft, separated architectural facts from vendor benchmarks, and retained the independent benchmark challenge.
