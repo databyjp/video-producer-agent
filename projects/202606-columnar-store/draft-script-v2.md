@@ -6,21 +6,19 @@ This is one metric point. It has a timestamp, a service, a host, and a value.
 
 It looks tiny.
 
-But historically, Elasticsearch would represent parts of this point several different ways on disk.
+But historically, Elasticsearch would represent parts of this point multiple times.
 
 The timestamp might appear in doc values for aggregation, and a BKD tree for fast filtering.
 
-The document had an `_id` stored in an inverted index.
-
-It had a sequence number for replication and concurrency control.
+The document had an `_id` stored in an inverted index, and a sequence number for replication and concurrency control.
 
 [animate the metric point fanning out into doc values, BKD tree, `_id`, `_seq_no`]
 
-In other words, Elasticsearch was paying for the flexibility of a general-purpose search engine, even when the workload was just metrics.
+These representations make Elasticsearch great as a general-purpose search engine. But what we've also seen is that for some use cases, they added cost, and speed.
 
-Over the past few releases, the engineering team has been changing that to better serve metrics and columnar use cases.
+So over the past few releases, the engineering team has been changing that to better serve columnar use cases, like metrics.
 
-Here's the surprising fact: Elasticsearch did not become columnar by adding columns - because it already had those.
+The thing is, these changes didn't involve adding columnar storage - because Elasticsearch already had those.
 
 It became columnar by learning what it could *stop* storing.
 
@@ -32,9 +30,9 @@ We’ll look at what Elasticsearch removed, why it was safe to remove it, and wh
 
 # Why the extra structures existed
 
-Before deleting anything, we need to understand why it was there.
+So why do these extra structures exist? 
 
-Imagine this metric point were one event in a stream of logs.
+Forget the metric point for now - but imagine storing a stream of logs. And investigating a connection issue. 
 
 You might search across those events for “connection refused,” filter to the last hour, group the results by service, then open one complete event to inspect it.
 
@@ -42,27 +40,25 @@ Each step here benefits from a different data structure.
 
 [show one log event splitting into the structures as they are named]
 
-The inverted index makes text search fast.
+The inverted index speeds up text search.
 
-A BKD tree makes numeric and date ranges fast.
+A BKD tree enables speedy numeric and date range filtering.
 
-Doc values store fields as on-disk columns for sorting and aggregation.
+Doc values store fields as on-disk columns for fast sorting and aggregation.
 
 And `_source` preserves the original document for retrieval.
 
-That duplication is not automatically waste. It is how Elasticsearch supports several very different operations efficiently.
+Yes, these data structures sometime store the same data, but they enhance very different, important operations.
 
-That flexibility is valuable for logs. But metrics rarely need all of it.
+That flexibility is valuable for logs. But for metrics? There's a bunch of key differences - let's list through them:
 
-Metrics are usually appended, not repeatedly updated.
+Metrics are usually appended once, not repeatedly updated.
 
-Together, dimension fields identify which samples belong to the same series. Within that series, the timestamp identifies an individual point.
-
-That gives a metrics store the option to group points by series and order them by time.
+Dimension fields together identify which samples belong to the same series. And within that series, the timestamp identifies an individual point.
 
 And most queries follow the same broad shape: select some series, select a time range, then aggregate a few numeric fields.
 
-You rarely need full-text relevance ranking over a CPU sample.
+Full-text search of metrics data is pretty rare. 
 
 [on-screen ledger]
 
@@ -73,79 +69,65 @@ You rarely need full-text relevance ranking over a CPU sample.
 | Samples are append-mostly | Trim old sequence numbers |
 | Queries touch a few fields | Keep processing columnar |
 
-That difference in requirements is the key to this whole video.
+Those differences are the key to this whole video, and the recent changes to Elasticsearch.
 
-Each optimisation exchanges general-purpose flexibility for something specific to a metrics workload.
+In other words, each optimisation exchanges general-purpose flexibility for something specific to a metrics workload.
 
 -----
 
 # Elasticsearch already had columns
 
-Elasticsearch has actually had columnar data storage for a while - through doc values that store field values together.
+As I mentioned, columnar data storage isn't new to Elasticsearch. Doc values store field values together as groups, just like other columnar stores.
 
 [show a small metrics table: timestamp, host, service, request count]
 
-Doc values keep all timestamps in one column, all services in another, and all metric values in another.
+Doc values are set up to keep all timestamps, all services, and all metric values in their own groups of values. 
 
-Now imagine a query that calculates a request rate by host over the last day.
+So if query asked for a request rate by host over the last day, it would just read the timestamp, host, and counter columns through the doc values, and no others.
 
-It needs the timestamp, host, and counter columns, but no others.
+Meaning there's less I/O, as you're reading the required columns only. 
 
-Reading only the required columns means less I/O.
-
-Similar values also compress well together.
-
-And once decoded, the query engine can process them as arrays, speeding up operations.
+The values stored are the same type, so they tend to compress well, and they can be read as arrays, speeding up operations.
 
 [on-screen text: Less I/O. Better compression. Batch execution.]
 
-So why was Elasticsearch not already a columnar metrics engine?
+So why weren’t doc values enough on their own?
 
-Because doc values were only *one* part of the layout.
+The first major problem is filtering.
 
-For numeric and date fields, Elasticsearch still needed another structure to answer a basic question:
+With doc values, there's really no way to know which values meet particular criteria. A query for the last day would need to scan the entire timestamp column. 
 
-Which documents fall inside this range?
-
-The thing is, doc values are efficient when Elasticsearch already knows which documents to read.
-
-But if our timestamp exists only in a column, a naive “last hour” query has to inspect every timestamp.
-
-That is a full scan of the dataset.
-
-A BKD tree avoids this, but now we're back to where we started. The timestamp exists in two structures: doc values for aggregation and the tree for filtering.
+A BKD tree avoids that scan. But now the timestamp must exist in two structures: doc values for aggregation, and the tree for filtering.
 
 [diagram: timestamp → doc values for aggregation + BKD tree for filtering]
 
+Keyword dimensions had similar duplication: doc values supported aggregation, while an inverted index supported filtering.
+ 
 So the first engineering problem was very specific:
 
-How do you remove the tree without turning every time filter into a scan?
+How do you remove those filtering indexes without turning common metrics queries into full column scans?
 
 The answer depends on putting the data in a useful order.
 
 -----
 
-# The metrics bargain begins with order
+## Order makes lighter indexes possible
 
-Elasticsearch stores metrics in time-series data streams, or TSDS.
+Ordering out data is the key to lighter indexes - so let me tell you where that order comes from, starting from the structure.
 
-You configure the stream by marking fields as metrics, such as counters or gauges.
+Metrics are saved in a time-series database, or TSDB. 
 
-You also mark dimensions, such as service, host, region, or Kubernetes pod.
+Here, dimensions define which samples belong to the same series. Going back to our example metric point, it has a timestamp, a service, a host, and a value. 
 
-Underneath that data stream is Elasticsearch's time-series database, or TSDB: the storage, indexing, and query path we'll examine here.
+So Elasticsearch can combines those dimensions into an internal identifier called `_tsid`. It can then figure out which other points belong to the same series. 
 
-Those dimensions produce an internal time-series identifier called `_tsid`.
-
-Elasticsearch routes every point in the same series to the same shard.
-
-Then, inside each segment, it sorts the data by `_tsid` and timestamp.
+It routes every point with the same `_tsid` to the same shard. Then, inside each segment, it sorts points by `_tsid` and timestamp.
 
 [animation: mixed incoming points regroup into contiguous series, with points ordered by time]
 
-That gives the data a predictable physical shape: points from one series sit together, timestamps are ordered, and repeated dimensions cluster.
+Now the data has a predictable physical shape. Points from one series sit together, with ordered timestamps. And repeated dimension values cluster.
 
-This improves compression. More importantly, it makes a lighter kind of index useful.
+This improves compression, and importantly, it enables much lighter filtering index.
 
 -----
 
