@@ -14,7 +14,7 @@ What’s left looks less like a traditional search index and more like a columna
 
 So, given that intro, why do these "extra" representations of the data exist? The fact is that for a lot of data, including logs, each one solves a different problem.
 
-Here's what happens as you investigate a connection problem through logs. You run a query to search for “connection refused”, filter to the last hour, group the results by service, then open one complete event to inspect it.
+Here's what happens as you investigate a connection problem through logs. You run a query to search for "connection refused", filter to the last hour, group the results by service, then open one complete event to inspect it.
 
 You can do all of that because the same log event is represented in several structures, each optimized for a different operation.
 
@@ -44,11 +44,13 @@ So did Elasticsearch’s storage engine need to be rebuilt completely? Not quite
 
 -----
 
-# What “columnar” actually means
+# What "columnar" actually means
 
-Let’s make the columnar part concrete.
+I've said "columnar" a few times already - what is it and why does this matter?
 
-Imagine a table of metrics. Each row contains a timestamp, a host, a service, and a CPU value.
+The main advantage of columnar data is for working with high volumes of data in select fields.
+
+Imagine a table of metrics, each containing a timestamp, a host, a service, and a CPU value, as well as a host of others.
 
 [show a small metrics table]
 
@@ -56,33 +58,27 @@ A row-oriented layout keeps the values for each record together.
 
 [animate table into rows: timestamp, host, service, CPU — then the next record]
 
-That’s useful when you want one complete record. The engine can retrieve the row without jumping between several places.
+Meaning the engine can retrieve each row without jumping between several places.
 
-A columnar layout turns the table sideways. All timestamps are stored together. All host names are stored together. And all CPU values are stored together.
+A columnar layout turns the table sideways. Timestamps are stored together, host names are stored together and so on.
 
 [animate the same table into four columns]
 
-Now suppose the query asks for average CPU by service over the last hour.
+A row-oriented layout is great for tasks like preparing a templated letter to a customer. But instead, suppose you want to know the average CPU by service over the last hour.
 
 It needs the timestamp, service, and CPU columns. It doesn’t need every other field attached to every metric.
 
-A columnar engine can read only those columns.
+A columnar engine makes it easier to read only those columns, and not waste time reading others.
 
-Values of the same type also tend to compress well together. A run of similar timestamps has a pattern. A service column may repeat the same few names thousands of times. A metric column is a regular sequence of numbers.
+Also, values of the same type compress well. A run of similar timestamps has a pattern. A service column may repeat the same few names thousands of times. A metric column is a regular sequence of numbers. Blocks of these values can be stored very efficiently.
 
-And once those values are decoded, the CPU can process them as arrays rather than rebuilding one document at a time.
+And once those values are decoded, they can be processed as arrays, allowing faster bulk operations.
 
 That gives us three advantages: read fewer bytes, compress them more efficiently, and process them in batches.
 
 [on-screen text: Less I/O. Better compression. Vectorized execution.]
 
-But columnar storage has a trade-off.
 
-It’s excellent when queries scan and aggregate a few fields across many records. It’s less natural when you constantly retrieve or update individual records, or when you need full-text relevance ranking.
-
-So this isn’t a story about columns being universally better than documents.
-
-It’s a story about changing the default for a workload that already behaves like columns.
 
 -----
 
@@ -160,7 +156,7 @@ In Elastic’s OpenTelemetry benchmark, this change removed about ten bytes from
 
 Those are first-party benchmark results, and we’ll come back to that distinction.
 
-And “typical” matters there. Ad-hoc filters on dimensions that don’t correlate with the sort order are a weaker fit for skippers than time ranges and clustered dimensions.
+And "typical" matters there. Ad-hoc filters on dimensions that don’t correlate with the sort order are a weaker fit for skippers than time ranges and clustered dimensions.
 
 The underlying mechanism, though, is clear: the data is ordered, the blocks have useful boundaries, and entire regions can be ruled out without maintaining a second full index.
 
@@ -198,9 +194,9 @@ There’s still a problem. Elasticsearch needs to reject a duplicate point effic
 
 Checking the doc-values columns for every new metric would be expensive, so each Lucene segment gets a Bloom filter.
 
-[diagram: incoming synthetic ID → Bloom filter → usually “definitely absent”; occasional hit → verify using doc values]
+[diagram: incoming synthetic ID → Bloom filter → usually "definitely absent"; occasional hit → verify using doc values]
 
-A Bloom filter can quickly say, “This ID is definitely not here.”
+A Bloom filter can quickly say, "This ID is definitely not here."
 
 It can sometimes return a false positive, but never a false negative. On a possible match, Elasticsearch falls back to checking `_tsid` and timestamp through doc values.
 
@@ -210,7 +206,7 @@ Elastic attributes another five bytes per OpenTelemetry point to that change.
 
 The next target was sequence numbers.
 
-Elasticsearch assigns every write a sequence number. Replicas use it to stay synchronized, and clients can use it for optimistic concurrency control—essentially, “only update this document if nobody changed it since I last read it.”
+Elasticsearch assigns every write a sequence number. Replicas use it to stay synchronized, and clients can use it for optimistic concurrency control—essentially, "only update this document if nobody changed it since I last read it."
 
 Metrics rarely need that second behavior. You normally append a sample, query it, then delete it when it ages out. You don’t repeatedly compare and swap the CPU reading from last Tuesday.
 
@@ -286,7 +282,7 @@ Because the data is already sorted by `_tsid`, the engine can read a column of m
 
 The codec can decode data directly into the primitive arrays used by the compute engine. That removes intermediate copies and per-document objects.
 
-Repeated `_tsid` and dimension values can be represented as constant blocks—effectively, “this one value occurs this many times”—rather than expanded into a full array.
+Repeated `_tsid` and dimension values can be represented as constant blocks—effectively, "this one value occurs this many times"—rather than expanded into a full array.
 
 Null metric values are filtered before decoding. Timestamp and dimension filters are pushed down to Lucene, where the skippers remove irrelevant blocks.
 
@@ -300,7 +296,7 @@ This is the second half of the columnar claim.
 
 The storage engine reads only the required columns. The compute engine processes those columns as batches. And the query plan understands the physical order of time-series data.
 
-For TSDS metrics, “columnar” is not just a label attached to doc values. It describes both storage and execution.
+For TSDS metrics, "columnar" is not just a label attached to doc values. It describes both storage and execution.
 
 -----
 
@@ -318,7 +314,7 @@ Those tests used generated OpenTelemetry host metrics in two configurations: one
 
 They ran on single-node Amazon EC2 deployments and queried four hours of data across all series for each metric.
 
-[show Elastic benchmark charts with clear label: “Elastic benchmark”]
+[show Elastic benchmark charts with clear label: "Elastic benchmark"]
 
 The architecture gives us reasons to believe major improvement is plausible.
 
@@ -338,7 +334,7 @@ The same critique questioned whether Elastic measured Prometheus storage before 
 
 That reproduction is not the final word either. Benchmark configuration, product versions, ingestion paths, and tuning choices can change the result in both directions.
 
-What it does show is that “up to thirty times faster” is not a portable fact you can paste into an architecture decision.
+What it does show is that "up to thirty times faster" is not a portable fact you can paste into an architecture decision.
 
 The honest conclusion has two layers.
 
@@ -386,13 +382,13 @@ A purpose-built system may still be simpler, cheaper, or better understood by yo
 
 And if you’re starting greenfield, choose the system that best fits your primary workload.
 
-“Elasticsearch can now do metrics efficiently” is not the same statement as “everyone should choose Elasticsearch for metrics.”
+"Elasticsearch can now do metrics efficiently" is not the same statement as "everyone should choose Elasticsearch for metrics."
 
 -----
 
 # The broader Columnar Mode
 
-There’s one final distinction, because Elastic is now using the word “columnar” for two related things.
+There’s one final distinction, because Elastic is now using the word "columnar" for two related things.
 
 Everything we’ve discussed so far is the metrics path: TSDS storage plus the ES|QL time-series engine.
 
@@ -446,7 +442,7 @@ TSDS is also designed for metrics arriving near real time and roughly in timesta
 
 You give up some update and concurrency behavior. Uncorrelated filters benefit less from skippers. PromQL compatibility still has boundaries. And the headline competitive benchmarks remain first-party claims.
 
-So the useful question isn’t, “Is Elasticsearch finally better than Prometheus?”
+So the useful question isn’t, "Is Elasticsearch finally better than Prometheus?"
 
 It’s this:
 
