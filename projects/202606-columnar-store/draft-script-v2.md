@@ -6,7 +6,7 @@ This is one metric point. It has a timestamp, a service, a host, and a value.
 
 It looks tiny.
 
-But historically, Elasticsearch could represent parts of this point several different ways on disk.
+But historically, Elasticsearch would represent parts of this point several different ways on disk.
 
 The timestamp might appear in doc values for aggregation, and a BKD tree for fast filtering.
 
@@ -14,25 +14,19 @@ The document had an `_id` stored in an inverted index.
 
 It had a sequence number for replication and concurrency control.
 
-And Elasticsearch still needed enough information to reconstruct the original document.
+[animate the metric point fanning out into doc values, BKD tree, `_id`, `_seq_no`]
 
-[animate the metric point fanning out into doc values, BKD tree, `_id`, `_seq_no`, and source-related storage]
+In other words, Elasticsearch was paying for the flexibility of a general-purpose search engine, even when the workload was just metrics.
 
-Not every field was literally copied three times. Text, numbers, and keywords use different structures.
+Over the past few releases, the engineering team has been changing that to better serve metrics, and columnar use cases.
 
-But the underlying problem was real: Elasticsearch was paying for the flexibility of a general-purpose search engine, even when the workload was just metrics.
+Here's the surprising fact: Elasticsearch did not become columnar by adding columns - because it already had those.
 
-Over the past few releases, that changed.
-
-And the surprising part is that Elasticsearch did not become columnar by adding columns.
-
-It already had those.
-
-It became columnar for metrics by learning what it could stop storing.
+It became columnar by learning what it could *stop* storing.
 
 So let’s follow this one metric point through that change.
 
-We’ll look at what Elasticsearch removed, why it was safe to remove it, and what you give up in return.
+We’ll look at what Elasticsearch removed, why it was safe to remove it, and when it makes sense to give up these things.
 
 -----
 
