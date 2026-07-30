@@ -190,105 +190,61 @@ Instead, we get a small, efficient index using the column we already had.
 
 # The point already has an identity
 
-That removes one redundant structure from our point.
-
-But it still has a dedicated index for `_id`.
+The filtering indexes are gone, but our point still has a dedicated index for `_id`.
 
 [highlight the `_id` index still attached to the point]
 
-Elasticsearch normally indexes every document identifier.
+That index supports document lookups and duplicate detection.
 
-That supports lookups and helps reject duplicate documents during ingestion.
+But our point already has a natural identity: `_tsid` identifies its series, and the timestamp identifies the point within it.
 
-But our metric point already contains everything needed to identify it.
-
-Its dimensions identify the series.
-
-Its timestamp identifies the point within that series.
-
-So Elasticsearch can derive `_id` from `_tsid` and `@timestamp` instead of storing it in a separate inverted index.
+So Elasticsearch can derive `_id` from those two values instead of maintaining another inverted index.
 
 [combine `_tsid` and timestamp into a synthetic `_id`; remove the `_id` index]
 
-Elasticsearch still has to detect if this point arrives twice.
-
-A small Bloom filter lets Elasticsearch rule out a duplicate for most new points. Possible matches are checked against the `_tsid` and timestamp columns.
+A small Bloom filter quickly establishes that most new points are not duplicates. Possible matches are verified against the existing columns.
 
 That preserves deduplication and normal document lookups without keeping the dedicated `_id` index.
-
-Some unusual pattern searches over `_id` become slower.
-
-For metrics, that is usually a better trade than indexing every identifier forever.
 
 -----
 
 # The point’s sequence number can expire
 
-The ID index is gone.
-
-But our point still has one more piece of long-lived metadata: its sequence number.
+One structure still remains: the sequence number.
 
 [highlight `_seq_no`]
 
-When the point is written, the primary shard assigns it a `_seq_no`.
-
-Replica shards use that number to stay in sync.
-
-So Elasticsearch cannot simply remove it at ingestion.
+Elasticsearch needs it while replicating our point.
 
 [animate the point and its sequence number moving from primary to replicas]
 
 But metrics are normally append-only.
 
-Once every in-sync replica has confirmed this operation, the sequence number has completed its main job for this workload.
-
-During a later Lucene segment merge, Elasticsearch can leave it out of the new segment.
+Once every replica has confirmed the write, that number has little long-term value. During a later segment merge, Elasticsearch can remove it.
 
 [replicas confirm; later merge removes `_seq_no` from the point]
 
-Replication remains correct because the number survives for as long as replication needs it.
-
-What disappears is its second purpose: update and concurrency behaviour for individual documents.
+Replication remains correct. The trade-off is giving up conditional and single-document updates—behaviour most metrics workloads rarely need.
 
 [on-screen text: No optimistic concurrency control; no single-document updates; weaker update/delete-by-query conflict detection]
 
-If an application needs those operations, it can retain sequence numbers on new time-series indices.
-
-For a request-counter sample that will be queried and eventually aged out, trimming it is usually a sensible exchange.
+If an application does need that behaviour, it can retain sequence numbers.
 
 -----
 
 # What remains
 
-We have now followed our point through three removals.
-
-Before we follow it into a query, let’s look at their combined effect.
+We have now removed three structures from our point.
 
 [show before and after side by side]
 
-Before, its fields lived in doc values alongside heavier filtering indexes.
-
-Its `_id` had its own inverted index.
-
-And its sequence number stayed in every segment.
-
-Now its metric, timestamp, and dimensions remain in columns.
-
-Skippers provide lightweight filtering.
-
-Its identity is derived from information already present.
-
-And its sequence number disappears after replication and merge.
-
 [show Elastic’s storage trajectory as an overlay]
 
-In Elastic’s OpenTelemetry test, the combined storage work reduced the footprint from twenty-five bytes per point to three point seven five in Elasticsearch nine point four.
+In Elastic’s OpenTelemetry test, this storage work helped reduce the footprint from twenty-five bytes per point to three point seven five in Elasticsearch nine point four.
 
-Elastic’s draft nine point five announcement says the new ES95 codec reduces that by roughly another twenty percent, to around three bytes per sample.
+Its draft nine point five announcement reports a further reduction to roughly three bytes.
 
-Those are Elastic’s results for a particular workload, not a promise that every metric point will occupy three bytes.
-
-But they show the cumulative effect of asking whether each structure still earns its cost.
+Those are results from one Elastic workload, not a universal footprint. But they show what happens when every structure has to justify its cost.
 
 -----
 
@@ -333,17 +289,7 @@ The columnar shape survives from storage through execution.
 
 # What this proves—and what it does not
 
-Following our point explains how the architecture changed.
-
-Now we need to separate that engineering from the performance claims made about it.
-
-The duplicate indexes disappeared.
-
-The identifier became synthetic.
-
-The sequence number became temporary.
-
-And the query engine consumed the remaining columns directly.
+That explains the mechanism. Now we need to separate it from the performance claims made about it.
 
 Elastic reports major results from those changes: up to one hundred and sixty times faster than its earlier time-series implementation, and some queries up to thirty times faster than Prometheus and Mimir.
 
@@ -367,13 +313,9 @@ If this decision affects your infrastructure bill, test your own data, queries, 
 
 # Does this make consolidation credible?
 
-So far, we have answered the engineering question.
+That brings us back to the team running Elasticsearch for logs and Prometheus for metrics.
 
-Now for the operational one: does any of this make it sensible to move metrics from Prometheus into Elasticsearch?
-
-Return to the team that kept logs in Elasticsearch and metrics in Prometheus.
-
-Elasticsearch nine point five makes consolidation easier to evaluate without immediately discarding their existing workflow.
+Do these changes make consolidation sensible?
 
 According to Elastic’s draft release announcement, Prometheus remote write and PromQL support become generally available in nine point five.
 
@@ -399,21 +341,11 @@ It does not make it automatically correct.
 
 # The broader direction
 
-Before we finish, there is one broader implication.
-
-Elasticsearch nine point five also introduces a separate Columnar Mode as a technical preview.
-
-It extends the same principle beyond metrics: store fields once in columns, then add other indexes only where the workload needs them.
+Nine point five also previews a broader Columnar Mode that applies the same principle beyond metrics: store fields in columns, then add other indexes only where the workload needs them.
 
 Its first profile, Columnar Logs, keeps an inverted index on the message while treating the remaining fields as columns.
 
-General analytical data does not have the same strong series-and-time order as our metric point, so it does not inherit all the same guarantees.
-
-But the direction is consistent:
-
-Do not store another structure merely because a general-purpose engine traditionally did.
-
-Make it earn its place.
+It follows the same philosophy as the metrics work, but without the same ordering guarantees.
 
 -----
 
@@ -425,17 +357,7 @@ One metric point took us through the whole change.
 
 [return to the final version of the point]
 
-Its series and timestamp gave Elasticsearch a useful order, so skippers could replace heavier filtering indexes.
-
-The same two values identified the point, so `_id` could be derived.
-
-Its append-mostly lifecycle meant the sequence number could disappear after replication.
-
-And its query touched only a few fields, so ES|QL could process it directly from columns.
-
-Those constraints are not footnotes to the architecture.
-
-They are what made the architecture possible.
+Our point became lighter because its workload provided useful constraints: predictable order, natural identity, an append-mostly lifecycle, and queries that operate on a few columns.
 
 So the useful question is not whether Elasticsearch is now universally better than Prometheus.
 

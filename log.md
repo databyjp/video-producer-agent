@@ -767,3 +767,8 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 
 - **Delivery:** Added spoken navigation at section boundaries so the narrative remains clear when markdown headings are not read aloud.
 - **Flow:** Explicitly signposted shifts from storage to execution, mechanism to evidence, and engineering to the operational consolidation decision.
+
+## 2026-07-30 — Columnar v3 back-half compression
+
+- **Pacing:** Condensed the synthetic-ID and sequence-number explanations and removed repeated architecture summaries from the storage payoff, evidence, and conclusion.
+- **Scope:** Shortened the Columnar Mode epilogue while preserving the benchmark caveat, consolidation decision, and final workload-fit thesis.
