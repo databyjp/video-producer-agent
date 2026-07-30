@@ -4,7 +4,7 @@ If you use Elasticsearch for logs, there’s a good chance you use another syste
 
 Historically, that split made sense. Elasticsearch *could* store metrics, but it maintained several representations and indexes of the same data. That made many metrics workloads slower and more expensive.
 
-But Elasticsearch now gives you the option to remove those extra representations: inverted indexes, BKD trees, even stored identifiers and sequence numbers in specific cases.
+But Elasticsearch has changed that by removing structures rather than adding them.
 
 What’s left looks less like a traditional search index and more like a columnar metrics engine. Let’s look at the engineering underneath—and whether it makes consolidating your stack technically credible.
 
@@ -30,7 +30,7 @@ And of course, the original event is kept for retrieval and inspection.
 
 [end animation]
 
-In other words, these structures enable faster search, filter, aggregation, and retrieval - but they add work at ingestion time and consume disk space.
+In other words, these structures make searching, filtering, aggregation, and retrieval faster—but they add work at ingestion time and consume disk space.
 
 Metrics have a narrower access pattern.
 
@@ -48,9 +48,9 @@ So did Elasticsearch’s storage engine need to be rebuilt completely? Not quite
 
 I've said "columnar" a few times already - what is it and why does this matter?
 
-The main advantage of columnar data is for working with high volumes of data in select fields.
+Columnar storage is useful when a query touches a few fields across a large dataset.
 
-Imagine a table of metrics, each containing a timestamp, a host, a service, and a CPU value, as well as a host of others.
+Imagine a table of metrics. Each row contains a timestamp, a host, a service, and a CPU value, plus dozens of other fields.
 
 [show a small metrics table]
 
@@ -58,13 +58,13 @@ A row-oriented layout keeps the values for each record together.
 
 [animate table into rows: timestamp, host, service, CPU — then the next record]
 
-Meaning the engine can retrieve each row without jumping between several places.
+That lets the engine retrieve a complete row without jumping between several places.
 
 A columnar layout turns the table sideways. Timestamps are stored together, host names are stored together and so on.
 
 [animate the same table into four columns]
 
-A row-oriented layout is great for tasks like preparing a templated letter to a customer. But instead, suppose you want to know the average CPU by service over the last hour.
+Now suppose you want to know the average CPU by service over the last hour.
 
 It needs the timestamp, service, and CPU columns. It doesn’t need every other field attached to every metric.
 
@@ -278,6 +278,26 @@ If this decision matters to your infrastructure bill, benchmark your own cardina
 
 -----
 
+# The broader Columnar Mode
+
+Everything we’ve discussed so far applies to the metrics path: TSDS storage plus the ES|QL time-series engine.
+
+Elasticsearch nine point five also introduces a separate feature called Columnar Mode as a technical preview.
+
+It applies the same broad principle to other analytical data: store fields once in doc values, then add secondary indexes only where they justify their cost.
+
+Columnar Logs is the first specialized profile. It keeps an inverted index for the log message, while treating the remaining fields as columns.
+
+[diagram: Columnar Logs — message field gets inverted index; remaining fields use column store]
+
+But general analytical data does not have the same natural order as metrics. Its ability to skip data will depend on the sort chosen for the index and how closely query fields correlate with it.
+
+Columnar Mode is therefore related to the metrics work, but it is not the same implementation or the same set of guarantees.
+
+It is also opt-in and still a technical preview. Existing indexes are untouched.
+
+-----
+
 # Does this make Prometheus replaceable?
 
 Version nine point five makes that question easier to test without immediately rewriting your metrics workflow.
@@ -303,26 +323,6 @@ The case is weaker if you have a mature Prometheus-based platform that already w
 A purpose-built system may still be simpler, cheaper, or better understood by your team.
 
 This work makes consolidation technically credible. It doesn’t make it automatically correct.
-
------
-
-# The broader Columnar Mode
-
-Everything we’ve discussed so far applies to the metrics path: TSDS storage plus the ES|QL time-series engine.
-
-Elasticsearch nine point five also introduces a separate feature called Columnar Mode as a technical preview.
-
-It applies the same broad principle to other analytical data: store fields once in doc values, then add secondary indexes only where they justify their cost.
-
-Columnar Logs is the first specialized profile. It keeps an inverted index for the log message, while treating the remaining fields as columns.
-
-[diagram: Columnar Logs — message field gets inverted index; remaining fields use column store]
-
-But general analytical data does not have the same natural order as metrics. Its ability to skip data will depend on the sort chosen for the index and how closely query fields correlate with it.
-
-Columnar Mode is therefore related to the metrics work, but it is not the same implementation or the same set of guarantees.
-
-It is also opt-in and still a technical preview. Existing indexes are untouched.
 
 -----
 

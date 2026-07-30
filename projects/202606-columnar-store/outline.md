@@ -63,69 +63,17 @@ New: https://www.elastic.co/search-labs/blog/elasticsearch-columnar-storage
 
 # Video outline
 
-## Hook
-
-If you run Elasticsearch for logs, you probably also run another platform like Prometheus for metrics. Not because Elastic couldn't do metrics, but because it was too expensive to. In the last year, Elastic changed that—by removing structures, not adding them. The inverted index, the BKD tree, and sequence numbers got trimmed away. What's left is a storage layout that looks a lot more like a columnar database. So let's talk about how that works, and whether it changes your calculus.
-
 ## Video Structural Outline
 
 (*Argument or narrative only. What does the viewer need to understand, and in what order?*)
 
-- Hook (TBD)
-- Problem introduction
-    - Acknowledge Elasticsearch's reputation as not ideal for Metrics
-    - Why Elasticsearch historically paid a storage and query tax for metrics workloads
-    - Discuss the resulting technical stack bifurcation (e.g. Elasticsearch + Prometheus)
-- Engineering deep dive
-    - Document-oriented vs columnar: standard Elasticsearch indexes are hybrid—the original document is retained while many fields also have per-field doc values and dedicated search structures. For metrics, the goal is to make the per-field columnar representation primary so queries can read only the required columns.
-    - Enabling columnar metrics
-        - Establish the overall transformation before explaining each mechanism: Elasticsearch already had a columnar layer in doc values; the work made that layer primary for metrics and removed or trimmed parallel structures.
-        - Explain at a high level what changed and what capability each structure previously supplied:
-            - Separate inverted indexes and BKD trees on timestamp and dimension fields were replaced by doc value skippers for common filtering.
-            - `_id` became synthetic, removing its dedicated inverted index while preserving lookup and deduplication.
-            - Sequence numbers are retained for replication, then trimmed once the global checkpoint makes them unnecessary.
-            - ES|QL was adapted to process the resulting columns directly rather than reconstructing documents.
-        - Keep this as a roadmap; versions, byte savings, tradeoffs, and implementation details belong in the following sections.
-    - Introduce TSDB
-        - What is it, why does it exist, what does this change about the data shape
-        - Talk about sorting guarantees - data is sorted by `[_tsid ascending, @timestamp descending]`, so each time series sits contiguously on disk and timestamp ranges prune cleanly. Time series data is unique (like metrics), this makes sorting inherent at ingestion.
-        - How Doc value skippers take advantage of this shape
-            - Solves a lot of pain for numerical data vs BKD trees
-            - Especially powerful when it comes to TSDB, because of the sorting guarantees
-    - Long concerted effort - evidenced by timeline of storage reduction
-        - | 9.1 | Synthetic recovery source | Cuts recovery-source disk I/O; foundational for later ingest throughput gains |
-        - | 9.3 | Doc value skippers | –10 bytes/point |
-        - | 9.3 | Larger codec blocks (128→512 elements) | –2 bytes/point |
-        - | 9.4 | Synthetic `_id` | –5 bytes/point |
-        - | 9.4 | Sequence number trimming | –4 bytes/point |
-        - | 9.5 | ES95 codec | ~–20% further reduction (~3 bytes/sample) |
-        - Gets us to 25 → 3.75 bytes per OTel data point (9.4); ~3 bytes/sample with the ES95 codec in 9.5
-    - TSDB after the changes
-        - Dimension and timestamp fields drop their separate inverted indices and BKD trees; they now live as doc values with skippers. Metric values were already stored as doc values. Every field is now in its own file, with no duplicated structure.
-        - But the query engine also needs to change to take advantage of this — enter ES|QL
-    - The ES|QL `TS` source command
-        - Two-level aggregation model: inner function per time series (RATE, AVG_OVER_TIME), then outer aggregation across groups (SUM, AVG). Because data is in `_tsid` order, the engine applies the inner function vectorized over a fetched column until the series changes, fetching dimensions only once.
-        - Zero-copy decoding: the codec reads on-disk data directly into primitive arrays the compute engine aggregates over — no extra copies.
-        - Run-length constant blocks for repeated `_tsid` and dimension values; null metric values filtered at the Lucene level before decoding.
-        - Filters on timestamp and dimensions pushed down to Lucene, which uses skippers to exclude non-matching blocks.
-        - Counter rate evaluation assigns in-order `_tsid` ranges to threads so resets are detected correctly while scanning in order.
-- Impact
-    - TSDB no longer pays the overhead of a general-purpose search engine on dimension and timestamp fields.
-    - Ingest throughput is higher, footprint smaller
-    - Query performance: up to 160x faster than Elasticsearch's own TSDB from a year ago; up to 30x faster than Prometheus on the same workload
-    - "So what" - who this is actually for
-        - If you're already running Elastic for logs: metrics are now economically viable in the same stack. No new operational model.
-        - If you're running Prometheus + Elastic today: collapsing that stack has become technically credible, and 9.5 makes the migration path low-friction — native Prometheus remote write and PromQL are now GA, with a migration tool for Grafana/Datadog dashboards and alerts.
-        - If you're greenfield: start with the tool purpose-built for your primary workload. This isn't a reason to choose Elastic.
-    - Forward look: this is the foundation, not the ceiling. 9.5 ships Columnar Mode as a technical preview (GA in 9.6), generalizing what TSDB did for metrics to logs and beyond. Columnar Mode stores each field once in the column store with no inverted index by default, and — the part TSDB didn't touch — can regenerate the original record from the column store on demand instead of keeping a redundant stored copy. Columnar Logs is the first specialized profile (keeps an inverted index on the message field, everything else columnar). The metrics mechanics in this video are the precedent and foundation for that broader move, not the same thing as it.
-- Honest assessment
-    - The structural changes are real and verifiable: skippers replace BKD trees, synthetic `_id` removes the `_id` index, sequence numbers are trimmed after replication. The byte-level trajectory (25 → 3.75 bytes/point in 9.4; ~3 bytes/sample with the ES95 codec in 9.5) is internally consistent and documented per release.
-    - The headline multipliers are self-reported by Elastic and have not been independently reproduced. The open-source `prom-elastic-benchmark` reproduction found Elasticsearch struggled to ingest datasets that Prometheus handled in ~2 hours, projecting >40 hours with high I/O churn. The storage comparison against Prometheus is suspected to have measured pre-WAL-compaction data.
-    - What you actually get: a storage layout that enables cheaper operation and faster queries for your own workload, but the magnitude depends on your cardinality, ingestion pattern, and hardware. The architecture makes improvement possible; the exact multiplier is workload-dependent.
-- Tradeoffs & Evaluation
-    - The optimization works because time-series data has structure and ordering guarantees.
-    - works best on append-only time series
-    - The skipping benefit depends on a sort order. TSDB gets it for free (`_tsid` + `@timestamp`); Columnar Mode's general profile inherits Elasticsearch's `index.sort.field` — one static sort key, defined at index creation. Pruning is effective on sort-key fields and fields correlated with them; ad-hoc filters on uncorrelated fields fall back to scanning. This is the structural reason the initial profiles are time-ordered workloads rather than general analytical queries.
-    - Sequence numbers are trimmed after replication by default on TSDB in 9.4 — still assigned and written at index time because replication depends on them, but dropped from merged segments once the global checkpoint has advanced past them. Re-enable full retention with `index.disable_sequence_numbers: false`.
-    - PromQL support and Prometheus remote write reached GA in 9.5 (were tech preview in 9.4), along with a migration tool for Grafana and Datadog dashboards and alerts. PromQL compatibility is not complete, though — public docs list unsupported constructs and semantic differences.
-    - Dimension and timestamp filtering that previously used dedicated BKD trees and inverted indices now relies on doc value skippers. Benchmarks showed no measured regression for typical metrics queries, but ad-hoc text search or complex non-time-range filtering on dimension fields may not perform as well as before.
+- **Hook:** Elasticsearch was historically expensive for metrics, but recent gains came from removing storage structures rather than adding a new engine. Does that make stack consolidation credible?
+- **Why the overhead existed:** General search workloads benefit from separate structures for searching, filtering, aggregating, and retrieving data. Metrics follow a narrower access pattern, so paying for all of them is harder to justify.
+- **The columnar foundation:** Doc values already gave Elasticsearch per-field columnar storage, reducing I/O and improving compression and batch processing. The unresolved problem was filtering those columns efficiently.
+- **The key mechanism:** TSDS orders data by series and time. Doc value skippers exploit that order to prune blocks, allowing timestamp and dimension fields to drop heavier parallel indexes.
+- **The remaining removals:** Synthetic IDs eliminate the `_id` index, while sequence numbers are discarded after replication. Supporting codec and recovery changes further reduce storage.
+- **Columnar execution:** ES|QL processes the stored columns directly instead of reconstructing documents, applying per-series calculations before combining results across groups.
+- **Evidence and limits:** Elastic reports major storage, ingest, and query improvements, but the competitive multipliers remain first-party claims and a third-party reproduction reached different results.
+- **Broader direction:** The separate Columnar Mode preview applies the same “store once, index selectively” principle beyond metrics, but without all of TSDS’s ordering guarantees.
+- **Stack decision:** Consolidation is most credible for existing Elastic users whose metrics are append-mostly and time ordered. Mature Prometheus or metrics-only environments may still benefit from a purpose-built system.
+- **Conclusion:** Elasticsearch did not make metrics columnar by adding columns; it did so by learning which other structures it could stop storing.

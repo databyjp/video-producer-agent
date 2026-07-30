@@ -741,3 +741,12 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Structure:** Rewrote `draft-script-v1.md` after the columnar primer around one causal chain: doc-values filtering problem → TSDS ordering → skippers → synthetic `_id` → sequence-number trimming → columnar ES|QL execution.
 - **Comprehension:** Removed the up-front mechanism inventory, separated one concept per section, and moved release chronology and byte accounting into a single evidence overlay.
 - **Pacing:** Condensed the ES|QL implementation list, benchmark discussion, consolidation guidance, Columnar Mode forward look, and conclusion while preserving the principal tradeoffs and evidence boundaries.
+
+## 2026-07-30 — Columnar script final structural alignment
+
+- **Script polish:** Simplified the hook, corrected awkward spoken constructions in the log and columnar explanations, removed the templated-letter analogy, and moved the broader Columnar Mode context before the stack-decision section.
+- **Outline alignment:** Rebuilt the structural outline to match the script’s causal section order, evidence boundaries, forward look, consolidation guidance, and conclusion.
+
+## 2026-07-30 — Columnar outline condensed
+
+- **Outline:** Reduced the detailed section-by-section inventory to ten essential argument beats, preserving the causal flow, evidence boundary, broader direction, stack decision, and conclusion while removing implementation-level review noise.
