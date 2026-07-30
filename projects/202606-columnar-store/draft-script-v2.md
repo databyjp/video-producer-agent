@@ -34,11 +34,11 @@ We’ll look at what Elasticsearch removed, why it was safe to remove it, and wh
 
 Before deleting anything, we need to understand why it was there.
 
-Imagine this metric point was a log event instead.
+Imagine instead of metrics, looking at log events instead.
 
-You might search its message for “connection refused,” filter to the last hour, group the results by service, then open one complete event to inspect it.
+You might be investigating a problem. You search messages for “connection refused,” filter to the last hour, group the results by service, then get to this complete event to inspect it.
 
-Each step benefits from a different data structure.
+Each step here benefits from a different data structure.
 
 [show one log event splitting into the structures as they are named]
 
@@ -52,32 +52,30 @@ And `_source` preserves the original document for retrieval.
 
 That duplication is not automatically waste. It is how Elasticsearch supports several very different operations efficiently.
 
-Metrics make a narrower bargain.
+That flexibility is valuable for logs. But metrics rarely need all of it.
 
-They are usually appended, not repeatedly updated.
+Metrics are usually appended, not repeatedly updated.
 
-Their dimensions define stable series.
+Together, dimension fields identify which samples belong to the same series. Within that series, the timestamp identifies an individual point.
+
+That gives a metrics store the option to group points by series and order them by time.
 
 And most queries follow the same broad shape: select some series, select a time range, then aggregate a few numeric fields.
 
 You rarely need full-text relevance ranking over a CPU sample.
 
-And you probably do not need optimistic concurrency control for last Tuesday’s request counter.
-
 [on-screen ledger]
 
 | Workload property | Opportunity |
 |---|---|
-| Series and time provide useful order | Replace heavy filtering indexes |
+| Points can be grouped by series and ordered by time | Replace heavy filtering indexes |
 | Series plus timestamp identifies a point | Derive `_id` |
 | Samples are append-mostly | Trim old sequence numbers |
 | Queries touch a few fields | Keep processing columnar |
 
-That is the key to this whole video.
+That difference in requirements is the key to this whole video.
 
-The optimizations are not free tricks.
-
-Each one exchanges general-purpose flexibility for something a metrics workload needs more.
+Each optimisation exchanges general-purpose flexibility for something specific to a metrics workload.
 
 -----
 
