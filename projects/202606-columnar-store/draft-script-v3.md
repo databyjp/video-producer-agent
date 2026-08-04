@@ -4,68 +4,60 @@ This is a metric point.
 
 [show one metric point]
 
-At ten-oh-three, the checkout service on `web-03` reported a request counter of forty-two thousand, one hundred and eight.
+At ten-oh-three, this point was born - to tell us that the checkout service on `web-03` reported a request counter of forty-two thousand, one hundred and eight.
 
-That is all the point needs to say.
+It's a useful, but simple signal containing a few data points.
 
-But historically, putting it into Elasticsearch would mean its values appear multiple times, like this:
+But historically, putting it into Elasticsearch meant leaving additional traces.
 
-Its timestamp would appear in doc values for aggregation and a BKD tree for filtering.
-
-Its dimensions would appear in doc values and an inverted index.
+Its timestamp would appear in doc values for aggregation and a BKD tree for filtering. And its dimensions would appear in doc values and an inverted index.
 
 The document also needed an indexed `_id` and a sequence number.
 
 [animate the point fanning out into doc values, filtering indexes, `_id`, and `_seq_no`]
 
-Those structures make Elasticsearch flexible, and powerful.
+These data structures power fast searches and filtering for Elasticsearch for a variety of workloads. But they also make this *tiny* point more expensive to store and index.
 
-They also make this tiny point more expensive to store and index.
+Historically, this is why teams using Elasticsearch for logs often used a different system like Prometheus to store their metrics.
 
-That is one reason teams using Elasticsearch for logs often kept their metrics somewhere else, in a system like Prometheus.
+But recently, Elasticsearch has made significant changes to how it works with metrics. The high level claims are that the metrics store has become significantly smaller and faster to query.
 
-But over the past few releases, Elasticsearch has changed how it organises metrics like our little friend here, by figuring out how to store and work with them efficiently.
+In this video, I want to focus on not on the high-level specs and claims, but the engineering under the hood.
 
-So let’s follow this point through that change.
+What are these structures, what's disappeared, what still works, and whether this makes consolidating an observability stack technically credible.
 
-By the end, we’ll know what disappeared, what still works, and whether this makes consolidating an observability stack technically credible.
+To do that, let’s follow this point through our changes.
 
 -----
 
 # Why the extra structures existed
 
-Before diving into what was removed, let's switch perspectives by looking at a log event. This will tell us why these pieces exist.
+So why do these overheads exist? The answer is that they help make Elasticsearch great as an excellent text search engine.
+
+To help explain this - let me show you what happens when you're working with logs.
 
 [keep the metric point on screen; introduce a log event beside it]
 
-Imagine an engineer investigating a connection problem. Their query might look for “connection refused,” filtered to the last hour, grouped by service - then they would open one complete event from those hits.
+Imagine an SRE - let's call him Lonnie. He's investigating a connection problem. Their query might look for “connection refused,” filtered to the last hour, grouped by service - then they would open one complete event from those hits.
 
 Now, each part of this query benefits from a different structure.
 
+[show the log event branching into each structure]
 The text search is sped up by an inverted index.
-
 The numerical and date filtering is done by a BKD tree.
-
 Sorting and aggregations are done by doc values.
-
 And the complete event is retrieved from the `_source` field.
 
-[show the log event branching into each structure]
+If we remove any of them, we're going to make Lonnie very sad - his query will still work, but it's going to be a lot more brute-force based. As the log data grows, his query will take unacceptably long.
 
-The key is that these are different data structures, each supporting speedup of different operations.
-
-The question is - do they all apply to our metric point?
+But the question now is - do these all help Meg, who's analysing metrics data?
 
 [remove the log event; centre the metric point again]
+Here's the thing about metrics points. Each point going to be written once, and probably never updated. And its's identified by its timestamp, service and host.
 
-Because a metric store has a much narrower job.
+Metrics' queries are different, too. Meg's typical query would be to choose a series and a time range, then aggregate numeric fields to get numbers out.
 
-[read fast]
-- It is normally written once rather than repeatedly updated.
-- Its service and host tell us which time series it belongs to, where within that series, its timestamp identifies this individual point.
-- And most queries follow the same pattern: choose some series, choose a time range, then aggregate a few numeric fields.
-
-Nobody is running full-text relevance ranking over the number forty-two thousand, one hundred and eight.
+You can see how this is different from logs. Meg isn't running custom full-text searches for events or details like Lonnie would.
 
 [on-screen ledger]
 
@@ -76,51 +68,35 @@ Nobody is running full-text relevance ranking over the number forty-two thousand
 | It is append-mostly | Trim its sequence number later |
 | Queries need only a few fields | Keep processing columnar |
 
-Those differences drive everything that follows.
-
-Each optimisation gives up some general-purpose flexibility in exchange for something this workload values more.
+Those differences drive everything that follows: each optimisation trades general-purpose flexibility for something metrics value more.
 
 -----
 
-# The column was already there
+# Doc values as the star
 
-To understand what Elasticsearch changed, we need to start with something it already had: doc values.
+So what changed? The short answer is that the data was reorganised around a key data structure that already existed in Elasticsearch - doc values.
 
 [place the metric point into a small table with neighbouring points]
 
-Doc values keep each field in its own on-disk column.
+Doc values is a columnar data structure, collecting data from each field together.
 
-All timestamps sit together. All hosts sit together. And all request-counter values sit together. Although each of these sets might be in different places.
+That means all timestamps, all hosts, all request-counter values and so on are all sitting separately from each other.
 
 [animate the table into three columns]
 
-Suppose we ask for the request rate by host over the last day.
+Why does this matter? It's useful when you need to work with volumes of particular fields. It allows Elastic to save on the amount of data read, compress data efficiently, and process data faster in batches.
 
-Doc values allow efficient reading of just the columns we need. Reading only the required columns means less I/O.
+Like, imagine our friend Meg looking to find the aveage request rate over the last day - Elastic can simply read the timestamp data, and the requests data, and bulk-process them.
 
-Similar values also compress well together, and the engine can process faster, in batches.
+What doc values aren't so great for is filtering.
 
-[on-screen text: Less I/O. Better compression. Batch execution.]
+As in - in that last query, how does Elastic know which parts of the doc values relate to yesterday, without reading the entire timestamp column?
 
-So why were doc values not enough on their own?
+That's what BKD tree was for - not just timestamps, but for everything.
 
-The first major problem was filtering.
+And Elasticsearch needed inverted indexes for filtering text data, like service or host names, for example.
 
-Doc values make a field efficient to read once Elasticsearch knows which documents it needs.
-
-But if our timestamp existed only in doc values, a query for the last day would have to scan the entire timestamp column.
-
-A BKD tree avoids that scan.
-
-But now our point’s timestamp exists twice: once in doc values for aggregation, and again in the tree for filtering.
-
-[highlight the point’s timestamp in both structures]
-
-Its service and host had similar duplication: doc values supported aggregation, while an inverted index supported filtering.
-
-So the first engineering problem was specific:
-
-How do you remove those filtering indexes without turning common metrics queries into full column scans?
+So here's engineering problem - how do you remove those indexes without compromising speed? How do we keep Meg happy?
 
 The solution starts by changing where our point sits in relation to all the others.
 
@@ -128,15 +104,11 @@ The solution starts by changing where our point sits in relation to all the othe
 
 # Giving the point a useful place
 
-Metrics are optimised in time series databases, or TSDBs - the path works like ths.
-
-Our point’s service and host are dimensions. Together, they identify the series it belongs to.
-
-Elasticsearch turns those dimensions into an internal identifier called `_tsid`.
+Elasticsearch combines the point’s service and host into an internal series identifier called `_tsid`.
 
 [attach `_tsid` to the metric point]
 
-Every point with the same `_tsid` is routed to the same shard.
+It routes every point with the same `_tsid` to the same shard.
 
 Inside each segment, Elasticsearch sorts those points by `_tsid` and timestamp.
 
@@ -150,7 +122,7 @@ And importantly, it makes a much lighter filtering index possible.
 
 # Replacing the tree
 
-This grouping of points in an useful order allows Elasticsearch to replace the first redundant structure: the BKD tree.
+This grouping of points in a useful order allows Elasticsearch to replace the first redundant structure: the BKD tree.
 
 Its lighter replacement is called a doc value skipper.
 
@@ -172,19 +144,11 @@ If points were scattered randomly, any block could contain any timestamps - the 
 
 [briefly scramble the column; show the block ranges overlap; restore the ordered version]
 
-The data layout in TSDB creates the correlation the skipper needs.
-
-That lets our point keep its timestamp and dimensions in doc values while Elasticsearch removes their separate BKD trees and inverted indexes.
+That lets Elasticsearch replace separate BKD trees and inverted indexes with a small index over columns it already stores.
 
 [return to the original fan-out and remove the filtering indexes]
 
-Our point now leaves a lighter footprint, but common time and dimension filters still work efficiently.
-
-The trade-off is that filters unrelated to the physical order may benefit less.
-
-The result is not “no index.”
-
-Instead, we get a small, efficient index using the column we already had.
+Common time and dimension filters remain efficient; filters unrelated to the physical order may benefit less.
 
 -----
 
@@ -351,19 +315,13 @@ It follows the same philosophy as the metrics work, but without the same orderin
 
 # Conclusion
 
-So, where does all of this leave us?
-
 One metric point took us through the whole change.
 
 [return to the final version of the point]
 
-Our point became lighter because its workload provided useful constraints: predictable order, natural identity, an append-mostly lifecycle, and queries that operate on a few columns.
+If your metrics share its constraints—and you already run Elastic—the case for consolidation is much more credible than it was a year ago.
 
-So the useful question is not whether Elasticsearch is now universally better than Prometheus.
-
-It is whether your metric points behave like this one.
-
-If they do—and you already operate Elastic—the case for one observability stack is much more credible than it was a year ago.
+That doesn't make Elasticsearch universally better than Prometheus.
 
 Elasticsearch did not make metrics columnar by adding columns.
 

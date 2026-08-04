@@ -772,3 +772,8 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 
 - **Pacing:** Condensed the synthetic-ID and sequence-number explanations and removed repeated architecture summaries from the storage payoff, evidence, and conclusion.
 - **Scope:** Shortened the Columnar Mode epilogue while preserving the benchmark caveat, consolidation decision, and final workload-fit thesis.
+
+## 2026-07-30 — Columnar v3 repetition pass
+
+- **Pacing:** Consolidated repeated explanations in the workload, doc-values, skipper, and conclusion sections while retaining repetition used for comprehension and emphasis.
+- **Delivery:** Simplified the ordering transition and corrected several awkward spoken constructions.
