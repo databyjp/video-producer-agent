@@ -26,7 +26,7 @@ In this video, I want to focus on not on the high-level specs and claims, but th
 
 What are these structures, what's disappeared, what still works, and whether this makes consolidating an observability stack technically credible.
 
-To do that, let’s follow this point through our changes.
+To do that, let’s follow this point, and some of its friends through our changes.
 
 -----
 
