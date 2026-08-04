@@ -66,21 +66,11 @@ Now, let me show you what happens now when you ingest a metric point.
 
 # What a metric point actually needs
 
-Our point has a much narrower life than a typical Elasticsearch document.
+The first difference is that Elasticsearch knows this is a metric point, which has a much narrower (but still rich and fulfilling) life than a typical document.
 
-It will be written once and probably never updated.
+For one, it's a write-once and never updated type data. Also, it's got cool uniqueness properties. Its service and host dimensions identify the series it belongs to, and its timestamp is a unique identifier within that series.
 
-Its series is defined by dimensions like service and host.
-
-And the timestamp identifies its position within that series.
-
-Most queries will choose one or more series, choose a time range, and aggregate a few numeric fields.
-
-They won't run arbitrary full-text searches across the point.
-
-They won't repeatedly fetch and update it as a standalone document.
-
-And they normally won't need the full concurrency behavior of a mutable record.
+Metrics queries are predictable, too. Typically the analyst would choose the series and a time range, then aggregate a few numeric fields. They don't need arbitrary full-text search across every value, or the full update and concurrency behaviour of a mutable document.
 
 [on-screen ledger]
 
@@ -91,205 +81,118 @@ And they normally won't need the full concurrency behavior of a mutable record.
 | It is append-mostly | Trim its sequence number later |
 | Queries need only a few fields | Keep processing columnar |
 
-This is the bargain behind the redesign.
-
-Elasticsearch can store less because metrics promise to behave in a more predictable way.
-
-And here is what our point looks like after taking that bargain.
+This is the bargain behind the redesign: Elasticsearch can store less because metrics behave in a more predictable way, and the nature of the analysis is very different to say - a database of articles, or even logs.
 
 [show the old and new point side by side; reveal the filtering indexes, indexed `_id`, and long-lived `_seq_no` disappearing]
 
-Doc values remain at the centre.
+So here's what our point looks like in Elasticsearch. Doc values remain front and centre, but several structures around them have either become much smaller or disappeared entirely.
 
-But several structures around them have either become much smaller or disappeared.
-
-So let's rewind and remove them one at a time.
+Let's look at each of those changes, starting with the filtering indexes.
 
 -----
 
 # Removing the filtering indexes
 
-The first targets are the BKD tree and the inverted indexes used for common time and dimension filters.
+The first targets are the BKD tree and inverted indexes used for common time and dimension filters. We can't simply delete them, because our query still needs to filter for hostnames like `web-03`, or for time windows, like the last day. Without some kind of replacement, Elasticsearch would have to scan these columns from beginning to end.
 
-We can't simply delete them.
-
-Our query still needs to find `web-03` over the last day.
-
-Without a replacement, Elasticsearch would have to scan the columns from beginning to end.
-
-The replacement starts by giving our point a useful place among all the other points.
-
-Elasticsearch combines its service, host and other dimensions into an internal series identifier called `_tsid`.
+The solution starts by giving our point a predictable place. Elasticsearch does this by combining its service, host and other dimensions into an internal series identifier called `_tsid`.
 
 [attach `_tsid` to the point]
 
-Every point in the same series gets the same `_tsid` and is routed to the same shard.
-
-Inside each segment, Elasticsearch sorts points by `_tsid` and timestamp.
+Every point in the same series gets the same `_tsid` and is routed to the same shard. Inside each segment, Elasticsearch sorts the points by `_tsid` and timestamp.
+That metrics are a good fit for this sorting: dimensions repeat heavily, and points generally arrive in roughly timestamp order. Elastic's time-series database is designed for current metrics rather than frequent historical backfills.
 
 [place the point between neighbouring points from the same series]
 
-Now our point has predictable neighbours.
+Now our point has predictable neighbours. Points from the same series sit together, their timestamps are ordered, and repeated dimension values cluster together.
 
-Points from the same series sit together.
-
-Their timestamps are ordered within that series.
-
-And repeated dimension values cluster together.
-
-That improves compression.
-
-But more importantly, it makes a much lighter filtering structure useful.
-
-It's called a doc value skipper.
+This improves compression, but more importantly, it enables a much lighter filtering structure: a doc value skipper.
 
 [show the timestamp doc-values column divided into blocks]
 
-Instead of building a separate tree over every timestamp, the skipper records a summary for each block of the existing column.
+The doc value skipper is a simple, but powerful idea. It records a summary of each block of the existing column: its lowest value, highest value, and how many documents are present.
 
-The lowest value.
-
-The highest value.
-
-And how many documents are present.
-
-Now ask for the last day again.
-
-Our point's block overlaps that range, so Lucene checks it.
-
-But a block from two months ago has a maximum value that is already too old.
-
-Lucene can skip the entire block.
+Now, if we ask for the last day again, our point's block overlaps that range, so Lucene checks it. But a block from two months ago has a maximum value that's already too old, so Lucene can skip the entire thing.
 
 [keep the recent block; fade the old blocks]
 
-And this works because the data is ordered.
+This only works because the data is ordered. If timestamps were scattered randomly, almost every block could contain both old and new values. Each block's minimum and maximum would cover a huge range, and the skipper would tell us almost nothing.
 
-If timestamps were scattered randomly, almost every block could contain both old and new values.
-
-Its minimum and maximum would cover a huge range.
-
-The skipper would tell us almost nothing.
+Instead of building a separate tree structure over every timestamp, the doc value skipper leverages the inherent structure of timestamps and the nature of queries to speed up queries.
 
 [briefly scramble the timestamp column; show the ranges overlapping; restore the ordered version]
 
-Series grouping gives dimension columns the same kind of useful correlation.
-
-Common time and dimension filters can skip large parts of those columns without maintaining the heavier indexes that used to sit beside them.
+Grouping by series gives the dimension columns the same kind of useful correlation. Common time and dimension filters can now skip large parts of these columns without maintaining the heavier indexes, in the form of inverted indexes and BKD trees.
 
 [return to the fan-out and remove the BKD tree and dimension inverted indexes]
 
-So the capability survives: Elasticsearch can still filter common series-and-time queries efficiently.
-
-The trade-off is that skippers depend on physical order.
-
-A filter unrelated to that order may benefit less than it would from a general-purpose index.
+But there's still a couple of additional changes - like how to manage lookups of object `_id`s.
 
 -----
 
 # Removing the dedicated `_id` index
 
-Our point is leaner now.
-
-But it still has a dedicated inverted index for `_id`.
+When dealing with, say, logs, Elasticsearch keeps a dedicated inverted index for object `_id`s.
 
 [highlight the `_id` index]
 
-That index supports direct lookups and duplicate detection.
+This supports direct lookups and duplicate detection. It's useful, but again, for such lightweight signals like metrics - the question was is there a way to replace it?
 
-But metrics have already given us a natural identity.
-
-The `_tsid` identifies the series.
-
-The timestamp identifies the point inside it.
-
-Together, they identify our point.
+And the solution, again, relates to uniqueness of metric points. Each one already has a natural identity, in that the `_tsid` identifies its series, and the timestamp identifies a unique point inside it.
 
 [combine `_tsid` and timestamp into a synthetic `_id`]
 
-So Elasticsearch can derive `_id` from those two values instead of storing and indexing another copy.
+For newly created TSDB indices since Elasticsearch nine point four, Elasticsearch simply derives a unique `_id` from those two values instead of building the normal `_id` inverted index.
 
-A small Bloom filter quickly establishes that most incoming points aren't duplicates.
-
-If the filter finds a possible match, Elasticsearch verifies it against the existing columnar data.
+So lookups and deduplications work this way. Elasticsearch first rules out segments with a different timestamp range. A small Bloom filter on each remaining segment then says that the `_id` is either definitely absent, or might be present. Possible matches are verified using the `_tsid` and timestamp doc values - and lookups would simply fetch that result, or deduplication would be based on the match.
 
 [remove the dedicated `_id` index]
 
-Normal `_id` lookups and deduplication survive.
+So, exact `_id` lookups and deduplication still work fine, even though the dedicated inverted index that used to store and locate it is now gone.
 
-What disappears is the dedicated index that used to provide them.
+And lastly, let's talk about the sequence number, which is key to concurrency.
 
 -----
 
 # Letting the sequence number expire
 
-One piece still follows our point around: its sequence number.
+When the point first arrives, the primary shard assigns the write a sequence number.
 
 [highlight `_seq_no`]
 
-Unlike the filtering indexes, this one is essential when the point first arrives.
-
-Elasticsearch assigns the write a sequence number and uses it while replicating the point from the primary shard to its replicas.
+Replicas use this number to stay in sync and identify operations they may need to replay.
 
 [animate the point and sequence number moving from primary to replicas]
 
-But metrics are normally append-only.
+Normally, Elasticsearch keeps this number to support safe concurrent updates. But metrics are normally append-only, so once every in-sync replica has confirmed the write, Elasticsearch now simply removes during a later segment merge.
 
-Once every replica has confirmed the write, the sequence number has done its main job.
+[replicas confirm; later merge removes _seq_no]
 
-During a later segment merge, Elasticsearch can remove it.
-
-[replicas confirm; later merge removes `_seq_no`]
-
-Replication remains correct.
-
-But the point gives up behavior associated with mutable documents.
-
-[on-screen text: No optimistic concurrency control; no single-document updates; weaker update/delete-by-query conflict detection]
-
-That is a real trade-off.
-
-If an application needs that behavior, it can retain sequence numbers.
-
-But for an append-mostly metric point, keeping the number forever means paying indefinitely for a capability it is unlikely to use.
+Giving us an even smaller footprint, in exchange for single-document updates and concurrency checks which are really superfluous for metrics.
 
 -----
 
 # The point after the changes
 
-Now compare the two versions.
-
 [show before and after side by side]
 
-The old version stored columns for analytics, additional indexes for filtering, a dedicated `_id` index, and a permanent sequence number.
+Now we can compare the two versions. The old point stored columns for analytics, additional indexes for filtering, a dedicated `_id` index, and a permanent sequence number.
 
-The new version is organised around its columns.
-
-Ordering and skippers preserve common filtering behavior.
-
-Series plus timestamp provides its identity.
-
-And the sequence number survives only as long as replication needs it.
+The new version is organised around its columns. Ordering and skippers preserve common filtering behaviour, series plus timestamp provides its identity, and the sequence number survives only as long as replication needs it.
 
 [show Elastic's storage trajectory as an overlay]
 
-In Elastic's OpenTelemetry test, this storage work helped reduce the footprint from twenty-five bytes per point to three point seven five in Elasticsearch nine point four.
+In Elastic's OpenTelemetry test, this storage work helped reduce the footprint from twenty-five bytes per point to three point seven five in Elasticsearch nine point four. Its draft nine point five announcement reports a further reduction to roughly three bytes.
 
-Its draft nine point five announcement reports a further reduction to roughly three bytes.
+Those are results from one Elastic workload, not a universal footprint, but they demonstrate the cumulative effect of making every stored structure justify its cost.
 
-Those are results from one Elastic workload, not a universal footprint.
-
-But they demonstrate the cumulative effect of making every stored structure justify its cost.
-
-The point is now smaller.
-
-The remaining question is whether it is still useful.
+Our point is now much smaller. But can we still use it?
 
 -----
 
 # Following the point through a query
 
-Let's return to the query we started with.
+Let's return to the query we started with, and ask for a request rate by host over the last day.
 
 [show query]
 
@@ -300,127 +203,79 @@ TS metrics
     BY host.name, TBUCKET(1h)
 ```
 
-This asks for a request rate by host over the last day.
-
 First, the skipper rules out blocks outside the time range.
 
 [our point's block survives while old blocks disappear]
 
-Then ES|QL reads the remaining timestamp, host and counter columns directly.
+Then ES|QL reads the remaining timestamp, host and counter columns directly. Because points are already grouped by `_tsid`, it processes one series at a time.
 
-Because points are already grouped by `_tsid`, it processes one series at a time.
-
-Our point contributes to the rate for `web-03`.
-
-That rate is then combined into the hourly result.
+Our point contributes to the rate for `web-03`, which is then combined into the hourly result.
 
 [follow the point from its column into the `web-03` rate and then the final chart]
 
-At no stage does Elasticsearch need to rebuild every metric as a complete row.
+At no stage does Elasticsearch need to rebuild every metric as a complete row. The columnar shape survives from storage through execution.
 
-The columnar shape survives from storage through execution.
-
-So the useful behavior did survive.
-
-Our query can still select a series, filter a time range and aggregate the counter.
-
-What disappeared was general-purpose machinery that this workload had agreed not to need.
+So the useful behaviour did survive. Our query can still select a series, filter a time range and aggregate the counter. What disappeared was general-purpose machinery that this workload didn't need.
 
 -----
 
 # What this proves—and what it does not
 
-That explains the mechanism.
+That explains the mechanism. Now we need to separate it from the performance claims made about it.
 
-Now we need to separate it from the performance claims made about it.
+Elastic reports major results from these changes: up to one hundred and sixty times faster than its earlier time-series implementation, and some queries up to thirty times faster than Prometheus and Mimir. But those exact multipliers remain vendor benchmarks.
 
-Elastic reports major results from these changes: up to one hundred and sixty times faster than its earlier time-series implementation, and some queries up to thirty times faster than Prometheus and Mimir.
-
-But those exact multipliers remain vendor benchmarks.
-
-One Prometheus ecosystem engineer attempted to reproduce the high-cardinality ingestion workload and reached a very different result.
-
-Prometheus completed it in roughly two hours.
-
-Elasticsearch repeatedly timed out and was projected to take more than forty.
+One Prometheus ecosystem engineer attempted to reproduce the high-cardinality ingestion workload and reached a very different result. Prometheus completed it in roughly two hours, while Elasticsearch repeatedly timed out and was projected to take more than forty hours.
 
 [on-screen note: One attempted reproduction—not a universal verdict]
 
-Different versions, ingestion paths, hardware and tuning can change the result.
+Different versions, ingestion paths, hardware and tuning can change the result, so that reproduction isn't the final word either.
 
-So that reproduction isn't the final word either.
-
-The honest conclusion has two layers.
-
-The architectural changes are inspectable and credible.
-
-The size of the advantage over another system depends on the workload.
-
-If this decision affects your infrastructure bill, test your own data, queries, ingest path and hardware.
+The honest conclusion has two layers: the architectural changes are inspectable and credible, but the size of the advantage over another system depends on the workload. If this decision affects your infrastructure bill, test your own data, queries, ingest path and hardware.
 
 -----
 
 # Does this make consolidation credible?
 
-That brings us back to the team running Elasticsearch for logs and Prometheus for metrics.
+[note to self - add tradeoff bits here]
+- The trade-off is that skippers depend on physical order, so a filter unrelated to that order may benefit less than it would from a general-purpose index.
 
-Do these changes make consolidation sensible?
 
-According to Elastic's draft release announcement, Prometheus remote write and PromQL support become generally available in nine point five.
 
-Prometheus can send points like ours directly into Elasticsearch.
 
-Existing PromQL and Grafana workflows can query the same metrics engine.
+That brings us back to the team running Elasticsearch for logs and Prometheus for metrics. Do these changes make consolidation sensible?
+
+According to Elastic's draft release announcement, Prometheus remote write and PromQL support become generally available in nine point five. Prometheus can send points like ours directly into Elasticsearch, while existing PromQL and Grafana workflows can query the same metrics engine.
 
 [diagram: Prometheus remote write → Elasticsearch metrics → PromQL/Grafana or ES|QL]
 
-Compatibility isn't complete.
+Compatibility isn't complete. Remote write version two and staleness markers aren't supported, and PromQL still has documented gaps.
 
-Remote write version two and staleness markers aren't supported.
-
-PromQL still has documented gaps.
-
-And there is more to migration than query syntax.
-
-Sizing, retention, failure behavior and existing data still matter.
+There's also more to migration than query syntax. Sizing, retention, failure behaviour and existing data still matter.
 
 The strongest case is a team already operating Elastic for logs or traces, whose metrics fit the append-mostly, series-and-time shape we followed.
 
 The case is weaker if a mature Prometheus platform already works well, or metrics are the only major workload.
 
-This engineering makes consolidation technically credible.
-
-It doesn't make it automatically correct.
+This engineering makes consolidation technically credible. It doesn't make it automatically correct.
 
 -----
 
 # The broader direction
 
-Nine point five also previews a broader Columnar Mode.
+Nine point five also previews a broader Columnar Mode, which applies the same principle beyond metrics: store fields in columns, then add other indexes only where the workload needs them.
 
-It applies the same principle beyond metrics: store fields in columns, then add other indexes only where the workload needs them.
-
-Its first profile, Columnar Logs, keeps an inverted index on the message while treating the remaining fields as columns.
-
-It follows the same philosophy as the metrics work, but without the same ordering guarantees.
+Its first profile, Columnar Logs, keeps an inverted index on the message while treating the remaining fields as columns. It follows the same philosophy as the metrics work, but without the same ordering guarantees.
 
 -----
 
 # Conclusion
 
-One metric point took us through the whole change.
-
 [return to the final version of the point]
 
-If your metrics share its constraints—and you already run Elastic—the case for consolidation is much more credible than it was a year ago.
+One metric point took us through the whole change. If your metrics share its constraints—and you already run Elastic—the case for consolidation is much more credible than it was a year ago.
 
-That doesn't make Elasticsearch universally better than Prometheus.
-
-Elasticsearch didn't make metrics columnar by adding columns.
-
-It had those for years.
-
-It became columnar by learning what it could stop storing.
+That doesn't make Elasticsearch universally better than Prometheus. Elasticsearch didn't make metrics columnar by adding columns—it had those for years. It became columnar by learning what it could stop storing.
 
 [beat]
 

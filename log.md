@@ -777,3 +777,8 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 
 - **Pacing:** Consolidated repeated explanations in the workload, doc-values, skipper, and conclusion sections while retaining repetition used for comprehension and emphasis.
 - **Delivery:** Simplified the ordering transition and corrected several awkward spoken constructions.
+
+## 2026-08-04 — Columnar metrics script v4
+
+- **Narrative:** Rebuilt the script after the introduction around the metric point's old indexing path, the leaner current path, each removed structure, and a query that proves the required behaviour survives.
+- **Voice:** Revised the later sections to match JP's denser paragraph rhythm, conversational transitions, British spelling, and reduced repetition.
