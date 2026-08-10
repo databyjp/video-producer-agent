@@ -782,3 +782,22 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 
 - **Narrative:** Rebuilt the script after the introduction around the metric point's old indexing path, the leaner current path, each removed structure, and a query that proves the required behaviour survives.
 - **Voice:** Revised the later sections to match JP's denser paragraph rhythm, conversational transitions, British spelling, and reduced repetition.
+
+## 2026-08-10 — Serverless search activation video outline kickoff
+
+- **Ideation:** Proposed a short, demo-led outline for developers who created an Elastic Serverless project but have not ingested data.
+- **Through-line:** Use one small product-catalog dataset to move from a real search problem to Python bulk ingestion, a first useful query, and a concise map of follow-on questions.
+- **Scope:** Keep project setup, mappings, and advanced search mechanics minimal; preview filters, aggregations, semantic/hybrid search, and RAG rather than implementing all of them.
+- **Verification:** Checked the current Elastic Serverless keyword-search quickstart and Python client guidance for endpoint/API-key connection, `helpers.bulk`, and `client.search` patterns.
+
+## 2026-08-10 — Aligned activation video with draft search quickstart
+
+- **Alignment:** Recommended using the quickstart's books dataset, environment variables, Python client connection, `semantic_text` mapping, and `helpers.bulk(..., refresh="wait_for")` ingestion path in the video.
+- **Scope:** For an ingestion-led video, use one prewritten search only as proof that the indexed data is useful; reserve query construction, hybrid search, and ES|QL instruction for later content.
+- **Verification risk:** Current official Elastic documentation classifies the `semantic` query as legacy for new projects and recommends a `match` query against `semantic_text`; the draft quickstart should be reconciled with that guidance before the video code is locked.
+
+## 2026-08-10 — Serverless search ingestion outline
+
+- **Outline:** Created `projects/202608-serverless-tutorials/search-1-ingestion.md` for an ingestion-led activation video aimed at developers with an empty Elasticsearch Serverless project.
+- **Demo:** Aligned the video with the supplied quickstart's books dataset, environment variables, Python client, `semantic_text` mapping, bulk helper, and semantic-query syntax.
+- **Scope:** Kept query construction, hybrid search, and aggregations out of the tutorial body; one prewritten semantic query proves ingestion worked and previews the rest of the series.
