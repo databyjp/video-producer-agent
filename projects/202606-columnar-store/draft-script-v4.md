@@ -176,23 +176,9 @@ Giving us an even smaller footprint, in exchange for single-document updates and
 
 [show before and after side by side]
 
-Now we can compare the two versions. The old point stored columns for analytics, additional indexes for filtering, a dedicated `_id` index, and a permanent sequence number.
+That's a lot of pretty clever engineering work. So what did it do? Well, Elastic reports that its OpenTelemetry footprint fell from twenty-five bytes per point to three point seven five in nine point four. And in nine point five reports, this is down to roughly three bytes, with another clever codec update.
 
-The new version is organised around its columns. Ordering and skippers preserve common filtering behaviour, series plus timestamp provides its identity, and the sequence number survives only as long as replication needs it.
-
-[show Elastic's storage trajectory as an overlay]
-
-In Elastic's OpenTelemetry test, this storage work helped reduce the footprint from twenty-five bytes per point to three point seven five in Elasticsearch nine point four. Its draft nine point five announcement reports a further reduction to roughly three bytes.
-
-Those are results from one Elastic workload, not a universal footprint, but they demonstrate the cumulative effect of making every stored structure justify its cost.
-
-Our point is now much smaller. But can we still use it?
-
------
-
-# Following the point through a query
-
-Let's return to the query we started with, and ask for a request rate by host over the last day.
+So - does it work? Let's return to the query we started with, and ask for a request rate by host over the last day. The query might look something like this:
 
 [show query]
 
@@ -203,69 +189,43 @@ TS metrics
     BY host.name, TBUCKET(1h)
 ```
 
+When you run this, here's what happens.
+
 First, the skipper rules out blocks outside the time range.
 
 [our point's block survives while old blocks disappear]
 
-Then ES|QL reads the remaining timestamp, host and counter columns directly. Because points are already grouped by `_tsid`, it processes one series at a time.
+Then Elasticsarch reads the remaining timestamp, host and counter fields' doc values directly. Because points are already grouped by `_tsid`, it can easily identify which ones are relevant for which hostname, and processes them.
 
-Our point contributes to the rate for `web-03`, which is then combined into the hourly result.
+When the query calculates the hourly results for `web-03`, it would include our original metric point.
 
 [follow the point from its column into the `web-03` rate and then the final chart]
 
-At no stage does Elasticsearch need to rebuild every metric as a complete row. The columnar shape survives from storage through execution.
+I won't talk about the benchmark numbers so much here. The reason is that they vary a lot, according to so many variables, and what is indicative for one user's workload might not be for another.
 
-So the useful behaviour did survive. Our query can still select a series, filter a time range and aggregate the counter. What disappeared was general-purpose machinery that this workload didn't need.
-
------
-
-# What this proves—and what it does not
-
-That explains the mechanism. Now we need to separate it from the performance claims made about it.
-
-Elastic reports major results from these changes: up to one hundred and sixty times faster than its earlier time-series implementation, and some queries up to thirty times faster than Prometheus and Mimir. But those exact multipliers remain vendor benchmarks.
-
-One Prometheus ecosystem engineer attempted to reproduce the high-cardinality ingestion workload and reached a very different result. Prometheus completed it in roughly two hours, while Elasticsearch repeatedly timed out and was projected to take more than forty hours.
-
-[on-screen note: One attempted reproduction—not a universal verdict]
-
-Different versions, ingestion paths, hardware and tuning can change the result, so that reproduction isn't the final word either.
-
-The honest conclusion has two layers: the architectural changes are inspectable and credible, but the size of the advantage over another system depends on the workload. If this decision affects your infrastructure bill, test your own data, queries, ingest path and hardware.
+BUT - the fact is that internal testing shows a significant improvement in both footprint of metric data in Elasticsearch, AND in query speeds. What we're really going to differ is how much smaller and how much faster it will be, according to your own setup.
 
 -----
 
 # Does this make consolidation credible?
 
-[note to self - add tradeoff bits here]
-- The trade-off is that skippers depend on physical order, so a filter unrelated to that order may benefit less than it would from a general-purpose index.
+Let's get back to the team running Elasticsearch for logs and Prometheus for metrics. Do these changes make consolidation viable?
 
+Here's something else to consider - in Elastic nine point five, Prometheus remote write and PromQL support is generally available. Prometheus can send points like ours directly into Elasticsearch, while existing PromQL and Grafana workflows can query the same metrics engine.
 
-
-
-That brings us back to the team running Elasticsearch for logs and Prometheus for metrics. Do these changes make consolidation sensible?
-
-According to Elastic's draft release announcement, Prometheus remote write and PromQL support become generally available in nine point five. Prometheus can send points like ours directly into Elasticsearch, while existing PromQL and Grafana workflows can query the same metrics engine.
+All of these, and the performance improvements, mean that this might be a pretty compelling argument for a team already operating Elastic for logs or traces.
 
 [diagram: Prometheus remote write → Elasticsearch metrics → PromQL/Grafana or ES|QL]
 
-Compatibility isn't complete. Remote write version two and staleness markers aren't supported, and PromQL still has documented gaps.
-
-There's also more to migration than query syntax. Sizing, retention, failure behaviour and existing data still matter.
-
-The strongest case is a team already operating Elastic for logs or traces, whose metrics fit the append-mostly, series-and-time shape we followed.
-
-The case is weaker if a mature Prometheus platform already works well, or metrics are the only major workload.
-
-This engineering makes consolidation technically credible. It doesn't make it automatically correct.
+Of course, I understand that typically one tool isn't the right solution for everybody. I won't pretend that it is. But these engineering changes are designed to make Metrics first-class citizens for Elasticsearch. It doesn't make consolidating automatically correct for everybody, but for may of you, it may be a compelling argument for a simplified stack that is easier to maintain, and overall potentially saves you money as well.
 
 -----
 
 # The broader direction
 
-Nine point five also previews a broader Columnar Mode, which applies the same principle beyond metrics: store fields in columns, then add other indexes only where the workload needs them.
+Now, I should point out just one more thing. Nine point five also previews Columnar Mode for Elasticsearch. This applies the same principle beyond metrics: store fields in columns, then add other indexes only where the workload needs them.
 
-Its first profile, Columnar Logs, keeps an inverted index on the message while treating the remaining fields as columns. It follows the same philosophy as the metrics work, but without the same ordering guarantees.
+Its first profile, Columnar Logs, keeps an inverted index on the message while treating the remaining fields as columns. I'd encourage you to check out information in our docs and blogs, for more info on this.
 
 -----
 
@@ -273,28 +233,10 @@ Its first profile, Columnar Logs, keeps an inverted index on the message while t
 
 [return to the final version of the point]
 
-One metric point took us through the whole change. If your metrics share its constraints—and you already run Elastic—the case for consolidation is much more credible than it was a year ago.
+One metric point took us through the whole change. If your metrics share its constraints—and you already run Elastic—the case for consolidation is a strong one. And if you're start a new observability stack which includes metrics, and you've heard that Elasticsearch might not be the right solution - well, now you know what that's about, and that those reasons no longer apply.
 
-That doesn't make Elasticsearch universally better than Prometheus. Elasticsearch didn't make metrics columnar by adding columns—it had those for years. It became columnar by learning what it could stop storing.
+For me, the most interesting part of these engineering changes was that Elasticsearch didn't optimise for metrics by adding parts. Instead, the key change was actually about giving up these existing data structures, and coming up with metric-specific solutions.
 
-[beat]
+I'd be curious to hear - if you currently run another solution for metrics alongside Elastic, what do you think of these changes? What would you still want to see, before you were to consolidate your observability solutions - let us know in the comments.
 
-If you currently run Prometheus alongside Elastic, what would Elasticsearch need to prove before you would consolidate them?
-
------
-
-# Sources and verification notes
-
-- [Time series data streams — Elastic documentation](https://www.elastic.co/docs/manage-data/data-store/data-streams/time-series-data-stream-tsds)
-- [Bringing it together: How we rebuilt Elasticsearch as a columnar metrics engine](https://www.elastic.co/search-labs/blog/elasticsearch-metrics-columnar-engine)
-- [How we rebuilt Elasticsearch as a leading columnar metrics datastore](https://www.elastic.co/search-labs/blog/elasticsearch-columnar-metrics-engine-30x-faster-prometheus)
-- [How DocValuesSkippers in Lucene 10 make range queries faster](https://www.elastic.co/search-labs/blog/docvaluesskippers-lucene-range-queries)
-- [How Elasticsearch cuts time-series storage with synthetic `_id`](https://www.elastic.co/search-labs/blog/elasticsearch-synthetic-id-time-series-storage)
-- [How Elasticsearch cuts metrics storage by dropping sequence numbers after replication](https://www.elastic.co/search-labs/blog/elasticsearch-time-series-storage-sequence-numbers)
-- [Why Elasticsearch is becoming a columnar database](https://www.elastic.co/search-labs/blog/elasticsearch-columnar-storage)
-- [PromQL limitations — Elastic documentation](https://www.elastic.co/docs/reference/query-languages/promql/promql-limitations)
-- [Prometheus remote write endpoint — Elastic documentation](https://www.elastic.co/docs/manage-data/data-store/data-streams/tsds-ingest-prometheus-remote-write)
-- [Third-party benchmark critique and reproduction](https://www.gouthamve.dev/lies-damned-lies-and-elastics-benchmarks/)
-- Elastic 9.5 all-up release announcement supplied for this draft.
-
-Availability claims for Prometheus remote write, PromQL, migration tooling, Columnar Mode, and the ES95 codec rely on the supplied Elastic 9.5 release draft and should be checked against final 9.5 documentation before recording.
+Thanks for watching - if you liked this, please like & subscribe, and I'll see you later.
