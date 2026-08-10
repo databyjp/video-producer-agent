@@ -14,9 +14,7 @@
 
 - Preview the finished result: search for `surviving alone in space` and show *Project Hail Mary* returned first.
 - Establish the promise: we will get from the empty project to this result by connecting a Python application and indexing five JSON documents.
-- Establish the value: Explain some other high-value use cases for search
-    - [TBD: examples]
-- Note that this video doesn't cover search; but ingestion only
+- Establish why - understand how to perform data ingestion, enable you to do it yourself with your own data
 
 [on-screen: outline graphic -> preview completed query being run -> graphic indicating use cases for search]
 
@@ -47,7 +45,7 @@ print(es.info())
 
 ### 3. Create the books index
 
-- Explain what an index is (equivalent of a SQL table, or NOSQL collection), why this is helpful (speed up search, establish default configs)
+- Explain what an index is (analogous of a SQL table, or NOSQL collection), why this is helpful (defines how fields are indexed and searched, speed up search)
 - We'll create an index to hold book entries
 
 ```python
@@ -56,7 +54,7 @@ es.indices.create(
     mappings={"properties": {"description": {"type": "semantic_text"}}},
 )
 
-assert es.indices.exists("book")  # confirm index exists
+assert es.indices.exists("books")  # confirm index exists
 ```
 
 - Explain what this does under the hood
@@ -66,8 +64,11 @@ assert es.indices.exists("book")  # confirm index exists
 
 - Explain the ingestion consequence: when each book is indexed, Elasticsearch automatically chunks and embeds its description and stores what it needs for semantic search.
 
+- Note to users that if the index exists, an error will be thrown; show code to delete the index
+
 [on-screen: what an index is, screencast code, show diagram of what happens upon ingestion]
 [diagram: book JSON document enters Elasticsearch; ordinary fields are indexed and the description is automatically embedded]
+
 
 ### 4. Ingest the books
 
@@ -98,9 +99,11 @@ print(f"Indexed documents: {response['count']}")
 - Show the successful completion & object count
 - Show the kibana console with documents
 
-- Go back to the code, and highlight that the the `[{"_index": "books", "_source": book} for book in books]` line can be any data.
+- Go back to the code, and highlight that the the `[{"_index": "books", "_source": book} for book in books]` line is the data being ingested. This can be any iterable of Python dictionaries whether they came from a JSON file, database, API, or your application.
 
-[on-screen: go through code, run the ingestion script, show Kibana, show on-screen recap with graphic]
+- Note to users that if the re-ingested, they'll get multiple copies of items; but can be prevented by adding unique "_id" to each document
+
+[on-screen: go through code, run the ingestion script, show docs in Kibana w/ Discover, show on-screen recap with graphic]
 
 ### 5. Prove the data is ready to search
 
@@ -128,7 +131,7 @@ for hit in resp["hits"]["hits"]:
 
 - Briefly preview what other queries are possible:
   - **Full-text:** Which books mention an exact title, author, or phrase?
-  - **Semantic:** Which books match an idea even when the wording differs? Even when languages differ?
+  - **Semantic:** Which books match an idea even when the wording differs? (Even when languages differ - w/ current default Jina model)
   - **Hybrid:** Which results best combine exact terms and semantic meaning?
   - **Aggregation:** How is the catalogue distributed by decade or author?
 - Connect the example back to the viewer’s own application: the same document pattern can represent products, documentation pages, support articles, or other application records.

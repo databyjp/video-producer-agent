@@ -801,3 +801,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Outline:** Created `projects/202608-serverless-tutorials/search-1-ingestion.md` for an ingestion-led activation video aimed at developers with an empty Elasticsearch Serverless project.
 - **Demo:** Aligned the video with the supplied quickstart's books dataset, environment variables, Python client, `semantic_text` mapping, bulk helper, and semantic-query syntax.
 - **Scope:** Kept query construction, hybrid search, and aggregations out of the tutorial body; one prewritten semantic query proves ingestion worked and previews the rest of the series.
+
+## 2026-08-10 — Reviewed Serverless ingestion outline revision
+
+- **Review:** Assessed `projects/202608-serverless-tutorials/search-1-ingestion.md` for promise, scope, technical correctness, pacing, and visual communication.
+- **Must-fix findings:** Flagged the singular `book` index assertion, the overbroad “any data” claim, and the unqualified cross-language semantic-search promise.
+- **Structure:** Recommended removing duplicated use-case coverage from the opening, framing the prewritten query explicitly as verification rather than instruction, and tightening the index explanation.
+- **Reliability:** Noted that rerunning the current script will fail at index creation or duplicate documents, so the completed example needs an explicit repeat-run/cleanup strategy.
