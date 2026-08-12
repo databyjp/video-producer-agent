@@ -36,7 +36,7 @@ from elasticsearch import Elasticsearch
 from dotenv import load_dotenv
 
 load_dotenv(overwrite=True)
-es = Elasticsearch(os.environ["ES_URL"], api_key=os.environ["ES_API_KEY"])
+es = Elasticsearch(os.getenv("ES_URL"), api_key=os.getenv("ES_API_KEY"))
 
 print(es.info())
 ```
@@ -80,7 +80,7 @@ assert es.indices.exists("books")  # confirm index exists
 from elasticsearch import helpers
 
 books = [
-    # The five books from the quickstart
+    # Books data - could be a raw list of dicts; or loaded from JSON - tbd
 ]
 
 helpers.bulk(
