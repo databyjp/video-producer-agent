@@ -808,3 +808,37 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Must-fix findings:** Flagged the singular `book` index assertion, the overbroad “any data” claim, and the unqualified cross-language semantic-search promise.
 - **Structure:** Recommended removing duplicated use-case coverage from the opening, framing the prewritten query explicitly as verification rather than instruction, and tightening the index explanation.
 - **Reliability:** Noted that rerunning the current script will fail at index creation or duplicate documents, so the completed example needs an explicit repeat-run/cleanup strategy.
+
+## 2026-08-12 — Serverless ingestion tutorial structure consultation
+
+- **Structure:** Endorsed a show-first sequence: ingest data, verify it in Kibana, demonstrate ordinary full-text search, then explain the mapping and managed embedding workflow before proving semantic retrieval.
+- **Technical distinction:** Flagged that the current recommended API is a `match` query against a `semantic_text` field; the dedicated `semantic` query is legacy for new projects. Recommended making the first match lexical by targeting a normal `text` field, then using `match` against `semantic_text` for the semantic payoff.
+- **Length:** Recommended an edited target of roughly 8–10 minutes, with setup and optional query previews cut before allowing the tutorial to exceed about 12 minutes.
+- **Verification:** Rechecked current official Elastic documentation for `semantic_text`, default Serverless inference, automatic mapping/chunking/embedding behavior, and supported query types.
+
+## 2026-08-12 — Sub-five-minute target for Serverless ingestion tutorial
+
+- **Length:** Confirmed the revised tutorial can fit under five minutes because the implementation is small, provided it uses prewritten code and focuses only on the activation path.
+- **Scope:** Recommended keeping connection details, one bulk ingestion, Kibana verification, one lexical search, a concise `semantic_text` explanation, and one semantic proof; move rerun handling and the wider query tour to supporting materials.
+
+## 2026-08-12 — Execution format for Serverless ingestion tutorial
+
+- **Recommendation:** Use a notebook for the recorded, staged demonstration if an equivalent runnable Python script is also supplied; avoid a raw REPL.
+- **Rationale:** Notebook cells support the video's ingest → verify → lexical search → explain → semantic proof sequence and keep outputs visible, while the `.py` script remains the cleaner artifact for customers adapting the example to an application.
+
+## 2026-08-12 — Serverless ingestion Jupyter notebook
+
+- **Deliverable:** Created `/Users/jphwang/code/content/202608-serverless-videos/search-1-ingestion.ipynb` with a staged connection, mapping, five-book bulk ingestion, Kibana verification prompt, lexical search, `semantic_text` explanation, and semantic-search proof.
+- **Reliability:** Used stable document IDs to make ingestion rerunnable without duplicates, explicit field mappings, environment-variable validation, and the currently recommended `match` query against `semantic_text`.
+- **Validation:** Confirmed the notebook is valid JSON and all Python code cells parse successfully. Live execution was not possible because the target repository does not currently contain a `.env` file.
+
+## 2026-08-12 — On-screen coding treatment for Serverless tutorial
+
+- **Recommendation:** Use self-recorded typing as brief visual texture, not as the primary instructional view. Keep high-signal lines at readable speed, jump-cut boilerplate, and pause on completed cells and outputs when viewers need to understand them.
+- **Composition:** Avoid making viewers divide attention between a talking head and code they must read; use the face overlay during ambient typing, then reduce or remove it for code explanation and result verification.
+
+## 2026-08-12 — Reordered Serverless ingestion tutorial outline
+
+- **Outline:** Updated `projects/202608-serverless-tutorials/search-1-ingestion.md` around the requested ingest → Kibana verification → lexical match → mapping and embeddings explanation → semantic proof sequence.
+- **Pacing:** Removed the broader query-capabilities tour and rerun/duplicate-ID asides to support a sub-five-minute cut using prewritten code.
+- **API:** Replaced the legacy `semantic` query example with the currently recommended `match` query against the `semantic_text` field.
