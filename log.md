@@ -842,3 +842,11 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Outline:** Updated `projects/202608-serverless-tutorials/search-1-ingestion.md` around the requested ingest → Kibana verification → lexical match → mapping and embeddings explanation → semantic proof sequence.
 - **Pacing:** Removed the broader query-capabilities tour and rerun/duplicate-ID asides to support a sub-five-minute cut using prewritten code.
 - **API:** Replaced the legacy `semantic` query example with the currently recommended `match` query against the `semantic_text` field.
+
+## 2026-08-12 — Drafted Serverless Python ingestion video script
+
+- **Script:** Created `projects/202608-serverless-tutorials/script.md`, using the Elastic 9.5 release-highlights script as the voice and formatting reference.
+- **Structure:** Followed the approved connect → ingest → Discover → lexical match → `semantic_text` explanation → semantic match sequence.
+- **Length control:** Kept the spoken draft to roughly 520 words versus roughly 828 in the 5.5-minute reference video, leaving room for screencast actions while targeting a final runtime below the reference.
+- **Verification:** Checked all Python snippets for syntax and verified current official guidance for Serverless connection details, data views, bulk ingestion, `semantic_text` automation, and `match` queries.
+- **Recording gate:** Left a TODO to validate the final dataset and semantic query together before recording, ensuring the result demonstrates meaning rather than keyword overlap.
