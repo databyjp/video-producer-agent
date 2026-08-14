@@ -16,7 +16,7 @@ timestamp: 2026-08-12T16:34:57Z
 [JP name & title in chyron]
 Hey there, let me show you how to turn your data into a searchable resource with Elasticsearch.
 
-We'll connect to Elasticsearch and add data, view it in Kibana, and even run lexical and semantic searches - all in just a few minutes.
+We add data, view it in Kibana, and even run lexical and semantic searches, in just a few minutes.
 
 [on-screen: overlay showing each stage]
 
@@ -26,11 +26,11 @@ We'll connect to Elasticsearch and add data, view it in Kibana, and even run lex
 
 First, we need the connection details - the URL and the API key.
 
-Open your Serverless project. At the time of recording, it conveniently opens the "Getting Started" page, which has the URL, and a default API key that's created for you. You can copy each one with this copy button.
+Open your Serverless project. At the time of recording, it opens the "Getting Started" page, which has the URL, and a default API key that's created for you. You can copy each one with this copy button.
 
 [screen recording: browser: Show new instance; Kibana w/ Getting Started -> screencast in Jupyter]
 
-Let's put these values into an `.env` file so avoid hard-coding them.
+Let's put these values into an `.env` file to avoid hard-coding them.
 
 ```dotenv
 ES_URL="YOUR_ELASTICSEARCH_ENDPOINT"
@@ -40,6 +40,8 @@ ES_API_KEY="YOUR_ENCODED_API_KEY"
 Now, we actually have everything we need.
 
 [narrate through video of typing]
+
+[Show cell installing requirements]
 
 We'll import the required pieces,
 load the environment variables,
@@ -71,7 +73,7 @@ Now, we're ready to send data to Elasticsearch
 
 [show one book dictionary, then reveal the five-item dataset]
 
-Here's a list of books - each containing a title, author, release year, and description. This can be in any form; we've just kept it as a list for simplicity.
+Here's a list of books - each containing a title, author, release year, and description. This could be any data here.
 
 First, I'll create an index called `books`.
 
@@ -148,9 +150,9 @@ We get *Project Hail Mary* - because those words appear in the title.
 
 Let me show you one more cool thing you can do with Elasticsearch.
 
-What if we wanted to search the documents, without the exact matches?
+What if we wanted to search the documents, without using the same words?
 
-Here's another `match` query - with the phrase "surviving alone in space".
+Here's another query - with the phrase "surviving alone in space".
 
 ```python
 resp = es.search(
@@ -167,9 +169,14 @@ for hit in resp["hits"]["hits"]:
     print(hit["_score"], hit["_source"]["title"])
 ```
 
-And *Project Hail Mary* is ranked first again. Even though there's no exact match, we were able to find the right object.
+And *Project Hail Mary* is ranked first again. Even though there's no exact match, we were able to find the right document.
 
-That's because this time, we targetted the `semantic_text` description, and we were able to make use of Elasticsearch and Jina's semantic, or vector, search capabilities. But we'll talk more about that another time.
+That's because this time, we targeted the `description`.
+
+[show mapping code again]
+This is why the mapping that we set up was important. The `description` field was set up as `semantic_text`, which told Elasticsearch to set it up for semantic, or vector, search, that makes use of Jina's embedding models by default.
+
+But we can talk more about that another time.
 
 -----
 
@@ -177,7 +184,7 @@ That's because this time, we targetted the `semantic_text` description, and we w
 
 As you can see, you can turn static data into a searchable set of documents in just a few steps. I showed a small list of books data, but it can be any format, and any size.
 
-Once you've created an index and ingested documents into Elasticsearch - they're immediately available for searches, including meaning-based semantic searches.
+Once you've created an index and ingested documents into Elasticsearch - they're available for searches, including meaning-based semantic searches.
 
 I've got links to the resources nearby, so you can try it out yourself.
 

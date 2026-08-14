@@ -850,3 +850,12 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Length control:** Kept the spoken draft to roughly 520 words versus roughly 828 in the 5.5-minute reference video, leaving room for screencast actions while targeting a final runtime below the reference.
 - **Verification:** Checked all Python snippets for syntax and verified current official guidance for Serverless connection details, data views, bulk ingestion, `semantic_text` automation, and `match` queries.
 - **Recording gate:** Left a TODO to validate the final dataset and semantic query together before recording, ensuring the result demonstrates meaning rather than keyword overlap.
+
+## 2026-08-12 — Reviewed revised Serverless ingestion script
+
+- **Review:** Assessed `projects/202608-serverless-tutorials/script.md` against the project outline, the requested customer journey, current Elastic documentation, and the sub-five-minute constraint.
+- **Strengths:** The revision is more natural in JP's demo voice, has a clean activation path, and remains comfortably shorter than the 5.5-minute release-video reference at roughly 489 spoken words.
+- **Must-fix:** Flagged the mismatch between narration and code in the semantic section: the script calls it a `match` query but uses the legacy `semantic` query. Current guidance recommends `match` against `semantic_text` for new projects.
+- **Promise:** Flagged that the requested mapping/embedding explanation has mostly disappeared and now comes after the semantic demo; recommended a compact explanation before the proof query.
+- **Usability:** Flagged that Discover normally needs a data view unless using ES|QL, and that the script omits installation of `elasticsearch` and `python-dotenv`.
+- **Claims:** Recommended narrowing “any form, any format, and any size” and verifying the current Getting Started/default-API-key UI against a fresh customer project before recording.
