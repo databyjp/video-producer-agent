@@ -859,3 +859,34 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Promise:** Flagged that the requested mapping/embedding explanation has mostly disappeared and now comes after the semantic demo; recommended a compact explanation before the proof query.
 - **Usability:** Flagged that Discover normally needs a data view unless using ES|QL, and that the script omits installation of `elasticsearch` and `python-dotenv`.
 - **Claims:** Recommended narrowing “any form, any format, and any size” and verifying the current Getting Started/default-API-key UI against a fresh customer project before recording.
+
+## 2026-08-14 — Created designer briefs for Serverless ingestion tutorial
+
+- Created three ready-to-use task briefs in `projects/202608-serverless-tutorials/tasks/` for the custom screen overlays required by the script: the tutorial journey overview, the `semantic_text` ingestion explainer, and the completed-path wrap-up.
+- Used the Elastic 9.5 designer task descriptions in `/Users/jphwang/code/agent-sandboxes/designer/tasks/26-07-9-5-release/` as references for concise, video-readable content organization.
+- Kept the briefs semantic rather than stylistic and excluded code cells, Kibana recordings, and the standard name chyron because those are editor-time or template assets rather than custom designer deliverables.
+
+## 2026-08-14 — Completed non-code graphic coverage for Serverless tutorial
+
+- Added designer briefs for the presenter chyron, API-key safety callout, and full-text-versus-semantic-search comparison.
+- Expanded the tutorial overview brief to request five reusable progress states, eliminating the need for separate section-title graphics.
+- The complete custom-graphics set now covers the opening identity and journey, credential safety, semantic ingestion explanation, search-mode comparison, and closing recap. Kibana/product UI and all Jupyter/code/results remain screen-recorded editor assets.
+
+## 2026-08-14 — Added persistent tutorial section-frame brief
+
+- Added `projects/202608-serverless-tutorials/tasks/design-tutorial-section-frame.md` for a partly transparent compositing overlay that reserves separate demo and talking-head regions while keeping the current tutorial stage visible.
+- Specified five section states, a compact five-stage journey indicator, caption safety, editable independent regions, transparent exports, and a mirrored talking-head option.
+- Simplified the opening-overview brief so its progress variants are handled by the new persistent frame rather than duplicated.
+
+## 2026-08-14 — Reframed Serverless tutorial wrap-up graphic
+
+- Revised `projects/202608-serverless-tutorials/tasks/design-tutorial-wrap-up.md` so the closing graphic no longer mirrors the introduction's five-stage workflow.
+- The new proposal reinforces three transferable ideas: source data becomes documents, mappings determine search behavior, and bulk ingestion carries the same document pattern from a five-book demo to larger batched datasets.
+- Added explicit claim boundaries so the visual does not imply universal format compatibility, unlimited scale, or that the tutorial notebook is a complete production ingestion architecture.
+
+## 2026-08-18 — Created Gemini Enterprise–Elastic system diagram brief
+
+- Reviewed `/Users/jphwang/code/content/202608-gcloud-video/video-outline.md`, the supplied architecture reference, and the implemented Cloud Run A2A proxy.
+- Created `/Users/jphwang/code/content/202608-gcloud-video/tasks/design-gemini-elastic-system-diagram.md` for a concise user → Gemini Enterprise → Cloud Run proxy → Elastic Agent Builder → observability-data flow.
+- Corrected the reference diagram's semantics by treating the A2A agent card as registration metadata rather than a runtime node and replacing its unrelated products/vector-search endpoint with logs, metrics, and traces.
+- Requested separate current-demo and planned OAuth states, with explicit IAM/API-key boundaries and the proxy marked as temporary.

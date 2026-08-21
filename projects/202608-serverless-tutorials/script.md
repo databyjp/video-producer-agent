@@ -26,7 +26,7 @@ We add data, view it in Kibana, and even run lexical and semantic searches, in j
 
 First, we need the connection details - the URL and the API key.
 
-Open your Serverless project. At the time of recording, it opens the "Getting Started" page, which has the URL, and a default API key that's created for you. You can copy each one with this copy button.
+Open your Serverless project. Go to the "Getting Started" page here. It will have the URL, either use the default API key that's created for you, or if not, create one with the default settings.
 
 [screen recording: browser: Show new instance; Kibana w/ Getting Started -> screencast in Jupyter]
 
