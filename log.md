@@ -890,3 +890,25 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Created `/Users/jphwang/code/content/202608-gcloud-video/tasks/design-gemini-elastic-system-diagram.md` for a concise user → Gemini Enterprise → Cloud Run proxy → Elastic Agent Builder → observability-data flow.
 - Corrected the reference diagram's semantics by treating the A2A agent card as registration metadata rather than a runtime node and replacing its unrelated products/vector-search endpoint with logs, metrics, and traces.
 - Requested separate current-demo and planned OAuth states, with explicit IAM/API-key boundaries and the proxy marked as temporary.
+
+## 2026-08-21 — Reviewed TSDS metrics-engine script
+
+- **Review:** Assessed `projects/202606-columnar-store/draft-script-v5.md` against its outline, channel script guidance, Elastic's current TSDS, remote-write, PromQL, and Columnar Mode documentation.
+- **Must-fix:** Flagged overbroad update/concurrency tradeoffs, unsupported certainty around PromQL GA and workflow compatibility, and a conclusion that turns a mechanism explainer into an unqualified consolidation recommendation.
+- **Accuracy:** Confirmed the core TSDS, skipper, synthetic-ID, and sequence-number narrative. Updated [Elastic 9.5 Metrics GA](wiki/elastic-9-5-metrics-ga.md) to record the current documentation-status ambiguity for PromQL.
+- **Craft:** Flagged the repeated opening, missing decision criteria, and a focused spoken-language cleanup pass for grammar, density, and promotional phrasing.
+
+## 2026-08-21 — Revised TSDS metrics-engine script
+
+- **Script:** Made a restrained structural pass on `projects/202606-columnar-store/draft-script-v5.md`, cutting repeated setup while preserving the one-metric-point narrative and existing technical sequence.
+- **Examples:** Added a concrete point representation, a dimension-skipping example, a real-query screencast cue, and an optional Prometheus-to-Grafana workflow demonstration.
+- **Decision:** Replaced the generic consolidation pitch with strong-fit and weak-fit cases, folded the Columnar Mode aside into the decision section, and tightened the conclusion around the central subtraction insight.
+
+## 2026-08-21 — Reviewed spoken voice in TSDS script revision
+
+- **Finding:** The structural changes improved pace and decision value, but several sentence-level cleanups shifted JP's conversational phrasing toward polished written prose.
+- **Recommendation:** Preserve the structural additions while restoring conversational connectors, direct second-person language, reaction beats, and concrete verbs in the intro, `_id` explanation, consolidation cases, and conclusion.
+- **Revision:** Reviewed the full diff and reverted copy-editing changes that did not materially improve structure, clarity, grammar, or the requested examples. Retained the shorter opening, concrete demonstrations, decision criteria, and corrections to broken sentences.
+- **Strict rollback:** After a second diff review, restored the original wording and section structure almost everywhere. The remaining script diff is limited to one repeated paragraph removal, concrete visual and screencast additions, the dimension example, consolidation fit criteria, the conclusion fix, and clear grammatical errors.
+- **Final triage:** Identified only three remaining high-value copy changes: state the subtraction insight in the opening, split the awkward metrics-bargain sentence, and break the conclusion callback into speakable beats. No further structural consolidation is recommended.
+- **Applied:** Made those three spoken-language changes, corrected “there's still a couple,” and attributed the benchmark statement to “our internal testing.”

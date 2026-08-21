@@ -3,7 +3,7 @@ type: Concept
 title: "Elastic 9.5 Metrics GA"
 description: "How to explain the GA Prometheus migration path and metrics-efficiency claims in Elastic 9.5."
 tags: [elastic, elasticsearch, observability, metrics, prometheus, promql, grafana]
-timestamp: 2026-07-27T10:58:00+01:00
+timestamp: 2026-08-21T13:01:08Z
 ---
 
 # Core explanation
@@ -26,7 +26,7 @@ This is a first-party workload result. It should be attributed and separated fro
 
 # Honest boundaries
 
-- PromQL compatibility is not complete; public documentation lists unsupported constructs and semantic differences.
+- PromQL compatibility is not complete; public documentation lists unsupported constructs and semantic differences. As of 2026-08-21, the remote-write endpoint is documented as GA in Elastic Stack 9.5, while the PromQL reference still labels Elastic Stack support as Preview from 9.4. Do not call the complete PromQL path GA without confirming the final release-specific documentation.
 - The native endpoint currently documents Prometheus remote-write version one, not version two, and does not support staleness markers.
 - Deployment-specific ingestion guidance differs: Elastic Cloud Serverless documentation recommends managed inputs.
 - Competitive claims of up to thirty-times faster queries and two-and-a-half-times better storage have received methodological criticism and should not be repeated as universal outcomes.
@@ -35,7 +35,7 @@ This is a first-party workload result. It should be attributed and separated fro
 
 - Lead with “migrate without rewriting,” not “Elasticsearch is faster than Prometheus.”
 - Show the existing workflow surviving: Prometheus remote write, Grafana query, then optional ES|QL post-processing.
-- State GA status clearly because it distinguishes this section from the release's preview-heavy architectural changes.
+- State the confirmed GA status of Prometheus remote write clearly. Qualify PromQL compatibility and its availability until the final release-specific documentation resolves its status.
 - Mention compatibility limits without turning a release highlight into an exhaustive support matrix.
 
 # Sources
