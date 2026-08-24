@@ -937,3 +937,17 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Finding:** The historical summary at lines 15–31 and the detailed explanation at lines 35–65 perform the same setup, repeat the fan-out, and create a false restart.
 - **Recommendation:** Keep one “What used to happen to the point” section, state the video promise in the intro, and reveal each historical structure once as it is explained.
 - **Applied:** Merged the two setups in `projects/202606-columnar-store/draft-script-v5.md`, removed the repeated fan-out and superhero analogy, and added a direct transition into the metrics-specific redesign.
+
+## 2026-08-24 — Recreated opening graphic brief for TSDS metrics video
+
+- Created `/Users/jphwang/code/agent-sandboxes/designer/tasks/202606-columnar-store/01-opening-metric-point.md` from the current script.
+- The brief introduces the four-field metric point, preserves it through the transition, and then contrasts the historical fan-out with the recent reduced metrics-storage state.
+- Requested separable animation states and reusable components for later graphics, with claim boundaries for metrics-only index removal, existing doc values, synthetic identity, and delayed sequence-number trimming.
+
+## 2026-08-24 — Reviewed remaining TSDS script flow and repetition
+
+- **Finding:** The mechanism sequence flows clearly, and the repeated historical query works as a deliberate before-and-after callback.
+- **Must-fix:** `What a metric point actually needs` states the workload properties in prose, repeats them in the ledger, summarizes the bargain, and then summarizes the before-and-after state again. Recommended making the ledger carry the explanation and keeping one transition into the mechanisms.
+- **Must-fix:** The evidence section gives storage benchmark numbers, then says it will not discuss benchmark numbers and follows with a second vague performance claim. Recommended one attributed evidence paragraph with workload-specific limits.
+- **Polish:** The Columnar Mode aside interrupts the path from the consolidation verdict to the conclusion. Recommended cutting it or reducing it to one forward-looking sentence.
+- **Preserve:** Keep the filtering, synthetic-ID, and sequence-number recaps, plus the final return to the metric point. These orient the viewer and close the argument rather than merely duplicate it.
