@@ -8,37 +8,19 @@ At ten-oh-three, this point was born - to tell us that the checkout service on `
 
 It's a useful, but simple signal containing a few data points.
 
-Recently, Elasticsearch has made significant changes to how it works with metrics, making it significantly smaller and faster to query. And it got there mostly by taking things away. To understand how, let’s take a look at what **used** to happen to this point.
+Recently, Elasticsearch has changed how it stores and queries metrics, reducing their storage footprint and speeding up queries. And it got there mostly by taking things away.
 
------
+What are these structures? What's disappeared? What still works? And does this make consolidating an observability stack technically credible?
 
-Historically, putting metrics points into Elasticsearch meant organising parts of this data separately for faster retrieval.
-
-Parts of the data point would exist multiple times - in some combination of doc values, a BKD tree, an inverted index for example.
-
-Each metric also needed an indexed `_id` and a sequence number.
-
-[animate the point fanning out into doc values, filtering indexes, `_id`, and `_seq_no`]
-
-These data structures power fast searches and filtering for Elasticsearch for a variety of workloads. But they also make this *tiny* point more expensive to store and index.
-
-Historically, this is why teams using Elasticsearch for logs often used a different system like Prometheus to store their metrics.
-
-In this video, I want to focus not on the high-level specs and claims, but on the engineering under the hood.
-
-What are these structures, what's disappeared, what still works, and whether this makes consolidating an observability stack technically credible.
-
-To do that, let’s follow this point through our changes.
+To find out, let's follow this point through those changes.
 
 -----
 
 # What used to happen to the point
 
-This is what used to happen.
-
 When our point arrived, Elasticsearch organised data from each field to give it the full flexibility of a general-purpose search engine.
 
-[return to the original fan-out; highlight each structure as it is explained]
+[animate the point fanning out; reveal each structure as it is explained]
 
 First of all, each value went into the appropriate set of doc values. Doc values store each field as a column. They let Elasticsearch sort, aggregate and read values efficiently.
 
@@ -52,17 +34,17 @@ And finally, it stored a sequence number to replicate the write correctly and to
 
 [show the complete old point and all of its surrounding structures]
 
-Each of these plays a role in speeding up queries, like a team of superheroes with complementary powers.
-
 Imagine asking for the average request rate from `web-03` over the last day.
 
 The inverted index finds the right host, the BKD tree finds the right time range, and doc values supply the timestamps and counter values for the calculation.
 
 [trace the query through each old structure]
 
-That's great, but it also means storing some of the same information more than once, which of course means extra footprint, and indexing steps.
+That flexibility made queries fast. But it also meant storing some of the same information more than once, adding both storage and indexing work.
 
-Now, let me show you what happens now when you ingest a metric point.
+This overhead is one reason teams using Elasticsearch for logs have often used a separate system like Prometheus for metrics.
+
+So, what can Elasticsearch remove when it knows this point is a metric?
 
 -----
 

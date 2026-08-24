@@ -912,3 +912,28 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Strict rollback:** After a second diff review, restored the original wording and section structure almost everywhere. The remaining script diff is limited to one repeated paragraph removal, concrete visual and screencast additions, the dimension example, consolidation fit criteria, the conclusion fix, and clear grammatical errors.
 - **Final triage:** Identified only three remaining high-value copy changes: state the subtraction insight in the opening, split the awkward metrics-bargain sentence, and break the conclusion callback into speakable beats. No further structural consolidation is recommended.
 - **Applied:** Made those three spoken-language changes, corrected “there's still a couple,” and attributed the benchmark statement to “our internal testing.”
+
+## 2026-08-24 — Created opening graphic brief for TSDS metrics video
+
+- Created `/Users/jphwang/code/agent-sandboxes/designer/tasks/202606-columnar-store/01-opening-metric-point.md` for the opening metric-point reveal and its transition into the historical storage fan-out.
+- Specified four reusable states: point, field reveal, historical structures, and the recent reduced structure set.
+- Preserved claim boundaries around metrics-only index removal, synthetic identity, sequence-number trimming, and the fact that doc values predate the recent changes.
+
+## 2026-08-24 — Created next two TSDS graphics briefs
+
+- Created `/Users/jphwang/code/agent-sandboxes/designer/tasks/202606-columnar-store/02-historical-query-path.md` for tracing a host-and-time metrics query through the historical inverted index, BKD tree, and doc values.
+- Created `/Users/jphwang/code/agent-sandboxes/designer/tasks/202606-columnar-store/03-metrics-properties-ledger.md` for the four workload-property-to-storage-opportunity relationships in the “metrics bargain.”
+- Kept both briefs animation-ready, tied them to the recurring metric point, and separated historical query behavior from the later implementation mechanisms.
+
+## 2026-08-24 — Completed TSDS explanatory graphics briefs
+
+- Added five designer briefs under `/Users/jphwang/code/agent-sandboxes/designer/tasks/202606-columnar-store/`: `_tsid` ordering and skippers, synthetic `_id` lookup, sequence-number lifecycle, the current columnar query path, and Prometheus workflow continuity.
+- Defined reusable animation states and transitions around the same metric point rather than treating the graphics as unrelated slides.
+- Added mechanism-specific claim boundaries for skipper pruning, Bloom-filter uncertainty, checkpoint-before-merge timing, columnar query execution, and PromQL compatibility.
+- The task set now contains eight main explanatory graphics briefs for the full script.
+
+## 2026-08-24 — Reviewed opening section boundary in TSDS script
+
+- **Finding:** The historical summary at lines 15–31 and the detailed explanation at lines 35–65 perform the same setup, repeat the fan-out, and create a false restart.
+- **Recommendation:** Keep one “What used to happen to the point” section, state the video promise in the intro, and reveal each historical structure once as it is explained.
+- **Applied:** Merged the two setups in `projects/202606-columnar-store/draft-script-v5.md`, removed the repeated fan-out and superhero analogy, and added a direct transition into the metrics-specific redesign.
