@@ -951,3 +951,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - **Must-fix:** The evidence section gives storage benchmark numbers, then says it will not discuss benchmark numbers and follows with a second vague performance claim. Recommended one attributed evidence paragraph with workload-specific limits.
 - **Polish:** The Columnar Mode aside interrupts the path from the consolidation verdict to the conclusion. Recommended cutting it or reducing it to one forward-looking sentence.
 - **Preserve:** Keep the filtering, synthetic-ID, and sequence-number recaps, plus the final return to the metric point. These orient the viewer and close the argument rather than merely duplicate it.
+
+## 2026-08-24 — Tightened TSDS script repetition and confirmed PromQL GA
+
+- Revised `projects/202606-columnar-store/draft-script-v5.md` to make the workload ledger carry its explanation, remove a duplicate skipper summary, compress the synthetic-ID setup, and consolidate the evidence caveat.
+- Moved the Columnar Mode aside into one sentence in the conclusion and replaced the two-part comment prompt with one specific consolidation question.
+- Preserved the historical/current query callback and the final return to the metric point.
+- Verified Elastic's published August 4 release announcement, which confirms native Prometheus and PromQL support as GA in 9.5. Updated `sources/elastic-9-5-release-blog-draft.md`, `wiki/elastic-9-5-metrics-ga.md`, and `index.md` to replace the stale pre-publication status.

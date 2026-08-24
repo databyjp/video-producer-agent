@@ -3,7 +3,7 @@ type: Concept
 title: "Elastic 9.5 Metrics GA"
 description: "How to explain the GA Prometheus migration path and metrics-efficiency claims in Elastic 9.5."
 tags: [elastic, elasticsearch, observability, metrics, prometheus, promql, grafana]
-timestamp: 2026-08-21T13:01:08Z
+timestamp: 2026-08-24T16:01:52+01:00
 ---
 
 # Core explanation
@@ -16,7 +16,7 @@ The migration path has three parts:
 2. Grafana can query Elasticsearch through a Prometheus-compatible API.
 3. The ES|QL `PROMQL` source command evaluates PromQL through the ES|QL runtime and makes its results available to the rest of an ES|QL pipeline.
 
-The 9.5 release draft describes these capabilities, plus migration tooling for Grafana and Datadog dashboards and alerts, as generally available.
+Elastic's published 9.5 release announcement confirms that native Prometheus and PromQL support are generally available. It also describes generally available migration tooling for Grafana and Datadog dashboards and alerts.
 
 # Storage story
 
@@ -26,7 +26,7 @@ This is a first-party workload result. It should be attributed and separated fro
 
 # Honest boundaries
 
-- PromQL compatibility is not complete; public documentation lists unsupported constructs and semantic differences. As of 2026-08-21, the remote-write endpoint is documented as GA in Elastic Stack 9.5, while the PromQL reference still labels Elastic Stack support as Preview from 9.4. Do not call the complete PromQL path GA without confirming the final release-specific documentation.
+- PromQL compatibility is not complete; public documentation lists unsupported constructs and semantic differences. Elastic's published 9.5 announcement confirms that native PromQL support is GA, even if some reference pages still contain older preview labels.
 - The native endpoint currently documents Prometheus remote-write version one, not version two, and does not support staleness markers.
 - Deployment-specific ingestion guidance differs: Elastic Cloud Serverless documentation recommends managed inputs.
 - Competitive claims of up to thirty-times faster queries and two-and-a-half-times better storage have received methodological criticism and should not be repeated as universal outcomes.
@@ -35,12 +35,12 @@ This is a first-party workload result. It should be attributed and separated fro
 
 - Lead with “migrate without rewriting,” not “Elasticsearch is faster than Prometheus.”
 - Show the existing workflow surviving: Prometheus remote write, Grafana query, then optional ES|QL post-processing.
-- State the confirmed GA status of Prometheus remote write clearly. Qualify PromQL compatibility and its availability until the final release-specific documentation resolves its status.
+- State the confirmed GA status of native Prometheus and PromQL support clearly. Mention compatibility limits where they affect a demonstrated workflow.
 - Mention compatibility limits without turning a release highlight into an exhaustive support matrix.
 
 # Sources
 
-- [Draft: Elastic 9.5 All-Up Release Announcement](../sources/elastic-9-5-release-blog-draft.md)
+- [Elastic 9.5 Release Announcement](../sources/elastic-9-5-release-blog-draft.md)
 - [PromQL reference](https://www.elastic.co/docs/reference/query-languages/promql)
 - [Prometheus remote write endpoint](https://www.elastic.co/docs/manage-data/data-store/data-streams/tsds-ingest-prometheus-remote-write)
 - Elastic DevRel Wiki: `sources/elasticsearch-columnar-metrics-engine.md`

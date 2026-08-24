@@ -26,7 +26,7 @@ Elastic published this corporate release announcement on August 4, 2026. It conf
 - Existing Grafana workflows can query Elasticsearch through Prometheus-compatible interfaces.
 - A generally available migration tool is described for Grafana and Datadog dashboards and alerts.
 - The ES95 codec is claimed to reduce the prior metrics footprint by roughly another twenty percent, to about three bytes per sample.
-- The draft repeats first-party claims of up to two-and-a-half-times better storage efficiency and up to thirty-times faster queries than Prometheus.
+- The announcement makes first-party claims of up to two-and-a-half-times better storage efficiency and up to thirty-times faster queries than Prometheus.
 
 The competitive benchmark multipliers are first-party claims with known methodological criticism. They should not be presented as universal outcomes without a reproducible workload and resource comparison.
 
@@ -34,7 +34,7 @@ The competitive benchmark multipliers are first-party claims with known methodol
 
 AlertZero is presented as a goal rather than a product: the SOC equivalent of inbox zero, where agents and analysts reduce a raw alert queue to the attacks that merit attention.
 
-Attack Discovery is the capability positioned as moving teams toward that goal. The draft says its 9.5 investigation can:
+Attack Discovery is the capability positioned as moving teams toward that goal. The announcement says its 9.5 investigation can:
 
 - Threat-hunt raw events beyond the alerts that first fired.
 - Check entity risk and seek corroborating evidence.
@@ -43,7 +43,7 @@ Attack Discovery is the capability positioned as moving teams toward that goal. 
 
 A separate Alert Analysis workflow is described as classifying alerts as true or false positives before Attack Discovery investigates the cleaner set.
 
-The draft explicitly says AlertZero does not mean zero alerts or replacing analysts. Human judgment remains responsible for validating findings and approving changes.
+The announcement explicitly says AlertZero does not mean zero alerts or replacing analysts. Human judgment remains responsible for validating findings and approving changes.
 
 # Other solution updates
 

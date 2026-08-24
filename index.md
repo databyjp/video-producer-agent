@@ -8,7 +8,7 @@ Master catalog of all pages in this knowledge bundle.
 
 ## Sources
 
-- [Draft: Elastic 9.5 All-Up Release Announcement](sources/elastic-9-5-release-blog-draft.md) — Pre-publication platform, observability, security, metrics, and AI-agent launch claims for Elastic 9.5
+- [Elastic 9.5 Release Announcement](sources/elastic-9-5-release-blog-draft.md) — Published platform, observability, security, metrics, and AI-agent launch claims for Elastic 9.5
 - [Draft: Why Elasticsearch Is Becoming a Columnar Database](sources/elastic-columnar-mode-draft-article.md) — Pre-publication rationale, behavior, workload boundaries, and roadmap for Columnar Mode
 - [Draft: Querying S3 Directly with ES|QL Data Federation](sources/esql-data-federation-draft-article.md) — Pre-publication S3 federation architecture, query capabilities, performance claims, and validation risks
 - [YouTube Help — Search, Discovery, and Content Performance](sources/youtube-search-discovery-official.md) — Official YouTube guidance on recommendations, search, analytics, metadata, and experiments
