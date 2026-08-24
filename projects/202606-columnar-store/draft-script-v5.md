@@ -50,13 +50,9 @@ So, what can Elasticsearch remove when it knows this point is a metric?
 
 # What a metric point actually needs
 
-The first difference is that Elasticsearch knows this is a metric point, which has a much narrower (but still rich and fulfilling) life than a typical document.
+The difference is that a metric point has a much narrower, but still rich and fulfilling, life than a typical document.
 
-For one, it's write-once, never-updated data. Also, it's got cool uniqueness properties. Its service and host dimensions identify the series it belongs to, and its timestamp is a unique identifier within that series.
-
-Metrics queries are predictable, too. Typically the analyst would choose the series and a time range, then aggregate a few numeric fields. They don't need arbitrary full-text search across every value, or the full update and concurrency behaviour of a mutable document.
-
-[on-screen ledger]
+[on-screen ledger; highlight each row as it is explained]
 
 | Property of our point | Opportunity |
 |---|---|
@@ -65,13 +61,13 @@ Metrics queries are predictable, too. Typically the analyst would choose the ser
 | It is append-mostly | Trim its sequence number later |
 | Queries need only a few fields | Keep processing columnar |
 
-This is the bargain behind the redesign: Elasticsearch can store less because metrics behave in a more predictable way. And analysing metrics is very different from, say, searching a database of articles or even logs.
+It belongs to a series and time range, so Elasticsearch can replace the heavier filtering indexes. Its series and timestamp already identify it, so Elasticsearch can derive its `_id`. It's append-mostly, so its sequence number doesn't need to live forever. And queries usually need only a few fields, so processing can stay columnar.
+
+That's the bargain behind the redesign: metrics behave predictably, so Elasticsearch can keep doc values front and centre while removing or shrinking the structures around them.
 
 [show the old and new point side by side; reveal the filtering indexes, indexed `_id`, and long-lived `_seq_no` disappearing]
 
-So here's what our point looks like in Elasticsearch. Doc values remain front and centre, but several structures around them have either become much smaller or disappeared entirely.
-
-Let's look at each of those changes, starting with the filtering indexes.
+Let's look at each change, starting with the filtering indexes.
 
 -----
 
@@ -103,8 +99,6 @@ Now, if we ask for the last day again, our point's block overlaps that range, so
 
 This only works because the data is ordered. If timestamps were scattered randomly, almost every block could contain both old and new values. Each block's minimum and maximum would cover a huge range, and the skipper would tell us almost nothing.
 
-Instead of building a separate tree structure over every timestamp, the doc value skipper leverages the inherent structure of timestamps and the nature of queries to speed up queries.
-
 [briefly scramble the timestamp column; show the ranges overlapping; restore the ordered version]
 
 Grouping by series gives the dimension columns the same kind of useful correlation. For our host filter, if a block's summary says it can't contain `web-03`, Lucene can skip that block too.
@@ -121,13 +115,11 @@ But there are still a couple of additional changes - like how to manage lookups 
 
 # Removing the dedicated `_id` index
 
-When dealing with, say, logs, Elasticsearch keeps a dedicated inverted index for object `_id`s.
+Elasticsearch normally keeps a dedicated inverted index for object `_id`s. That supports direct lookups and duplicate detection.
 
 [highlight the `_id` index]
 
-This supports direct lookups and duplicate detection. It's useful, but again, for such lightweight signals like metrics - the question is: is there a way to replace it?
-
-And the solution, again, relates to uniqueness of metric points. Each one already has a natural identity, in that the `_tsid` identifies its series, and the timestamp identifies a unique point inside it.
+But our metric point already has a natural identity. The `_tsid` identifies its series, and the timestamp identifies a unique point inside it.
 
 [combine `_tsid` and timestamp into a synthetic `_id`]
 
@@ -165,7 +157,7 @@ Giving us an even smaller footprint, in exchange for single-document updates and
 
 [show before and after side by side]
 
-That's a lot of pretty clever engineering work. So what did it do? Well, Elastic reports that its OpenTelemetry footprint fell from twenty-five bytes per point to three point seven five in nine point four. In nine point five, another codec update brings that down to roughly three bytes.
+That's a lot of pretty clever engineering work. So what did it do? Elastic reports that its OpenTelemetry footprint fell from twenty-five bytes per point to three point seven five in nine point four. In nine point five, another codec update brings that down to roughly three bytes. Those are Elastic's workload results, so your own storage and query gains will depend on your data, ingest pattern and queries.
 
 So - does it work? Let's return to the query we started with, and ask for a request rate by host over the last day. The query might look something like this:
 
@@ -192,10 +184,6 @@ When the query calculates the hourly results for `web-03`, it would include our 
 
 [follow the point from its column into the `web-03` rate and then the final chart]
 
-I won't talk about the benchmark numbers so much here. They vary according to so many variables, and what's indicative for one user's workload might not be for another.
-
-BUT - our internal testing shows a significant improvement in both the footprint of metric data in Elasticsearch and in query speeds. What's really going to differ is how much smaller and faster it will be in your own setup.
-
 -----
 
 # Does this make consolidation credible?
@@ -216,22 +204,16 @@ So yes, these changes make consolidation technically credible. Just not automati
 
 -----
 
-# The broader direction
-
-Now, I should point out just one more thing. Nine point five also previews Columnar Mode for Elasticsearch. This applies the same principle beyond metrics: store fields in columns, then add other indexes only where the workload needs them.
-
-Its first profile, Columnar Logs, keeps an inverted index on the message while treating the remaining fields as columns. I'd encourage you to check out information in our docs and blogs, for more info on this.
-
------
-
 # Conclusion
 
 [return to the final version of the point]
 
-One metric point took us through the whole change. It could lose all those extra structures because metrics are predictable. They're mostly written once. Their series and timestamp give each point an identity. And we tend to query them in a few familiar ways.
+One metric point took us through the whole change. It could lose those extra structures because metrics are predictable. They're mostly written once. Their series and timestamp give each point an identity. And we tend to query them in a few familiar ways.
 
-For me, the most interesting part of these engineering changes was that Elasticsearch didn't optimise for metrics by adding parts. Instead, the key change was actually about giving up these existing data structures, and coming up with metric-specific solutions.
+Elasticsearch optimised for those properties by subtraction: it kept columns central and replaced general-purpose structures with metrics-specific solutions.
 
-I'd be curious to hear - if you currently run another solution for metrics alongside Elastic, what do you think of these changes? What would you still want to see, before you were to consolidate your observability solutions - let us know in the comments.
+Elastic nine point five's technical-preview Columnar Mode now applies that broader principle beyond metrics: keep fields in columns, then add other indexes only where the workload needs them.
+
+If you currently run another metrics system alongside Elastic, what would you still need to see before consolidating? Let us know in the comments.
 
 Thanks for watching - if you liked this, please like & subscribe, and I'll see you later.

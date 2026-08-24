@@ -1,15 +1,15 @@
 ---
 type: Source Summary
-title: "Draft: Elastic 9.5 All-Up Release Announcement"
-description: "Pre-publication launch copy covering Elastic 9.5 platform, observability, security, and AI-agent highlights."
+title: "Elastic 9.5 Release Announcement"
+description: "Published Elastic 9.5 launch announcement covering Columnar Mode, metrics, vector search, observability, security, and AI-agent features."
 tags: [elastic, release, elasticsearch, observability, security, metrics, prometheus, attack-discovery]
-timestamp: 2026-07-27T10:58:00+01:00
-source: projects/202607-elastic-9-5-release-highlights/references/blog.md
+timestamp: 2026-08-24T16:01:52+01:00
+source: https://www.elastic.co/blog/whats-new-elastic-9-5-0
 ---
 
 # Source status
 
-This is pre-publication corporate launch copy scheduled for July 28, 2026. Several reviews were still incomplete in the supplied draft, so final naming, availability, licensing, and quantitative claims require confirmation against the published post and release documentation.
+Elastic published this corporate release announcement on August 4, 2026. It confirms that Elastic 9.5 and native Prometheus and PromQL support are generally available. Columnar Mode and Columnar Logs remain technical previews.
 
 # Major release themes
 
@@ -22,7 +22,7 @@ This is pre-publication corporate launch copy scheduled for July 28, 2026. Sever
 
 # Metrics claims
 
-- Native Prometheus remote-write ingestion and PromQL support are described as generally available in 9.5.
+- Native Prometheus remote-write ingestion and PromQL support are generally available in 9.5.
 - Existing Grafana workflows can query Elasticsearch through Prometheus-compatible interfaces.
 - A generally available migration tool is described for Grafana and Datadog dashboards and alerts.
 - The ES95 codec is claimed to reduce the prior metrics footprint by roughly another twenty percent, to about three bytes per sample.
@@ -53,7 +53,7 @@ The draft explicitly says AlertZero does not mean zero alerts or replacing analy
 
 # Evidence boundaries
 
-- Treat availability and packaging as draft platform claims until final release documentation is published.
+- The published announcement is a primary source for the GA status of native Prometheus and PromQL support in Elastic 9.5.
 - Treat the ES95 storage figure as a first-party workload result, not a guaranteed customer saving.
 - Treat AlertZero as product positioning and an operating goal, not a feature name or promise of zero alerts.
-- Current public documentation establishes the existing Prometheus interfaces and Attack Discovery model, but may lag the unreleased 9.5 changes described here.
+- PromQL compatibility may still have unsupported constructs or semantic differences even though the capability is GA.
