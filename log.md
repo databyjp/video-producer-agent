@@ -958,3 +958,34 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Moved the Columnar Mode aside into one sentence in the conclusion and replaced the two-part comment prompt with one specific consolidation question.
 - Preserved the historical/current query callback and the final return to the metric point.
 - Verified Elastic's published August 4 release announcement, which confirms native Prometheus and PromQL support as GA in 9.5. Updated `sources/elastic-9-5-release-blog-draft.md`, `wiki/elastic-9-5-metrics-ga.md`, and `index.md` to replace the stale pre-publication status.
+
+## 2026-08-24 — Created simple historical query graphic brief
+
+- Created `/Users/jphwang/code/agent-sandboxes/designer/tasks/202606-columnar-store/02-historical-query-path.md` for the two-sentence historical query explanation.
+- Kept the deliverable to one reused composition with three sequential highlights: inverted index for host, BKD tree for time, and doc values for calculation inputs.
+- Excluded intermediate set diagrams, query syntax, charts, and numeric results so the visual fits the short narration span.
+
+## 2026-08-24 — Created four TSDS mechanism graphic briefs
+
+- Added `03-metrics-properties-ledger.md` for the four workload-property-to-opportunity relationships.
+- Added `04-tsid-ordering-and-skippers.md` for `_tsid`, ordered columns, block summaries, timestamp and dimension skipping, and removal of historical filtering indexes.
+- Added `05-synthetic-id-lookups.md` for synthetic identity, segment pruning, Bloom-filter outcomes, and doc-value verification.
+- Added `06-sequence-number-lifecycle.md` for primary assignment, replication, confirmation, delayed segment merging, and `_seq_no` removal.
+- All briefs reuse the recurring metric point and request separable animation states with mechanism-specific claim boundaries.
+
+## 2026-08-24 — Replaced Kibana query demo with current-path graphic
+
+- Revised `projects/202606-columnar-store/draft-script-v5.md` so **The point after the changes** shows the ES|QL query as a graphic instead of a Kibana recording.
+- Created `/Users/jphwang/code/agent-sandboxes/designer/tasks/202606-columnar-store/07-current-query-path.md` to map query clauses to time-block pruning, selective column reads, `_tsid` grouping, rate calculation, hourly bucketing, and an illustrative result chart.
+- Required multiple points for the rate calculation and prohibited invented result values, benchmark data, and product-interface chrome.
+
+## 2026-08-24 — Reframed consolidation section as a viewer decision
+
+- Renamed the script section to **Should you consolidate?**, removed the optional screencast, and replaced its final slogan-like verdict with a natural qualified recommendation.
+- Created `/Users/jphwang/code/agent-sandboxes/designer/tasks/202606-columnar-store/08-should-you-consolidate.md` for four concise states: workflow continuity, strong fit, reasons to stay separate, and the conclusion that consolidation is realistic when the workload fits.
+
+## 2026-08-24 — Created static conclusion graphic brief
+
+- Created `/Users/jphwang/code/agent-sandboxes/designer/tasks/202606-columnar-store/09-conclusion-metric-point.md` for one static callback to the opening metric point.
+- The composition keeps doc values, skippers, synthetic identity, and the post-merge state active while showing the removed historical structures faintly.
+- Used the takeaway **Keep the columns. Remove what metrics don't need.** and excluded Columnar Mode, benchmarks, decision criteria, and CTA elements from the image.

@@ -2,6 +2,7 @@
 
 This is a metric point.
 
+[IMG 1]
 [show one metric point, then reveal its fields: `@timestamp: 10:03`, `service.name: checkout`, `host.name: web-03`, `search_requests: 42108`]
 
 At ten-oh-three, this point was born - to tell us that the checkout service on `web-03` reported a request counter of forty-two thousand, one hundred and eight.
@@ -18,7 +19,7 @@ To find out, let's follow this point through those changes.
 
 # What used to happen to the point
 
-When our point arrived, Elasticsearch organised data from each field to give it the full flexibility of a general-purpose search engine.
+Until recently, Elasticsearch organised data from each field of a metric point to give it the full flexibility of a general-purpose search engine.
 
 [animate the point fanning out; reveal each structure as it is explained]
 
@@ -32,15 +33,16 @@ Then Elasticsearch indexed the point's `_id`, to support direct lookups and help
 
 And finally, it stored a sequence number to replicate the write correctly and to support updates with optimistic concurrency control.
 
-[show the complete old point and all of its surrounding structures]
+Let me show you the jobs that they do in a query.
 
+[IMG 2]
 Imagine asking for the average request rate from `web-03` over the last day.
 
 The inverted index finds the right host, the BKD tree finds the right time range, and doc values supply the timestamps and counter values for the calculation.
 
 [trace the query through each old structure]
 
-That flexibility made queries fast. But it also meant storing some of the same information more than once, adding both storage and indexing work.
+That flexibility made queries fast. But it also meant storing some of the same information more than once, adding both storage and indexing work - for what is a lightweight signal.
 
 This overhead is one reason teams using Elasticsearch for logs have often used a separate system like Prometheus for metrics.
 
@@ -50,7 +52,7 @@ So, what can Elasticsearch remove when it knows this point is a metric?
 
 # What a metric point actually needs
 
-The difference is that a metric point has a much narrower, but still rich and fulfilling, life than a typical document.
+The difference is that a metric point has a much narrower, but still rich and fulfilling, life than a typical document. This leads to a whole lot of opportunities.
 
 [on-screen ledger; highlight each row as it is explained]
 
@@ -65,8 +67,6 @@ It belongs to a series and time range, so Elasticsearch can replace the heavier 
 
 That's the bargain behind the redesign: metrics behave predictably, so Elasticsearch can keep doc values front and centre while removing or shrinking the structures around them.
 
-[show the old and new point side by side; reveal the filtering indexes, indexed `_id`, and long-lived `_seq_no` disappearing]
-
 Let's look at each change, starting with the filtering indexes.
 
 -----
@@ -75,39 +75,41 @@ Let's look at each change, starting with the filtering indexes.
 
 The first targets are the BKD tree and inverted indexes used for common time and dimension filters. We can't simply delete them, because our query still needs to filter for hostnames like `web-03`, or for time windows, like the last day. Without some kind of replacement, Elasticsearch would have to scan these columns from beginning to end.
 
+[d9d3e0: Show the two chapter headings only: “Give the point a place” and “Use order to skip.”]
+
 The solution starts by giving our point a predictable place. Elasticsearch does this by combining its service, host and other dimensions into an internal series identifier called `_tsid`.
 
-[attach `_tsid` to the point]
+[d9d3e0: Reveal the metric point, then the “dimensions → internal series ID” strip.]
 
 Every point in the same series gets the same `_tsid` and is routed to the same shard. Inside each segment, Elasticsearch sorts the points by `_tsid` and timestamp.
 
 Metrics are a good fit for this sorting: dimensions repeat heavily, and points generally arrive in roughly timestamp order. Elastic's time-series database is designed for current metrics rather than frequent historical backfills.
 
-[place the point between neighbouring points from the same series]
+[d9d3e0: Reveal the three ordered neighbours; highlight the recurring 10:03 point.]
 
 Now our point has predictable neighbours. Points from the same series sit together, their timestamps are ordered, and repeated dimension values cluster together.
 
 This improves compression, but more importantly, it enables a much lighter filtering structure: a doc value skipper.
 
-[show the timestamp doc-values column divided into blocks]
+[d9d3e0: Reveal Chapter 2 with the old and recent timestamp blocks.]
 
 The doc value skipper is a simple, but powerful idea. It records a summary of each block of the existing column: its lowest value, highest value, and how many documents are present.
 
 Now, if we ask for the last day again, our point's block overlaps that range, so Lucene checks it. But a block from two months ago has a maximum value that's already too old, so Lucene can skip the entire thing.
 
-[keep the recent block; fade the old blocks]
+[d9d3e0: Reveal “FILTER: last day”; fade the old block to “SKIP” and highlight the recent block as “INSPECT.”]
 
 This only works because the data is ordered. If timestamps were scattered randomly, almost every block could contain both old and new values. Each block's minimum and maximum would cover a huge range, and the skipper would tell us almost nothing.
 
-[briefly scramble the timestamp column; show the ranges overlapping; restore the ordered version]
+[d9d3e0: Reveal the small “Why order matters” callout. Keep the main blocks unchanged.]
 
 Grouping by series gives the dimension columns the same kind of useful correlation. For our host filter, if a block's summary says it can't contain `web-03`, Lucene can skip that block too.
 
-[show dimension doc-value blocks; reject blocks whose summaries cannot contain `web-03`]
+[d9d3e0: Reveal the small host callout: `api-02` skip, `web-03` inspect.]
 
 Common time and dimension filters can now skip large parts of these columns without maintaining the heavier indexes, in the form of inverted indexes and BKD trees.
 
-[return to the fan-out and remove the BKD tree and dimension inverted indexes]
+[d9d3e0: Reveal the final “order + doc values + skippers” summary, then transition to the `_id` section.]
 
 But there are still a couple of additional changes - like how to manage lookups of object `_id`s.
 
@@ -116,8 +118,6 @@ But there are still a couple of additional changes - like how to manage lookups 
 # Removing the dedicated `_id` index
 
 Elasticsearch normally keeps a dedicated inverted index for object `_id`s. That supports direct lookups and duplicate detection.
-
-[highlight the `_id` index]
 
 But our metric point already has a natural identity. The `_tsid` identifies its series, and the timestamp identifies a unique point inside it.
 
@@ -137,7 +137,7 @@ And lastly, let's talk about the sequence number, which is key to concurrency.
 
 # Letting the sequence number expire
 
-When the point first arrives, the primary shard assigns the write a sequence number.
+There's something called a sequence number, which is a thing that the primary shard assigns when the point first arrives.
 
 [highlight `_seq_no`]
 
@@ -161,7 +161,7 @@ That's a lot of pretty clever engineering work. So what did it do? Elastic repor
 
 So - does it work? Let's return to the query we started with, and ask for a request rate by host over the last day. The query might look something like this:
 
-[screen recording: run this query in Kibana]
+[show the query as a graphic; highlight each clause as its operation is illustrated]
 
 ```esql
 TS metrics
@@ -170,37 +170,31 @@ TS metrics
     BY host.name, TBUCKET(1h)
 ```
 
-[show the result table, then chart the hourly values for `web-03`]
-
-When you run this, here's what happens.
+Here's how Elasticsearch runs it.
 
 First, the skipper rules out blocks outside the time range.
-
-[our point's block survives while old blocks disappear]
 
 Then Elasticsearch reads the remaining timestamp, host and counter fields' doc values directly. Because points are already grouped by `_tsid`, it can easily identify which ones are relevant for which hostname, and process them.
 
 When the query calculates the hourly results for `web-03`, it would include our original metric point.
 
-[follow the point from its column into the `web-03` rate and then the final chart]
+[follow the point from its column into the `web-03` hourly bucket and then an illustrative result chart]
 
 -----
 
-# Does this make consolidation credible?
+# Should you consolidate?
 
-Let's get back to the team running Elasticsearch for logs and Prometheus for metrics. Do these changes make consolidation viable?
+Let's get back to the team running Elasticsearch for logs and Prometheus for metrics.
 
 Here's something else to consider - in Elastic nine point five, Prometheus remote write and PromQL support is generally available. Prometheus can send points like ours directly into Elasticsearch, while existing PromQL and Grafana workflows can query the same metrics engine.
 
-[diagram: Prometheus remote write → Elasticsearch metrics → PromQL/Grafana or ES|QL]
-
-[optional screencast: show Prometheus remote write feeding Elasticsearch, then the metric in an existing Grafana panel and in ES|QL]
+[show the workflow, then key points for a strong fit and reasons to stay separate]
 
 If you already run Elastic for logs or traces, and maintain Prometheus separately for metrics, this is where the case gets compelling. Especially if those metrics are current and append-only. You could potentially remove a system without replacing your established PromQL and Grafana workflows.
 
 But if you already have a mature metrics platform that works, or you frequently backfill old data, smaller storage alone may not be enough reason to move. And if you don't already run Elastic, it's less obvious again.
 
-So yes, these changes make consolidation technically credible. Just not automatically right for every observability stack.
+So consolidation is now a realistic option, especially if you already use Elastic and your metrics fit this model. But that doesn't mean moving is right for every team.
 
 -----
 
