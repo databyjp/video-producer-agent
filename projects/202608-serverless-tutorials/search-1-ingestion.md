@@ -1,157 +1,222 @@
-# Search Tutorial 1 — Ingest data with Python
+[Note: not all overlays are described in the script]
 
-## Video intent
+-----
 
-- **Audience:** Developers who have created an Elasticsearch Serverless project but have not added data.
-- **Primary viewer job:** Build — connect to the project and ingest a small, searchable dataset.
-- **Promise:** Take an empty Serverless project and turn it into a searchable books index with one short Python script.
-- **Scope:** Focus on connection and ingestion, verify the data in Kibana, then contrast one ordinary full-text query with one semantic query. Explain only enough of the mapping and `semantic_text` automation to make the difference clear; leave hybrid search and aggregations for subsequent tutorials.
-- **Example:** Use the same dataset and Python conventions as the draft quickstart.
+[JP name & title in chyron]
+Hi I’m JP - I’m a developer advocate with Elasstic. Let me show you in the next few minutes how to ingest data into Elasticsearch so it turns into a searchable resource. We’ll use a Serverless instance and the Python SDK, but the general principle should be the same, regardless of what type of Elastic instance or any of the other SDKs, or even the direct REST API.
 
-## Outline
+[on-screen: overlay showing each stage]
 
-### 1. Open with the task
+-----
 
-- Establish the promise: we will get from an empty project to searchable data by connecting a Python application and indexing JSON documents.
-- Establish why: understand how to perform data ingestion so you can do it yourself with your own data.
+## CONNECT TO ELASTICSEARCH
 
-[on-screen: agenda outline]
+First, we need the connection details - that’s the URL and the API key.
 
-### 2. Set up Python SDK; connect to the existing project
+Open your Serverless project. This is a brand new instance, so it sends me to the "Getting Started" page. If this isn't what you see, you can click on this icon to get there.
 
-- Show how to get the project’s endpoint + API key.
-- Store them in a `.env` file.
-- Set up the environment.
+You should see a URL here, and you *might* have a default API key that's created for you. If you don’t see this API key, you can create one by clicking through here, and creating an API key with the default options. These are the credentials we’ll use to authenticate against Elasticsearch today.
 
-```shell
-pip install elasticsearch python-dotenv
+You can copy each one with this copy button, and I’m going to paste them into this `.env` file, so we don’t hard-code them.
+
+[screen recording: browser: Show new instance; Kibana w/ Getting Started -> screencast in VSCode / Jupyter]
+
+```dotenv
+ES_URL="YOUR_ELASTICSEARCH_ENDPOINT"
+ES_API_KEY="YOUR_ENCODED_API_KEY"
 ```
 
-- Create the client and verify the connection.
+I’ve got a Jupyter notebook so we can run these snippets bit-by-bit; if you’re new to Jupyter, it’ just a REPL environment where the state persists.
+
+I’ve installed these libraries already, but if you haven’t, you can uncomment and run this cell to do so.
+
+We'll start by import the modules, functions et cetera that we'll use here.
 
 ```python
 import os
-from elasticsearch import Elasticsearch
 from dotenv import load_dotenv
+from elasticsearch import Elasticsearch, helpers
+```
 
+This here will load the env variables in our `.env` file:
+```python
 load_dotenv(overwrite=True)
-es = Elasticsearch(os.getenv("ES_URL"), api_key=os.getenv("ES_API_KEY"))
+```
 
+And we can now connect to Elasticsearch like so
+```python
+es = Elasticsearch(
+    hosts=os.environ["ES_URL"],
+    api_key=os.environ["ES_API_KEY"],
+)
+```
+
+And run this method - to print some details about your cluster.
+
+```python
 print(es.info())
 ```
 
-[on-screen: where to get connection details; move quickly through the prewritten setup]
+What you see here should be similar, but slightly different.
 
-### 3. Create the index and ingest the books
+-----
 
-- Show one book as a normal Python dictionary containing a title, author, release year, and description.
-- Reveal the dataset JSON file.
-- Create an index with bare minimum configs.
+## INGEST THE BOOKS
+
+Here's the data that we're going to ingest - it's just a list of dictionaries of book data. Each one contains a title, author, release year, and description, and you probably recognise a few of them.
+
+First, let's create an index to store our data. We've got nicely structured data, so we'll let Elasticsearch infer the data structure from them. The only thing we'll do is to is to set up the `description` field as a `semantic_text` type.
+
+That will let us search objects by meaning, using the default semantic search model, some of you might know what that means, but if you don't that's fine we'll come back to that.
 
 ```python
 es.indices.create(
     index="books",
-    mappings={"properties": {"description": {"type": "semantic_text"}}},
+    mappings={
+        "properties": {
+            "description": {"type": "semantic_text"},
+        }
+    },
 )
 ```
 
-- Use the bulk helper to index all five documents in one operation.
+And once we have the index, we can add data to it.
+
+The fastest, easiest way is probably to use this `helpers.bulk` helper function.
+
+Pass the Elasticsearch handle here,
+Pass the iterable with the index to add the data to, which is `books`, and the source object - I'm building this as a list comprehension here, containing dictionaries.
+
+And since there's just five elements - I'll ask Elasticsearch to only send a response when these objects are not only ingested, but ready for search.
 
 ```python
-from elasticsearch import helpers
-
-books = [
-    # Books data - could be a raw list of dicts; or loaded from JSON - tbd
-]
-
 helpers.bulk(
     es,
-    [{"_index": "books", "_source": book} for book in books],
+    [
+        {"_index": "books", "_source": book}
+        for book in books
+    ],
     refresh="wait_for",
 )
-
-response = es.count(index="books")
-print(f"Indexed documents: {response['count']}")
 ```
 
-- Explain the core ideas briefly:
-  - The bulk helper batches document operations for speed.
-  - `refresh="wait_for"` waits until the new books are searchable.
-- Show the successful completion and object count.
-- Go back to the code, and highlight that the `[{"_index": "books", "_source": book} for book in books]` line is the data being ingested. This can be any iterable whether they came from a JSON file, database, API, or your application.
+And since we have a response, that means all these books are in Elasticsearch!
 
-[on-screen: go through code and run the ingestion script]
+We can confirm this programmatically, with the `.count` method, like this.
 
-### 4. Show the data in Kibana
+We'll get the response,
+And print the 'count' attribute.
 
-- Open Discover and select the `books` data view.
-- Show that all five documents arrived with the original title, author, release year, and description fields.
-- Use this as the visible confirmation that ingestion worked before introducing search.
+```python
+response = es.count(index="books")
+print(response["count"])
+```
 
-[on-screen: documents in Kibana Discover]
+And it confirms that we've got five documents in Elasticsearch.
 
-### 5. Run an ordinary full-text search
+Let me quickly show you where to view them in Kibana, and then we'll run some searches.
 
-- Run a `match` query against the dynamically mapped `title` field.
+-----
+
+## SEE THE DATA IN KIBANA
+
+Now back in Kibana - if we go to the Discover tab here -
+
+[screen recording: open Discover → show the five rows on display]
+
+You see the five documents, with the same fields and values that we sent. You can run queries here as well, but let’s save that for another time.
+
+So the data is in Elasticsearch. Let's run a search on it.
+
+-----
+
+## RUN A FULL-TEXT SEARCH
+
+Now that we've got the books in Elasticsearch, let me show you how easy it is to search through them.
+
+To search the books index, use the `es.search` method, specify the index name, and then the query.
+
+To start, let's look for books based on its title, and look for the terms "Hail Mary".
 
 ```python
 resp = es.search(
     index="books",
     query={"match": {"title": "Hail Mary"}},
 )
+```
 
+And to look at the results,
+we want to look through the hits - the outer one is the results container, and the inner one is the documents.
+Then, let's look at their score, and the title.
+
+```python
 for hit in resp["hits"]["hits"]:
     print(hit["_score"], hit["_source"]["title"])
 ```
 
-- Show *Project Hail Mary* returned because its title contains the query terms.
-- Establish the limitation: this search works from the words in the field; what if the user describes the book without knowing its title?
+We see that there's just the only result - Project Hail Mary. Because none of the other titles contain these words.
 
-[on-screen: run the query and highlight the matching title terms]
+-----
 
-### 6. Explain the mapping, embeddings, and `semantic_text`
+## SEARCH BY MEANING
 
-- Return to the index creation code and explain what an index is: analogous to a SQL table or NoSQL collection.
-- Explain that a mapping defines how fields are indexed and searched.
-- Highlight the one explicit mapping choice: declaring `description` as `semantic_text` before ingestion.
-- Explain what `semantic_text` did automatically:
-  - Selected the default inference endpoint for this Serverless project.
-  - Configured the vector field details needed by that model.
-  - Chunked each description when needed.
-  - Generated and stored embeddings as the books were indexed.
-- Explain why this matters: the application sent ordinary text, without generating vectors itself or building a separate inference pipeline, but the descriptions are now searchable by meaning.
-- Note that the other field types were inferred from the imported documents.
+So, when you can find the right words, search seems pretty straigthforward. But what about searches with typos, synonyms, and so on? In other words, where the query doesn't use the same words as the document?
 
-[on-screen: return to the mapping, then show diagram of what happened during ingestion]
-[diagram: book JSON document enters Elasticsearch; ordinary fields are indexed and the description is automatically chunked and embedded]
+That's where semantic search comes in. Let me show you.
 
-### 7. Run the semantic search to prove it
+We'll call `es.search` again, and search the same `books` index.
 
-- Run the recommended `match` query against the `semantic_text` description field.
+This time, instead of a `match` query, we'll use a `semantic` query.
+
+The field we want to search is `description`, and for the query, let's use the phrase "surviving alone in space".
 
 ```python
 resp = es.search(
     index="books",
-    query={"match": {
-        "description": {
+    query={
+        "semantic": {
+            "field": "description",
             "query": "surviving alone in space",
-        },
-    }},
+        }
+    },
 )
+```
 
+Let's run that.
+
+We can use the same loop as before to print the score and title for each result.
+
+```python
 for hit in resp["hits"]["hits"]:
     print(hit["_score"], hit["_source"]["title"])
 ```
 
-- Show *Project Hail Mary* ranked first.
-- Explain the result at the outcome level: because `description` is a `semantic_text` field, the `match` query searches by meaning rather than requiring the same words.
-- Validate before recording that the final query demonstrates a semantic match rather than overlapping important terms from the winning description.
+And *Project Hail Mary* is the first result again! Even though its description doesn't contain the exact phrase "surviving alone in space".
 
-[on-screen: run the query, compare its wording with the winning description, and show the top result]
+Elasticsearch found it because this query searches the meaning of the description, rather than only looking for matching words. This is semantic search, which works based on similarity of meaning.
 
-### 8. Close
+Let's scroll back to the mapping we created earlier.
 
-- Recap the completed path: endpoint and API key → Python client → bulk ingestion → data in Kibana → full-text search → semantic search.
-- Encourage the viewer to replace the five books with a small sample of their own JSON records.
-- Point to a repo or gist for the completed script.
-- Bridge to the next tutorial: build more queries that use this data.
+[show mapping code again]
+
+We set `description` to the `semantic_text` field type. That tells Elasticsearch to generate the data it needs for semantic search. On this Serverless project, Elasticsearch uses Jina's embedding model by default, but this is configurable.
+
+So once that field was mapped and the books were ingested, we could search their descriptions by meaning without setting up a separate model ourselves.
+
+-----
+
+## WRAP-UP
+
+Let's quickly recap what we did.
+
+We connected to a Serverless Elasticsearch project with the Python client. Then we created a `books` index, mapped the `description` as `semantic_text`, and ingested five documents with the bulk helper. That meant Elastic inferred the necessary fields based on our data, and the books data was already ready for search.
+
+With all that done, we performed a couple of searches -one through the titles for matching words, and searched the descriptions based on meaning.
+
+The data here was a small list of books, but the same steps apply to your own documents: create an index, define any mappings you need, ingest the documents, and query them.
+
+I've included links nearby so you can try this yourself.
+
+If you'd like help getting this set up in your own environment, the Customer Architecture team is here for exactly that. You can book a free session using the provided link, they can get you sorted.
+
+Thanks for watching. See you next time.

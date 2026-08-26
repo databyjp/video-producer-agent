@@ -75,41 +75,29 @@ Let's look at each change, starting with the filtering indexes.
 
 The first targets are the BKD tree and inverted indexes used for common time and dimension filters. We can't simply delete them, because our query still needs to filter for hostnames like `web-03`, or for time windows, like the last day. Without some kind of replacement, Elasticsearch would have to scan these columns from beginning to end.
 
-[d9d3e0: Show the two chapter headings only: “Give the point a place” and “Use order to skip.”]
+[d9d3e0: Show the first chapter]
 
 The solution starts by giving our point a predictable place. Elasticsearch does this by combining its service, host and other dimensions into an internal series identifier called `_tsid`.
-
-[d9d3e0: Reveal the metric point, then the “dimensions → internal series ID” strip.]
 
 Every point in the same series gets the same `_tsid` and is routed to the same shard. Inside each segment, Elasticsearch sorts the points by `_tsid` and timestamp.
 
 Metrics are a good fit for this sorting: dimensions repeat heavily, and points generally arrive in roughly timestamp order. Elastic's time-series database is designed for current metrics rather than frequent historical backfills.
 
-[d9d3e0: Reveal the three ordered neighbours; highlight the recurring 10:03 point.]
-
 Now our point has predictable neighbours. Points from the same series sit together, their timestamps are ordered, and repeated dimension values cluster together.
 
 This improves compression, but more importantly, it enables a much lighter filtering structure: a doc value skipper.
 
-[d9d3e0: Reveal Chapter 2 with the old and recent timestamp blocks.]
+[d9d3e0: Reveal Chapter 2]
 
 The doc value skipper is a simple, but powerful idea. It records a summary of each block of the existing column: its lowest value, highest value, and how many documents are present.
 
 Now, if we ask for the last day again, our point's block overlaps that range, so Lucene checks it. But a block from two months ago has a maximum value that's already too old, so Lucene can skip the entire thing.
 
-[d9d3e0: Reveal “FILTER: last day”; fade the old block to “SKIP” and highlight the recent block as “INSPECT.”]
-
 This only works because the data is ordered. If timestamps were scattered randomly, almost every block could contain both old and new values. Each block's minimum and maximum would cover a huge range, and the skipper would tell us almost nothing.
-
-[d9d3e0: Reveal the small “Why order matters” callout. Keep the main blocks unchanged.]
 
 Grouping by series gives the dimension columns the same kind of useful correlation. For our host filter, if a block's summary says it can't contain `web-03`, Lucene can skip that block too.
 
-[d9d3e0: Reveal the small host callout: `api-02` skip, `web-03` inspect.]
-
 Common time and dimension filters can now skip large parts of these columns without maintaining the heavier indexes, in the form of inverted indexes and BKD trees.
-
-[d9d3e0: Reveal the final “order + doc values + skippers” summary, then transition to the `_id` section.]
 
 But there are still a couple of additional changes - like how to manage lookups of object `_id`s.
 
