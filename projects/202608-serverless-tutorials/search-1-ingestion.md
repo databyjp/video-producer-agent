@@ -3,7 +3,7 @@
 -----
 
 [JP name & title in chyron]
-Hi I’m JP - I’m a developer advocate with Elasstic. Let me show you in the next few minutes how to ingest data into Elasticsearch so it turns into a searchable resource. We’ll use a Serverless instance and the Python SDK, but the general principle should be the same, regardless of what type of Elastic instance or any of the other SDKs, or even the direct REST API.
+Hi I’m JP - I’m a developer advocate with Elastic. Let me show you in the next few minutes how to ingest data into Elasticsearch so it turns into a searchable resource. We’ll use a Serverless instance and the Python SDK. But the general principle should be the same, regardless of whether you're using another type of Elastic instance or any of the other SDKs, or even the direct REST API.
 
 [on-screen: overlay showing each stage]
 
