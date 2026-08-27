@@ -33,8 +33,8 @@ video-producer/
 │       ├── brief.md       # Status, concept, key decisions (project index)
 │       ├── outline.md     # Working outline (deliverable)
 │       ├── script.md      # Working script (deliverable)
-│       ├── tasks/         # Handoff briefs for sub-agents (designer, researcher, etc.)
-│       ├── assets/        # Graphics, thumbnails
+│       ├── tasks/         # Canonical handoff briefs for sub-agents
+│       ├── assets/        # Project-owned graphics, thumbnails, and renders
 │       ├── code/          # Demo code, configs
 │       └── scratch/       # Raw notes, Obsidian exports (human input, not modified by LLM)
 ├── code/              # Runnable code/scripts linked from wiki pages
@@ -141,6 +141,19 @@ When the human asks to review a script or draft (for example, `review projects/<
 
 If no meaningful issues are found, say so plainly and note any remaining verification risks. Feed reusable lessons back into the wiki and append the completed review to `log.md` as required by the Task workflow.
 
+### Video graphics
+
+This repository is the user-facing entry point for project graphics. When the human asks to create a graphic, or invokes `/video-graphic`, load and follow the project `video-graphic` skill.
+
+Ownership rules:
+
+- Keep the canonical semantic brief only in `projects/<project>/tasks/design-<subject>.md`. Do not copy it into the designer repository.
+- Keep final project graphics in `projects/<project>/assets/graphics/<subject>/`.
+- Treat variant count, style baseline, talking-head allocation, and layout preferences as run-specific design direction. Do not add them to the semantic brief unless they change what the visual means.
+- Delegate SVG implementation and rendering to an agent running from `/Users/jphwang/code/agent-sandboxes/designer`, which owns the visual system and rendering workflow.
+- Generate the brief and graphics in one run by default. Stop after the brief only when the human requests a review gate or an unresolved semantic decision requires one.
+- Return the canonical brief path and every generated SVG and PNG path for review.
+
 ### Ingest (add knowledge)
 
 When the human provides sources (URLs or files in `raw/`):
@@ -195,7 +208,7 @@ The body should contain:
 ### Principles
 
 - **One file per deliverable.** Don't bundle unrelated requests.
-- **Task briefs live in the originating project**, not in the sub-agent's workspace. The sub-agent reads from here; outputs go to `projects/<project>/assets/`.
+- **Task briefs live in the originating project**, not in the sub-agent's workspace. The sub-agent reads them by absolute path. Project graphics go to `projects/<project>/assets/graphics/<subject>/`.
 - **Use absolute paths** in `project_root` so sub-agents with different working directories can resolve references unambiguously.
 - **Don't duplicate the outline** — the task brief provides focused instructions; the sub-agent reads the project files for broader context.
 
