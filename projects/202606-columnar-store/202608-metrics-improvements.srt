@@ -1,0 +1,743 @@
+1
+00:00:00,000 --> 00:00:01,000
+This is a metric point.
+
+2
+00:00:02,000 --> 00:00:05,000
+At 1003, this point was born to tell us
+
+3
+00:00:05,000 --> 00:00:08,000
+that the checkout service on Web 03 reported
+
+4
+00:00:08,000 --> 00:00:11,000
+a request counter of 42,108.
+
+5
+00:00:11,600 --> 00:00:14,600
+Until recently, elastic search organized data from
+
+6
+00:00:14,600 --> 00:00:18,600
+each field of a metric point to give it the full flexibility
+
+7
+00:00:18,600 --> 00:00:20,560
+of a general purpose search engine.
+
+8
+00:00:20,560 --> 00:00:24,560
+First of all, each value went into the appropriate set of doc values.
+
+9
+00:00:24,560 --> 00:00:27,560
+Doc values store each field as a column.
+
+10
+00:00:27,560 --> 00:00:31,280
+They let elastic surge sort, aggregate, and read valleys efficiently.
+
+11
+00:00:31,280 --> 00:00:35,280
+But the timestamp also went into a BKD tree,
+
+12
+00:00:35,280 --> 00:00:38,280
+a BKD tree, groups numeric valleys into ranges, so
+
+13
+00:00:38,280 --> 00:00:41,240
+elastic surge can jump to the relevant part of data.
+
+14
+00:00:41,240 --> 00:00:44,240
+Meaning that for a query like the last hour, elastic
+
+15
+00:00:44,240 --> 00:00:46,240
+avoids checking every timestamp.
+
+16
+00:00:46,440 --> 00:00:47,080
+And...
+
+17
+00:00:47,160 --> 00:00:50,160
+data, like service and host dimensions, would go into
+
+18
+00:00:50,160 --> 00:00:53,160
+inverted indexes, similar to what you've seen in any other elastic
+
+19
+00:00:53,160 --> 00:00:56,160
+search systems, that power things like digital libraries
+
+20
+00:00:56,160 --> 00:00:57,160
+or e commerce engines.
+
+21
+00:00:58,160 --> 00:01:02,160
+Then, elastic search index the points ID to
+
+22
+00:01:02,160 --> 00:01:05,160
+support direct lookups and help reject duplicates.
+
+23
+00:01:05,200 --> 00:01:08,200
+And finally, it's thought a sequence number to replicate
+
+24
+00:01:08,200 --> 00:01:11,200
+the right correctly and to support updates with optimistic
+
+25
+00:01:11,200 --> 00:01:12,200
+concurrency control.
+
+26
+00:01:12,680 --> 00:01:15,480
+Let me show you the jobs that they do in a query.
+
+27
+00:01:15,480 --> 00:01:18,480
+Imagine asking for the average request rate from Web 03
+
+28
+00:01:18,480 --> 00:01:19,480
+over the last day.
+
+29
+00:01:20,120 --> 00:01:24,120
+The inverted index finds the right host, the BKV
+
+30
+00:01:24,120 --> 00:01:27,120
+tree, finds the right time range, and dock values supplied
+
+31
+00:01:27,120 --> 00:01:29,120
+the time stamps, and countervalues for the calculation.
+
+32
+00:01:30,120 --> 00:01:32,120
+That flexibility made queries fast.
+
+33
+00:01:32,120 --> 00:01:35,120
+But it also meant storing some of the same information more
+
+34
+00:01:36,120 --> 00:01:39,120
+than once, adding both storage and indexing
+
+35
+00:01:39,120 --> 00:01:41,120
+work for what is a lightweight signal.
+
+36
+00:01:41,400 --> 00:01:44,400
+And this overhead was one reason that teams using elastic search
+
+37
+00:01:44,400 --> 00:01:48,400
+for logs have often used a separate system like Prometheus for metrics.
+
+38
+00:01:48,760 --> 00:01:51,760
+So what can elastic search remove when it knows this
+
+39
+00:01:51,760 --> 00:01:52,760
+point is a metric?
+
+40
+00:01:53,520 --> 00:01:57,520
+The difference is that a metric point has a much narrower,
+
+41
+00:01:57,520 --> 00:02:00,120
+but still a rich and fulfilling life than a typical document.
+
+42
+00:02:00,120 --> 00:02:02,120
+This leads to a whole lot of opportunities.
+
+43
+00:02:02,600 --> 00:02:05,600
+It belongs to a series and time range, so Atlantic search
+
+44
+00:02:05,600 --> 00:02:07,600
+can replicate the heavier filtering indexes.
+
+45
+00:02:08,600 --> 00:02:11,600
+Its series and timestamp already identified, so
+
+46
+00:02:11,600 --> 00:02:13,600
+elastic search can derive the ID.
+
+47
+00:02:14,600 --> 00:02:18,600
+It's a pent mostly, so its sequence number doesn't need to live forever.
+
+48
+00:02:18,600 --> 00:02:21,600
+And queries only need a few fields, so
+
+49
+00:02:21,600 --> 00:02:22,600
+processing can stay calumnar.
+
+50
+00:02:23,560 --> 00:02:25,560
+So that's the bargain behind this redesign.
+
+51
+00:02:26,560 --> 00:02:29,560
+Metrics behave quite predictably, so elastic surge
+
+52
+00:02:29,560 --> 00:02:33,560
+can keep dock values front and center while removing or shrinking the structures around them.
+
+53
+00:02:34,040 --> 00:02:37,920
+Let's look at each change, starting with the filtering indexes.
+
+54
+00:02:37,920 --> 00:02:40,920
+The first targets are the BKD tree and inverted
+
+55
+00:02:40,920 --> 00:02:43,920
+indexes used for common time and dimension filters.
+
+56
+00:02:43,920 --> 00:02:46,920
+We can't simply delete them, because our query still needs to
+
+57
+00:02:46,920 --> 00:02:49,920
+filter for host names like Web 03, or for time
+
+58
+00:02:49,920 --> 00:02:50,920
+windows, like the last day.
+
+59
+00:02:51,920 --> 00:02:54,920
+Without some kind of replacement, elastic search would have to scan
+
+60
+00:02:54,920 --> 00:02:56,920
+these columns from beginning right to the end.
+
+61
+00:02:57,680 --> 00:03:00,680
+So the solution starts by giving our point a predictable place.
+
+62
+00:03:01,680 --> 00:03:04,680
+Elastic search does this by combining its service, host,
+
+63
+00:03:04,680 --> 00:03:08,560
+and other dimensions into an internal series identifier called TSID.
+
+64
+00:03:08,560 --> 00:03:12,560
+Every point in the same series gets the same TSID, and is real, it's the same shard.
+
+65
+00:03:13,000 --> 00:03:16,000
+Inside each segment, elastic search sorts the points by
+
+66
+00:03:16,000 --> 00:03:17,880
+TSID and timestamp.
+
+67
+00:03:17,880 --> 00:03:19,880
+Metrics are a great fit for this kind of sorting.
+
+68
+00:03:20,880 --> 00:03:23,880
+Dimensions repeat heavily, and points generally arrive
+
+69
+00:03:23,880 --> 00:03:25,880
+in a roughly timestamp order.
+
+70
+00:03:25,880 --> 00:03:28,880
+So, elastic search is time series database is designed
+
+71
+00:03:28,880 --> 00:03:31,880
+for current metrics, rather than frequent historical backfills.
+
+72
+00:03:32,640 --> 00:03:35,640
+And now, our point has predictable neighbors.
+
+73
+00:03:35,640 --> 00:03:38,640
+Points from the same series sit together, their time stamps
+
+74
+00:03:38,640 --> 00:03:41,520
+are ordered, and repeated dimension values clustered together.
+
+75
+00:03:41,520 --> 00:03:44,520
+This improves compression, but more importantly, it
+
+76
+00:03:44,520 --> 00:03:48,440
+enables a much lighter filtering structure, a dock value skipper.
+
+77
+00:03:48,440 --> 00:03:51,440
+The dog value skipper is a simple but powerful idea,
+
+78
+00:03:52,440 --> 00:03:55,440
+records a summary of each block of the existing column, its
+
+79
+00:03:55,440 --> 00:03:58,440
+lowest value, highest value, and how many documents are present.
+
+80
+00:03:58,880 --> 00:04:01,880
+Now, if we ask for the last day again, our points block
+
+81
+00:04:01,880 --> 00:04:04,880
+overlaps that range, so Lucine checks it.
+
+82
+00:04:04,880 --> 00:04:07,880
+But a block from two months ago has a maximum value that's
+
+83
+00:04:07,880 --> 00:04:10,880
+already too old, so lucine can skip the whole thing.
+
+84
+00:04:11,080 --> 00:04:14,080
+This only works because the data is ordered.
+
+85
+00:04:14,080 --> 00:04:17,080
+If time stamps were scattered randomly, almost every block
+
+86
+00:04:17,080 --> 00:04:19,080
+could contain both old and new values.
+
+87
+00:04:19,080 --> 00:04:23,080
+Each block's minimum and maximum would cover a huge range,
+
+88
+00:04:23,080 --> 00:04:25,080
+and the skipper would tell us almost nothing.
+
+89
+00:04:25,680 --> 00:04:28,680
+And grouping by series gives the dimension columns the
+
+90
+00:04:28,680 --> 00:04:30,680
+same kind of useful correlation.
+
+91
+00:04:30,680 --> 00:04:33,680
+For our host filter, if a block summary
+
+92
+00:04:33,680 --> 00:04:37,680
+says it can't contain Web 03, Lucine can skip that block as well.
+
+93
+00:04:37,960 --> 00:04:40,960
+Common time and dimension filters can now skip large
+
+94
+00:04:40,960 --> 00:04:43,960
+parts of these columns without maintaining the heavier indexes
+
+95
+00:04:43,960 --> 00:04:46,960
+in the form of inverted indexes and BKP trees.
+
+96
+00:04:47,960 --> 00:04:50,960
+But there are still a couple of additional changes, like how to manage
+
+97
+00:04:51,960 --> 00:04:53,520
+look ups of object IDs.
+
+98
+00:04:53,520 --> 00:04:56,520
+Elastic search normally keeps a dedicated inverted
+
+99
+00:04:56,520 --> 00:04:59,520
+index for object IDs that supports direct lookups
+
+100
+00:05:00,520 --> 00:05:01,840
+and duplicate detection.
+
+101
+00:05:01,840 --> 00:05:04,840
+But our metric point already has a natural identity.
+
+102
+00:05:04,840 --> 00:05:07,840
+The TSID identifies its series and the timestamp
+
+103
+00:05:07,840 --> 00:05:09,840
+identifies a unique point inside of it.
+
+104
+00:05:10,320 --> 00:05:14,320
+So for newly created TSDV indices since elastic search 9.4,
+
+105
+00:05:14,320 --> 00:05:17,320
+elastic search simply derives a unique ID from
+
+106
+00:05:17,320 --> 00:05:21,320
+these two values instead of building the normal ID inverted index.
+
+107
+00:05:21,320 --> 00:05:24,320
+So look up some deduplication work like this.
+
+108
+00:05:24,320 --> 00:05:27,320
+Elastic search first rules our segments with a different timestamp
+
+109
+00:05:27,320 --> 00:05:30,320
+range, a small bloom filter on each remaining segment,
+
+110
+00:05:31,320 --> 00:05:35,320
+then says that the ID is either definitely absent or might be present.
+
+111
+00:05:35,320 --> 00:05:37,320
+If it says definitely absent, that's it.
+
+112
+00:05:37,320 --> 00:05:40,320
+If it says maybe, elastic search checks the TSID
+
+113
+00:05:41,320 --> 00:05:42,320
+and timestamp doc values.
+
+114
+00:05:42,520 --> 00:05:45,520
+So, exact ID, lookups, and deduplication still works
+
+115
+00:05:45,520 --> 00:05:48,520
+fine, even though the dedicated inverted index that
+
+116
+00:05:49,520 --> 00:05:51,520
+used to store and locate it is now gone.
+
+117
+00:05:51,560 --> 00:05:52,320
+And last...
+
+118
+00:05:52,520 --> 00:05:55,520
+There's something called a sequence number, which is a thing that the primary charter
+
+119
+00:05:55,520 --> 00:05:57,520
+signs when the point 1st arrives.
+
+120
+00:05:57,520 --> 00:06:00,520
+Replicas use this number to stay in sync and identify
+
+121
+00:06:01,520 --> 00:06:03,160
+operations when they need to replay.
+
+122
+00:06:03,160 --> 00:06:06,160
+Normally, elastic search keeps this number to support safe
+
+123
+00:06:06,160 --> 00:06:09,160
+concurrent updates, but metrics are normally append
+
+124
+00:06:09,160 --> 00:06:12,160
+only, so once every NSYNC replica
+
+125
+00:06:13,160 --> 00:06:16,160
+has confirmed the right, elastic search now simply removes it during
+
+126
+00:06:16,160 --> 00:06:19,160
+a later segment merge, giving us an even smaller
+
+127
+00:06:19,160 --> 00:06:22,160
+footprint in exchange for single document updates and
+
+128
+00:06:22,160 --> 00:06:25,160
+concurrency checks, which are really superfluous for metrics.
+
+129
+00:06:25,560 --> 00:06:27,560
+That's a lot of pretty clever engineering work.
+
+130
+00:06:27,560 --> 00:06:29,560
+So what did it do?
+
+131
+00:06:29,560 --> 00:06:32,560
+Well, elastic reports that its open telemetry footprint
+
+132
+00:06:32,560 --> 00:06:37,560
+fell from 25 bytes per point to just 3.75 in 9.4.
+
+133
+00:06:37,560 --> 00:06:40,560
+In 9.5, another Codec update
+
+134
+00:06:40,560 --> 00:06:42,560
+brings that down to roughly 3 bytes.
+
+135
+00:06:43,120 --> 00:06:46,120
+These elastics workload results, so, of course, your own storage
+
+136
+00:06:46,120 --> 00:06:49,120
+and query gains will depend on your data ingest pattern and
+
+137
+00:06:49,120 --> 00:06:53,120
+queries, but of course, this is a very significant reduction for many of you.
+
+138
+00:06:53,360 --> 00:06:55,360
+So, does it work?
+
+139
+00:06:55,360 --> 00:06:58,360
+Well, let's return to the query that we started with, and ask for
+
+140
+00:06:58,360 --> 00:07:01,360
+a request rate by host over the last day.
+
+141
+00:07:01,360 --> 00:07:02,360
+The query might look something like this.
+
+142
+00:07:03,360 --> 00:07:05,160
+Here's how elastic search runs it.
+
+143
+00:07:05,160 --> 00:07:09,160
+First, the skipper rules up blocks outside the time range.
+
+144
+00:07:09,160 --> 00:07:12,160
+Then, elastic search reads the remaining timestamp,
+
+145
+00:07:12,160 --> 00:07:14,160
+host, and counter fields dock values directly.
+
+146
+00:07:15,160 --> 00:07:18,160
+Because points are already grouped by TSID, it can
+
+147
+00:07:18,160 --> 00:07:21,160
+easily identify which ones are relevant for which host name
+
+148
+00:07:21,160 --> 00:07:22,160
+and process them.
+
+149
+00:07:23,160 --> 00:07:26,160
+When the query calculates the hourly results for Web 03,
+
+150
+00:07:26,160 --> 00:07:28,160
+it would include our original metric point.
+
+151
+00:07:29,400 --> 00:07:32,400
+With all that said, let's get back to the team running elastic search for
+
+152
+00:07:32,400 --> 00:07:34,400
+logs and Prometheus for metrics.
+
+153
+00:07:35,400 --> 00:07:37,400
+Here's something else to consider.
+
+154
+00:07:37,400 --> 00:07:39,400
+In elastic 9.5, Prometheus remote right and
+
+155
+00:07:40,400 --> 00:07:42,400
+prom QL support is generally available.
+
+156
+00:07:42,400 --> 00:07:44,400
+Prometheus can send points like ours directly into elastic
+
+157
+00:07:45,400 --> 00:07:48,400
+search, while existing prom QL and Grafana workflows can
+
+158
+00:07:48,400 --> 00:07:49,400
+query the same metrics engine.
+
+159
+00:07:50,400 --> 00:07:53,400
+So if you already run elastic for logs or traces,
+
+160
+00:07:53,400 --> 00:07:55,400
+and maintain Prometheus separately for metrics.
+
+161
+00:07:55,400 --> 00:07:59,400
+This is where the case gets compelling for consolidation, especially
+
+162
+00:07:59,400 --> 00:08:01,400
+if those metrics are current and depend only.
+
+163
+00:08:02,400 --> 00:08:05,400
+You could potentially remove a system without replacing your established
+
+164
+00:08:05,400 --> 00:08:07,400
+prom QL and Grifana workflows.
+
+165
+00:08:08,280 --> 00:08:11,280
+So consolidation is now a realistic option, especially
+
+166
+00:08:11,280 --> 00:08:14,280
+if you already use elastic and geometrics fit this model.
+
+167
+00:08:15,280 --> 00:08:18,280
+But of course, that doesn't mean moving is right for every team, and you
+
+168
+00:08:18,280 --> 00:08:20,280
+should consider your particular circumstances.
+
+169
+00:08:20,640 --> 00:08:23,640
+So we took this one metric point through the
+
+170
+00:08:23,640 --> 00:08:25,640
+whole change in elastic surge.
+
+171
+00:08:25,640 --> 00:08:28,640
+It could lose those extra structures, because metrics are predictable.
+
+172
+00:08:29,640 --> 00:08:31,640
+They're mostly written ones.
+
+173
+00:08:31,640 --> 00:08:34,640
+Their series and timestamp give each point an identity.
+
+174
+00:08:34,640 --> 00:08:37,640
+And we tend to query them in a few familiar ways.
+
+175
+00:08:38,640 --> 00:08:41,640
+Elastic search optimized for these properties by subtraction kept
+
+176
+00:08:41,640 --> 00:08:44,640
+columns central and replaced general purpose structures
+
+177
+00:08:44,640 --> 00:08:46,640
+with metric specific solutions.
+
+178
+00:08:47,640 --> 00:08:50,640
+Elastic 9.5's technical preview columnar mode now
+
+179
+00:08:50,640 --> 00:08:52,640
+applies that broader principle beyond metrics.
+
+180
+00:08:52,640 --> 00:08:55,640
+Keep fields in columns, and then add other indexes
+
+181
+00:08:55,640 --> 00:08:57,640
+only where the workload needs them.
+
+182
+00:08:58,120 --> 00:08:59,120
+And I have a question for you.
+
+183
+00:09:00,120 --> 00:09:04,120
+If you currently run another metric system alongside elastic,
+
+184
+00:09:04,120 --> 00:09:07,120
+what would you still want to see before consolidating, let us know in the comments.
+
+185
+00:09:08,120 --> 00:09:09,120
+Okay, thanks for watching.
+
+186
+00:09:10,120 --> 00:09:13,120
+If you like this, please like and subscribe, and we'll see you later.

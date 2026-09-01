@@ -1073,3 +1073,9 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 
 - Studied the five-and-a-half-minute Elastic 9.5 release-highlights outline and script as the model for a selective, developer-first announcement rather than a feature inventory.
 - Created `projects/202609-elastic-vector-database/script.md`, a compact talking-head draft with retrieval-flow graphics. It explains the vector-plus-BM25-plus-reranking path without a preview-environment demo, states the Serverless and VectorDB-mode boundary, and excludes unsupported scale, pricing, benchmark, competitor, and Slices claims.
+
+## 2026-09-01 — Reviewed updated Vector Database announcement draft
+
+- The revised draft has a concise technical retrieval explanation, but it removes the earlier Serverless-only and VectorDB-mode-only self-selection boundary.
+- Flagged unsupported language about automatic Jina-model configuration, "class-leading" quality, and broad scaling benefits. Elastic's public documentation describes setup paths but does not support an unconditional no-configuration claim for this unreleased project type.
+- Recommended replacing the medieval-vector-index hook and generic closing with the actual developer decision: which parts of a production retrieval stack the project configures, and when to use ES3 instead.
