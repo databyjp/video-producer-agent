@@ -1079,3 +1079,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - The revised draft has a concise technical retrieval explanation, but it removes the earlier Serverless-only and VectorDB-mode-only self-selection boundary.
 - Flagged unsupported language about automatic Jina-model configuration, "class-leading" quality, and broad scaling benefits. Elastic's public documentation describes setup paths but does not support an unconditional no-configuration claim for this unreleased project type.
 - Recommended replacing the medieval-vector-index hook and generic closing with the actual developer decision: which parts of a production retrieval stack the project configures, and when to use ES3 instead.
+
+## 2026-09-01 — Corrected metrics video captions against final script
+
+- Fixed transcription errors in `projects/202606-columnar-store/202608-metrics-improvements.srt` using `draft-script-v5.md` as the source of truth.
+- Categories of fixes: product-name garbles (elastic surge / Atlantic search → Elasticsearch, Lucine → Lucene, Grifana → Grafana, prom QL → PromQL, bloom → Bloom filter), technical-term garbles (dock/dog values → doc values, BKV/BKP tree → BKD tree, TSDV → TSDB, calumnar → columnar, NSYNC replica → in-sync replica, "primary charter signs" → "primary shard assigns", "confirmed the right" → "confirmed the write", "rules our/up" → "rules out", "depend only" → "append-only", "geometrics" → "your metrics"), and dropped/garbled words ("And..." → "And text data...", "it's thought" → "it stored", "is real" → "is routed", "It's a pent mostly" → "It's append-mostly", "look up some deduplication" → "lookups and deduplication", "written ones" → "written once").
+- Kept ad-libbed lines absent from the script (e.g. "but of course, this is a very significant reduction for many of you") since they were plausibly spoken, not transcription errors.
+- Normalized terms for caption readability: TSID (for `_tsid`), web-03, 42,108, 10:03.
