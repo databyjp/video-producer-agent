@@ -25,6 +25,8 @@ Master catalog of all pages in this knowledge bundle.
 - [Hooksnap — Viral Thumbnail Data Study 2026](sources/hooksnap-viral-thumbnail-data-study.md) — Data-backed thumbnail CTR analysis including faces, colors, text, composition
 - [Last Week Tonight Transcripts S12–S13](sources/lwt-transcripts-s12-s13.md) — Five full LWT episodes studied as primary source evidence of professional ear-writing craft
 
+- [Elastic Vector Database project brief](sources/elastic-vector-database-project-brief-internal.md) — Internal pre-launch scope, technical mechanisms, and claim boundaries for the planned Serverless vector-database project type
+
 ## Raw Assets
 
 - `raw/past-scripts/` — 7 video script sets (2026-02 through 2026-06), immutable originals
@@ -36,6 +38,7 @@ Master catalog of all pages in this knowledge bundle.
 - [AlertZero](wiki/alertzero.md) — Accurate framing of AlertZero as a SOC goal supported by Attack Discovery, Alert Analysis, and human judgment
 - [Elastic 9.5 Metrics GA](wiki/elastic-9-5-metrics-ga.md) — Prometheus migration path, metrics-efficiency claims, compatibility limits, and video guidance
 - [Elasticsearch Columnar Mode](wiki/elasticsearch-columnar-mode.md) — Accurate framing, workload heuristic, evidence boundaries, and relationship to the metrics deep dive
+- [Elastic Vector Database launch](wiki/elastic-vector-database-launch.md) — Technical narrative, mechanisms, and claim boundaries for the planned Serverless Vector Database project type
 - [ES|QL Data Federation](wiki/esql-data-federation.md) — Direct S3 querying, strongest demo story, validation gates, and claim boundaries
 - [Script Voice and Style](wiki/script-voice-and-style.md) — JP's writing voice, humor, tone conventions
 - [Script Structure Patterns](wiki/script-structure-patterns.md) — Hooks, sections, CTAs, pacing archetypes
