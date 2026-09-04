@@ -1102,3 +1102,16 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Created `/Users/jphwang/code/content/202609-llm-wiki-ai-index/docs/video-outline-proposals.md` with two structures: a recommended demo-led story built around the evolving SIMD page, and a design-led explanation of separate human-readable and machine-retrievable memory.
 - Kept both proposals within the demonstrated claim boundary: ten sources, historical KI retrieval, local Wiki operations, nondeterministic topic organization, and no production-scale or guaranteed-efficiency claim.
 - Updated `wiki/ai-index-backed-llm-wikis.md` with the replay findings and separated the proof required for architecture-and-evolution claims from the comparative evidence required for answer-quality or efficiency claims.
+
+## 2026-09-04 — Developed opening analogies for Vector Database announcement
+
+- Reviewed the current script, launch claim boundaries, RAG and hybrid-search context, and channel voice guidance.
+- Developed analogy options that frame vector search as necessary but incomplete, with direct mappings to lexical search, filters, and reranking.
+- Recommended a librarian analogy because it makes each retrieval layer concrete without portraying vector search itself as obsolete.
+- Made no wiki concept update pending JP's choice and feedback on the preferred analogy.
+
+## 2026-09-04 — Reviewed artisanal-workshop revision of Vector Database announcement
+
+- Reviewed the revised script for opening clarity, analogy structure, spoken delivery, repetition, and CTA specificity. Per JP's instruction, did not reassess factual claims.
+- Found that the modern-workshop image supports the product story, but the script delays the image until after the product explanation and uses "artisanal" to mean primitive tooling rather than custom craftsmanship.
+- Recommended resolving the metaphor in the opening, replacing the vague query paragraph with concrete retrieval needs, and merging the two repeated statements about starting work instead of configuring infrastructure.
