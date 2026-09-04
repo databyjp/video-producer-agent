@@ -9,18 +9,16 @@ timestamp: 2026-09-01T10:42:17+01:00
 
 # Elastic Vector Database project-type announcement
 
-Building RAG used to be... artisianal. That's because there's a lot more to it than just adding embeddings into a vector index.
+Building RAG used to be... artisanal. And not in the nice, sourdough kind of way.
 
-These days, many of us want to run complex and varied queries using versatile models that can work with diverse dataests. Not to mention the huge number of configuration choices, like the index type and settings, how to chunk data, and so on.
+Before you could build the application, you had to build the workshop itself: choose an index type, tune vector settings, wire up models, decide how to chunk the data, and configure everything in between. That's fine, and it can even be fun. But if your goal is to ship something to an end user, it's a lot of work before the real work begins.
 
-So, Elastic is introducing a dedicated Vector Database project type on Serverless, as a starting point for RAG and agent retrieval. It uses the recently added VectorDB index mode with vector-oriented defaults.
+So Elastic is introducing a dedicated Vector Database project type on Serverless. Think of it as a modern, fully featured workshop for RAG and agent retrieval. It uses the recently added VectorDB index mode with vector-oriented defaults.
 
-That means you get vector and semantic search for similarity, BM25 for precision, and filters to rule things in and out. And a reranker puts the best candidate first.
+You get vector and semantic search for similarity, BM25 for precision, and filters to rule things in and out. Then a reranker puts the best candidate first.
 
-And they come with great defaults pre-configured, like the efficient DiskBBQ index and class-leading, multilingual Jina models, meaning you can start building super quickly.
+The project comes preconfigured with sensible defaults - like the efficient DiskBBQ index and class-leading, multilingual Jina models.
 
-It's like having a fully featured, modern workshop that you can put to use straight away - compared to an artisanal workshop where you have to forge the hammer, cut the teeth into the saw, and mill your own lumber.
+So, instead of sizing a cluster or tuning vector settings, you can start solving real problems - getting feedback, iterating, and scaling.
 
-All of this means that you can get to actually doing the work, solving real problems, getting feedback, iterating and scaling - rather than fiddling with settings like sizing a cluster, or tuning vector settings.
-
-We're really excited to see you build with it. The Vector DB project type is available now on Serverless - so try it out, and let us know below what you think.
+We're really excited to see you build with it. The Vector DB project type is available now on Serverless, so try it out and let us know below what you think.
