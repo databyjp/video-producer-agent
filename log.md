@@ -1115,3 +1115,13 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Reviewed the revised script for opening clarity, analogy structure, spoken delivery, repetition, and CTA specificity. Per JP's instruction, did not reassess factual claims.
 - Found that the modern-workshop image supports the product story, but the script delays the image until after the product explanation and uses "artisanal" to mean primitive tooling rather than custom craftsmanship.
 - Recommended resolving the metaphor in the opening, replacing the vague query paragraph with concrete retrieval needs, and merging the two repeated statements about starting work instead of configuring infrastructure.
+
+## 2026-09-04 — Revised Vector Database announcement workshop framing
+
+- Produced a review draft that moves the workshop analogy into the opening, retains the existing product claims and structure, and merges the repeated setup-versus-building payoff.
+- Limited the revision to the requested analogy, clarity, repetition, typo, and spoken-delivery changes. Did not edit the project script file.
+
+## 2026-09-04 — Reviewed integrated workshop revision
+
+- Found that the revised opening now establishes and resolves the workshop analogy before the product mechanics, with no remaining structural issue.
+- Recommended only local spoken-language edits to strengthen the "work before the work" contrast, remove awkward default phrasing, and simplify the final payoff sentence.
