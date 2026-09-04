@@ -1086,3 +1086,19 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Categories of fixes: product-name garbles (elastic surge / Atlantic search → Elasticsearch, Lucine → Lucene, Grifana → Grafana, prom QL → PromQL, bloom → Bloom filter), technical-term garbles (dock/dog values → doc values, BKV/BKP tree → BKD tree, TSDV → TSDB, calumnar → columnar, NSYNC replica → in-sync replica, "primary charter signs" → "primary shard assigns", "confirmed the right" → "confirmed the write", "rules our/up" → "rules out", "depend only" → "append-only", "geometrics" → "your metrics"), and dropped/garbled words ("And..." → "And text data...", "it's thought" → "it stored", "is real" → "is routed", "It's a pent mostly" → "It's append-mostly", "look up some deduplication" → "lookups and deduplication", "written ones" → "written once").
 - Kept ad-libbed lines absent from the script (e.g. "but of course, this is a very significant reduction for many of you") since they were plausibly spoken, not transcription errors.
 - Normalized terms for caption readability: TSID (for `_tsid`), web-03, 42,108, 10:03.
+
+## 2026-09-03 — Reassessed the executable LLM Wiki demo
+
+- Re-reviewed `/Users/jphwang/code/content/202609-llm-wiki-ai-index` after the repository added executable multi-page Wiki maintenance, the `ai-index-idx-` convention, 10 bundled blog sources, deterministic scale profiles, and checked-in sample output.
+- Ran `npm run typecheck`, all 11 live tests, incremental ingestion, and representative KI queries. Typecheck and tests passed. The blog index held 186 KIs, and all 10 bundled sources skipped unchanged inference.
+- Found that the app now demonstrates source-linked KI extraction, idempotent ingestion, bounded hybrid retrieval, and small-batch Markdown synthesis. It does not yet prove that an AI Index makes the Wiki better or more scalable because maintenance loads KIs by source URI rather than retrieving related prior evidence, the query command only prints KIs, and no controlled baseline compares Wiki-plus-Raw retrieval with KI-assisted retrieval.
+- Found two visible fidelity gaps: the maintained three-batch demo excludes the tenth and most relevant precomputed-context article, and generated topic pages do not link to one another. Only `index.md` links into the topic set.
+- Recommended a demo-led experiment centered on one omitted detail, one topic page revised across checked-in batch snapshots, and a fixed comparison of correctness, citations, context volume, tool calls, and latency.
+- Added source summaries for Karpathy's LLM Wiki pattern, Elastic's AI Index walkthrough, and Elastic's precomputed-context evaluation. Added `wiki/ai-index-backed-llm-wikis.md` with the product seam, proof requirements, video structure, and complexity budget.
+
+## 2026-09-03 — Proposed two LLM Wiki video structures
+
+- Read the companion repository, its three architecture decisions, executable maintenance path, checked-in Wiki output, and the detailed replay brief. Verified the LLM Wiki and AI Index mechanics against the supplied primary sources.
+- Created `/Users/jphwang/code/content/202609-llm-wiki-ai-index/docs/video-outline-proposals.md` with two structures: a recommended demo-led story built around the evolving SIMD page, and a design-led explanation of separate human-readable and machine-retrievable memory.
+- Kept both proposals within the demonstrated claim boundary: ten sources, historical KI retrieval, local Wiki operations, nondeterministic topic organization, and no production-scale or guaranteed-efficiency claim.
+- Updated `wiki/ai-index-backed-llm-wikis.md` with the replay findings and separated the proof required for architecture-and-evolution claims from the comparative evidence required for answer-quality or efficiency claims.
