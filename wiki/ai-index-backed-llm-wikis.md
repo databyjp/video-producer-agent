@@ -3,10 +3,10 @@ type: Concept
 title: AI Index-backed LLM Wikis
 description: How to demonstrate an Elastic AI Index as the detailed evidence and retrieval layer behind a persistent human-readable LLM Wiki
 tags: [llm-wiki, ai-index, knowledge-indicators, context-engineering, video-strategy, elastic]
-timestamp: 2026-09-03T23:12:13Z
+timestamp: 2026-09-07T11:36:42Z
 ---
 
-# The useful product seam
+## The useful product seam
 
 Karpathy's LLM Wiki compiles Raw sources into maintained, interlinked Markdown. The Markdown gives people a compact, browsable synthesis. An Elastic AI Index can preserve source-linked details that do not belong in those pages and retrieve a bounded set when an agent needs them.
 
@@ -21,54 +21,52 @@ See [Karpathy's LLM Wiki pattern](../sources/karpathy-llm-wiki.md) and [Elastics
 
 ## What a demonstration must prove
 
-The proof depends on the claim. A working pipeline does not prove that the AI Index lowers cost, improves answers, or supports production scale. Those claims require comparative evidence at the seam where the product changes the outcome.
+The proof depends on the claim. A working pipeline does not prove that the AI Index lowers cost, improves answers, or supports production scale. Those claims require a controlled comparison at the seam where the product changes the outcome.
 
-For an answer-quality or efficiency claim, use the same questions, model, corpus, and tool budget for two paths:
+An architecture-and-evolution claim can use direct repository evidence. It should show that maintenance retrieves historical KIs, incorporates later evidence into existing topics, preserves provenance, and leaves unaffected pages unchanged. It should also recover a source-linked detail that Markdown omitted. This supports the claim that detailed AI Index memory and readable Markdown synthesis can develop separately. It does not establish token savings or a production scale threshold.
+
+For an answer-quality or efficiency claim, compare the same questions, model, corpus, and tool budget across two paths:
 
 - Markdown plus Raw-source search.
 - The same Markdown plus bounded KI retrieval, with Raw-source fallback.
 
-Report answer correctness and citation support first. Then report input tokens or retrieved characters, tool calls, and latency. A small transparent evaluation is stronger than an unsupported scale claim. Elastic's larger precomputed-context experiment provides an external hypothesis, not a result that a separate Wiki demo can inherit. See [Cutting agent costs with precomputed context](../sources/elastic-precomputed-context-agent-costs.md).
+Report answer correctness and citation support before input tokens, retrieved characters, tool calls, and latency. Elastic's larger precomputed-context experiment is an external hypothesis, not a result that a separate Wiki demo can inherit. See [Cutting agent costs with precomputed context](../sources/elastic-precomputed-context-agent-costs.md).
 
-A narrower architecture-and-evolution claim can use direct repository evidence instead. It should show that maintenance retrieves historical KIs, incorporates later evidence into an existing topic, preserves provenance, and leaves unaffected pages unchanged. This supports the claim that detailed AI Index memory and readable Markdown synthesis can grow separately. It does not establish a fixed token saving or a production scale threshold.
+## Findings from the 100-source experiment
 
-A fuller demonstration should show:
+The retained experiment produced 1,728 KIs from 100 Raw sources. The final Wiki contained 27 topic pages plus `index.md`; 23 topics cited multiple sources, and 17 topics were revised after creation. Twelve source articles had no Markdown citation while their KIs remained retrievable with provenance.
 
-- A later source revises an existing topic page.
-- One topic page synthesizes evidence from multiple sources.
-- Topic pages link to related topic pages, rather than only linking outward from `index.md`.
-- An omitted source-level fact remains recoverable through KI retrieval with provenance.
-- One missing, stale, or conflicting KI triggers Raw-source verification.
+The original 25-source maintenance guidance told the model to integrate every KI into Markdown. That retained run produced 23 topics, including 19 single-source topics. Revised selective-synthesis guidance over the same 443 KIs produced 14 topics, including eight single-source topics, and increased topic-to-topic links from zero to 31. These are nondeterministic demo findings, not an optimal page-count result.
 
-## Findings from the ten-source proof of concept
+Topic creation slowed in the retained growth run. The Wiki had 14 topics at 25 sources, 26 at 67 sources, and 27 at 100 sources. Fifteen of the 25 batches after source 25 created no page. `vector-search-benchmarking.md` accumulated 16 cited sources across 13 later revisions.
 
-The companion repository now retrieves historical KIs during Wiki maintenance. In a successful four-batch replay, batches two through four retrieved 24, 26, and 30 historical KIs. The third batch expanded one SIMD topic from two cited sources to four, while the final batch created a distinct KI topic and left six existing topic pages unchanged.
+The final batch reviewed a 27-page manifest, opened three existing pages, retrieved 22 historical KIs, created one topic, revised two topics plus `index.md`, and left 24 existing pages unchanged. One incoming Kubernetes dependency-management source remained KI-only because it did not improve the Wiki under its search-engineering charter.
 
-The replay produced seven topic pages, while the checked-in reviewed run produced eight from the same ten sources. This is evidence of organic, nondeterministic organization, not a stable page-count result. The later replay batches also opened every existing page body, so historical KI retrieval is demonstrated more strongly than selective body access.
-
-The query command remains a bounded KI retriever rather than a complete answer flow. Topic pages still lack links to one another. Use those limits to constrain the video promise.
+The experiment also exposed its next constraints. `agent-builder-integrations.md` reached 2,265 words and `vector-search-benchmarking.md` reached 1,975 words; both cited 16 sources. Broad hub pages, exhaustive manifest review, model-output failures, and the absence of a complete Wiki-plus-KI answer path bound the video claim. The run did not demonstrate an explicit merge, split, rename, deletion, or contradiction-resolution operation.
 
 ## Recommended video structure
 
-Use a demo-led experiment rather than a source-code tour.
+Use the retained Wiki evolution as the narrative spine.
 
-1. Preview the maintained Wiki and recover one obscure detail that is absent from Markdown.
-2. Explain the original LLM Wiki pattern and the context problem that appears as sources accumulate.
-3. Show one Raw source becoming source-linked KIs in the AI Index.
-4. Add small source batches and inspect a topic page that changes across checked-in snapshots.
-5. Compare the baseline and KI-assisted query paths on the same question set.
-6. State the limits: precomputation cost, extractor quality, freshness, fallback, and Wiki-maintenance context growth.
-7. End with the decision rule: use the extra layer when source volume or repeated detail retrieval has outgrown index-only navigation.
+1. Open on the 100-source map and distinguish source, KI, and topic counts.
+2. Explain Raw sources, KIs, the AI Index, Wiki pages, the Wiki index, and the Wiki manifest.
+3. Compare the original and revised 25-source outcomes to show why exhaustive KI-to-Markdown guidance contradicted the architecture.
+4. Follow one topic through retained snapshots so the audience sees evidence accumulate.
+5. Show the growth curve without treating page count as an optimization target.
+6. Trace the final batch: three opened pages, historical KI retrieval, four local operations, one KI-only source, and 24 unchanged pages.
+7. Query an omitted source detail through the AI Index and keep the provenance visible.
+8. Show only the `maintainWiki()` orchestration path after the audience has seen the behavior it explains.
+9. End on broad hub pages and the decision of when a successful topic should split.
 
-The viewer's job is to evaluate the pattern. Setup, corpus adapters, test architecture, and every Elasticsearch request belong in the repository, not the main narrative.
+The viewer's job is to evaluate the pattern. Setup, corpus adapters, structured-output internals, and every Elasticsearch request belong in the repository, not the main narrative. See the [current project outline](/projects/202609-ai-index-llm-wiki/outline.md).
 
 ## Complexity budget
 
-Keep idempotent ingestion, provenance, bounded hybrid retrieval, and a visible maintenance limitation. These mechanisms support the claim.
+Keep provenance, bounded hybrid retrieval, local page operations, validation, checkpointing, and one visible limitation. These mechanisms support the architecture-and-evolution claim.
 
-Move corpus profiling, secondary demo corpora, broad test tours, and production orchestration out of the main path. Spend the recovered complexity on one logical query command, reproducible batch snapshots, link and citation validation, and a small comparison harness.
+Use retained snapshots and traces for maintenance scenes. Reserve live execution for a short read-only KI query. The current generic `blogs` query command targets the smaller bundled index, so the recording needs a reviewed command that targets the 100-source experiment index and supports source filtering.
 
-A broad claim that AI Indexes make Wiki maintenance scale also requires maintenance to retrieve relevant prior KIs. If maintenance only loads the new batch by source URI, the AI Index is acting as storage rather than a search-assisted synthesis layer. Either add bounded retrieval of related prior evidence during maintenance or narrow the claim to durable detail recovery.
+Do not add a web interface, production queue, manifest index, or another corpus experiment for this video. Those additions increase explanation cost without strengthening the demonstrated claim.
 
 ## Evidence labels
 

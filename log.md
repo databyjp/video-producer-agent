@@ -1125,3 +1125,15 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 
 - Found that the revised opening now establishes and resolves the workshop analogy before the product mechanics, with no remaining structural issue.
 - Recommended only local spoken-language edits to strengthen the "work before the work" contrast, remove awkward default phrasing, and simplify the final payoff sentence.
+
+## 2026-09-07 — Outlined the 100-source AI Index-backed LLM Wiki video
+
+- Read the completed handoff, domain vocabulary, architecture decisions, 25- and 100-source summaries, retained Wiki snapshots, final-batch trace, and current Elastic AI Index guidance.
+- Created `projects/202609-ai-index-llm-wiki/outline.md`. The demo-led structure opens on the 100-source result, rewinds to the failed exhaustive guidance, follows one topic across retained snapshots, traces the final batch, retrieves one KI-only detail, and closes on broad hub pages as the next design pressure.
+- Verified the shell-tools result with a source-filtered query against `ai-index-idx-elastic-search-ai-demo`. Found that the current `npm run query -- blogs` command targets the smaller bundled index, so the outline records a separate recording prerequisite for the live query.
+- Updated `wiki/ai-index-backed-llm-wikis.md` to replace the stale ten-source findings with the completed 100-source evidence and current claim boundaries.
+
+## 2026-09-07 — Condensed the AI Index-backed LLM Wiki outline
+
+- Replaced the 266-line production outline with a one-page, 500-word structural outline after JP said the original was too long to review.
+- Kept the central narrative beats and evidence while removing the video brief, claim annotations, recording prerequisites, and source appendix.
