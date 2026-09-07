@@ -6,25 +6,26 @@ AI agents are great at research - I use them a lot. They can retrieve and read t
 
 But the volume and speed became a problem. I struggled to turn all that output into a curated knowledge base that compounds over time and helps me remember and learn.
 
-After some experimenting, I ended up with a system for maintaining Wikis that grew like this.
-[Show dataviz of source word count growing vs topic pages and topic page word counts growing far more slowly]
+After some experimenting, I ended up with a system for maintaining a Wiki that grew like this.
+[Show the retained experiment: source word count growing while topic count and Wiki word count grow more slowly]
 
 This keeps the human-readable Wiki manageable, while the AI Index preserves detailed, source-linked knowledge for agents.
 
 [TODO - review transition based on what comes next] So let me show you how this works, what I tried before it, and how you can try it yourself.
 
-## Explain the core concepts - llm-wiki, and AI-index
+## Explain the core concepts: LLM Wiki and AI Index
 
 - Explain Karpathy's LLM Wiki: Instead of re-synthesizing sources for every question, an agent maintains persistent, interlinked Markdown pages. You guide the research; the agent organizes and updates the Wiki.
-- Describe the challenges:
-    - As the Wiki grows, it requires more context to decide whether a new source needs a new page, should update an existing one, or doesn't change anything
-    - But the naive approach is to load the entire Wiki and all the old sources every time. That context keeps growing. And only giving the model the new source isn’t really fair either, because you’re asking it to weigh a primary source against compressed notes of everything that came before. [joke about study notes vs War and Peace?]
-    - Then there's the detail problem: put everything into Markdown and the Wiki becomes enormous; leave things out and they become difficult to find again later.
-- Show illustrative problems if possible
-    - Show the first 25-source attempt: 23 topics, including 19 single-source topics.
-    - Show the revised attempt over the same 443 KIs: 14 topics, including 8 single-source topics.
-    - Explain that telling the model to put every KI into Markdown was recreating the source collection rather than building a synthesized Wiki.
-- Elastic AI Index: Stores source-linked Knowledge Indicators (KIs) as machine-facing memory. The Wiki stays readable, while lexical and semantic search retrieve omitted details for queries and relevant history for maintenance.
+- Show the Markdown-only architecture: Raw sources -> maintained Wiki. People and agents depend on the same knowledge layer.
+- Explain where that starts to strain:
+  - As the Wiki grows, it needs more context to decide whether a source needs a new page, should update an existing one, or changes nothing.
+  - Loading everything makes the context keep growing. But showing only the new source asks the model to weigh primary evidence against compressed notes of everything that came before. [study notes versus *War and Peace*?]
+  - Put every detail in Markdown and the Wiki becomes enormous; leave details out and they become difficult to recover. [Architectural pressure, not a measured failure of Karpathy's approach.]
+- Introduce the Elastic AI Index: It stores source-linked KIs as machine-facing memory. Lexical and semantic search retrieve omitted details for queries and relevant history for maintenance.
+- Show why the AI Index alone was not enough:
+  - My first prompt still put every KI into Markdown: 25 sources produced 23 topics, including 19 single-source topics.
+  - Revised guidance over the same 443 KIs produced 14 topics, including 8 single-source topics.
+  - The separate memory layer only helps if the Wiki is allowed to stay selective.
 
 ## Watch the Wiki accumulate knowledge
 

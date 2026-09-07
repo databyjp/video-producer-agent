@@ -1137,3 +1137,8 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 
 - Replaced the 266-line production outline with a one-page, 500-word structural outline after JP said the original was too long to review.
 - Kept the central narrative beats and evidence while removing the video brief, claim annotations, recording prerequisites, and source appendix.
+
+## 2026-09-07 — Separated the LLM Wiki and AI Index failure modes
+
+- Updated the working outline to distinguish the architectural pressure in a Markdown-only LLM Wiki from the retained failure of the first AI Index-backed maintenance prompt.
+- Added the original-versus-revised 25-source result after introducing the AI Index, making clear that the memory layer only helps when maintenance allows Markdown to remain selective.
