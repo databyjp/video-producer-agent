@@ -28,6 +28,7 @@ Master catalog of all pages in this knowledge bundle.
 - [Elastic AI Assistant for Observability and Search](sources/elastic-observability-ai-assistant-docs.md) — Official capability, permission, provider, anonymization, and data-handling guidance for the observability AI assistant
 
 - [Elastic Vector Database project brief](sources/elastic-vector-database-project-brief-internal.md) — Internal pre-launch scope, technical mechanisms, and claim boundaries for the planned Serverless vector-database project type
+- [Elastic 9.5 vector-search defaults and index mode](sources/elastic-vector-search-9-5-official.md) — Official documentation for `vectordb_document`, vector-oriented defaults, and related DiskBBQ and Jina capabilities
 - [Karpathy's LLM Wiki pattern](sources/karpathy-llm-wiki.md) - Persistent, LLM-maintained Markdown knowledge that compounds across ingestion, queries, and linting
 - [Elasticsearch AI Indices: building context for agents](sources/elastic-ai-index-building-context-agents.md) - AI Index creation, KI generation, hybrid retrieval, and agent-routing mechanics
 - [Cutting agent costs with precomputed context](sources/elastic-precomputed-context-agent-costs.md) - Elastic's staged KI evaluation against search-and-fetch RAG under a fixed agent budget

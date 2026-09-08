@@ -1156,3 +1156,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - JP identified the central scope conflict as a mix of basic EDOT setup and persuasion to use Elastic, without a clear intended viewer.
 - Added that the video describes the application's frameworks and plumbing without first explaining what the application does or why its failure matters.
 - Recorded two reusable review rules: state the intended viewer and assumed knowledge, and describe a demo system through its user-facing scenario before inventorying its technical stack.
+
+## 2026-09-08 — Created Vector Database announcement design briefs
+
+- Created three semantics-only designer briefs for the short: the opening RAG workshop setup burden, the hybrid retrieval and Jina reranking journey, and the dedicated Serverless Vector Database project reveal and close.
+- Kept setup tasks, retrieval stages, project defaults, and closing copy independently revealable for editing.
+- Verified the exact `index.mode: vectordb_document` setting and vector-oriented defaults against Elastic's 9.5 announcement and index-settings reference.
+- Recorded that the checked public pages document VectorDB index mode but do not yet confirm the dedicated Serverless project type, its availability, or preconfigured Jina endpoints. Added a source summary and updated the launch concept with these verification boundaries.

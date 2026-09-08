@@ -15,10 +15,11 @@ Before you could build the application, you had to build the workshop itself: ch
 
 So Elastic is introducing a dedicated Vector Database project type on Serverless. Think of it as a modern, fully featured workshop for RAG and agent retrieval. It uses the recently added VectorDB index mode with vector-oriented defaults.
 
-You get vector and semantic search for similarity, BM25 for precision, and filters to rule things in and out. Then a reranker puts the best candidate first.
+You get vector and semantic search for similarity, BM25 for precision, and filters to rule things in and out. Then a preconfigured Jina reranker can put the best candidate first.
 
 The project comes preconfigured with sensible defaults - like the efficient DiskBBQ index and class-leading, multilingual Jina models.
 
 So, instead of sizing a cluster or tuning vector settings, you can start solving real problems - getting feedback, iterating, and scaling.
 
-We're really excited to see you build with it. The Vector DB project type is available now on Serverless, so try it out and let us know below what you think.
+We're really excited to see you build with it. The Vector DB project type is now available on Serverless, so try it out and let us know what you think below.
+

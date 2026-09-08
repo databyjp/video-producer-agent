@@ -3,14 +3,16 @@ type: Concept
 title: "Elastic Vector Database launch"
 description: "Technical narrative and claim boundaries for the planned Serverless Vector Database project type."
 tags: [elastic, elasticsearch, vector-search, hybrid-search, launch]
-timestamp: 2026-09-01T10:42:17+01:00
+timestamp: 2026-09-08T10:36:43Z
 ---
 
 # Core narrative
 
 The substantive product story is a **preconfigured production retrieval stack**, not a new embedding algorithm or a claim that vectors alone solve relevance.
 
-A developer creates a Serverless vector-database project. The project uses VectorDB index mode and vector-tuned operating defaults. One index supports vector retrieval, BM25 keyword retrieval, filters, and reranking. Elastic-managed inference can generate embeddings and run the reranker. The platform is intended to handle scaling, security, and pricing instead of requiring a separate vector database, model-serving layer, and search platform.
+A developer creates a Serverless vector-database project. The project uses VectorDB index mode, documented as `index.mode: vectordb_document`, and vector-tuned operating defaults. One index supports vector retrieval, BM25 keyword retrieval, filters, and reranking. Elastic-managed inference can generate embeddings and run the reranker. The platform is intended to handle scaling, security, and pricing instead of requiring a separate vector database, model-serving layer, and search platform.
+
+Elastic's public 9.5 documentation confirms the index mode and its vector-oriented defaults. As of September 8, 2026, the checked public pages do not document the dedicated Serverless project type or confirm that Jina endpoints are preconfigured. Treat the project name, availability, and included inference endpoints as launch-verification items.
 
 # Mechanisms worth explaining
 
@@ -39,6 +41,7 @@ Then state the boundary plainly: it is a Serverless project type using VectorDB 
 # Sources
 
 - [Elastic Vector Database project brief](../sources/elastic-vector-database-project-brief-internal.md)
+- [Elastic 9.5 vector-search defaults and index mode](../sources/elastic-vector-search-9-5-official.md)
 - Elastic DevRel Wiki: [Vector Search](../../llm-wiki/elastic-devrel-wiki/wiki/vector-search.md)
 - Elastic DevRel Wiki: [Elasticsearch Search Approaches](../../llm-wiki/elastic-devrel-wiki/wiki/search-approaches.md)
 - Elastic DevRel Wiki: [DiskBBQ](../../llm-wiki/elastic-devrel-wiki/wiki/diskbbq.md)
