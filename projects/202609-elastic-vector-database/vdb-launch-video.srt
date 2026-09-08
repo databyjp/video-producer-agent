@@ -1,6 +1,6 @@
 1
 00:00:00,040 --> 00:00:02,840
-Building rag used to be artisanal,
+Building RAG used to be artisanal,
 
 2
 00:00:02,840 --> 00:00:05,840
@@ -12,7 +12,7 @@ could build the application, you had to build the workshop itself,
 
 4
 00:00:09,840 --> 00:00:12,840
-choose an index type, tune back to settings, wire
+choose an index type, tune vector settings, wire
 
 5
 00:00:12,840 --> 00:00:16,840
@@ -32,11 +32,11 @@ That's a lot of work before the real work begins.
 
 9
 00:00:26,840 --> 00:00:29,840
-So, elastic is introducing a dedicated vector
+So, Elastic is introducing a dedicated Vector
 
 10
 00:00:29,840 --> 00:00:31,840
-database project type, one serverless.
+Database project type, on Serverless.
 
 11
 00:00:31,840 --> 00:00:34,840
@@ -44,15 +44,15 @@ Think of it like a modern, fully featured workshop
 
 12
 00:00:34,840 --> 00:00:36,840
-for rag and agent retrieval.
+for RAG and agent retrieval.
 
 13
 00:00:37,840 --> 00:00:40,840
-It uses the recently added vector DB index mode with
+It uses the recently added VectorDB index mode with
 
 14
 00:00:40,840 --> 00:00:42,840
-vector oriented defaults.
+vector-oriented defaults.
 
 15
 00:00:42,840 --> 00:00:45,840
@@ -64,7 +64,7 @@ BM25 for precision, and filters to rule things in or out.
 
 17
 00:00:50,840 --> 00:00:53,840
-Then, a preconfigured Gina reranker can
+Then, a preconfigured Jina reranker can
 
 18
 00:00:53,840 --> 00:00:54,840
@@ -76,15 +76,15 @@ This project comes preconfigured with sensible defaults,
 
 20
 00:00:59,840 --> 00:01:02,840
-like the efficient disk BBQ index and class leading
+like the efficient DiskBBQ index and class-leading
 
 21
 00:01:02,840 --> 00:01:04,840
-multilingual Gena models.
+multilingual Jina models.
 
 22
 00:01:04,840 --> 00:01:07,840
-So instead of sizing a cluster or tuning back to settings,
+So instead of sizing a cluster or tuning vector settings,
 
 23
 00:01:08,840 --> 00:01:11,840
@@ -100,7 +100,7 @@ We're really excited to see you build with it.
 
 26
 00:01:16,840 --> 00:01:19,840
-The Back to DV Project type is now available on server list.
+The Vector DB project type is now available on Serverless.
 
 27
 00:01:19,840 --> 00:01:21,840

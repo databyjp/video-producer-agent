@@ -1163,3 +1163,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Kept setup tasks, retrieval stages, project defaults, and closing copy independently revealable for editing.
 - Verified the exact `index.mode: vectordb_document` setting and vector-oriented defaults against Elastic's 9.5 announcement and index-settings reference.
 - Recorded that the checked public pages document VectorDB index mode but do not yet confirm the dedicated Serverless project type, its availability, or preconfigured Jina endpoints. Added a source summary and updated the launch concept with these verification boundaries.
+
+## 2026-09-08 — Corrected Vector Database launch subtitles
+
+- Compared `projects/202609-elastic-vector-database/vdb-launch-video.srt` with the original script and corrected high-confidence mistranscriptions of product and technical terms.
+- Corrected `tune back to settings` to `tune vector settings`, `Gina` and `Gena` to `Jina`, `disk BBQ` to `DiskBBQ`, `one serverless` to `on Serverless`, and `Back to DV` to `Vector DB`.
+- Preserved plausible recorded ad-libs, including `a nice sourdough kind of way`, `Think of it like`, and `filters to rule things in or out`.
+- Retained all 27 cue numbers and timestamps.
