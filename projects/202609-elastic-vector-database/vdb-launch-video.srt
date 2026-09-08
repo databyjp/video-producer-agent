@@ -1,0 +1,107 @@
+1
+00:00:00,040 --> 00:00:02,840
+Building rag used to be artisanal,
+
+2
+00:00:02,840 --> 00:00:05,840
+and not in a nice sourdough kind of way, before you
+
+3
+00:00:06,840 --> 00:00:09,840
+could build the application, you had to build the workshop itself,
+
+4
+00:00:09,840 --> 00:00:12,840
+choose an index type, tune back to settings, wire
+
+5
+00:00:12,840 --> 00:00:16,840
+up models, decide how to chunk the data, and configure everything in between.
+
+6
+00:00:17,840 --> 00:00:20,840
+Now, that's fine, and it can even be fun, but if
+
+7
+00:00:20,840 --> 00:00:22,840
+your goal is to ship something to an end user.
+
+8
+00:00:22,840 --> 00:00:24,840
+That's a lot of work before the real work begins.
+
+9
+00:00:26,840 --> 00:00:29,840
+So, elastic is introducing a dedicated vector
+
+10
+00:00:29,840 --> 00:00:31,840
+database project type, one serverless.
+
+11
+00:00:31,840 --> 00:00:34,840
+Think of it like a modern, fully featured workshop
+
+12
+00:00:34,840 --> 00:00:36,840
+for rag and agent retrieval.
+
+13
+00:00:37,840 --> 00:00:40,840
+It uses the recently added vector DB index mode with
+
+14
+00:00:40,840 --> 00:00:42,840
+vector oriented defaults.
+
+15
+00:00:42,840 --> 00:00:45,840
+You get vector and semantic search for similarity,
+
+16
+00:00:45,840 --> 00:00:49,840
+BM25 for precision, and filters to rule things in or out.
+
+17
+00:00:50,840 --> 00:00:53,840
+Then, a preconfigured Gina reranker can
+
+18
+00:00:53,840 --> 00:00:54,840
+put the best candidate first.
+
+19
+00:00:56,840 --> 00:00:59,840
+This project comes preconfigured with sensible defaults,
+
+20
+00:00:59,840 --> 00:01:02,840
+like the efficient disk BBQ index and class leading
+
+21
+00:01:02,840 --> 00:01:04,840
+multilingual Gena models.
+
+22
+00:01:04,840 --> 00:01:07,840
+So instead of sizing a cluster or tuning back to settings,
+
+23
+00:01:08,840 --> 00:01:11,840
+you can start solving real problems, getting feedback,
+
+24
+00:01:11,840 --> 00:01:12,840
+iterating, and scaling.
+
+25
+00:01:13,840 --> 00:01:15,840
+We're really excited to see you build with it.
+
+26
+00:01:16,840 --> 00:01:19,840
+The Back to DV Project type is now available on server list.
+
+27
+00:01:19,840 --> 00:01:21,840
+So try it out and let us know what you think below.
