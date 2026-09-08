@@ -44,7 +44,7 @@ Developers value their time acutely. This isn't a platitude — it's a measurabl
 ### Practical length guidance
 
 | Format | Typical Length | When to Use |
-|---|---|---|
+| --- | --- | --- |
 | Short vertical video | Up to 3 minutes | One idea, one result, or a clear bridge to a longer resource |
 | Focused tutorial | Often 8–15 minutes | One complete workflow or answer |
 | Deep dive | Often 15–25 minutes | Complex subject that benefits from evidence, tradeoffs, or a fuller demo |
@@ -91,13 +91,13 @@ Before recording, state the packaging promise in one sentence and check:
 
 If the opening uses someone else's story or an industry example, move into JP's experiment, result, or demonstration quickly. The story should create the question, not postpone the answer.
 
-### What works for developer hooks:
+### What works for developer hooks
 
 - **Universal pain or surprising fact** — "Should you let an AI agent run loose on your machine?" hooks anyone with a coding agent.
 - **Counterintuitive finding** — "Four out of five agent skills yielded zero improvement" creates immediate tension.
 - **Quick visual payoff** — A demo clip, a striking benchmark, a headline.
 
-### What doesn't work:
+### What doesn't work
 
 - Brand intros or logos before the content.
 - Broad topic statements that don't create tension ("Let's talk about X").
@@ -110,7 +110,9 @@ The first minute gets disproportionate editing investment. Polish the opening; t
 ## 6. Structure for Comprehension
 
 - **One dominant viewer job.** A video may help the viewer learn, build, choose, or diagnose, but one of those jobs must clearly dominate. If the outline tries to serve several equally, narrow it or split it.
+- **Name the intended viewer and assumed knowledge.** A beginner needs the problem, benefit, and terminology. A practitioner needs the product-specific behavior, tradeoffs, and decisions. Mixing both usually leaves the first group without motivation and the second without enough depth.
 - **One clear through-line per video.** The viewer should be able to state the video's argument in one sentence.
+- **Describe the application before inventorying its stack.** Explain what the system does, who uses it, and what failure matters. Frameworks, databases, and clients belong only where they clarify that scenario or a later diagnostic step.
 - **Prefer concrete outcomes over inventories.** Demonstrations, decisions, and worked examples are easier to follow than broad surveys of features, models, or benchmark results.
 - **Sections as self-contained units.** Each section answers one question. Clearly labeled. A viewer who skips ahead should be able to understand a section in isolation.
 - **Chapters/timestamps by default for substantial videos.** They improve navigation and show respect for the viewer's time. They are not a documented direct ranking boost. ([official source](../sources/youtube-search-discovery-official.md))
@@ -124,6 +126,7 @@ In order of impact:
 
 1. **Audio quality.** Non-negotiable. Poor audio is the #1 technical reason developers stop watching (15% cite it explicitly, and many more leave without saying why). A USB condenser mic in a low-reverb room is sufficient.
 2. **Content accuracy.** Every code snippet runs. Every benchmark is cited. Every claim is verifiable. A single factual error undermines the rest of the video.
+   - For AI-assisted observability demos, state what telemetry the assistant can access, whose permissions govern its queries, and whether a model provider processes the data. Do not tell viewers to paste raw telemetry into another AI service without redaction and organizational approval. ([official source](../sources/elastic-observability-ai-assistant-docs.md))
 3. **Pacing and editing.** Cut dead air, filler words, and redundancy. Modular filming (60–90 second segments) makes editing tractable. ([source](../sources/james-coffey-devrel-video-stack.md))
 4. **Visual clarity.** Code on screen must be readable — high-contrast syntax highlighting, 16pt+ equivalent, progressive reveal matching narration pace.
 5. **Camera/lighting.** Last priority. A webcam with soft lighting is fine. Developers judge by content and audio, not production value (only 14% of surveyed developers cared about production quality).
@@ -134,18 +137,22 @@ In order of impact:
 
 The goal is not to hide the company — it's to make the company's involvement *add value* rather than subtract it.
 
-### How to integrate organically:
+### How to integrate organically
+
 - **Solve a real problem using the product as one tool among others.** "Here's how to observe your coding agent" where Elasticsearch is one viable backend, not the only option.
 - **Leverage access.** Company affiliation gives access to engineering teams, early product features, and partnership opportunities that independent creators can't get. Use that access to deliver exclusive value.
 - **Be self-aware.** A tongue-in-cheek "I should shamelessly plug…" acknowledges what you're doing and disarms cynicism. Pretending you're not affiliated is worse than being transparent about it.
 
-### What to avoid:
+### What to avoid
+
 - Sales CTAs at the end of educational content ("contact sales for commercial use!") — they shift the register jarringly.
 - Product mentions that aren't earned by the content. If the product didn't appear in the video's problem-solving narrative, don't bolt it on.
 - Multiple product mentions in the back half — one organic integration is more credible than three.
 
-### The business case for viewer-first content:
+### The business case for viewer-first content
+
 The value isn't direct attribution (which will always undercount for developer audiences). It's:
+
 - **Brand association** — IBM's principle: if they've watched 5 of your videos on a topic, you're part of that conversation.
 - **Dark funnel influence** — Clerk saw sign-up spikes on video publish days even through untracked channels. 70% of B2B buying decisions happen before sales contact.
 - **Trust-driven conversion** — content that earns trust converts at higher rates than content that demands attention.

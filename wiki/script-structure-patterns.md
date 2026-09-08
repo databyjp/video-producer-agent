@@ -15,37 +15,44 @@ Common structures extracted from [past videos](past-videos-catalog.md).
 Most videos follow this arc:
 
 ### 1. Hook (30–60s)
+
 - Opens with a **relatable pain point or provocative question**: "Should you let an AI agent run loose on your machine?", "What if search could be as easy as this?"
 - Immediately establishes **stakes** — why should the viewer care?
 - Often includes a quick visual payoff (headlines, demo clip, benchmark screenshot).
 - Sometimes the hook is a **story** (Laurenzo's detective work in the black box agents video). Use an external story to create the question, then move quickly into JP's experiment, result, or application.
 
 ### 2. Problem / Context
+
 - Explains **why** the problem exists, not just what it is.
 - Builds understanding before introducing the solution.
 - Uses analogies to make abstract concepts concrete (containers vs VMs → Parallels running Windows).
 
 ### 3. Solution / Reveal
+
 - Introduces the tool/concept that solves the problem.
 - **Key facts first** — model sizes, capabilities, architecture in bullet-point style.
 - Benchmarks and evidence presented as a narrative, not a data dump.
 
 ### 4. Deep Dive Sections
+
 - Broken into clearly labeled sections with `##` headers and `-----` dividers.
 - Each section is self-contained (retrieval, quantization, tradeoffs, etc.).
 - Sections often end with a **takeaway sentence**: "That makes them very safe, versatile choices."
 
 ### 5. Honest Tradeoffs
+
 - Dedicated section for limitations — never buried or minimized.
 - Specific and concrete: "four gigabyte limit is hardcoded", "five to six gigabytes of disk".
 - Sometimes uses other people's criticism: "The Arcade.dev team called this 'a steep penalty'…"
 
 ### 6. Bigger Picture / Wrap-Up
+
 - Zooms out to industry context or future implications.
 - Ties back to the opening hook/question.
 - Often forward-looking: "I'm going to be playing in the sandbox a lot more."
 
 ### 7. CTA / Outro
+
 - Asks for likes/comments with personality (not generic).
 - Specific question to drive comments: "What's your preferred isolation strategy?"
 - Sign-off is brief and warm: "See you next time."
@@ -76,6 +83,8 @@ Use when the viewer's primary job is to build or see whether something works:
 5. **Tradeoffs and next step** — define where the approach is useful and give the viewer a practical continuation.
 
 The demo is the evidence, not decoration after a long explanation. Introduce architecture or benchmarks only when they explain a decision the viewer has just encountered.
+
+For a troubleshooting demo, close the loop: reproduce the symptom, use telemetry to narrow it, identify the cause, apply the fix, rerun the same path, and verify the result. Choose a failure where the demonstrated signal changes the investigation. If an obvious error message or one source line gives away the answer, explain what the observability tool added or use a problem that requires correlation across telemetry.
 
 ## Decision-Led Technical Explainer
 

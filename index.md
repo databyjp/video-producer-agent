@@ -24,6 +24,8 @@ Master catalog of all pages in this knowledge bundle.
 - [AIR Media Tech — YouTube Title Study](sources/air-media-tech-youtube-title-study.md) — 18,080-channel data study on title patterns across 11 niches
 - [Hooksnap — Viral Thumbnail Data Study 2026](sources/hooksnap-viral-thumbnail-data-study.md) — Data-backed thumbnail CTR analysis including faces, colors, text, composition
 - [Last Week Tonight Transcripts S12–S13](sources/lwt-transcripts-s12-s13.md) — Five full LWT episodes studied as primary source evidence of professional ear-writing craft
+- [Elastic Distribution of OpenTelemetry for Node.js](sources/elastic-edot-nodejs-docs.md) — Official setup, supported-instrumentation, configuration, and limitation guidance for EDOT Node.js
+- [Elastic AI Assistant for Observability and Search](sources/elastic-observability-ai-assistant-docs.md) — Official capability, permission, provider, anonymization, and data-handling guidance for the observability AI assistant
 
 - [Elastic Vector Database project brief](sources/elastic-vector-database-project-brief-internal.md) — Internal pre-launch scope, technical mechanisms, and claim boundaries for the planned Serverless vector-database project type
 - [Karpathy's LLM Wiki pattern](sources/karpathy-llm-wiki.md) - Persistent, LLM-maintained Markdown knowledge that compounds across ingestion, queries, and linting

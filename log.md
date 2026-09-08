@@ -1142,3 +1142,17 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 
 - Updated the working outline to distinguish the architectural pressure in a Markdown-only LLM Wiki from the retained failure of the first AI Index-backed maintenance prompt.
 - Added the original-versus-revised 25-source result after introducing the AI Index, making clear that the memory layer only helps when maintenance allows Markdown to remain selective.
+
+## 2026-09-08 — Reviewed first-draft Node.js observability video
+
+- Reviewed the 11:36 generated transcript in `captions-suyash-o11y-v1_iTT_English (United States).itt` for promise, structure, spoken clarity, technical claims, tutorial completeness, and reusable coaching feedback.
+- Found that the strongest material is the diagnosis after 7:03, but the opening promises a setup tutorial and spends most of the first seven minutes on architecture, README narration, account creation, and repeated already-completed steps.
+- Recommended choosing one diagnostic story, previewing the result, executing only the setup steps that matter, applying the fix, rerunning the same request, and verifying the error is gone.
+- Flagged overstatements that EDOT captures all application logic and that the AI assistant sees all data, plus the unsafe suggestion to paste raw telemetry into a separate model. Verified EDOT instrumentation and AI Assistant data boundaries against current Elastic documentation.
+- Added source summaries for EDOT Node.js and the Observability AI Assistant. Updated the demo structure and AI-data-safety guidance with reusable findings.
+
+## 2026-09-08 — Refined feedback on Node.js observability draft
+
+- JP identified the central scope conflict as a mix of basic EDOT setup and persuasion to use Elastic, without a clear intended viewer.
+- Added that the video describes the application's frameworks and plumbing without first explaining what the application does or why its failure matters.
+- Recorded two reusable review rules: state the intended viewer and assumed knowledge, and describe a demo system through its user-facing scenario before inventorying its technical stack.
