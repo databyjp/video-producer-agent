@@ -2,24 +2,58 @@
 
 ## Open on the result
 
-I use AI agents for research a LOT. I know the phrase "do your own research" can be controversial, but when used responsibly, they can be amazing.
+I use AI agents for research a LOT. They search, read, filter, and summaries thousands of documents for me in **minutes**.
 
-I use them to search, read, filter, and summaries thousands of documents in just minutes, which was unthinkable just a few years ago.
+But this introduces a new problem - it's now too easy for research end up with piles and piles of documents. Just like how developers are drowning in code review work.
 
-But this shifts the problem - just like how developers deal with mountains of code review tasks, it's too easy for research end up with piles and piles of documents.
+Here's what I do instead:
+[show me running `npm run wiki:import -- sample_data/blogs --limit 10]
 
-For me, that meant too much skimming, and trying to stay afloat. I wasn't doing the things that actually help me long term - thinking, reflecting and learning.
+This imports 10 articles from the blogs directory, and autonomously builds a wiki.
+[Show the rendered wiki pages]
 
-So after some experimenting, I ended up with a system where I use an LLM and Elasticsearch to manage Wikis for me.
-[Show the retained experiment: source word count growing while topic count and Wiki word count grow more slowly]
+And if I import, say - 90 more
+[show me running `npm run wiki:import -- sample_data/blogs --limit 100]
 
-This keeps the human-readable Wiki manageable, while the AI Index preserves detailed, source-linked knowledge for when I, or agents, need it.
+This will take a bit longer - [show caption "LITTLE WHILE LATER"]
+[show the rendered wiki pages]
+It handles the larger size just fine - and the number of pages has only gone from <n1> to <n2> [TODO: CONFIRM]
 
-Let me show you how that works, and take you through the journey of how I got there.
+Meanwhile the original knowledge is still available to me, and the agents.
+
+In other words - the human-readable Wiki remains manageable, while the AI Index preserves detailed, source-linked knowledge.
+
+I built this by expanding the LLM-wiki concept with Elasticsearch's AI index at its core.
+
+So let me show you how that works, and take you through the journey of how I got there.
 
 <JP REVISION HEAD>
 
-## Explain the core concepts: LLM Wiki and AI Index
+## Architecture
+
+Let me show you how the app works.
+[Architecture diagram]
+
+## Explain the core concept: LLM Wiki
+
+My starting point was the LLM-wiki. This is an idea floated by Andrej Karpathy - yes, THAT Andrej Karpahy [show picture].
+
+[read over the original GIST on screen https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f]
+His thesis was that RAG is useful, but "LLM is rediscovering knowledge from scratch on every question. There's no accumulation", so he proposes that "Instead of just retrieving from raw documents at query time, the LLM incrementally builds and maintains a persistent wiki". One where "You're in charge of sourcing, exploration, and asking the right questions. The LLM does all the grunt work".
+
+It's a very simple, but also very smart - let the LLMs do what they're good at, which is reading and manipulating big volumes of information. While you curate the direction of the wikis.
+
+So you can probably see why this is a great idea, with lots of adoption in forms of packages, websites, extensions (TODO: agent to research; show screenshots).
+
+But this - let's called "vanilla LLM-wiki", has a few limitations around scaling.
+
+Let me explain.
+
+### LLM wikis - the pain
+
+
+
+
 
 - Explain Karpathy's LLM Wiki: Instead of re-synthesizing sources for every question, an agent maintains persistent, interlinked Markdown pages. You guide the research; the agent organizes and updates the Wiki.
 - Show the Markdown-only architecture: Raw sources -> maintained Wiki. People and agents depend on the same knowledge layer.
