@@ -2,16 +2,20 @@
 
 ## Open on the result
 
-AI agents are great at research - I use them a lot. They can retrieve and read through hundreds of documents in minutes, and produce (pretty reasonable) summaries for me to use.
+I use AI agents for research a LOT. I know the phrase "do your own research" can be controversial, but when used responsibly, they can be amazing.
 
-But the volume and speed became a problem. I struggled to turn all that output into a curated knowledge base that compounds over time and helps me remember and learn.
+I use them to search, read, filter, and summaries thousands of documents in just minutes, which was unthinkable just a few years ago.
 
-After some experimenting, I ended up with a system for maintaining a Wiki that grew like this.
+But this shifts the problem - just like how developers deal with mountains of code review tasks, it's too easy for research end up with piles and piles of documents.
+
+For me, that meant too much skimming, and trying to stay afloat. I wasn't doing the things that actually help me long term - thinking, reflecting and learning.
+
+So after some experimenting, I ended up with a system where I use an LLM and Elasticsearch to manage Wikis for me.
 [Show the retained experiment: source word count growing while topic count and Wiki word count grow more slowly]
 
-This keeps the human-readable Wiki manageable, while the AI Index preserves detailed, source-linked knowledge for agents.
+This keeps the human-readable Wiki manageable, while the AI Index preserves detailed, source-linked knowledge for when I, or agents, need it.
 
-To see why it ended up with two knowledge layers, let's start with the Markdown-only idea, then add the AI Index and watch one retained run grow.
+Let me show you how that works, and take you through the journey of how I got there.
 
 ## Explain the core concepts: LLM Wiki and AI Index
 
