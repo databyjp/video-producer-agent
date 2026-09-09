@@ -17,6 +17,8 @@ This keeps the human-readable Wiki manageable, while the AI Index preserves deta
 
 Let me show you how that works, and take you through the journey of how I got there.
 
+<JP REVISION HEAD>
+
 ## Explain the core concepts: LLM Wiki and AI Index
 
 - Explain Karpathy's LLM Wiki: Instead of re-synthesizing sources for every question, an agent maintains persistent, interlinked Markdown pages. You guide the research; the agent organizes and updates the Wiki.
