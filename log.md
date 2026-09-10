@@ -1177,3 +1177,9 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Reduced the application to the Raw source, KI extraction, Elastic AI Index, Wiki maintenance, Markdown Wiki, and read-only query paths.
 - Kept progressive-disclosure internals, experiment counts, production machinery, and individual TypeScript modules out of the graphic so the viewer gets a system map before the later conceptual and code explanations.
 - Preserved the demonstrated boundaries: maintenance consumes KIs rather than Raw source bodies, Markdown remains selective, and the query CLI retrieves source-linked KIs without synthesizing a final answer.
+
+## 2026-09-10 — Drafted the AI Index app architecture section
+
+- Replaced the architecture placeholder in `projects/202609-ai-index-llm-wiki/outline.md` with spoken narration matched to the existing first-person draft.
+- Synchronized the narration with the completed graphic's machine-memory, read-only query, Wiki-maintainer, and Markdown-Wiki elements.
+- Kept the explanation at system level and preserved the implementation boundaries: source-linked KI extraction, lexical and semantic retrieval, selected Wiki context, local page changes, and a read-only query path.

@@ -27,12 +27,34 @@ I built this by expanding the LLM-wiki concept with Elasticsearch's AI index at 
 
 So let me show you how that works, and take you through the journey of how I got there.
 
-<JP REVISION HEAD>
-
 ## Architecture
 
-Let me show you how the app works.
-[Architecture diagram]
+Here's the basic architecture.
+[show app architecture graphic - ~/code/agent-sandboxes/video-producer/projects/202609-ai-index-llm-wiki/assets/graphics/202609-ai-index-01-app-architecture.svg]
+
+This top part shows what I'd call the "machine memory" layer.
+
+[highlight machine-memory lane: Raw sources -> LLM -> Elastic AI Index]
+
+This layer starts with raw sources - articles, documents, whatever I'm researching. An LLM reads each source and ingests it into an Elasticsearch AI index, to create KIs, or "knowledge indicators".
+
+A KI is just one useful piece of knowledge. And crucially, it keeps the URL of the source it came from. This allows the agent to find each piece of knowledge when it's needed - AND if it wants to go deeper, it can review the full source, through the URL.
+
+This is the magic that allows detailed memory to keep growing.
+
+And that infrastructure, in turn, powers the final outputs.
+
+[highlight the bottom row]
+
+The maintainer LLM now has access to a query tool. It uses that to find the relevant KIs and update the Wiki documents with a holistic perspective.
+
+The result is a compact Wiki index and a set of topic pages that I can use as starting points.
+
+I can tell you, from having used LLM wikis for a while - that they make it so much easier my little brain to process and digest information.
+
+Now, this is the final outcome - but it's not how I started. Let me show you why and how I made these decisions.
+
+<JP REVISION HEAD>
 
 ## Explain the core concept: LLM Wiki
 
@@ -50,10 +72,6 @@ But this - let's called "vanilla LLM-wiki", has a few limitations around scaling
 Let me explain.
 
 ### LLM wikis - the pain
-
-
-
-
 
 - Explain Karpathy's LLM Wiki: Instead of re-synthesizing sources for every question, an agent maintains persistent, interlinked Markdown pages. You guide the research; the agent organizes and updates the Wiki.
 - Show the Markdown-only architecture: Raw sources -> maintained Wiki. People and agents depend on the same knowledge layer.

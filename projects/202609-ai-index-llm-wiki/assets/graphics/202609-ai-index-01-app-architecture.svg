@@ -136,8 +136,8 @@
                 <path id="path56" fill="#fec514" stroke="none" d="M 498 412 L 649 412 C 656.179688 412 662 417.820313 662 425 L 662 437 C 662 444.179688 656.179688 450 649 450 L 498 450 C 490.820313 450 485 444.179688 485 437 L 485 425 C 485 417.820313 490.820313 412 498 412 Z"/>
                 <text id="EXTRACT" xml:space="preserve" x="523.677202" y="441" font-family="Inter" font-size="18" font-weight="700" fill="#1c1e23" letter-spacing="1.5">EXTRACT</text>
                 <text id="LLM--KIs" xml:space="preserve" x="484" y="484" font-family="Space Mono" font-size="29" font-weight="700" fill="#1c1e23">LLM → KIs</text>
-                <text id="its-source-URL" xml:space="preserve" x="484" y="571" font-family="Inter" font-size="24" fill="#5a6068">its source URL</text>
-                <text id="Each-KI-keeps" xml:space="preserve" x="484" y="538" font-family="Inter" font-size="24" fill="#5a6068">Each KI keeps</text>
+                <text id="Elasticsearch-AI-index" xml:space="preserve" x="484" y="571" font-family="Inter" font-size="24" fill="#5a6068">Elasticsearch AI index</text>
+                <text id="Ingest-data-into-an" xml:space="preserve" x="484" y="538" font-family="Inter" font-size="24" fill="#5a6068">Ingest data into an</text>
             </g>
             <g id="elastic-ai-index">
                 <filter id="filter3" x="0" y="0" width="2400" height="1350" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
