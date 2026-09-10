@@ -54,8 +54,6 @@ I can tell you, from having used LLM wikis for a while - that they make it so mu
 
 Now, this is the final outcome - but it's not how I started. Let me show you why and how I made these decisions.
 
-<JP REVISION HEAD>
-
 ## Explain the core concept: LLM Wiki
 
 My starting point was the LLM-wiki. This is an idea floated by Andrej Karpathy - yes, THAT Andrej Karpahy [show picture].
@@ -67,9 +65,11 @@ It's a very simple, but also very smart - let the LLMs do what they're good at, 
 
 So you can probably see why this is a great idea, with lots of adoption in forms of packages, websites, extensions (TODO: agent to research; show screenshots).
 
-But this - let's called "vanilla LLM-wiki", has a few limitations around scaling.
+But this - let's called "vanilla LLM-wiki", has a few limitations - around scaling and efficiency.
 
 Let me explain.
+
+<JP REVISION HEAD>
 
 ### LLM wikis - the pain
 
