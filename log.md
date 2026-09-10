@@ -1197,3 +1197,8 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Made a minimal edit to the architecture section in `projects/202609-ai-index-llm-wiki/outline.md`.
 - Reframed the Query CLI and Wiki maintainer as separate consumers of the AI Index.
 - Clarified that the CLI is read-only, source URLs provide provenance, and the maintainer receives selected Wiki context and updates only affected pages.
+
+## 2026-09-10 — Corrected KI generation attribution
+
+- Updated the architecture narration in `projects/202609-ai-index-llm-wiki/outline.md` to state that an LLM generates KIs during ingestion and the Elasticsearch AI Index stores them.
+- Preserved the surrounding wording and delivery structure.

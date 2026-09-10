@@ -38,7 +38,7 @@ This top part shows what I'd call the "machine memory" layer.
 
 This layer starts with raw sources - articles, documents, whatever I'm researching.
 
-When I send it to Elasticsearch's AI index, it automatically turns each source into a set of Knowledge Indicators, or KIs - which are then stored in the index.
+When I ingest a source, an LLM automatically turns it into a set of Knowledge Indicators, or KIs - which are then stored in the Elasticsearch AI Index.
 
 A KI is just one useful piece of knowledge. And crucially, it keeps the URL of the source it came from. So every result stays traceable back to the full source.
 
