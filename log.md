@@ -1170,3 +1170,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Corrected `tune back to settings` to `tune vector settings`, `Gina` and `Gena` to `Jina`, `disk BBQ` to `DiskBBQ`, `one serverless` to `on Serverless`, and `Back to DV` to `Vector DB`.
 - Preserved plausible recorded ad-libs, including `a nice sourdough kind of way`, `Think of it like`, and `filters to rule things in or out`.
 - Retained all 27 cue numbers and timestamps.
+
+## 2026-09-10 — Created AI Index-backed LLM Wiki architecture brief
+
+- Created `projects/202609-ai-index-llm-wiki/tasks/design-app-architecture.md` for the architecture scene immediately after the opening Wiki demonstration.
+- Reduced the application to the Raw source, KI extraction, Elastic AI Index, Wiki maintenance, Markdown Wiki, and read-only query paths.
+- Kept progressive-disclosure internals, experiment counts, production machinery, and individual TypeScript modules out of the graphic so the viewer gets a system map before the later conceptual and code explanations.
+- Preserved the demonstrated boundaries: maintenance consumes KIs rather than Raw source bodies, Markdown remains selective, and the query CLI retrieves source-linked KIs without synthesizing a final answer.
