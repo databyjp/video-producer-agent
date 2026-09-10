@@ -36,17 +36,21 @@ This top part shows what I'd call the "machine memory" layer.
 
 [highlight machine-memory lane: Raw sources -> LLM -> Elastic AI Index]
 
-This layer starts with raw sources - articles, documents, whatever I'm researching. An LLM reads each source and ingests it into an Elasticsearch AI index, to create KIs, or "knowledge indicators".
+This layer starts with raw sources - articles, documents, whatever I'm researching.
 
-A KI is just one useful piece of knowledge. And crucially, it keeps the URL of the source it came from. This allows the agent to find each piece of knowledge when it's needed - AND if it wants to go deeper, it can review the full source, through the URL.
+When I send it to Elasticsearch's AI index, it automatically turns each source into a set of Knowledge Indicators, or KIs - which are then stored in the index.
+
+A KI is just one useful piece of knowledge. And crucially, it keeps the URL of the source it came from. So every result stays traceable back to the full source.
 
 This is the magic that allows detailed memory to keep growing.
 
-And that infrastructure, in turn, powers the final outputs.
+And that machine memory, in turn, powers two separate paths.
 
-[highlight the bottom row]
+[highlight the Query CLI, then the Wiki maintainer and Markdown Wiki separately]
 
-The maintainer LLM now has access to a query tool. It uses that to find the relevant KIs and update the Wiki documents with a holistic perspective.
+The read-only Query CLI retrieves KIs and their source URLs directly. It doesn't change the Wiki.
+
+The maintainer LLM is different. It receives the new KIs, retrieves relevant history from the AI Index, and reads the existing Wiki context. Then it updates only the pages that need to change.
 
 The result is a compact Wiki index and a set of topic pages that I can use as starting points.
 
@@ -72,6 +76,10 @@ Let me explain.
 <JP REVISION HEAD>
 
 ### LLM wikis - the pain
+
+The idea of asking an LLM to produce summaries in a wiki sounds simple enough.
+
+But a vanilla LLM-wiki often makes us choose between playing a nasty game of telephone, or incurring extra token costs.
 
 - Explain Karpathy's LLM Wiki: Instead of re-synthesizing sources for every question, an agent maintains persistent, interlinked Markdown pages. You guide the research; the agent organizes and updates the Wiki.
 - Show the Markdown-only architecture: Raw sources -> maintained Wiki. People and agents depend on the same knowledge layer.

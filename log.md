@@ -1183,3 +1183,17 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Replaced the architecture placeholder in `projects/202609-ai-index-llm-wiki/outline.md` with spoken narration matched to the existing first-person draft.
 - Synchronized the narration with the completed graphic's machine-memory, read-only query, Wiki-maintainer, and Markdown-Wiki elements.
 - Kept the explanation at system level and preserved the implementation boundaries: source-linked KI extraction, lexical and semantic retrieval, selected Wiki context, local page changes, and a read-only query path.
+
+## 2026-09-10 — Reviewed the revised AI Index Wiki opening
+
+- Reviewed `projects/202609-ai-index-llm-wiki/outline.md` through `<JP REVISION HEAD>` against the project evidence, source code, completed architecture graphic, and script guidance.
+- Found that the result-first structure, first-person voice, and product integration work, but the opening's `wiki:import -- sample_data/blogs --limit 100` scene cannot import 90 more sources because the bundled directory contains only ten.
+- Flagged unsupported scale and efficiency language, an incorrect KI-generation sequence, an unimplemented Raw-source fetch implication, and a maintainer description that overstates the disclosed context as holistic.
+- Recommended replacing the dense three-quotation Karpathy paragraph with a spoken paraphrase, tightening the 555-word runway to the pain section, and completing a grammar and terminology pass.
+- Made no changes to the outline.
+
+## 2026-09-10 — Separated AI Index query and Wiki maintenance narration
+
+- Made a minimal edit to the architecture section in `projects/202609-ai-index-llm-wiki/outline.md`.
+- Reframed the Query CLI and Wiki maintainer as separate consumers of the AI Index.
+- Clarified that the CLI is read-only, source URLs provide provenance, and the maintainer receives selected Wiki context and updates only affected pages.
