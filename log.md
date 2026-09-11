@@ -1225,3 +1225,24 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Explained Wiki maintenance through new KIs, the complete manifest, selected page bodies, retrieved historical KIs, and local page changes.
 - Used the retained 443-KI comparison to show that the memory layer only kept Markdown selective after the maintenance guidance allowed KI-only detail.
 - Did not edit `outline.md` because the user's supplied pain section is newer than the checked-in text.
+
+## 2026-09-10 — Reshaped the AI Index explanation around benefits
+
+- Recommended leading the AI Index section with the user outcome, then explaining KI generation and storage, showing one bounded retrieval example, and recapping the benefit before reconnecting it to Wiki maintenance.
+- Kept performance claims qualitative because the companion experiment did not measure token cost, latency, or answer quality.
+- Recommended using the following section to map AI Index retrieval directly onto the two Markdown-only maintenance pressures and then introduce the exhaustive-versus-selective prompt comparison.
+- Did not edit the outline.
+
+## 2026-09-10 — Drafted the AI Index benefit and Wiki solution sections
+
+- Replaced the two placeholders in `projects/202609-ai-index-llm-wiki/outline.md` with full spoken drafts.
+- Structured the AI Index section as benefit, reference construction pattern, bounded retrieval example, and benefit recap.
+- Connected the Wiki section to the preceding summary-versus-context problem through KI generation, the Wiki manifest, selected page bodies, retrieved history, and local updates.
+- Added the retained exhaustive-versus-selective comparison using the same 443 KIs and identified both outputs as nondeterministic runs.
+- Preserved the surrounding pain section and rough sections.
+
+## 2026-09-10 — Revised the AI Index sections toward JP's voice
+
+- Reworked the two newly drafted sections in `projects/202609-ai-index-llm-wiki/outline.md` without changing their evidence or visual sequence.
+- Replaced product-documentation phrasing with first-person explanation, conversational transitions, shorter spoken sentences, and a self-deprecating turn around the failed maintenance prompt.
+- Preserved the KI construction, retrieval, progressive-disclosure, and 443-KI comparison claims.

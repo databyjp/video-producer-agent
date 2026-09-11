@@ -106,30 +106,87 @@ And that's how I arrived at the solution that leverages Elastic's AI index and K
 
 An AI Index is an Elasticsearch index designed to store and retrieve knowledge for agents.
 
-Here's what it can do for you - (describe benefits of an AI index)
+Now, here's the useful bit.
 
-And here's how we recommend that you build it. (describe what KIs are, and how to create and add them)
+Normally, when an agent starts a job, it first has to go rummaging around for context. It reads files, pokes at systems, and spends tokens working out where the useful information actually lives.
 
-[Brief example on retrieval]
+An AI Index moves some of that grunt work up front. You do it once, store what the agent learns, and make that knowledge searchable for later.
 
-[recap benefit]
+[show benefits: do the work once -> retrieve when needed -> keep the source]
+
+So instead of sending the agent back through the entire source collection, you can give it the pieces of knowledge that are actually relevant to the job.
+
+So, how do you build one?
+
+The exact tooling can vary, but here's the pattern we recommend.
+
+[show: source -> LLM or workflow -> KIs -> AI Index]
+
+You take a source, send it through a workflow to an LLM, and ask that LLM to extract Knowledge Indicators, or KIs.
+
+A KI isn't just some arbitrary chunk of text. It's one useful claim, explanation, or relationship, with a link back to where it came from.
+
+Those KIs get written into the AI Index, where Elasticsearch makes them available through lexical and semantic search.
+
+So let's say I ask, "How do I configure hybrid search fusion?"
+
+[show brief retrieval: question -> relevant KIs with source URLs]
+
+Instead of reopening every article that mentions hybrid search, I get back a handful of relevant KIs, with the source URL right next to each one.
+
+Now, that's not the final answer. It's the context an agent can use to produce one.
+
+So, in other words - detailed memory, on demand, with a link back to the original source.
 
 ## How an LLM-wiki backed by an AI index solves the problem
 
-[connect it back to LLM-wiki]
+And this is exactly what my LLM Wiki was missing.
 
+Instead of asking the maintainer to compare a full new source against a collection of lossy summaries, I first turn that source into KIs and store them in the AI Index.
 
+[show: new source -> new source-linked KIs -> AI Index]
 
+The maintainer gets those new KIs, plus a manifest of the existing Wiki - basically, a one-line description of every page.
 
+It uses that overview to work out which Wiki pages it needs to read, and what historical knowledge it wants to retrieve from the AI Index.
 
+[show: new KIs + Wiki manifest -> selected pages + retrieved historical KIs]
 
+So now it's comparing apples with apples: new KIs, historical KIs, and the full contents of only the Wiki pages that might need to change.
 
+It updates those pages, and leaves everything else alone.
 
-- Introduce the Elastic AI Index: It stores source-linked KIs as machine-facing memory. Lexical and semantic search retrieve omitted details for queries and relevant history for maintenance.
-- Show why the AI Index alone was not enough:
-  - My first maintenance prompt told the model to integrate every KI into Markdown: 25 sources produced 23 topics, including 19 single-source topics.
-  - Revised guidance over the same 443 KIs produced 14 topics, including 8 single-source topics.
-  - The separate memory layer only helps if the Wiki is allowed to stay selective.
+It doesn't have to load every source or every Wiki page up front. It starts small, and only pulls in the deeper context it asks for.
+
+Which sounds like problem solved.
+
+Except, of course, I still managed to get it wrong.
+
+My first maintenance prompt told the LLM to integrate every KI into Markdown.
+
+[show original maintenance instruction]
+
+So with twenty-five sources, I ended up with twenty-three topics. And nineteen of those were based on a single source.
+
+Basically, I'd built a collection of source summaries wearing Wiki-page costumes.
+
+So I changed the guidance. I told the maintainer that narrow or highly detailed knowledge could stay in the AI Index. The Markdown Wiki should focus on the bigger, cross-source picture.
+
+[show revised maintenance instruction]
+
+The architecture stayed exactly the same. Both runs used the same four hundred and forty-three KIs.
+
+But the revised run produced fourteen topics, with eight based on a single source.
+
+[show comparison: original guidance -> 23 topics, 19 single-source | selective guidance -> 14 topics, 8 single-source]
+
+Now, these were two nondeterministic runs, so fourteen isn't some magic number. But it made the design mistake pretty obvious.
+
+The AI Index had been doing its job all along. I just hadn't allowed the Wiki to leave anything there.
+
+A separate memory layer only helps if you actually allow the human-readable Wiki to be selective.
+
+And once I made that change, I could start watching individual Wiki topics develop as more sources arrived.
 
 ## Watch the Wiki accumulate knowledge
 
