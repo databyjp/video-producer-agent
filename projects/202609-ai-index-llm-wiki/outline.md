@@ -7,13 +7,13 @@ I use AI agents for research a LOT. They search, read, filter, and summaries tho
 But this introduces a new problem - it's now too easy for research end up with piles and piles of documents. Just like how developers are drowning in code review work.
 
 Here's what I do instead:
-[show me running `npm run wiki:import -- sample_data/blogs --limit 10]
+[show me running `npm run wiki:import -- sample_data/search-labs-10 --limit 10`]
 
-This imports 10 articles from the blogs directory, and autonomously builds a wiki.
+This imports 10 articles from this smaller Search Labs directory and autonomously builds a Wiki.
 [Show the rendered wiki pages]
 
 And if I import, say - 90 more
-[show me running `npm run wiki:import -- sample_data/blogs --limit 100]
+[show me running `npm run wiki:import -- sample_data/search-labs-100 --limit 100`]
 
 This will take a bit longer - [show caption "LITTLE WHILE LATER"]
 [show the rendered wiki pages]

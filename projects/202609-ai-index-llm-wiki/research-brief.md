@@ -19,7 +19,9 @@ Use these files rather than copying measurements into production notes:
 - Retained final Wiki: [`wiki/archive/20260909/search-ai-growth/`](file:///Users/jphwang/code/content/202609-llm-wiki-ai-index/wiki/archive/20260909/search-ai-growth/)
 - Retained experiment traces: [`wiki/archive/20260909/search-ai-growth-experiment/`](file:///Users/jphwang/code/content/202609-llm-wiki-ai-index/wiki/archive/20260909/search-ai-growth-experiment/)
 
-The measured run is committed under `wiki/archive/20260909/`. New growth runs use the active `wiki/search-ai-growth*` paths until they are reviewed and archived.
+The measured run is committed under `wiki/archive/20260909/`. New growth runs use active `wiki/` paths until they are reviewed and archived.
+
+The outline's `wiki:import` sequence processes `search-labs-100` newest first, while the archived 25/100 experiment used category-stratified batches. Treat the new import as a separate run: measure its page counts and evolution after completion rather than reusing archived batch-level claims.
 
 ## Central claim
 
