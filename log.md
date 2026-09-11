@@ -1202,3 +1202,26 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 
 - Updated the architecture narration in `projects/202609-ai-index-llm-wiki/outline.md` to state that an LLM generates KIs during ingestion and the Elasticsearch AI Index stores them.
 - Preserved the surrounding wording and delivery structure.
+
+## 2026-09-10 — Proposed the LLM Wiki pain section
+
+- Drafted a suggested spoken section that frames Markdown-only maintenance as a context-selection tradeoff rather than a universal failure of LLM Wikis.
+- Used a visual whole-Wiki-versus-summary dilemma, then connected it to the retained exhaustive-versus-selective 443-KI comparison.
+- Kept the measured takeaway bounded: a separate memory layer helps only when maintenance allows Markdown to remain selective.
+- Did not edit the outline.
+
+## 2026-09-10 — Reviewed the Lord of the Rings pain analogy
+
+- Found that the analogy gives the Wiki-maintenance tradeoff a concrete shape and matches JP's voice.
+- Flagged that a synopsis can support some editorial decisions; the actual missing information is whether existing pages already cover, contradict, or connect to the new detail.
+- Recommended framing the second problem as loading relevant Wiki page bodies and, when necessary, Raw sources rather than implying every vanilla LLM Wiki must reread many sources.
+- Noted that the current app architecture graphic does not represent the Markdown-only flow and that the Gandalf-Saruman fight is a film invention.
+- Did not edit the outline.
+
+## 2026-09-10 — Drafted AI Index and Wiki solution sections
+
+- Prepared suggested narration for `How an AI index works` and `How an LLM-wiki backed by an AI index solves the problem`.
+- Explained KI generation as an upstream LLM step, AI Index storage and hybrid retrieval, and source-linked provenance without turning the section into an Elasticsearch mapping tour.
+- Explained Wiki maintenance through new KIs, the complete manifest, selected page bodies, retrieved historical KIs, and local page changes.
+- Used the retained 443-KI comparison to show that the memory layer only kept Markdown selective after the maintenance guidance allowed KI-only detail.
+- Did not edit `outline.md` because the user's supplied pain section is newer than the checked-in text.
