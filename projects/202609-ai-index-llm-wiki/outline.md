@@ -106,114 +106,18 @@ And that's how I arrived at the solution that leverages Elastic's AI index and K
 
 An AI Index is an Elasticsearch index designed to store and retrieve knowledge for agents.
 
-But the AI Index doesn't generate that knowledge by itself.
+Here's what it can do for you - (describe benefits of an AI index)
 
-When I ingest a source, an LLM reads it and extracts a set of Knowledge Indicators, or KIs.
+And here's how we recommend that you build it. (describe what KIs are, and how to create and add them)
 
-These aren't arbitrary chunks of the document. Each KI is meant to capture one useful piece of knowledge,
-like a claim, an explanation, or a relationship.
+[Brief example on retrieval]
 
-[show one source becoming several KIs]
-
-And each one keeps a link back to the source it came from.
-
-Those KIs are then stored as searchable documents in the AI Index.
-
-[show KIs entering the AI Index, with their source URLs attached]
-
-Because this is Elasticsearch, I can retrieve them using both lexical and semantic search.
-
-So I can search for an exact term. Or I can describe the knowledge I need and retrieve KIs that are
-related by meaning.
-
-The important part is that this work is done when the source is ingested.
-
-Instead of asking an agent to reread the same source every time it needs that knowledge, I extract the
-useful pieces once and make them searchable.
-
-And because every KI remains linked to its source, I can still trace the result back to the original
-evidence.
-
-The AI Index becomes the detailed memory behind the Wiki.
-
-So now, let's connect that memory back to the problem we had before.
+[recap benefit]
 
 ## How an LLM-wiki backed by an AI index solves the problem
 
-When a new source arrives, I don't send the entire source collection back into the Wiki maintainer.
+[connect it back to LLM-wiki]
 
-Instead, the ingestion pipeline creates KIs for the new source and stores them in the AI Index.
-
-[show new source -> new KIs -> AI Index]
-
-The maintainer starts with those new KIs and a compact list of the pages already in the Wiki.
-
-That list tells it what each page is about, without loading every page in full.
-
-[show new KIs beside the Wiki manifest]
-
-The LLM then chooses which Wiki pages it needs to open, and what historical knowledge it wants to
-retrieve from the AI Index.
-
-The app opens those pages and runs those searches.
-
-[highlight selected Wiki pages and retrieved historical KIs]
-
-So when the maintainer actually updates the Wiki, it has three things:
-
-The new knowledge.
-
-The relevant historical knowledge.
-
-And the existing Wiki pages that might need to change.
-
-[show all three flowing into the maintainer]
-
-It can then create or update only the relevant pages, while leaving everything else alone.
-
-This is essentially progressive disclosure.
-
-Instead of loading every page and every source up front, the maintainer asks for deeper context only
-where it needs it.
-
-But I got one important part of this wrong the first time.
-
-[show original maintenance instruction]
-
-My original prompt told the maintainer to integrate every KI into Markdown.
-
-So even though I had created this separate memory layer, the LLM still tried to give almost every piece
-of knowledge a home in the Wiki.
-
-With twenty-five sources, that run produced twenty-three topics. Nineteen of them were based on a single
-source.
-
-Basically, I had rebuilt a pile of source summaries, just with more steps.
-
-[show original result: 23 topics, 19 single-source]
-
-So I changed the instructions.
-
-I told the maintainer that the AI Index was allowed to keep narrow or highly detailed knowledge.
-
-The Markdown Wiki should only contain information that improves its cross-source understanding of a
-topic.
-
-[show revised maintenance instruction]
-
-The architecture didn't change. The revised run used exactly the same four hundred and forty-three KIs.
-
-But this time, it produced fourteen topics, with eight based on a single source.
-
-[show comparison:
-Original guidance: 23 topics, 19 single-source
-Selective guidance: 14 topics, 8 single-source]
-
-The AI Index gave the LLM somewhere else to keep the details.
-
-But the separate memory layer only became useful when I gave the Wiki permission to be selective.
-
-And once I made that change, I could start watching the Wiki's topics develop as more sources arrived.
 
 
 
