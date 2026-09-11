@@ -100,47 +100,27 @@ This is slow, and wasteful. It will cost you growing amounts of time, AND LLM in
 
 And that's how I arrived at the solution that leverages Elastic's AI index and Knowledge Indicators.
 
-<JP REVISION HEAD>
-
 ## How an AI index works
 
-An AI Index is an Elasticsearch index designed to store and retrieve knowledge for agents.
+An AI Index is an Elasticsearch index designed to save agents from repeatedly, and inefficiently looking for information.
 
-Now, here's the useful bit.
+Instead of an agent looking for files, performing searches or running commands - all of which will cost you tokens and money, an AI index will do all that up front. You do it once, store the outputs, and make that knowledge searchable for later.
 
-Normally, when an agent starts a job, it first has to go rummaging around for context. It reads files, pokes at systems, and spends tokens working out where the useful information actually lives.
-
-An AI Index moves some of that grunt work up front. You do it once, store what the agent learns, and make that knowledge searchable for later.
-
-[show benefits: do the work once -> retrieve when needed -> keep the source]
-
-So instead of sending the agent back through the entire source collection, you can give it the pieces of knowledge that are actually relevant to the job.
-
-So, how do you build one?
-
-The exact tooling can vary, but here's the pattern we recommend.
+The things it indexes can be thought of as small morsels, or nuggets of knowledge. They're called Knowledge Indicators.
 
 [show: source -> LLM or workflow -> KIs -> AI Index]
 
-You take a source, send it through a workflow to an LLM, and ask that LLM to extract Knowledge Indicators, or KIs.
+In this repo, I simply send the source to an LLM with a set of instructions [show code], which will in turn output a set of KIs.
 
-A KI isn't just some arbitrary chunk of text. It's one useful claim, explanation, or relationship, with a link back to where it came from.
+Then instead of this source, I get a set of useful claims, explanations, or relationships, each with a link back to the source.
 
-Those KIs get written into the AI Index, where Elasticsearch makes them available through lexical and semantic search.
+Those KIs then get added into our AI Index, which of course is searchable.
 
-So let's say I ask, "How do I configure hybrid search fusion?"
-
-[show brief retrieval: question -> relevant KIs with source URLs]
-
-Instead of reopening every article that mentions hybrid search, I get back a handful of relevant KIs, with the source URL right next to each one.
-
-Now, that's not the final answer. It's the context an agent can use to produce one.
-
-So, in other words - detailed memory, on demand, with a link back to the original source.
+<JP REVISION HEAD>
 
 ## How an LLM-wiki backed by an AI index solves the problem
 
-And this is exactly what my LLM Wiki was missing.
+And this fills the gap in our LLM Wiki what my LLM Wiki was missing.
 
 Instead of asking the maintainer to compare a full new source against a collection of lossy summaries, I first turn that source into KIs and store them in the AI Index.
 
