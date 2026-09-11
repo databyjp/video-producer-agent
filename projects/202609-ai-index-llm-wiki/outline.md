@@ -65,7 +65,7 @@ My starting point was the LLM-wiki. This is an idea floated by Andrej Karpathy -
 [read over the original GIST on screen https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f]
 His thesis was that RAG is useful, but "LLM is rediscovering knowledge from scratch on every question. There's no accumulation", so he proposes that "Instead of just retrieving from raw documents at query time, the LLM incrementally builds and maintains a persistent wiki". One where "You're in charge of sourcing, exploration, and asking the right questions. The LLM does all the grunt work".
 
-It's a very simple, but also very smart - let the LLMs do what they're good at, which is reading and manipulating big volumes of information. While you curate the direction of the wikis.
+Like many of his other ideas, it's a deceptively simple, but a super observant one that comes from a deep understanding and intuition. He proposes to let the LLMs do what they're good at, which is reading and manipulating big volumes of information. While you **curate** the direction of the wikis.
 
 So you can probably see why this is a great idea, with lots of adoption in forms of packages, websites, extensions (TODO: agent to research; show screenshots).
 
