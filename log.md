@@ -1270,3 +1270,15 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Reduced the `maintainWiki()` section from 217 to 79 spoken words.
 - Replaced the step-by-step walkthrough with one code view that confirms the two inference calls, local operations, validation, and source checkpointing.
 - Ended with a repository invitation covering the runnable example, prompts, validation, and retained traces.
+
+## 2026-09-14 — Drafted the AI Index Wiki closing section
+
+- Read the completed script and representative scripts for the Vector Database announcement, Serverless tutorial, Agent Skills, Docker Sandbox, coding-agent observability, and Visual Plan Mode.
+- Replaced the final placeholder in `projects/202609-ai-index-llm-wiki/outline.md` with a callback to the opening research pile, an architecture recap, proof-of-concept limits, and the unresolved topic-splitting problem.
+- Extended the AI Index pattern to agent routing and other knowledge workflows, linked the repository and Elastic Vector Database project, and ended with a specific audience question and brief sign-off.
+
+## 2026-09-14 — Condensed the AI Index Wiki closing
+
+- Reduced the closing from 430 to 251 spoken words.
+- Preserved the opening callback, architecture recap, proof-of-concept boundary, topic-splitting problem, broader AI Index applications, repository and Vector Database links, audience question, and sign-off.
+- Removed repeated architecture explanation and compressed the limitation and application passages.

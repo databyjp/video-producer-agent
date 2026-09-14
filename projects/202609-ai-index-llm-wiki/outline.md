@@ -208,6 +208,22 @@ It's built with TypeScript - but obviously, you can adapt it to any language. El
 
 ## Close with recap & other applications of the AI index
 
-- Mention the Elasticsearch vector DB
+AI agents make collecting research ridiculously easy. They also create giant piles of documents that... will just sit on my desktop until deletion.
 
-> The Markdown Wiki is the readable model of the subject. The AI Index is the detailed, source-linked memory behind it.
+So, a Markdown-based, LLM-managed wiki is a good solution to all of this. It gives me a high level overview, without drowning me in information.
+
+And by integrating the Elastic AI Index as the back end, I was able to make the LLM-wiki sustainable to manage as it scales up. And hopefully, consistent in how it treats the mix of old information and new information.
+
+This pattern was relatively easy to understand, and robust.
+
+What's nice is that this pattern isn't really just limited to Wikis.
+
+AI indexes could support any kind of big, and deep knowledge bases, cutting down on retrieved context and giving agents solid bases to work off of.
+
+I think there's high utility for all sort of things - technical documentation, internal knowledge bases, or anywhere an agent keeps rediscovering context.
+
+If you want to try my version, I've shared the TypeScript repository in the description. I'll also link to Elasticsearch Serverless and Elastic's Vector Database project.
+
+I'd love to know how you'd decide when a growing Wiki topic should be split, or what other failure mode I'm about to discover the hard way.
+
+Let me know in the comments. Thanks for watching, and I'll see you next time.
