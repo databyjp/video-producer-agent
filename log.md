@@ -1258,3 +1258,15 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Replaced the marked section in `projects/202609-ai-index-llm-wiki/outline.md` with spoken narration and inline visual direction for the current `maintainWiki()` workflow.
 - Walked through new KI loading, complete-manifest routing, selected page bodies, bounded historical KI retrieval, local operations, candidate validation, checkpointing, and retained traces.
 - Kept the claims bounded to the proof of concept and named complete-manifest growth, live inference, and missing production orchestration as limitations.
+
+## 2026-09-14 — Condensed the Wiki maintenance walkthrough
+
+- Reviewed JP's shorter opening and used its pace as the baseline for the rest of the section.
+- Reduced the walkthrough from 428 to 217 spoken words while preserving the two inference calls, progressive disclosure, local page operations, checkpointed commit, and main limitations.
+- Combined related code highlights so the visual plan now uses six focused reveals instead of stepping through each intermediate value separately.
+
+## 2026-09-14 — Reframed the code section as implementation proof
+
+- Reduced the `maintainWiki()` section from 217 to 79 spoken words.
+- Replaced the step-by-step walkthrough with one code view that confirms the two inference calls, local operations, validation, and source checkpointing.
+- Ended with a repository invitation covering the runnable example, prompts, validation, and retained traces.

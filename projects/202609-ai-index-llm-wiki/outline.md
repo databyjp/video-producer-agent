@@ -180,59 +180,31 @@ You see that it maintains a some sort of log-ish scale as we ingest more sources
 
 In the meantime, if we take a look at the raw data - [show scatter plots of KIs in Elasticsearch over document count], you see the KIs rise more or less in proportion with the document count; meaning that all the raw data is available for you and your agent, as you need.
 
-## Show the code path and limits
+## Show the implementation
 
-I built this project as an open-source adaptation of my LLM-wiki repos, so you can try it out as well.
+Let me show you the core function in my codebase: `maintainWiki()`.
 
-The repo is available here - I'll leave the link in the description. I've tried to document it as well as I can, so it should be easy enough for you - well, let's face it - your coding agent, to follow & use.
+[show the complete function; highlight `selectContext()` -> `retrieveHistoricalIndicators()` -> `reviseWiki()` -> `commit()`]
 
-Let's take a look at just one function - the `maintainWiki()` function here.
+It loads the new KIs and Wiki manifest to establish the overall task.
 
-It really goes through what we talked about, step-by-step.
+The first LLM call chooses the page bodies and historical searches it needs. This helps the model find the context to review.
 
-[show `sourceUris` and `newKnowledgeIndicators`]
-First, we use the URLs of the new sources, and load every KI generated for them from AI Index.
+Then this second LLM call returns local page operations - what pages to update, or create, and what changes to make conretely.
 
-[show `manifestBefore` and the `selectContext()` call]
-Then we read the Wiki manifest - that's like a map, including the path and routing summary for every Wiki page.
+Lastly, the Wiki validates those changes and checkpoints the sources.
 
-The first LLM call uses that manifest and all of the new KIs, to get two things: the existing page bodies it needs to open, and searches for historical KI it wants to run.
+This combines LLM calls with deterministic workflows. The LLM returns structured data, and our program implements the changes in a predicable way.
 
-[highlight `validateSelection()` and the `index.md` block]
-The code validates those page choices, and we always include the overall wiki index.
+I've shared the codebase as fully open source - including the runnable example, prompts, validation, and so on in the repo here.
 
-[show `openedPages` and `retrieveHistoricalIndicators()`]
-Only then do we open the selected pages. We also run the requested searches against KIs from sources this Wiki has already committed.
-
-[overlay: complete manifest -> selected page bodies -> bounded historical KIs]
-That's the progressive disclosure in practice. The model gets the complete map, but only selected topic-page bodies, the Wiki index, and a bounded slice of detailed history.
-
-[show the `context` object]
-At this point, we've built the apples-to-apples context I mentioned earlier: the new KIs, relevant historical KIs, and the existing Wiki pages that may need to change.
-
-[show the `reviseWiki()` call, then highlight "Return local operations only" in its prompt]
-That context goes into the second LLM call. But this call doesn't rewrite the whole Wiki. The operation format supports upserting a page, deleting a page, or returning no changes at all.
-
-[popup: upsert = create or replace one page]
-Anything the model omits stays byte-for-byte unchanged.
-
-[show `request.wiki.commit(...)`; overlay: candidate -> validate -> checkpoint -> swap]
-The Wiki applies those operations to a candidate copy. It validates the page metadata, internal links, and whether `index.md` links to every topic page.
-
-Only after those checks pass does it record the source fingerprints and swap the candidate into place. If maintenance fails before that, the batch stays pending and can be retried.
-
-[show `describeMaintenanceCommit()` and a retained batch trace]
-Finally, it returns measurements and a trace showing what context was opened and which pages changed. That's what I used to inspect the experiment batch by batch.
-
-Now, this doesn't make context growth disappear. Every batch still reviews the complete manifest, and both routing and revision use live LLM inference. At a much larger scale, the manifest itself may need its own retrieval step.
-
-And this is still a proof of concept. It doesn't include a production queue, concurrency control, or durable job orchestration.
-
-<JP REVISION HEAD>
+If you want to see what an implementation looks like, check it out, and you can use it with a free trial of Elasticsearch.
 
 This current version is built to work with a particular JSON shape, but of course - you can adapt it to whatever data source and shape that works for you.
 
 It's built with TypeScript - but obviously, you can adapt it to any language. Elasticsearch client libraries are available in 8 different languages, and you can use it with direct REST calls, or for agentic work, you can use the Elastic Agent Skills, or even try the new Elastic CLI, which as of now is in technical preview.
+
+<JP REVISION HEAD>
 
 ## Close with recap & other applications of the AI index
 
