@@ -1246,3 +1246,15 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Reworked the two newly drafted sections in `projects/202609-ai-index-llm-wiki/outline.md` without changing their evidence or visual sequence.
 - Replaced product-documentation phrasing with first-person explanation, conversational transitions, shorter spoken sentences, and a self-deprecating turn around the failed maintenance prompt.
 - Preserved the KI construction, retrieval, progressive-disclosure, and 443-KI comparison claims.
+
+## 2026-09-14 — Drafted the AI Index LLM Wiki task template
+
+- Drafted a task-tracking description for the companion repository and video outline.
+- Positioned the LLM Wiki as the viewer-facing use case and Elastic AI Indexes as the source-linked memory and retrieval layer that makes selective Markdown possible.
+- Kept the outline at concept level and framed the project as a working DevRel demonstration with measured behavior and explicit limitations, not a product feature tour or benchmark.
+
+## 2026-09-14 — Completed the Wiki maintenance code walkthrough
+
+- Replaced the marked section in `projects/202609-ai-index-llm-wiki/outline.md` with spoken narration and inline visual direction for the current `maintainWiki()` workflow.
+- Walked through new KI loading, complete-manifest routing, selected page bodies, bounded historical KI retrieval, local operations, candidate validation, checkpointing, and retained traces.
+- Kept the claims bounded to the proof of concept and named complete-manifest growth, live inference, and missing production orchestration as limitations.

@@ -1,5 +1,7 @@
 # How AI and Elasticsearch curate my research Wiki
 
+[CONSIDER SHOWING A HIGHLIGHT REEL HERE LIKE TOP GEAR - "IN THIS VIDEO" etc etc.]
+
 ## Open on the result
 
 I use AI agents for research a LOT. They search, read, filter, and summaries thousands of documents for me in **minutes**.
@@ -77,12 +79,12 @@ Let me explain.
 
 The idea of asking an LLM to produce summaries in a wiki sounds simple enough.
 
-[show graphic (new graphic needed) - indicating top half]
+[show architecture graphic of LLM wiki (no AI index) - show top half only]
 A new source comes in, it gets sent to an LLM, and it makes updates to the wiki articles. Easy, right?
 
-Well, it turns out there are two problems with this, and both of them get worse over time.
+Well, it turns out there are two problems with this, and both of them get worse over time. They relate to context.
 
-[show graphic - show bottom half indicating LLM trying to synthecise summaries + new source and confused]
+[show graphic - now revealing bottom half indicating LLM trying to synthecise summaries + new source and confused]
 The first problem is that comparing a source article to a bunch of summaries is just a difficult task.
 
 Imagine that you've never seen or read The Lord of the Rings. Then someone gives you a book synopsis - like "Frodo and his friends have to journey to Mordor to destroy a magic ring and prevent it from falling into the wrong hands."
@@ -116,95 +118,124 @@ Then instead of this source, I get a set of useful claims, explanations, or rela
 
 Those KIs then get added into our AI Index, which of course is searchable.
 
-<JP REVISION HEAD>
-
 ## How an LLM-wiki backed by an AI index solves the problem
 
-And this fills the gap in our LLM Wiki what my LLM Wiki was missing.
+As it turns out, AI index is a great solution for our context problem.
 
-Instead of asking the maintainer to compare a full new source against a collection of lossy summaries, I first turn that source into KIs and store them in the AI Index.
+What you can do is to introduce an AI index **here** [show architecture graphic that now shows AI index].
+
+So instead of making our maintainer LLM choose between using lossy summaries, or wasteful long documents, we fill this AI index with compact, easy-to-search KIs.
 
 [show: new source -> new source-linked KIs -> AI Index]
 
-The maintainer gets those new KIs, plus a manifest of the existing Wiki - basically, a one-line description of every page.
+Now, the maintainer LLM's workflow is different.
 
-It uses that overview to work out which Wiki pages it needs to read, and what historical knowledge it wants to retrieve from the AI Index.
+When a new source document is to be added, our pipeline turns that into a set of KIs, to be added to the AI index.
 
-[show: new KIs + Wiki manifest -> selected pages + retrieved historical KIs]
+Then, the maintainer looks through the existing wiki pages to see where, and if, those KIs might fit in. And when it does find those relevant pages, it can selectively retrieve other KIs from the AI index to compare the full context, but in a much more efficient, and apples-to-apples way.
 
-So now it's comparing apples with apples: new KIs, historical KIs, and the full contents of only the Wiki pages that might need to change.
+In other words, it looks at new KIs, historical KIs, and the wiki pages that might need to change. This is far more efficient than feeding a stack of full documents to our LLM. And it's far more complete than feeding the wikis and the new document.
 
-It updates those pages, and leaves everything else alone.
+## IRL failure mode - prompting
 
-It doesn't have to load every source or every Wiki page up front. It starts small, and only pulls in the deeper context it asks for.
+Hopefully all of this sounds pretty straightforward. Convert sources into KIs up front, and use LLMs to manage the final wikis, ... profit.
 
-Which sounds like problem solved.
+But let me tell you about a pretty important failure mode that I came across.
 
-Except, of course, I still managed to get it wrong.
+My first attempt at running this app turned 25 blogs into 23 wiki pages.
 
-My first maintenance prompt told the LLM to integrate every KI into Markdown.
+In other words, I'd built this complex system, so that I'd have to... look at an eight per cent reduction in the document count.
 
-[show original maintenance instruction]
+Not so great - can you imagine if the official Wikipedia has 92% the page count of all of the Internet?
 
-So with twenty-five sources, I ended up with twenty-three topics. And nineteen of those were based on a single source.
+What helped here, was to steer the LLM.
 
-Basically, I'd built a collection of source summaries wearing Wiki-page costumes.
+[show `src/wiki-maintenance.ts`]
 
-So I changed the guidance. I told the maintainer that narrow or highly detailed knowledge could stay in the AI Index. The Markdown Wiki should focus on the bigger, cross-source picture.
+The key phrase to add was this: "detailed or narrow KIs may remain available only through the AI Index".
 
-[show revised maintenance instruction]
+This let the LLM know to focus the output on human-readable, summary documents. And with this changed prompt, the next run produced only fourteen documents, down from 23.
 
-The architecture stayed exactly the same. Both runs used the same four hundred and forty-three KIs.
-
-But the revised run produced fourteen topics, with eight based on a single source.
-
-[show comparison: original guidance -> 23 topics, 19 single-source | selective guidance -> 14 topics, 8 single-source]
-
-Now, these were two nondeterministic runs, so fourteen isn't some magic number. But it made the design mistake pretty obvious.
-
-The AI Index had been doing its job all along. I just hadn't allowed the Wiki to leave anything there.
-
-A separate memory layer only helps if you actually allow the human-readable Wiki to be selective.
-
-And once I made that change, I could start watching individual Wiki topics develop as more sources arrived.
+The nice thing was that as I ingested more data, the better we could see the benefit of this structure. Let me show you how it worked.
 
 ## Watch the Wiki accumulate knowledge
 
-- Follow `vector-search-benchmarking.md`: one cited source when it was created, six at the 25-source checkpoint, and 16 after 13 revisions across the complete run.
-- Zoom out: 14 topics at 25 sources, 26 at 67 sources, and 27 at 100 sources. Fifteen of the 25 later batches created no page.
+What I have here [show the final wiki directory] is a wiki of recent Elastic Search Labs blogs - generated from ingesing a hundred blog entries.
 
-[show three page snapshots, then the source-to-topic growth curve]
+But - not all at once. The thing is, I wanted to simulate how a real wiki would grow. And you wouldn't really be reading a hundred articles at once, and summarising it - you're not writing a graduate thesis here.
 
-## Trace the final batch
+Instead, I broke it up into batches of 3 files - to simulate an incremental growth in knowledge.
 
-- Three sources arrive. The maintainer reviews the 27-page manifest, opens three pages, and retrieves 22 historical KIs.
-- It creates one topic, revises two topics plus `index.md`, and leaves 24 existing pages unchanged.
-- The Kubernetes article receives no Wiki page or citation. Under the selective maintenance guidance, its KIs remain in the AI Index rather than being forced into the search-engineering Wiki.
+And I captured how some files grow over that time, like this page on vector search benchmarking.
 
-[show three inputs -> selected context -> four local operations]
+It was actually created on the first batch of documents [show the first iteration of doc] - and captures some pretty good overall tips on how to do benchmarking.
 
-## Retrieve what Markdown omitted
+And then, as more documents get ingested [show document length & source documents grow over document count in scatter plot?], this wiki page grows in length, while remaining pretty reasonable.
 
-- Query the AI Index for shell-tool context-retrieval trade-offs. Show the returned KI and source URL, then show that the source is absent from the Wiki citations.
-- Clarify that this demonstrates KI retrieval with provenance, not a complete answer synthesized across Wiki pages and KIs.
+By the time the all 100 blog entries are added, the page collates information from 16 different sources - it not only has these high level tips about benchmarking, but also a lot of detailed nuggets about how specific features might affect benchmarks, and how certain features might improve performance in certain situations [highlight relevant text]
 
-[screen recording:]
+Looking at the bigger picture, we see that the number of wiki pages grew like this [show scatter plots of wiki pages & total word count (two separate scatters) over document count].
 
-```bash
-npm run query -- search-ai \
-  --source https://www.elastic.co/search-labs/blog/search-tools-context-engineering \
-  "shell tool context retrieval trade-offs"
-```
+You see that it maintains a some sort of log-ish scale as we ingest more sources, which is key to keeping our human-facing wiki maintainable, even as the sources keep growing.
+
+In the meantime, if we take a look at the raw data - [show scatter plots of KIs in Elasticsearch over document count], you see the KIs rise more or less in proportion with the document count; meaning that all the raw data is available for you and your agent, as you need.
 
 ## Show the code path and limits
 
-- Show only `maintainWiki()`: load KIs -> inspect manifest -> select pages and searches -> retrieve history -> emit operations -> validate and checkpoint.
-- State the limits: one nondeterministic 100-source experiment, no demonstrated page split or merge, no measured token or cost reduction, and no production orchestration.
-- Briefly show the repository and the bundled 10-source workflow. Explain that other source formats need an adapter to the `RawSource` shape, then show where to inspect the resulting Wiki and traces.
+I built this project as an open-source adaptation of my LLM-wiki repos, so you can try it out as well.
 
-## Close on the next problem
+The repo is available here - I'll leave the link in the description. I've tried to document it as well as I can, so it should be easy enough for you - well, let's face it - your coding agent, to follow & use.
 
-- Show the two largest hub pages. Each cites 16 sources.
-- The AI Index helped avoid one page per source, but successful topics became broad. When should an agent split a topic?
+Let's take a look at just one function - the `maintainWiki()` function here.
+
+It really goes through what we talked about, step-by-step.
+
+[show `sourceUris` and `newKnowledgeIndicators`]
+First, we use the URLs of the new sources, and load every KI generated for them from AI Index.
+
+[show `manifestBefore` and the `selectContext()` call]
+Then we read the Wiki manifest - that's like a map, including the path and routing summary for every Wiki page.
+
+The first LLM call uses that manifest and all of the new KIs, to get two things: the existing page bodies it needs to open, and searches for historical KI it wants to run.
+
+[highlight `validateSelection()` and the `index.md` block]
+The code validates those page choices, and we always include the overall wiki index.
+
+[show `openedPages` and `retrieveHistoricalIndicators()`]
+Only then do we open the selected pages. We also run the requested searches against KIs from sources this Wiki has already committed.
+
+[overlay: complete manifest -> selected page bodies -> bounded historical KIs]
+That's the progressive disclosure in practice. The model gets the complete map, but only selected topic-page bodies, the Wiki index, and a bounded slice of detailed history.
+
+[show the `context` object]
+At this point, we've built the apples-to-apples context I mentioned earlier: the new KIs, relevant historical KIs, and the existing Wiki pages that may need to change.
+
+[show the `reviseWiki()` call, then highlight "Return local operations only" in its prompt]
+That context goes into the second LLM call. But this call doesn't rewrite the whole Wiki. The operation format supports upserting a page, deleting a page, or returning no changes at all.
+
+[popup: upsert = create or replace one page]
+Anything the model omits stays byte-for-byte unchanged.
+
+[show `request.wiki.commit(...)`; overlay: candidate -> validate -> checkpoint -> swap]
+The Wiki applies those operations to a candidate copy. It validates the page metadata, internal links, and whether `index.md` links to every topic page.
+
+Only after those checks pass does it record the source fingerprints and swap the candidate into place. If maintenance fails before that, the batch stays pending and can be retried.
+
+[show `describeMaintenanceCommit()` and a retained batch trace]
+Finally, it returns measurements and a trace showing what context was opened and which pages changed. That's what I used to inspect the experiment batch by batch.
+
+Now, this doesn't make context growth disappear. Every batch still reviews the complete manifest, and both routing and revision use live LLM inference. At a much larger scale, the manifest itself may need its own retrieval step.
+
+And this is still a proof of concept. It doesn't include a production queue, concurrency control, or durable job orchestration.
+
+<JP REVISION HEAD>
+
+This current version is built to work with a particular JSON shape, but of course - you can adapt it to whatever data source and shape that works for you.
+
+It's built with TypeScript - but obviously, you can adapt it to any language. Elasticsearch client libraries are available in 8 different languages, and you can use it with direct REST calls, or for agentic work, you can use the Elastic Agent Skills, or even try the new Elastic CLI, which as of now is in technical preview.
+
+## Close with recap & other applications of the AI index
+
+- Mention the Elasticsearch vector DB
 
 > The Markdown Wiki is the readable model of the subject. The AI Index is the detailed, source-linked memory behind it.
