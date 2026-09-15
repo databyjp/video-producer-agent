@@ -1282,3 +1282,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Reduced the closing from 430 to 251 spoken words.
 - Preserved the opening callback, architecture recap, proof-of-concept boundary, topic-splitting problem, broader AI Index applications, repository and Vector Database links, audience question, and sign-off.
 - Removed repeated architecture explanation and compressed the limitation and application passages.
+
+## 2026-09-15 — Planned complete graphic coverage for the AI Index Wiki video
+
+- Mapped every section of `projects/202609-ai-index-llm-wiki/outline.md` to a custom graphic, screencast, editor overlay, or on-camera treatment in `graphics-plan.md`.
+- Added ten semantic designer briefs covering the opening problem, human and LLM roles, vanilla Wiki context limits, KI extraction, selective maintenance, prompt guidance, retained topic and corpus growth, and broader applications.
+- Reused the existing app-architecture brief, kept real text and code in screencasts, and separated retained experiment findings from unmeasured efficiency claims.
+- Left all new briefs in `draft` status for review before SVG production.

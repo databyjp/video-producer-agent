@@ -1,7 +1,5 @@
 # How AI and Elasticsearch curate my research Wiki
 
-[CONSIDER SHOWING A HIGHLIGHT REEL HERE LIKE TOP GEAR - "IN THIS VIDEO" etc etc.]
-
 ## Open on the result
 
 I use AI agents for research a LOT. They search, read, filter, and summaries thousands of documents for me in **minutes**.
@@ -56,7 +54,7 @@ The maintainer LLM is different. It receives the new KIs, retrieves relevant his
 
 The result is a compact Wiki index and a set of topic pages that I can use as starting points.
 
-I can tell you, from having used LLM wikis for a while - that they make it so much easier my little brain to process and digest information.
+I can tell you, from having used LLM wikis for a while - that they make it so much easier for my little brain to process and digest information.
 
 Now, this is the final outcome - but it's not how I started. Let me show you why and how I made these decisions.
 
@@ -84,7 +82,7 @@ A new source comes in, it gets sent to an LLM, and it makes updates to the wiki 
 
 Well, it turns out there are two problems with this, and both of them get worse over time. They relate to context.
 
-[show graphic - now revealing bottom half indicating LLM trying to synthecise summaries + new source and confused]
+[show graphic - now revealing bottom half indicating LLM trying to synthesize summaries + new source and confused]
 The first problem is that comparing a source article to a bunch of summaries is just a difficult task.
 
 Imagine that you've never seen or read The Lord of the Rings. Then someone gives you a book synopsis - like "Frodo and his friends have to journey to Mordor to destroy a magic ring and prevent it from falling into the wrong hands."
@@ -160,7 +158,7 @@ The nice thing was that as I ingested more data, the better we could see the ben
 
 ## Watch the Wiki accumulate knowledge
 
-What I have here [show the final wiki directory] is a wiki of recent Elastic Search Labs blogs - generated from ingesing a hundred blog entries.
+What I have here [show the final wiki directory] is a wiki of recent Elastic Search Labs blogs - generated from ingesting a hundred blog entries.
 
 But - not all at once. The thing is, I wanted to simulate how a real wiki would grow. And you wouldn't really be reading a hundred articles at once, and summarising it - you're not writing a graduate thesis here.
 
@@ -190,7 +188,7 @@ It loads the new KIs and Wiki manifest to establish the overall task.
 
 The first LLM call chooses the page bodies and historical searches it needs. This helps the model find the context to review.
 
-Then this second LLM call returns local page operations - what pages to update, or create, and what changes to make conretely.
+Then this second LLM call returns local page operations - what pages to update, or create, and what changes to make concretely.
 
 Lastly, the Wiki validates those changes and checkpoints the sources.
 
@@ -203,8 +201,6 @@ If you want to see what an implementation looks like, check it out, and you can 
 This current version is built to work with a particular JSON shape, but of course - you can adapt it to whatever data source and shape that works for you.
 
 It's built with TypeScript - but obviously, you can adapt it to any language. Elasticsearch client libraries are available in 8 different languages, and you can use it with direct REST calls, or for agentic work, you can use the Elastic Agent Skills, or even try the new Elastic CLI, which as of now is in technical preview.
-
-<JP REVISION HEAD>
 
 ## Close with recap & other applications of the AI index
 
