@@ -69,7 +69,6 @@ Master catalog of all pages in this knowledge bundle.
 
 - [Script Writing Process](wiki/howto/script-writing-process.md) — End-to-end workflow from blank page to speakable draft (5-phase process)
 - [On-Camera Delivery](wiki/howto/on-camera-delivery.md) — Rehearsal workflow, teleprompter setup and technique, delivery habits for natural on-camera presence
-- [Rough Cut Pipeline](wiki/howto/rough-cut-pipeline.md) — Automated video → FCPXML pipeline using Whisper + LLM retake detection
 - [YouTube Title Optimization](wiki/youtube-title-optimization.md) — Data-driven title patterns, formulas, and testing for developer content
 - [YouTube Thumbnail Design](wiki/youtube-thumbnail-design.md) — Design rules, CTR benchmarks, A/B testing, developer-specific guidance
 - [YouTube Description and Metadata](wiki/youtube-description-metadata.md) — Descriptions, tags, chapters, captions, end screens

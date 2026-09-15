@@ -59,6 +59,7 @@ This is the single most important teleprompter skill. Most first-time users read
 Monotone is the #1 tell that someone is reading. When every sentence arrives at the same speed and pitch, the content sounds recited even when the words are excellent. The fix is to build variation into the script before you record — not to try to fake it in the moment.
 
 Three things to vary deliberately:
+
 - **Pace** — faster for energy, slower for weight or gravity
 - **Pitch** — the natural rise and fall of conversational speech
 - **Emphasis** — which words you lean into
@@ -94,6 +95,7 @@ NBC anchor Emilie Ikeda: *"Don't be afraid to make edits, to put something into 
 After a practice take, mute the audio and watch only the video.
 
 What you'll see that audio playback misses:
+
 - Micro-expressions when you hit a difficult phrase
 - Brow tension when the scroll gets ahead of you
 - The exact moments where your eyes visibly scan instead of holding the lens
@@ -106,6 +108,7 @@ Fix what you see before recording the final take. This takes two minutes and cat
 You don't have to deliver a 10-minute video in one take. Record in short segments and assemble in editing — this is exactly what professional pre-taped shows do.
 
 **Benefits:**
+
 - Removes the psychological pressure of a flawless long take
 - Lets you concentrate fully on one section at a time
 - Errors in segment 3 don't invalidate segments 1 and 2
@@ -116,7 +119,7 @@ This is not a workaround for imperfect delivery. It's the professional approach 
 ## Quick Reference
 
 | Problem | Fix |
-|---------|-----|
+| --------- | ----- |
 | Sounds robotic | Rewrite script for the ear — see [Writing for the Ear](../writing-for-the-ear.md) |
 | Eyes visibly scanning | Move screen closer to lens; narrow column width; increase font size |
 | Rushing or stumbling | Slow down; calibrate scroll speed; rewrite the phrase |
@@ -130,6 +133,7 @@ This is not a workaround for imperfect delivery. It's the professional approach 
 The naturalness of hosts like John Oliver and Stephen Colbert on teleprompter is inseparable from their backgrounds: Oliver in UK stand-up comedy, Colbert in improv at Second City. Both built the core muscle that makes scripted delivery look unscripted: **delivering material with authentic intention, not recitation**.
 
 For a developer advocate, the path is less extreme but the principle is the same:
+
 - Giving the same talk live at a conference or meetup before recording it helps internalize structure and timing
 - Presenting technical content to real humans — even informally — builds the habit of speaking *to* someone rather than at a camera
 - Improv and stand-up training directly build delivery-under-pressure skills
@@ -143,4 +147,4 @@ The teleprompter techniques above are learnable in weeks. Genuine on-camera pres
 - NBCU Academy — [How to Use a Teleprompter](https://nbcuacademy.com/read-teleprompter/) (primary-source accounts from NBC/MSNBC anchors)
 - [Natural Scripted Delivery — Research Report](../../sources/natural-scripted-delivery-research.md)
 
-See also: [Writing for the Ear](../writing-for-the-ear.md) · [Script Voice and Style](../script-voice-and-style.md) · [Rough Cut Pipeline](rough-cut-pipeline.md)
+See also: [Writing for the Ear](../writing-for-the-ear.md) · [Script Voice and Style](../script-voice-and-style.md)
