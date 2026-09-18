@@ -1289,3 +1289,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Added ten semantic designer briefs covering the opening problem, human and LLM roles, vanilla Wiki context limits, KI extraction, selective maintenance, prompt guidance, retained topic and corpus growth, and broader applications.
 - Reused the existing app-architecture brief, kept real text and code in screencasts, and separated retained experiment findings from unmeasured efficiency claims.
 - Left all new briefs in `draft` status for review before SVG production.
+
+## 2026-09-16 — Reviewed Node.js observability outline
+
+- Reviewed Suyash Joshi's long-form and short-form outline against the demo-led troubleshooting structure, spoken-script guidance, and current Elastic EDOT Node.js and Observability AI Assistant documentation.
+- Flagged recording blockers around the incomplete EDOT setup, overbroad zero-code claim, unproven automatic error capture, inconsistent latency measurements, historical errors after a fix, and `Promise.allSettled()` failure semantics.
+- Recommended making diagnosis the long-form viewer job, treating the AI Assistant response as a hypothesis verified against source and a rerun, removing or reducing the Claude Code detour, and producing the vertical setup video as a dedicated short rather than a direct crop.
+- Confirmed that existing EDOT and AI Assistant source pages already cover the reusable technical boundaries, so no wiki concept update was needed.

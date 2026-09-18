@@ -1,15 +1,19 @@
 # How AI and Elasticsearch curate my research Wiki
 
+Accompanying repo: https://github.com/databyjp/llm-wiki-elastic-ai-index
+
 ## Open on the result
 
-I use AI agents for research a LOT. They search, read, filter, and summaries thousands of documents for me in **minutes**.
+[GRAPHIC: 01-research-overload-variant-a]
+I use AI agents for research a LOT. They search, read, filter, and summarize thousands of documents for me in **minutes**.
 
-But this introduces a new problem - it's now too easy for research end up with piles and piles of documents. Just like how developers are drowning in code review work.
+But this introduces a new problem - it's now too easy for research to end up with piles and piles of documents. Just like how developers are drowning in code review work.
 
 Here's what I do instead:
 [show me running `npm run wiki:import -- sample_data/search-labs-10 --limit 10`]
+[GRAPHIC: 02-terminal-presenter-frame]
 
-This imports 10 articles from this smaller Search Labs directory and autonomously builds a Wiki.
+This imports 10 articles from this smaller Search Labs directory and autonomously builds a set of summaries, or personal Wiki pages.
 [Show the rendered wiki pages]
 
 And if I import, say - 90 more
@@ -23,14 +27,14 @@ Meanwhile the original knowledge is still available to me, and the agents.
 
 In other words - the human-readable Wiki remains manageable, while the AI Index preserves detailed, source-linked knowledge.
 
-I built this by expanding the LLM-wiki concept with Elasticsearch's AI index at its core.
+[GRAPHIC: ADD OVERLAYS OF BOTH LLM-wiki gist + an AI Index page]
+I built this by expanding the LLM-wiki concept with Elasticsearch's AI index at its core. An AI index is designed to store knowledge efficiently for AI agents, which makes it a natural fit for this project.
 
-So let me show you how that works, and take you through the journey of how I got there.
+So, let me show you how that works, and take you through the journey of how I got there.
 
 ## Architecture
 
 Here's the basic architecture.
-[show app architecture graphic - ~/code/agent-sandboxes/video-producer/projects/202609-ai-index-llm-wiki/assets/graphics/202609-ai-index-01-app-architecture.svg]
 
 This top part shows what I'd call the "machine memory" layer.
 
@@ -223,3 +227,5 @@ If you want to try my version, I've shared the TypeScript repository in the desc
 I'd love to know how you'd decide when a growing Wiki topic should be split, or what other failure mode I'm about to discover the hard way.
 
 Let me know in the comments. Thanks for watching, and I'll see you next time.
+
+
