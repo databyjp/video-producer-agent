@@ -2,6 +2,7 @@ temp
 .obsidian/
 raw/past-videos
 analytics/yt-analytics-*
+projects/**/*.png
 
 # General
 .DS_Store
