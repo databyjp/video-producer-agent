@@ -38,8 +38,6 @@ Here's the basic architecture.
 
 This top part shows what I'd call the "machine memory" layer.
 
-[highlight machine-memory lane: Raw sources -> LLM -> Elastic AI Index]
-
 This layer starts with raw sources - articles, documents, whatever I'm researching.
 
 When I ingest a source, an LLM automatically turns it into a set of Knowledge Indicators, or KIs - which are then stored in the Elasticsearch AI Index.
@@ -49,8 +47,6 @@ A KI is just one useful piece of knowledge. And crucially, it keeps the URL of t
 This is the magic that allows detailed memory to keep growing.
 
 And that machine memory, in turn, powers two separate paths.
-
-[highlight the Query CLI, then the Wiki maintainer and Markdown Wiki separately]
 
 The read-only Query CLI retrieves KIs and their source URLs directly. It doesn't change the Wiki.
 
