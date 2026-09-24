@@ -13,7 +13,7 @@ Here's what I do instead:
 [show me running `npm run wiki:import -- sample_data/search-labs-10 --limit 10`]
 [GRAPHIC: 02-terminal-presenter-frame]
 
-This imports 10 articles from this smaller Search Labs directory and autonomously builds a set of summaries, or personal Wiki pages.
+This imports 10 articles from this smaller Search Labs directory and autonomously builds a set of su  mmaries, or personal Wiki pages.
 [Show the rendered wiki pages]
 
 And if I import, say - 90 more
@@ -36,7 +36,7 @@ So, let me show you how that works, and take you through the journey of how I go
 
 Here's the basic architecture.
 
-This top part shows what I'd call the "machine memory" layer.
+This top part shows what I'd call the " machine memory" layer.
 
 This layer starts with raw sources - articles, documents, whatever I'm researching.
 

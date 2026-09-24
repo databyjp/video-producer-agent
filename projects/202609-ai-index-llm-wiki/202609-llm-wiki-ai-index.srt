@@ -1,0 +1,1051 @@
+1
+00:00:00,000 --> 00:00:04,000
+I use AI agents for research a lot.
+
+2
+00:00:04,000 --> 00:00:07,000
+They search, read, filter, and summarize 1000s
+
+3
+00:00:07,000 --> 00:00:10,000
+of documents for me in just minutes.
+
+4
+00:00:11,000 --> 00:00:13,000
+But this introduces a new problem.
+
+5
+00:00:13,000 --> 00:00:16,000
+You see, it's now too easy for research to end up with piles
+
+6
+00:00:16,000 --> 00:00:19,000
+and piles of documents, just like how developers are
+
+7
+00:00:19,000 --> 00:00:20,000
+drowning in code review work.
+
+8
+00:00:21,000 --> 00:00:23,000
+So, here's what I do instead.
+
+9
+00:00:23,760 --> 00:00:26,760
+This command here imports just 10 articles, and
+
+10
+00:00:27,760 --> 00:00:30,760
+autonomously builds a set of summaries or personal
+
+11
+00:00:30,760 --> 00:00:31,760
+Wiki pages.
+
+12
+00:00:32,760 --> 00:00:35,760
+And if I import, say, let's say, 90 more.
+
+13
+00:00:35,760 --> 00:00:36,760
+This will take a little bit longer.
+
+14
+00:00:37,000 --> 00:00:40,000
+It handles the larger size just fine, and the number
+
+15
+00:00:40,000 --> 00:00:43,000
+of wiki pages has only gone from five from our 10 sources
+
+16
+00:00:43,000 --> 00:00:45,000
+to 23 from our 100 sources.
+
+17
+00:00:46,560 --> 00:00:49,560
+Meanwhile, the original knowledge is still available to me
+
+18
+00:00:49,560 --> 00:00:51,560
+and the agents.
+
+19
+00:00:51,600 --> 00:00:55,600
+In other words, the human readable wiki remains manageable,
+
+20
+00:00:55,600 --> 00:00:58,600
+while the AI index preserves detailed source
+
+21
+00:00:58,600 --> 00:00:59,600
+linked knowledge.
+
+22
+00:01:00,000 --> 00:01:01,000
+How do I build this?
+
+23
+00:01:02,000 --> 00:01:05,000
+Well, I did it by expanding the LLM Wiki concept
+
+24
+00:01:05,000 --> 00:01:08,000
+with elastic searches AI index at its core.
+
+25
+00:01:08,120 --> 00:01:12,120
+Now, an AI index is designed to store knowledge efficiently
+
+26
+00:01:12,120 --> 00:01:16,000
+for AI agents, which makes it a natural fit for this project.
+
+27
+00:01:16,000 --> 00:01:19,000
+So, let me show you how that works and take you through
+
+28
+00:01:19,000 --> 00:01:21,000
+the journey of how I got there.
+
+29
+00:01:21,360 --> 00:01:23,360
+Here's the basic architecture.
+
+30
+00:01:23,640 --> 00:01:26,640
+The top part here shows what I call the machine memory layer.
+
+31
+00:01:27,640 --> 00:01:30,640
+It starts with the raw sources, so articles, documents,
+
+32
+00:01:30,640 --> 00:01:31,640
+or whatever I'm researching.
+
+33
+00:01:32,160 --> 00:01:35,160
+When I ingest a sauce, an LLM automatically turns
+
+34
+00:01:35,160 --> 00:01:38,160
+it into a set of knowledge indicators or KIs, which
+
+35
+00:01:38,160 --> 00:01:41,160
+are then stored in the elastic search AR index.
+
+36
+00:01:41,320 --> 00:01:44,320
+Achaia is just one useful piece of knowledge, and
+
+37
+00:01:44,320 --> 00:01:47,320
+crucially, it keeps the URL of the source it
+
+38
+00:01:47,320 --> 00:01:50,320
+came from, so every result stays traceable
+
+39
+00:01:51,320 --> 00:01:52,320
+back to the full source.
+
+40
+00:01:53,320 --> 00:01:56,320
+This is the small but important magic that allows detailed
+
+41
+00:01:56,320 --> 00:01:57,320
+memory to keep growing.
+
+42
+00:01:58,320 --> 00:02:02,320
+And that machine memory, in turn, powers 2 separate paths,
+
+43
+00:02:02,320 --> 00:02:05,320
+the read only queries CLI retrieves KIs,
+
+44
+00:02:05,320 --> 00:02:07,320
+and their source URLs directly.
+
+45
+00:02:08,320 --> 00:02:10,320
+It doesn't change the wiki.
+
+46
+00:02:10,320 --> 00:02:12,320
+Now, the maintainer LLM is different.
+
+47
+00:02:13,320 --> 00:02:16,320
+It receives the new KIs retrieves relevant
+
+48
+00:02:16,320 --> 00:02:20,320
+history from the AI index and reads the existing wiki context.
+
+49
+00:02:21,320 --> 00:02:24,320
+Then, it updates only the pages that need to change.
+
+50
+00:02:24,720 --> 00:02:27,720
+The result is a compact wiki index and a set of topic
+
+51
+00:02:27,720 --> 00:02:30,720
+pages that I can use as a starting point for my learning.
+
+52
+00:02:30,800 --> 00:02:33,800
+And I can tell you, from having used LLM wikis
+
+53
+00:02:33,800 --> 00:02:36,800
+for a little while, that they make it so much easier for my small
+
+54
+00:02:36,800 --> 00:02:39,800
+brain to process and digest information.
+
+55
+00:02:40,320 --> 00:02:43,320
+Now, this is the final outcome, but it's not necessarily
+
+56
+00:02:44,320 --> 00:02:47,320
+where I started, so let me show you why and how I
+
+57
+00:02:47,320 --> 00:02:48,320
+made those decisions.
+
+58
+00:02:48,760 --> 00:02:51,760
+My starting point was the LLM wiki.
+
+59
+00:02:51,760 --> 00:02:53,760
+This is an idea floated by Andre Capati.
+
+60
+00:02:54,760 --> 00:02:56,760
+That's right, that Andre Capati.
+
+61
+00:02:56,760 --> 00:02:59,760
+His thesis was that rag is useful, but LLM
+
+62
+00:03:00,760 --> 00:03:03,760
+is rediscovering knowledge from scratch on every question and
+
+63
+00:03:03,760 --> 00:03:04,760
+that there's no accumulation.
+
+64
+00:03:05,760 --> 00:03:08,760
+So, he proposed that instead of just retrieving
+
+65
+00:03:08,760 --> 00:03:11,760
+from raw documents at query time, the LLM
+
+66
+00:03:11,760 --> 00:03:14,760
+incrementally builds and maintains a persistent wiki.
+
+67
+00:03:15,760 --> 00:03:18,760
+One where you're in charge of sourcing, exploration,
+
+68
+00:03:18,760 --> 00:03:22,760
+and asking the right questions, so the LLM does all the grunt work.
+
+69
+00:03:23,760 --> 00:03:26,760
+Like many of these ideas, it's a deceptively simple,
+
+70
+00:03:26,760 --> 00:03:29,760
+but a super observant one that comes from a deep understanding
+
+71
+00:03:30,760 --> 00:03:31,760
+and intuition.
+
+72
+00:03:31,960 --> 00:03:34,960
+He proposes to let the LLMs do what they're good at, which is
+
+73
+00:03:34,960 --> 00:03:37,960
+reading and manipulating big volumes of information.
+
+74
+00:03:38,480 --> 00:03:41,400
+While you curate the direction of the wikis.
+
+75
+00:03:41,400 --> 00:03:44,400
+So you can probably see why this is a great idea with
+
+76
+00:03:44,400 --> 00:03:48,400
+lots of adoption in forms of packages, websites, extensions, and so on.
+
+77
+00:03:48,600 --> 00:03:51,600
+But this, let's call it vanilla, LLM
+
+78
+00:03:51,600 --> 00:03:54,600
+wicki, has a few limitations around scaling
+
+79
+00:03:54,600 --> 00:03:55,600
+and efficiency.
+
+80
+00:03:55,600 --> 00:03:57,600
+So let me explain what I mean by that.
+
+81
+00:03:58,160 --> 00:04:01,160
+The idea of asking an LLM to produce summaries,
+
+82
+00:04:01,160 --> 00:04:03,160
+you know, wiki sounds simple enough, right?
+
+83
+00:04:04,160 --> 00:04:07,160
+A new source comes in, it gets sent to an LLM,
+
+84
+00:04:07,160 --> 00:04:09,160
+and it makes updates the wiki articles.
+
+85
+00:04:10,160 --> 00:04:11,160
+easy, right?
+
+86
+00:04:11,160 --> 00:04:14,160
+Well, it turns out there are 2 problems with this, and
+
+87
+00:04:14,160 --> 00:04:16,160
+both of them kind of get worse over time.
+
+88
+00:04:17,160 --> 00:04:18,160
+And they relate to context.
+
+89
+00:04:20,160 --> 00:04:23,160
+The 1st problem is that comparing a source article to a bunch
+
+90
+00:04:23,160 --> 00:04:25,160
+of summaries is just a difficult task.
+
+91
+00:04:25,160 --> 00:04:28,160
+So imagine that you've never seen or read the Lord of the Rings.
+
+92
+00:04:29,160 --> 00:04:32,160
+And someone gives you a book synopsis, like Frodo
+
+93
+00:04:32,160 --> 00:04:35,160
+and his friends have to journey to Mordo to destroy a magic ring and
+
+94
+00:04:35,160 --> 00:04:37,160
+prevent it from falling to the wrong hands.
+
+95
+00:04:37,720 --> 00:04:40,720
+And then they give you the full scene of Gandalf confronting ceremony
+
+96
+00:04:40,720 --> 00:04:43,720
+at Isengard and ask you whether this should be in the summary.
+
+97
+00:04:44,720 --> 00:04:46,720
+Well, how could you possibly know?
+
+98
+00:04:46,720 --> 00:04:47,720
+You just can't.
+
+99
+00:04:47,720 --> 00:04:50,720
+You just don't have enough apples to Apple's context in your brain.
+
+100
+00:04:51,720 --> 00:04:55,720
+At that point, you either have to make a total guess, which congratulations,
+
+101
+00:04:55,720 --> 00:04:58,720
+you've learned to be like an LLM, or you have to now go back and
+
+102
+00:04:58,720 --> 00:04:59,720
+read the Lord of the Rings.
+
+103
+00:05:00,760 --> 00:05:04,760
+Which brings us to the 2nd problem, the context window,
+
+104
+00:05:04,760 --> 00:05:07,760
+in order for the LLM to make an apples to Apple's comparison and
+
+105
+00:05:07,760 --> 00:05:10,760
+evaluation of these sources, it must rate all
+
+106
+00:05:11,760 --> 00:05:14,760
+of the relevant information, which, in the case of vanilla
+
+107
+00:05:14,760 --> 00:05:17,760
+LLM wikis, means reading source materials.
+
+108
+00:05:17,760 --> 00:05:20,760
+Now, and the growing number of them, too, as the
+
+109
+00:05:20,760 --> 00:05:21,760
+wiki grows over time.
+
+110
+00:05:23,760 --> 00:05:25,760
+This is slow and wasteful.
+
+111
+00:05:25,760 --> 00:05:29,760
+It'll cost you growing amounts of time and LLM inference costs.
+
+112
+00:05:29,760 --> 00:05:32,760
+So, that's how I arrived at the solution that leverages
+
+113
+00:05:32,760 --> 00:05:35,760
+elastics AI index and knowledge indicators.
+
+114
+00:05:36,440 --> 00:05:39,440
+On AI index is an elastic search index designed
+
+115
+00:05:40,440 --> 00:05:43,440
+to save agents from repeatedly and inefficiently
+
+116
+00:05:43,440 --> 00:05:44,440
+looking for information.
+
+117
+00:05:44,440 --> 00:05:47,440
+Instead of an agent looking for files, performing searches or
+
+118
+00:05:48,440 --> 00:05:51,440
+running commands, all of which will cost you toykens and money,
+
+119
+00:05:51,440 --> 00:05:54,440
+an AI index will do all of that upfront.
+
+120
+00:05:54,440 --> 00:05:57,440
+So you do it once, store the outputs, and make that
+
+121
+00:05:57,440 --> 00:05:59,440
+knowledge searchable for later.
+
+122
+00:05:59,760 --> 00:06:02,760
+The things that indexes can be thought of as small morsels or nuggets
+
+123
+00:06:02,760 --> 00:06:05,760
+of knowledge, which is why they're called knowledge indicators.
+
+124
+00:06:06,760 --> 00:06:09,760
+In this repo, I simply send the source to an LLM
+
+125
+00:06:09,760 --> 00:06:13,760
+with a set of instructions, which will in turn output a set of KIs.
+
+126
+00:06:15,760 --> 00:06:18,760
+Then instead of this source, I get a set of useful
+
+127
+00:06:18,760 --> 00:06:21,760
+claims, explanations, or relationships, each with
+
+128
+00:06:21,760 --> 00:06:23,760
+a link back to the source.
+
+129
+00:06:24,760 --> 00:06:27,760
+Those KIs then get added to our AI index, which
+
+130
+00:06:27,760 --> 00:06:28,760
+of course is searchable.
+
+131
+00:06:29,640 --> 00:06:32,640
+As it turns out, AI index is a great solution for
+
+132
+00:06:32,640 --> 00:06:33,640
+our context problem.
+
+133
+00:06:34,760 --> 00:06:37,760
+So instead of making our maintainer LLM, choose between
+
+134
+00:06:37,760 --> 00:06:40,760
+using lossy summaries, always full-long documents,
+
+135
+00:06:40,760 --> 00:06:44,760
+we fill this AI index with compact, easy to search KIs.
+
+136
+00:06:45,440 --> 00:06:48,440
+Now, the maintainer LLM's workflow is different.
+
+137
+00:06:49,440 --> 00:06:52,440
+When a new source document is to be added, a pipeline
+
+138
+00:06:53,440 --> 00:06:57,440
+turns that into a set of KIs to be added to the AI index.
+
+139
+00:06:57,440 --> 00:07:00,440
+And then, the maintainer looks through the existing wiki pages
+
+140
+00:07:00,440 --> 00:07:03,440
+to see where and if those KIs might fit in.
+
+141
+00:07:04,440 --> 00:07:07,440
+And when it does find those relevant pages, it can selectively
+
+142
+00:07:07,440 --> 00:07:10,440
+retrieve other KIs from the AI index to compare
+
+143
+00:07:10,440 --> 00:07:13,440
+the full context, but in a much more efficient and
+
+144
+00:07:14,440 --> 00:07:15,440
+apples to Apple's way.
+
+145
+00:07:16,440 --> 00:07:19,440
+In other words, it looks at new KIs, historical
+
+146
+00:07:19,440 --> 00:07:22,440
+KIs, and the wiki pages that might need to change.
+
+147
+00:07:23,440 --> 00:07:26,440
+This is far more efficient than feeding a stack of full documents
+
+148
+00:07:26,440 --> 00:07:27,440
+to your LLM.
+
+149
+00:07:27,440 --> 00:07:31,440
+and it's far more complete than feeding the wikis and the new document.
+
+150
+00:07:33,960 --> 00:07:36,960
+So hopefully all of this sounds pretty straightforward.
+
+151
+00:07:36,960 --> 00:07:39,960
+Convert sources into KIs up front, and then use LLMs
+
+152
+00:07:40,960 --> 00:07:43,960
+to manage the final Wiki's profit.
+
+153
+00:07:43,960 --> 00:07:46,960
+But let me tell you about a pretty important failure mode that I came across.
+
+154
+00:07:48,960 --> 00:07:51,960
+My 1st attempt at running this app turned 25
+
+155
+00:07:51,960 --> 00:07:53,960
+blogs into just 23 wiki pages.
+
+156
+00:07:54,960 --> 00:07:57,960
+In other words, I've built this complex system so that I have
+
+157
+00:07:57,960 --> 00:08:00,960
+to look at an 8% reduction in the document count.
+
+158
+00:08:01,960 --> 00:08:03,960
+So that's not so great, right?
+
+159
+00:08:03,960 --> 00:08:05,960
+So if you imagine if the official Wikipedia has 92%
+
+160
+00:08:06,960 --> 00:08:08,960
+of the page count of all of the internet.
+
+161
+00:08:08,960 --> 00:08:09,960
+It's not really going to be ideal.
+
+162
+00:08:10,960 --> 00:08:14,960
+So, what helped here for me was to steer the LLM.
+
+163
+00:08:16,920 --> 00:08:19,920
+The key phrase to add for me was detailed or narrow
+
+164
+00:08:19,920 --> 00:08:23,520
+KIs may remain available only through the AI index.
+
+165
+00:08:23,520 --> 00:08:26,520
+This led the LLM note to focus the output on human readable
+
+166
+00:08:26,520 --> 00:08:27,520
+summary documents.
+
+167
+00:08:28,520 --> 00:08:31,520
+And with this change prompt, the next run produced
+
+168
+00:08:31,520 --> 00:08:33,520
+only 14 documents down from 23.
+
+169
+00:08:35,520 --> 00:08:38,520
+And the nice thing was that as I ingested more and more
+
+170
+00:08:38,520 --> 00:08:41,520
+data, the better we could see the benefit of the structure.
+
+171
+00:08:41,520 --> 00:08:42,520
+So let me show you how that worked.
+
+172
+00:08:43,880 --> 00:08:46,880
+What I have here is a wiki of recent elastic search labs,
+
+173
+00:08:46,880 --> 00:08:49,880
+blogs, generated from ingesting 100 blog entries.
+
+174
+00:08:50,440 --> 00:08:51,440
+But not all at once.
+
+175
+00:08:52,440 --> 00:08:55,440
+You see, the thing is, I want to simulate how a real wiki would
+
+176
+00:08:55,440 --> 00:08:56,440
+grow over time.
+
+177
+00:08:56,440 --> 00:08:59,440
+And really, you wouldn't be ingesting 100 articles at once
+
+178
+00:08:59,440 --> 00:09:00,440
+and summarizing it.
+
+179
+00:09:00,440 --> 00:09:02,440
+You know, you're not writing a graduate thesis over here.
+
+180
+00:09:03,920 --> 00:09:07,920
+Instead, I broke it up into batches of three files to simulate
+
+181
+00:09:07,920 --> 00:09:09,920
+an incremental growth in knowledge.
+
+182
+00:09:10,160 --> 00:09:13,160
+And that captured how some files grow over that time,
+
+183
+00:09:13,160 --> 00:09:16,160
+like this page on vector search benchmarking.
+
+184
+00:09:16,560 --> 00:09:19,560
+So this file was actually created on the first batch of documents
+
+185
+00:09:19,560 --> 00:09:22,560
+that were ingested, and capture some pretty good overall tips
+
+186
+00:09:22,560 --> 00:09:24,560
+on how to do benchmarking.
+
+187
+00:09:24,880 --> 00:09:27,880
+And then, as more documents get ingested, this wiki
+
+188
+00:09:27,880 --> 00:09:31,880
+page grows in length while remaining pretty reasonable overall.
+
+189
+00:09:32,120 --> 00:09:35,120
+So by the time all 100 blog entries are added, the page
+
+190
+00:09:35,120 --> 00:09:38,120
+collates information from 16 different sources.
+
+191
+00:09:38,120 --> 00:09:41,120
+It not only has these high-level tips about benchmarking,
+
+192
+00:09:41,120 --> 00:09:44,120
+but also a lot of detailed nuggets about how specific features
+
+193
+00:09:45,120 --> 00:09:48,120
+might affect benchmarks and how certain features might
+
+194
+00:09:48,120 --> 00:09:50,120
+improve performance in certain situations.
+
+195
+00:09:51,120 --> 00:09:54,120
+Looking at the bigger picture, we see that the number of wiki
+
+196
+00:09:54,120 --> 00:09:55,120
+pages grew like this.
+
+197
+00:09:55,800 --> 00:09:58,800
+You see that it maintains some sort of log ish scale
+
+198
+00:09:58,800 --> 00:10:01,800
+as we ingest more sources, which is key to
+
+199
+00:10:01,800 --> 00:10:04,800
+keeping our human facing wicket maintainable, even
+
+200
+00:10:05,800 --> 00:10:07,400
+as the sources keep growing.
+
+201
+00:10:07,400 --> 00:10:10,400
+So in the meantime, if we take a look at the raw data, you
+
+202
+00:10:10,400 --> 00:10:13,400
+see the KIs rise more or less in proportion with the document
+
+203
+00:10:13,400 --> 00:10:16,400
+count, meaning that all the raw data is available
+
+204
+00:10:16,400 --> 00:10:19,400
+for you and your agent as you need.
+
+205
+00:10:19,720 --> 00:10:22,720
+Let me show you the core function in my code base.
+
+206
+00:10:22,920 --> 00:10:26,920
+It loads the new KIs and wiki manifest established overall tasks.
+
+207
+00:10:27,560 --> 00:10:30,560
+The 1st LLM call chooses the page bodies and
+
+208
+00:10:30,560 --> 00:10:32,560
+historical searches that it needs.
+
+209
+00:10:32,560 --> 00:10:35,560
+This helps the model find the right context to review.
+
+210
+00:10:36,560 --> 00:10:40,560
+And then this 2nd LLM call returns the local page operations.
+
+211
+00:10:40,560 --> 00:10:43,560
+So what pages to update or create, and what changes
+
+212
+00:10:43,560 --> 00:10:44,560
+to make concretely.
+
+213
+00:10:45,560 --> 00:10:48,560
+And lastly, the wiki validates those changes and
+
+214
+00:10:48,560 --> 00:10:50,560
+checkpoints the sources.
+
+215
+00:10:50,800 --> 00:10:53,800
+This combines LLM calls with deterministic workflows,
+
+216
+00:10:53,800 --> 00:10:56,800
+the LLM returns structure data, and our program
+
+217
+00:10:56,800 --> 00:10:58,800
+implements the changes in a predictable way.
+
+218
+00:11:00,480 --> 00:11:03,480
+I've shared the code base, including the runnable example, prompts
+
+219
+00:11:03,480 --> 00:11:05,480
+validation, and so on in the repo here.
+
+220
+00:11:06,480 --> 00:11:09,480
+So if you want to see what an implementation of an LLM
+
+221
+00:11:09,480 --> 00:11:12,480
+wiki with the elastic search AI index looks like,
+
+222
+00:11:12,480 --> 00:11:15,480
+please check it out, and you can use it with a free trial of
+
+223
+00:11:15,480 --> 00:11:17,480
+elastic search as well, which is very nice.
+
+224
+00:11:17,800 --> 00:11:20,800
+This current version is to work with a particular adjacent shape,
+
+225
+00:11:20,800 --> 00:11:23,800
+but of course, you can adapt it to whatever data source and
+
+226
+00:11:24,800 --> 00:11:25,800
+shape that works for you.
+
+227
+00:11:26,280 --> 00:11:29,280
+And similarly, it's built with typescript, but obviously it can adapt
+
+228
+00:11:29,280 --> 00:11:30,280
+it to any language.
+
+229
+00:11:31,280 --> 00:11:34,280
+Elastic search client libraries are available in 8 different languages,
+
+230
+00:11:34,280 --> 00:11:36,280
+and you can use it with direct rest calls, of course.
+
+231
+00:11:37,280 --> 00:11:40,280
+And for agentic work, you can use the elastic agent skills,
+
+232
+00:11:40,280 --> 00:11:43,280
+or even try the new elastic CLI, which, as of now,
+
+233
+00:11:43,280 --> 00:11:47,280
+is in technical preview, but by the time you watch it, maybe it won't be.
+
+234
+00:11:47,280 --> 00:11:48,280
+should go and check it out.
+
+235
+00:11:48,800 --> 00:11:52,800
+Look, AI agents make collecting research ridiculously
+
+236
+00:11:52,800 --> 00:11:55,800
+easy, but they also create giant piles of documents
+
+237
+00:11:56,800 --> 00:11:59,800
+that will just sit on my desktop until deletion, basically.
+
+238
+00:11:59,800 --> 00:12:02,800
+So, a mark done-based LLM managed
+
+239
+00:12:02,800 --> 00:12:04,800
+wiki is a really good solution to all of this.
+
+240
+00:12:04,800 --> 00:12:08,800
+It gives me a high level overview without draining me in information.
+
+241
+00:12:09,800 --> 00:12:12,800
+And by integrating the elastic AI index as
+
+242
+00:12:12,800 --> 00:12:15,800
+the back end for all this, I was able to make the LLM
+
+243
+00:12:15,800 --> 00:12:18,800
+wiki sustainable, to manage as it scales up.
+
+244
+00:12:19,600 --> 00:12:22,600
+And hopefully also consistent in how it treats
+
+245
+00:12:22,600 --> 00:12:25,600
+the mix of all the information and new information.
+
+246
+00:12:26,600 --> 00:12:30,600
+And this pattern for me was relatively easy to understand and robust.
+
+247
+00:12:30,600 --> 00:12:33,600
+And what's also nice about it is that it's not just limited
+
+248
+00:12:33,600 --> 00:12:36,600
+to wikis, AI indexes could support any kind
+
+249
+00:12:37,600 --> 00:12:40,600
+of big and deep knowledge bases, cutting down on retrieved
+
+250
+00:12:40,600 --> 00:12:43,600
+context, and giving agents solid bases to work off of.
+
+251
+00:12:44,600 --> 00:12:47,600
+So I think there's high utility for all sorts of things for
+
+252
+00:12:47,600 --> 00:12:50,600
+AI indexes, technical documentation, internal
+
+253
+00:12:50,600 --> 00:12:54,600
+knowledge bases, or really anywhere that an agent keeps rediscovering context.
+
+254
+00:12:56,600 --> 00:12:59,600
+So, if you want to try my version, I've shared the typescript
+
+255
+00:12:59,600 --> 00:13:02,600
+repository in the description, and I also link to elastic search
+
+256
+00:13:02,600 --> 00:13:05,600
+server list and elastic searches back to database project,
+
+257
+00:13:05,600 --> 00:13:06,600
+which you should check out as well.
+
+258
+00:13:07,400 --> 00:13:10,400
+Now, I'm sure I'm going to come across new problems as I keep
+
+259
+00:13:10,400 --> 00:13:12,400
+using the LLM Wiki.
+
+260
+00:13:12,400 --> 00:13:15,400
+So I'd love to know how you would decide when a growing
+
+261
+00:13:15,400 --> 00:13:18,400
+wiki topic should be split, or what other failure modes
+
+262
+00:13:19,400 --> 00:13:21,040
+you think I'm about to discover the hard way.
+
+263
+00:13:21,040 --> 00:13:25,040
+Let me know in the comments, and thanks for watching and I'll see you next time.

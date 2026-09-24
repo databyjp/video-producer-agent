@@ -31,6 +31,8 @@ Master catalog of all pages in this knowledge bundle.
 - [Elastic 9.5 vector-search defaults and index mode](sources/elastic-vector-search-9-5-official.md) — Official documentation for `vectordb_document`, vector-oriented defaults, and related DiskBBQ and Jina capabilities
 - [Karpathy's LLM Wiki pattern](sources/karpathy-llm-wiki.md) - Persistent, LLM-maintained Markdown knowledge that compounds across ingestion, queries, and linting
 - [Elasticsearch AI Indices: building context for agents](sources/elastic-ai-index-building-context-agents.md) - AI Index creation, KI generation, hybrid retrieval, and agent-routing mechanics
+- [TypeSafe Jev System One Model](sources/typesafe-jev-system-one-models.md) — Official capabilities, constraints, recipes, and early public applications of Jev
+- [Elastic capabilities relevant to Jev decision layers](sources/elastic-jev-integration-seams.md) — Official Elastic search, Jina, Agent Builder, and LLM-observability seams for bounded Jev decisions
 - [Cutting agent costs with precomputed context](sources/elastic-precomputed-context-agent-costs.md) - Elastic's staged KI evaluation against search-and-fetch RAG under a fixed agent budget
 
 ## Raw Assets
@@ -47,6 +49,7 @@ Master catalog of all pages in this knowledge bundle.
 - [Elastic Vector Database launch](wiki/elastic-vector-database-launch.md) — Technical narrative, mechanisms, and claim boundaries for the planned Serverless Vector Database project type
 - [ES|QL Data Federation](wiki/esql-data-federation.md) — Direct S3 querying, strongest demo story, validation gates, and claim boundaries
 - [AI Index-backed LLM Wikis](wiki/ai-index-backed-llm-wikis.md) - Product seam, proof requirements, complexity budget, and demo-led video structure
+- [Jev and Elasticsearch: bounded decision-layer video ideas](wiki/jev-elasticsearch-video-ideas.md) — Twenty search and observability concepts for combining Elasticsearch retrieval and deterministic policy with Jev's bounded semantic judgments
 - [Script Voice and Style](wiki/script-voice-and-style.md) — JP's writing voice, humor, tone conventions
 - [Script Structure Patterns](wiki/script-structure-patterns.md) — Hooks, sections, CTAs, pacing archetypes
 - [Visual Direction Conventions](wiki/visual-direction-conventions.md) — Square-bracket notation for popups, b-roll, overlays, demos

@@ -65,6 +65,8 @@ A separately started agent in the [Elastic developer graphic designer repository
 
 Compare generated captions with the recorded script to identify technical mistranscriptions. Preserve plausible ad-libs, cue numbers, and timestamps. Treat the recording as authoritative when it differs meaningfully from the script.
 
+You can typically generate & export captions from the video editor, such as Adobe Premiere or Apple Final Cut Pro. YouTube typically asks for .SRT files. If your editor will only output a different format (e.g. .ITT), you can convert it with a free online converter such as https://gotranscript.com/subtitle-converter
+
 ### Analyze YouTube exports
 
 Follow [`analytics/README.md`](analytics/README.md) to process YouTube Studio exports and produce age-normalized reports. Treat the results as channel-specific findings rather than platform behavior.

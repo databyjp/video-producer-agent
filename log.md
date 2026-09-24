@@ -1296,3 +1296,47 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Flagged recording blockers around the incomplete EDOT setup, overbroad zero-code claim, unproven automatic error capture, inconsistent latency measurements, historical errors after a fix, and `Promise.allSettled()` failure semantics.
 - Recommended making diagnosis the long-form viewer job, treating the AI Assistant response as a hypothesis verified against source and a rerun, removing or reducing the Claude Code detour, and producing the vertical setup video as a dedicated short rather than a direct crop.
 - Confirmed that existing EDOT and AI Assistant source pages already cover the reusable technical boundaries, so no wiki concept update was needed.
+
+## 2026-09-22 — Planned AI Index Wiki screencast recording
+
+- Reviewed the revised script, companion repository workflow, retained experiment evidence, and existing graphics plan.
+- Recommended completing the public 10-to-100 import before recording the count-dependent narration because the workflow is nondeterministic and uses a different source order from the retained experiment.
+- Identified the terminal, rendered Wiki, Gist, code, retained Wiki-evolution, and repository walkthrough segments that should be captured before the A-roll session.
+
+## 2026-09-22 — Wrote the AI Index Wiki recording runbook
+
+- Added `projects/202609-ai-index-llm-wiki/recording-commands.md` with exact commands for the public 10-to-100 import, topic counts, retained snapshots, code walkthroughs, and rendered Wiki captures.
+- Added an explicitly gated reset for the dedicated public-demo AI Index, local Wiki backups, import logs, retry commands, and separate off-camera checks so credentials and destructive setup do not appear in footage.
+- Kept the retained experiment artifacts separate from the newest-first public import and made the recorded public-run counts authoritative for the opening narration.
+
+## 2026-09-22 — Diagnosed an interrupted public Wiki import
+
+- Confirmed that the 100-source import had committed 58 source fingerprints and 20 topic pages before the maintainer returned an invalid page selection.
+- Verified that validation rejected the model output before a Wiki commit, leaving the completed batches intact and 42 sources pending.
+- Recommended rerunning the same import command so the failed three-source batch receives a fresh maintenance inference; no local or Elasticsearch reset is required.
+
+## 2026-09-22 — Researched TypeSafe Jev and developed Elasticsearch video concepts
+
+- Verified Jev's typed decision interface, operational limits, documented failure modes, vendor-reported speed and cost claims, and available integrations against TypeSafe documentation, Cloudflare documentation, and LangChain's integration post.
+- Reviewed public experiments including a dry-run low-latency trading loop, a GitHub issue-triage dashboard with human correction, and a developer CLI for PHI screening and code-comment review. Treated these as early-adoption signals rather than production performance evidence.
+- Added `sources/typesafe-jev-system-one-models.md` and `wiki/jev-elasticsearch-video-ideas.md`. The concept page defines the decision-layer boundary and proposes ten Elastic-adjacent video concepts, with RAG evidence filtering, agent-skill routing, and telemetry-citation verification identified as the strongest starting points.
+- Updated `index.md`.
+
+## 2026-09-22 — Expanded Jev and Elasticsearch video ideation
+
+- Verified the current Elastic seams around semantic reranking, Jina v5 Omni multimodal retrieval, Agent Builder ES|QL tools and Workflows, Agent Builder traces, and EDOT LLM observability.
+- Added `sources/elastic-jev-integration-seams.md` with capability boundaries. In particular, Jina can retrieve multimodal candidates, but Jev remains text-only and must receive transcript, OCR, caption, metadata, and other text-derived state rather than raw media.
+- Expanded `wiki/jev-elasticsearch-video-ideas.md` to twenty candidates: fourteen search-led patterns and six observability or LLM-observability patterns. Added a recommended ten-segment episode with seven search and three observability examples.
+- Updated `index.md`.
+
+## 2026-09-23 — Developed Jev LLM-trace evaluation pattern
+
+- Verified TypeSafe's published Agent Trace Observability workflow and Langfuse's Jev evaluator pattern. Both treat a completed agent trace as a set of separate bounded decisions, not one request for an overall verdict.
+- Added an LLM-trace evaluation section to `wiki/jev-elasticsearch-video-ideas.md`: precompute exact trace facts, ask separate questions for answer support, task completion, satisfaction, failure mode, permission compliance, and progress, then route with code.
+- Added the TypeSafe workflow's evaluation boundary and trace-specific design constraints to `sources/typesafe-jev-system-one-models.md`. The strongest demo is an agent claiming success after a refund tool returns 403, paired with an expectation-gap case where the task succeeded but the user remains unhappy.
+
+## 2026-09-24 — Prepared Wiki accumulation graphic briefs
+
+- Read all 34 retained batch traces for the 100-source Wiki growth experiment and derived one verified series for Raw sources, topic count, Markdown body words, cumulative KIs, and `vector-search-benchmarking.md` evolution.
+- Added `assets/data/wiki-growth-series.csv` and validated its 34 rows against the archived traces.
+- Added ready designer briefs for `topic-evolution` and `two-layer-growth`. The first makes the page's 1,993-to-1,233-word rewrite visible while citations continue rising; the second shows the final 27 topics, 20,446 Markdown body words, and 1,728 KIs without claiming a logarithmic scaling law.
