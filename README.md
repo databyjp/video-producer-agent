@@ -67,6 +67,22 @@ Compare generated captions with the recorded script to identify technical mistra
 
 You can typically generate & export captions from the video editor, such as Adobe Premiere or Apple Final Cut Pro. YouTube typically asks for .SRT files. If your editor will only output a different format (e.g. .ITT), you can convert it with a free online converter such as https://gotranscript.com/subtitle-converter
 
+You may use a prompt such as the below:
+
+```markdown
+I have an auto-generated SRT file here
+/Users/jphwang/code/agent-sandboxes/video-producer/projects/202609-ai-index
+-llm-wiki/202609-llm-wiki-ai-index.srt
+
+Review it, and correct any mis-transcriptions using the original script
+(/Users/jphwang/code/agent-sandboxes/video-producer/projects/202609-ai-inde
+x-llm-wiki/script.md).
+
+Note that I may have ad-libbed some sections, so do not remove any phrases
+or words from the transcript even if they do not appear in the original
+script.
+```
+
 ### Analyze YouTube exports
 
 Follow [`analytics/README.md`](analytics/README.md) to process YouTube Studio exports and produce age-normalized reports. Treat the results as channel-specific findings rather than platform behavior.
