@@ -1340,3 +1340,62 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Read all 34 retained batch traces for the 100-source Wiki growth experiment and derived one verified series for Raw sources, topic count, Markdown body words, cumulative KIs, and `vector-search-benchmarking.md` evolution.
 - Added `assets/data/wiki-growth-series.csv` and validated its 34 rows against the archived traces.
 - Added ready designer briefs for `topic-evolution` and `two-layer-growth`. The first makes the page's 1,993-to-1,233-word rewrite visible while citations continue rising; the second shows the final 27 topics, 20,446 Markdown body words, and 1,728 KIs without claiming a logarithmic scaling law.
+
+## 2026-09-24 — Shaped Jev product-ideas video
+
+- Reframed the concept as a seven-recipe developer video: inference-endpoint routing, input and retrieval safety, RAG relevance, citation support, zero-result recovery, tool and skill selection, and agent-trace outcome verification.
+- Recommended the agent-trace outcome verifier over a broad cost-and-failure classifier as the final standalone recipe. It has a compact, falsifiable demo: a refund tool returns 403 while the agent claims success. Cost and failure classification remain a natural second act within that trace segment.
+- Added five LLM-observability follow-up candidates: user disagreement, stuck-agent detection, failure ownership, context bloat, and unsafe-action evaluation.
+- Updated `wiki/jev-elasticsearch-video-ideas.md`.
+
+## 2026-09-24 — Built minimal Jev recipe demos
+
+- Added seven standalone Python scripts to `/Users/jphwang/code/content/202609-jev-elastic`, one for each selected product recipe.
+- Kept Elasticsearch, Elastic Inference Service, generative-model calls, tool execution, authorization, and writes outside the demos. Each script shows hard-coded state, a typed Jev decision, code-owned policy, and a printed next step.
+- Ran all seven scripts against `jev-latest`. The examples produced the intended routes, including a high-similarity RAG false positive rejection, citation support and contradiction, all six zero-result recovery paths, a no-tool option, a failed-refund silent failure, and a completed-but-unsatisfying expectation gap.
+- Added setup and boundary documentation to the demo repository.
+
+## 2026-09-24 — Grounded the Jev EIS router in actual models
+
+- Verified Elastic's current EIS chat-model catalog and Agent Builder model-selection guidance against official documentation.
+- Replaced placeholder fast, balanced, and reasoning models in `scripts/01_inference_endpoint_router.py` with generally available EIS model IDs for Claude 4.5 Haiku, Claude 4.6 Sonnet, and Claude 4.6 Opus.
+- Replaced generic chat prompts with coding-agent requests covering a localized test fix, ordinary multi-file feature, subtle concurrency investigation, and credentialed production operation.
+- Ran the live Jev classifier. It routed the four requests to Haiku, Sonnet, Opus, and human review respectively, without invoking EIS.
+- Updated the demo README, EIS source summary, and Jev video-ideas page with the model IDs, category boundaries, and endpoint-mapping caveat.
+
+## 2026-09-24 — Built the four-way inference-router comparison
+
+- Split the inference router into four ordered variants: Haiku serial, Jev serial, Haiku concurrent, and Jev parallel questions in one request. All four import the same coding requests and route rubric.
+- Used OpenRouter's pinned `anthropic/claude-haiku-4.5` slug with strict JSON Schema output. Used `jev-latest` because the TypeSafe account currently exposes only `jev-latest` and `jev-preview`; each Jev script prints the resolved model version.
+- Confirmed that all four variants chose the same routes: Haiku, Sonnet, Opus, and human review.
+- In one local validation run, Haiku serial took 4.689 seconds, Jev serial 1.418 seconds, Haiku concurrent 1.344 seconds, and Jev's one-request variant 0.609 seconds. These are local observations, not general provider benchmarks.
+- Added `sources/openrouter-haiku-routing-baseline.md`, updated the Wiki index and Jev concept page, and documented the comparison commands and boundaries in the demo README.
+
+## 2026-09-24 — Added five-run router summaries
+
+- Changed each inference-router variant to perform five measured runs through one reused client and report every wall time, the mean and range, request counts, mean token usage, route consistency, and OpenRouter cost when available.
+- Kept the first run measured rather than adding a hidden warm-up, so connection setup remains visible in the range.
+- In the validation pass, mean wall times were 4.796 seconds for Haiku serial, 1.049 seconds for Jev serial, 1.326 seconds for Haiku concurrent, and 0.336 seconds for Jev's one-request variant. The observed ranges were 4.098–5.491, 0.912–1.380, 1.181–1.481, and 0.244–0.655 seconds respectively.
+- All twenty classifications in every mode agreed on the four routes. The measurements remain local observations rather than general provider benchmarks.
+
+## 2026-09-24 — Added Jev cost estimates to the router comparison
+
+- Verified Jev 1.13 pricing in TypeSafe's model documentation: $0.042 per million input tokens and no output-token charge.
+- Added cost calculation from each TypeSafe response's token usage. The output labels this as a calculated estimate, while Haiku remains labeled as OpenRouter-reported cost.
+- In the validation pass, Jev serial averaged $0.000102 per four-route run and $0.000508 across five runs. Jev's one-request mode averaged $0.000073 per run and $0.000365 across five runs.
+- Updated the demo README and Jev concept page with the pricing date, formula boundary, and billing-record caveat.
+
+## 2026-09-25 — Made the inference router the anchor demonstration
+
+- Decided to cover the four-way inference-router comparison in full rather than compressing every recipe to equal length.
+- Assigned the router section responsibility for teaching Jev's typed interface, serial and parallel request shapes, comparison methodology, cost calculation, and measurement boundaries.
+- Kept recipes two through seven concise around one state, one typed decision, one code policy, and one visible failure or fallback. They will reuse the established visual grammar instead of re-explaining Jev mechanics.
+- Updated `wiki/jev-elasticsearch-video-ideas.md` with this depth allocation.
+
+## 2026-09-25 — Outlined the seven-recipe Jev video
+
+- Added `/Users/jphwang/code/content/202609-jev-elastic/outline.md` with the working title "7 Ways to Add Jev to Your Product," viewer job, promise, through-line, and scope boundary.
+- Opened on the four-way routing result before defining Jev, then gave the router full coverage: the coding-agent problem, Haiku and Jev serial baselines, client-side Haiku concurrency, Jev's one-request question parallelism, five-run latency and cost results, route agreement, and measurement limits.
+- Structured recipes two through seven as concise applications of the same state → decision → policy → outcome pattern, moving through input safety, retrieval relevance, citation support, zero-result recovery, tool selection, and completed-trace verification.
+- Added inline visual directions, Elastic integration seams, claim boundaries, a closing suitability test, and two designer-level visual assets. The outline contains no section-duration estimates.
+- Linked the phase-one outline from `wiki/jev-elasticsearch-video-ideas.md`.

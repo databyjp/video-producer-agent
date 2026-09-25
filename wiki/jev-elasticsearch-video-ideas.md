@@ -3,7 +3,7 @@ type: Concept
 title: Jev and Elasticsearch: bounded decision-layer video ideas
 description: Twenty developer-video candidates where Elasticsearch retrieves or computes, Jev makes a bounded semantic judgment, and code retains control.
 tags: [jev, typesafe, elasticsearch, jina, search, agents, llm-observability, observability, video-ideation]
-timestamp: 2026-09-23T14:03:19Z
+timestamp: 2026-09-25T13:17:48Z
 ---
 
 # The useful framing
@@ -71,6 +71,60 @@ Jina rerankers and Jev may both touch the same shortlist, but they do different 
 - Use a **Jina reranker** when the question is broadly "which result is most relevant?"
 - Use **Jev** when the application needs named, policy-shaped decisions such as "is this evidence?", "does it contradict the premise?", or "is this candidate safe to show?"
 - Use both only if a held-out evaluation shows a measurable gain worth the additional latency and cost.
+
+## "Ideas for adding Jev to your product" video
+
+This is a stronger framing than an Elasticsearch-only grab bag. It gives the viewer a reusable architecture: a product supplies a compact state and an explicit answer space, Jev returns a decision, and ordinary code owns the threshold and action.
+
+Use **seven** recipes. Seven is enough to establish the pattern without turning the video into a catalog readout. Every recipe should use the same four-panel visual: **state in**, **typed Jev question**, **policy in code**, and **what happens next**.
+
+| Recipe | Jev's narrow decision | Code still owns | Demo boundary |
+| --- | --- | --- | --- |
+| **1. Inference-endpoint router** | Which route fits this coding task: Claude 4.5 Haiku, Claude 4.6 Sonnet, Claude 4.6 Opus, or human review? | Endpoint availability, cost ceilings, task permissions, and the actual EIS invocation. | Route a localized test fix, ordinary multi-file feature, subtle concurrency bug, and credentialed production operation. Do not claim that the router measures absolute task difficulty. |
+| **2. Input and retrieval safety gate** | Does a user message or retrieved passage attempt instruction override, credential extraction, or another named hazard? | Block, review, support routing, prompt isolation, and every security control. | Separate user-input screening from retrieved-content injection. Neither is a complete security boundary. |
+| **3. RAG relevance threshold** | Does this retrieved chunk directly help answer this query? | Candidate retrieval, access filters, prompt construction, and the relevance threshold. | Start with top-k hybrid hits. Include a high-similarity false positive that the semantic judgment rejects. |
+| **4. Citation-support checker** | Does the cited passage support, contradict, or fail to address an atomic answer claim? | Exact quote lookup, citation IDs, claim extraction, and human review policy. | Call this citation support checking, not a universal hallucination detector. |
+| **5. Zero-result recovery router** | Is the empty result caused by a typo, acronym, missing filter, ambiguous intent, exact-ID need, or corpus gap? | The rewrite, filter suggestion, clarification UI, and gap logging. | One empty query takes several visibly different recovery paths. |
+| **6. Tool and skill selector** | Which named tool or skill applies, if any? Is the choice sufficiently certain? | Tool parameters, authorization, execution, and an explicit no-tool route. | Rank a catalog, inspect a short list, then reject a plausible but wrong tool. |
+| **7. Agent-trace outcome verifier** | Was the task completed? Does the final message match the tool record? Does this run need review? | Trace normalization, exact error checks, side effects, and the review or issue workflow. | An agent says a refund succeeded after the tool returns 403. The trace proves otherwise. |
+
+### Minimal demo implementation
+
+The working project at `/Users/jphwang/code/content/202609-jev-elastic` contains one implementation area per recipe. The inference router has four comparison scripts; each remaining recipe has one script. They send hard-coded example state to the classifier, print the typed result or probability distribution, and apply a small code-owned routing policy.
+
+The scripts deliberately omit Elasticsearch queries, Elastic Inference Service model calls, generated answers, tool execution, authorization, and writes. Those integrations happen after the decision being demonstrated. Keeping them out makes the repeated structure visible: **example state → Jev decision → code policy → printed next step**.
+
+The inference-router demo uses three generally available EIS model IDs verified on 2026-09-24: `anthropic-claude-4.5-haiku`, `anthropic-claude-4.6-sonnet`, and `anthropic-claude-4.6-opus`. These correspond to the high-throughput, balanced-performance, and extended-reasoning examples in Elastic's Agent Builder guidance. The requests now resemble coding-agent work rather than generic chat prompts.
+
+The router comparison has four ordered variants over the same requests and rubric: Haiku serial, Jev serial, Haiku with four concurrent HTTP requests, and Jev with four independent questions in one `system_one` request. This separates model choice from client concurrency and Jev's server-side question parallelism. Each script performs five measured runs through one reused client and reports all wall times, their mean and range, request counts, mean token usage, cost, and route consistency. OpenRouter reports Haiku's cost in its responses. The scripts estimate Jev cost from response input tokens at TypeSafe's price verified on 2026-09-24, $0.042 per million input tokens with free output tokens. There is no unmeasured warm-up, so the first run includes connection setup. The video should present the result as a local observation rather than a general provider benchmark. The TypeSafe account exposes `jev-latest` rather than a pinned public version, so the scripts print the resolved response model alongside the alias.
+
+### Depth allocation
+
+Treat the inference router as the episode's anchor demonstration. Cover the shared coding requests, bounded route definitions, serial Haiku and Jev implementations, client-side Haiku concurrency, Jev's one-request question parallelism, five-run timing and cost results, route agreement, and measurement boundaries. This section teaches the interface and the repeated decision-layer pattern that the rest of the episode relies on.
+
+Keep recipes two through seven short without reducing them to a list. Each should show one representative state, one typed question, one code policy, and one visible failure or fallback. Reuse the state → decision → policy → outcome visual grammar instead of explaining Jev's request model again. The later sections then demonstrate breadth while the first section supplies the technical depth.
+
+The phase-one structure is in `/Users/jphwang/code/content/202609-jev-elastic/outline.md`. It opens on the measured router result, explains Jev after the payoff, covers the four router implementations and their boundaries, then moves through the remaining recipes in product-lifecycle order before closing with a suitability test.
+
+The seventh recipe is stronger than a broad "LLM cost and failure classifier" as a standalone segment. It has an immediate viewer payoff and a falsifiable result. Keep cost and failure classification as the second half of that segment: once a trace needs review, classify it as retrieval bloat, tool-loop churn, model latency, failed execution, or escalation.
+
+### LLM-observability recipes for a follow-up or bonus section
+
+These should not all fit in the first video. Pick one as an optional eighth segment, or save them for an LLM-observability follow-up.
+
+| Recipe | Jev decision | Deterministic evidence |
+| --- | --- | --- |
+| **User-disagreement detector** | Does the next user message reject, correct, or redirect the agent's previous answer? | Correctly pair the prior reply and next user turn. |
+| **Stuck-agent detector** | Did the latest agent step materially advance the task? | Exact duplicate calls, retry count, elapsed time, and budget. |
+| **Failure-owner router** | Is the first material failure a tool, provider, missing-context, policy, or agent-strategy problem? | Error codes, provider-status data, and known incident correlation. |
+| **Context-bloat triage** | Is the trace slow because the agent retrieved irrelevant or redundant context? | Token counts, context size, retriever provenance, and latency. |
+| **Unsafe-action evaluator** | Was this irreversible tool call permitted by the policy and consent available before it ran? | Action type, authorization, consent record, and policy retrieval. |
+
+**Packaging directions:**
+
+- "7 Ways to Add Jev to Your Product"
+- "7 Smart Decisions Every AI Product Needs"
+- "Your AI Product Doesn't Need Another Chatbot. It Needs This."
 
 ## Recommended 10-piece grab-bag episode
 

@@ -1,10 +1,10 @@
 ---
 type: Source Summary
 title: Elastic capabilities relevant to Jev decision layers
-description: Current Elastic documentation for hybrid and multimodal search, Jina inference, Agent Builder, and LLM observability that can provide the deterministic context around Jev.
+description: Current Elastic documentation for EIS chat models, hybrid and multimodal search, Agent Builder, and LLM observability around Jev.
 source: https://www.elastic.co/docs/solutions/search/ranking/semantic-reranking
-tags: [elasticsearch, jev, jina, search, reranking, agent-builder, llm-observability, observability]
-timestamp: 2026-09-22T17:12:00Z
+tags: [elasticsearch, eis, jev, jina, search, reranking, agent-builder, llm-observability, observability]
+timestamp: 2026-09-24T16:45:26Z
 ---
 
 # Search and Jina capabilities
@@ -14,6 +14,12 @@ Elasticsearch can perform fast candidate retrieval before a Jev decision. Its re
 Elastic documents Jina Embeddings v5 Omni Small and Nano as multimodal models that accept text, image, audio, video, and document inputs in one shared vector space. The `semantic` field type can generate and query those embeddings. In Elastic Stack 9.5+, the `semantic` field supports all documented modalities. The field type remains technical preview and Elastic states that it is not recommended for production use.
 
 Jev itself accepts text only. A Jev-plus-Jina design therefore uses Jina to retrieve candidate media, then gives Jev the text state needed for an explicit decision: caption, transcript segment, OCR text, title, metadata, user query, and any deterministic similarity or filter values. It should not claim that Jev judges a raw image, audio recording, or video frame.
+
+## EIS chat models for routing
+
+Elastic's EIS catalog lists Claude 4.5 Haiku (`anthropic-claude-4.5-haiku`), Claude 4.6 Sonnet (`anthropic-claude-4.6-sonnet`), and Claude 4.6 Opus (`anthropic-claude-4.6-opus`) as generally available chat models. Elastic's Agent Builder guidance uses these models as examples of high-throughput, balanced-performance, and extended-reasoning routes. That guidance describes workload categories, not coding-specific benchmark results.
+
+The supported-model IDs identify the underlying models. Agent Builder selects a configured model for one request through its `inference_id` or `connector_id`; those two fields are mutually exclusive. A routing demo can return a model ID to make its decision legible, but production code must map that choice to an available endpoint or connector and retain fallback, authorization, cost, and invocation policy.
 
 ## Agent Builder and deterministic tools
 
@@ -50,3 +56,5 @@ The credible role split is:
 [7] [LLM and agentic AI observability](https://www.elastic.co/docs/solutions/observability/applications/llm-observability)
 [8] [Agent Builder trace collection](https://www.elastic.co/docs/explore-analyze/ai-features/agent-builder/collect-traces)
 [9] [Agent Builder trace dashboard](https://www.elastic.co/docs/explore-analyze/ai-features/agent-builder/agent-traces-dashboard)
+[10] [Elastic Inference Service supported models](https://www.elastic.co/docs/explore-analyze/elastic-inference/eis-supported-models)
+[11] [Model configuration in Elastic Agent Builder](https://www.elastic.co/docs/explore-analyze/ai-features/agent-builder/models)

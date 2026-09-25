@@ -33,6 +33,7 @@ Master catalog of all pages in this knowledge bundle.
 - [Elasticsearch AI Indices: building context for agents](sources/elastic-ai-index-building-context-agents.md) - AI Index creation, KI generation, hybrid retrieval, and agent-routing mechanics
 - [TypeSafe Jev System One Model](sources/typesafe-jev-system-one-models.md) — Official capabilities, constraints, recipes, and early public applications of Jev
 - [Elastic capabilities relevant to Jev decision layers](sources/elastic-jev-integration-seams.md) — Official Elastic search, Jina, Agent Builder, and LLM-observability seams for bounded Jev decisions
+- [OpenRouter Claude Haiku routing baseline](sources/openrouter-haiku-routing-baseline.md) — Official model slug, structured-output interface, and concurrency boundaries for the Haiku comparison
 - [Cutting agent costs with precomputed context](sources/elastic-precomputed-context-agent-costs.md) - Elastic's staged KI evaluation against search-and-fetch RAG under a fixed agent budget
 
 ## Raw Assets
