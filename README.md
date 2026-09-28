@@ -92,6 +92,7 @@ Follow [`analytics/README.md`](analytics/README.md) to process YouTube Studio ex
 | Path | Purpose |
 | --- | --- |
 | [`projects/`](projects/) | Active, recorded, and historical video projects |
+| [`docs/`](docs/) | Standalone HTML guides for presenting the repo and its workflows |
 | [`raw/`](raw/) | Immutable source material and past scripts; agents must not modify it |
 | [`sources/`](sources/) | Factual summaries of ingested sources |
 | [`wiki/`](wiki/) | Reusable production and technical knowledge synthesized from sources |

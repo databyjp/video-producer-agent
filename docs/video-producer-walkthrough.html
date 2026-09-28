@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video production prompt sampler</title>
+<style>
+:root{color-scheme:light;--ink:#17212b;--muted:#596979;--paper:#f4f7fb;--card:#fff;--line:#dce4ec;--blue:#1764d2;--blue-pale:#eaf2ff;--green:#14664f;--green-pale:#e8f5ef}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}a{color:var(--blue);text-underline-offset:3px}.wrap{max-width:1050px;margin:auto;padding:36px 24px 72px}header{margin-bottom:28px}h1{font-size:clamp(32px,5vw,48px);letter-spacing:-.04em;line-height:1.1;margin:8px 0 12px}.sub{color:var(--muted);font-size:17px;margin:0;max-width:760px}.trace{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:20px;font-size:13px}.trace a,.trace span{background:#fff;border:1px solid var(--line);border-radius:7px;padding:7px 10px;text-decoration:none}.trace b{color:#91a0ae}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 10px 28px #17212b0a;min-width:0}.top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}.stage{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:800;color:#3e566d}.kind{font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:800;border-radius:99px;padding:4px 8px;background:var(--blue-pale);color:#174b96;white-space:nowrap}.kind.saved{background:var(--green-pale);color:var(--green)}h2{font-size:19px;line-height:1.25;margin:0 0 7px}.desc{margin:0 0 12px;color:var(--muted);font-size:13px}.prompt{white-space:pre-wrap;overflow-wrap:anywhere;background:#101d2a;color:#eef4fb;border-radius:9px;padding:14px;font:13px/1.58 ui-monospace,SFMono-Regular,Menlo,monospace;margin:0 0 11px}.actions{display:flex;justify-content:space-between;align-items:center;gap:10px}.links{display:flex;flex-wrap:wrap;gap:6px}.links a{font-size:12px;border:1px solid var(--line);border-radius:6px;padding:5px 7px;text-decoration:none;overflow-wrap:anywhere}.copy{border:1px solid #c7d6e8;border-radius:6px;background:#f4f8ff;color:#174b96;padding:6px 10px;font:700 12px system-ui;cursor:pointer;white-space:nowrap}.copy:hover{background:var(--blue-pale)}.foot{margin-top:22px;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:14px}@media(max-width:720px){.wrap{padding:22px 14px 52px}.grid{grid-template-columns:1fr}.trace b{display:none}.actions{align-items:flex-start}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header>
+<div class="stage">Prompt sampler · colleague walkthrough</div>
+<h1>Try a few prompts from the video workflow</h1>
+<p class="sub">Pick a card, paste the prompt into Pi, then open the linked project files to see the related work. Green labels are prompts preserved in a research transcript; blue labels are reusable prompts based on logged tasks.</p>
+<div class="trace"><a href="../projects/202606-columnar-store/ai-research.md">Research transcript</a><b>→</b><a href="../projects/202606-columnar-store/outline.md">Outline</a><b>→</b><a href="../projects/202606-columnar-store/draft-script-v5.md">Script</a><b>→</b><a href="../projects/202606-columnar-store/202608-metrics-improvements.srt">Captions</a><b>→</b><a href="../log.md">Activity log</a></div>
+</header>
+
+<div class="grid">
+<article class="card">
+<div class="top"><span class="stage">Research</span><span class="kind saved">Verbatim · saved</span></div>
+<h2>Check the scope and credibility of a claim</h2>
+<p class="desc">Original research request · columnar metrics project</p>
+<pre class="prompt">I’m curious. Elastic claims that they are now a columnar store in blog posts like this. Two questions.
+
+1) Does this claim mean that Elasticsearch is a full columnar database?
+2) How credible is their claim, technically and objectively speaking?
+
+https://www.elastic.co/search-labs/blog/elasticsearch-metrics-columnar-engine</pre>
+<div class="actions"><div class="links"><a href="../projects/202606-columnar-store/ai-research.md">Transcript</a><a href="../projects/202606-columnar-store/Clippings/">Source clippings</a></div><button class="copy">Copy prompt</button></div>
+</article>
+
+<article class="card">
+<div class="top"><span class="stage">Outline</span><span class="kind saved">Verbatim · saved</span></div>
+<h2>Turn the topic into a useful video structure</h2>
+<p class="desc">Follow-up request in the same saved research transcript</p>
+<pre class="prompt">I’d like to write an impartial explainer video explaining the advances made by Elasticsearch, starting from the core idea of columnar vs row based storage. What key topics should this cover to provide the most value to the readers?</pre>
+<div class="actions"><div class="links"><a href="../projects/202606-columnar-store/outline.md">Resulting outline</a><a href="../projects/202606-columnar-store/reading-list.md">Reading list</a></div><button class="copy">Copy prompt</button></div>
+</article>
+
+<article class="card">
+<div class="top"><span class="stage">Outline revision</span><span class="kind">Adapted prompt</span></div>
+<h2>Reconcile the outline with new evidence</h2>
+<p class="desc">Based on logged technical review and outline updates</p>
+<pre class="prompt">Review this outline against the linked primary sources. Find claims that are stale, too broad, or unsupported. Verify the technical details, then make only the changes needed to correct them. Preserve the narrative structure where it still works. List any claims that still need checking before recording.
+
+Outline: projects/202606-columnar-store/outline.md
+Sources: projects/202606-columnar-store/Clippings/</pre>
+<div class="actions"><div class="links"><a href="../projects/202606-columnar-store/outline.md">Outline</a><a href="../log.md">Revision history</a></div><button class="copy">Copy prompt</button></div>
+</article>
+
+<article class="card">
+<div class="top"><span class="stage">Script review</span><span class="kind">Adapted prompt</span></div>
+<h2>Review without rewriting</h2>
+<p class="desc">Based on the repo’s documented script-review workflow</p>
+<pre class="prompt">Review the script against its outline and intended viewer. Prioritize promise and scope, opening, structure, spoken delivery, accuracy, and visual communication. Lead with the highest-impact findings. For each, cite the section, explain the viewer impact, and recommend a concrete fix. Separate must-fix issues from optional polish. Preserve the author's voice. Do not edit the files.
+
+Script: projects/202606-columnar-store/draft-script-v5.md
+Outline: projects/202606-columnar-store/outline.md</pre>
+<div class="actions"><div class="links"><a href="../projects/202606-columnar-store/draft-script-v5.md">Script</a><a href="../wiki/developer-video-production-guidelines.md">Review guidance</a></div><button class="copy">Copy prompt</button></div>
+</article>
+
+<article class="card">
+<div class="top"><span class="stage">Script revision</span><span class="kind">Adapted prompt</span></div>
+<h2>Make a focused spoken-language pass</h2>
+<p class="desc">A narrow revision request modeled on the recorded script passes</p>
+<pre class="prompt">Make a focused revision for spoken clarity and repetition. Keep the recurring metric point as the through-line. Preserve the technical sequence, evidence qualifications, and my conversational voice. Do not polish sentences that already sound natural. Show me the resulting diff.
+
+Script: projects/202606-columnar-store/draft-script-v5.md</pre>
+<div class="actions"><div class="links"><a href="../projects/202606-columnar-store/draft-script-v1.md">Earlier draft</a><a href="../projects/202606-columnar-store/draft-script-v5.md">Later draft</a><a href="../log.md">Revision history</a></div><button class="copy">Copy prompt</button></div>
+</article>
+
+<article class="card">
+<div class="top"><span class="stage">Editing · captions</span><span class="kind">Adapted prompt</span></div>
+<h2>Correct captions against the final script</h2>
+<p class="desc">Based on the logged SRT correction pass</p>
+<pre class="prompt">Compare this SRT with the final script. Correct clear speech-recognition errors in product names and technical terms. Keep cue numbers and timestamps unchanged. Preserve plausible ad-libs that were spoken but are absent from the script. Do not rewrite phrasing merely to match the script.
+
+SRT: projects/202606-columnar-store/202608-metrics-improvements.srt
+Script: projects/202606-columnar-store/draft-script-v5.md</pre>
+<div class="actions"><div class="links"><a href="../projects/202606-columnar-store/202608-metrics-improvements.srt">Corrected captions</a><a href="../projects/202606-columnar-store/draft-script-v5.md">Script</a></div><button class="copy">Copy prompt</button></div>
+</article>
+</div>
+
+<p class="foot">Prompt provenance: only the first two are quoted from a saved conversation. The other prompts are practical reconstructions from the activity log and repo guidance, not original chat transcripts. <a href="../index.md">Wiki index</a> · <a href="../log.md">Activity log</a></p>
+</main>
+<script>
+document.querySelectorAll('.copy').forEach(button => {
+  button.addEventListener('click', async () => {
+    const text = button.closest('.card').querySelector('.prompt').innerText;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const field = document.createElement('textarea');
+      field.value = text;
+      document.body.appendChild(field);
+      field.select();
+      document.execCommand('copy');
+      field.remove();
+    }
+    const old = button.textContent;
+    button.textContent = 'Copied';
+    setTimeout(() => button.textContent = old, 1200);
+  });
+});
+</script>
+</body>
+</html>

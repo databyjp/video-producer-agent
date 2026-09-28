@@ -1399,3 +1399,10 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Structured recipes two through seven as concise applications of the same state → decision → policy → outcome pattern, moving through input safety, retrieval relevance, citation support, zero-result recovery, tool selection, and completed-trace verification.
 - Added inline visual directions, Elastic integration seams, claim boundaries, a closing suitability test, and two designer-level visual assets. The outline contains no section-duration estimates.
 - Linked the phase-one outline from `wiki/jev-elasticsearch-video-ideas.md`.
+
+## 2026-09-25 — Exposed raw router responses
+
+- Updated all four inference-router variants to retain and print the JSON returned by every OpenRouter or TypeSafe call after the benchmark summary.
+- Serial and concurrent modes label each response by coding request. Jev's one-request mode prints the combined response with all four typed answers, probability distributions, confidence values, resolved model, and token usage.
+- Removed the `EIS invocation: skipped` output line from the shared summary.
+- Preserved the configured benchmark run count and updated the README and Jev concept page to describe the emitted classifier JSON.
