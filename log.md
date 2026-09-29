@@ -1406,3 +1406,27 @@ Stripped all "E.g." / "In practice:" dev advocacy example lines from the Structu
 - Serial and concurrent modes label each response by coding request. Jev's one-request mode prints the combined response with all four typed answers, probability distributions, confidence values, resolved model, and token usage.
 - Removed the `EIS invocation: skipped` output line from the shared summary.
 - Preserved the configured benchmark run count and updated the README and Jev concept page to describe the emitted classifier JSON.
+
+## 2026-09-25 — Reduced router response output
+
+- Kept timing, cost, and route-consistency calculations across every configured run.
+- Changed the terminal output to show classifier responses only from the final measured run.
+- Pretty-printed OpenRouter and TypeSafe response JSON with sorted keys and indentation for recording readability.
+
+## 2026-09-25 — Moved classifier output before benchmark statistics
+
+- Changed the shared router presentation order to show the final run's classifier JSON immediately after the mode and classifier labels.
+- Added a `Benchmark summary` section after the JSON for timing, token, cost, and route-consistency results.
+
+## 2026-09-25 — Completed the Jev suitability transition
+
+- Replaced the remaining script placeholder after the router comparison with a spoken explanation of Jev's useful task boundary.
+- Defined the fit as bounded semantic decisions over messy text, contrasted it with planning, generation, arithmetic, and date comparison, and kept thresholds, permissions, side effects, and uncertainty handling in code.
+- Added a spoken transition into the six shorter recipes.
+
+## 2026-09-25 — Drafted the remaining Jev video script
+
+- Converted recipes two through seven from outline bullets into concise spoken quick tours, with transitions that move through input screening, retrieval, citation checking, zero-result recovery, tool selection, and post-run trace review.
+- Preserved the runnable demo behavior and claim boundaries while avoiding a second explanation of the typed-decision pattern established by the model-router section.
+- Added a draft wrap-up that returns to the semantic `if` statement framing, states where Jev does and does not fit, points to the demo repository, and ends with a specific viewer question.
+- Updated the file metadata from outline to draft script.
